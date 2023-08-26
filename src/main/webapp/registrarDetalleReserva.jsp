@@ -6,27 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Registrar Detalle de Reserva</title>
-  	<link rel="icon" href="https://images.vexels.com/media/users/3/205195/isolated/preview/1c2ccc57f033c7b2612f1cce2b6eb7f2-ilustraci-n-de-gato-durmiendo-en-estanter-a.png">
+    <link rel="icon" href="https://images.vexels.com/media/users/3/205195/isolated/preview/1c2ccc57f033c7b2612f1cce2b6eb7f2-ilustraci-n-de-gato-durmiendo-en-estanter-a.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-        <style>
-        /* Estilos anteriores */
-
-        .form-group {
-            /* Estilos anteriores */
-            display: flex;
-            align-items: center;
-        }
-
-        .form-group label {
-            /* Estilos anteriores */
-            margin-right: 10px;
-        }
-
-        .form-group input[type="date"] {
-            /* Estilos anteriores */
-            margin-right: 10px;
-        }
-    </style>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,162 +26,110 @@
 
         .form-group {
             margin-bottom: 15px;
+            display: flex;
+            align-items: center;
         }
 
         .form-group label {
             font-weight: bold;
+            margin-right: 10px;
         }
 
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
+        .form-group select {
             width: 100%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
-        }
-
-        .form-group .btn {
-            background-color: #2196f3;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 20px;
-            cursor: pointer;
-        }
-
-        .form-group textarea {
-            height: 43px;
-        }
-
-        .form-group select {
-            appearance: none; /* Eliminar la apariencia predeterminada del select */
+            appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
-            padding-right: 25px; /* Agregar espacio para la flecha personalizada */
+            padding-right: 25px;
             background-image: url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/svgs/solid/chevron-down.svg");
             background-repeat: no-repeat;
             background-position: right 8px center;
             background-size: 14px;
         }
-    </style>
-        <style>
-        /* Estilos anteriores */
-
-        .form-group {
-            /* Estilos anteriores */
-            display: flex;
-            align-items: center;
-        }
-
-        .form-group label {
-            /* Estilos anteriores */
-            margin-right: 10px;
-        }
-
-        .form-group input[type="date"] {
-            /* Estilos anteriores */
-            margin-right: 10px;
-        }
-        
-        .observations-group {
-            /* Estilos para el contenedor de Observaciones */
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap; /* Para que los elementos se muestren en líneas si no caben en el ancho */
-        }
-
-        .observations-group label {
-            /* Estilos para el label de Observaciones */
-            margin-right: 10px;
-        }
-
-        .observations-group textarea {
-            /* Estilos para el campo de texto de Observaciones */
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            flex: 1; /* Ocupar todo el espacio disponible en el contenedor */
-            min-width: 200px; /* Ancho mínimo para que no se colapse completamente */
-        }
-    </style>
-    <style>
-	    .title {
-	        font-size: 24px;
-	        margin-right: 20px; /* Puedes ajustar este valor para cambiar la distancia a la derecha */
-	        color: #2196f3; /* Puedes cambiar el color a tu gusto */
-	    }
-	</style> 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 65px auto;
-            padding: 25px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            background-color: #fff;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-
-        .form-group label {
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .form-group input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
 
         .form-group button {
-            background-color: #2196f3;
             color: #fff;
             border: none;
             border-radius: 5px;
             padding: 8px 20px;
             cursor: pointer;
         }
-    </style>
-    <style>
-        /* Estilos anteriores */
 
-        .form-group {
-            /* Estilos anteriores */
-            display: flex;
-            align-items: center;
+        /* Estilos para el botón "Volver" */
+        .back-button {
+            background-color: #b1b0b0; /* Color inicial */
+            color: #333;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 20px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.3s;
         }
 
-        .form-group label {
-            /* Estilos anteriores */
-            margin-right: 10px;
+        .back-button:hover {
+            background-color: #999; /* Color al pasar el cursor por encima */
         }
 
-        .form-group input[type="date"] {
-            /* Estilos anteriores */
-            margin-right: 10px;
+        .back-button:focus::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.1); /* Color al hacer clic */
+            border-radius: 5px;
         }
-        
-        /* Agregar estilos adicionales si es necesario */
-    </style>
-    <style>
-	    .title {
-	        font-size: 24px;
-	        margin-right: 20px; /* Puedes ajustar este valor para cambiar la distancia a la derecha */
-	        color: #2196f3; /* Puedes cambiar el color a tu gusto */
+
+        /* Estilos para el botón "Guardar Detalle de Reserva" */
+        .save-button {
+            background-color: #00aaff; /* Cambiar al color celeste deseado */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .save-button:hover {
+            background-color: #0088cc; /* Cambiar al color celeste deseado para el estado hover */
+        }
+
+        .title {
+            font-size: 24px;
+            margin-right: 20px; /* Puedes ajustar este valor para cambiar la distancia a la derecha */
+            color: #2196f3; /* Puedes cambiar el color a tu gusto */
+        }
+	
+	    /* Estilos para el overlay */
+	    .overlay {
+	        position: fixed;
+	        top: 0;
+	        left: 0;
+	        width: 100%;
+	        height: 100%;
+	        background-color: rgba(0, 0, 0, 0.5);
+	        display: none;
+	        z-index: 1000; /* Asegurarse de que esté por encima de otros elementos */
+	    }
+	
+	    /* Estilos para el mensaje emergente de éxito */
+	    .success-popup {
+	        position: fixed;
+	        top: 50%;
+	        left: 50%;
+	        transform: translate(-50%, -50%);
+	        background-color: #fff;
+	        padding: 20px;
+	        border-radius: 10px;
+	        display: none;
+	        z-index: 1001; /* Asegurarse de que esté por encima del overlay */
+	        text-align: center;
 	    }
 	</style>
 </head>
@@ -209,10 +138,7 @@
     <div class="container">
         <h1 class="title">Registrar Detalle de Reserva</h1>
         <form action="guardarDetalleReserva.jsp" method="POST">
-            <div class="form-group">
-                <label for="reservation_id">ID de Reserva:</label>
-                <input type="number" id="reservation_id" name="reservation_id" value="<%= request.getParameter("id") %>" required readonly>
-            </div>
+			<input type="hidden" name="reservation_id" value="<%= request.getParameter("id") %>">
             <div class="form-group">
                 <label for="book_id">ID de Libro:</label>
                 <select id="book_id" name="book_id" required>
@@ -259,12 +185,48 @@
             </div>
             <div class="form-group">
                 <label for="quantity">Cantidad:</label>
-                <input type="number" id="quantity" name="quantity" required min="1" max="10">
+                <select id="quantity" name="quantity" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
             </div>
             <div class="form-group">
-                <button type="submit">Guardar Detalle de Reserva</button>
+                <button type="submit" class="save-button">Guardar Detalle de Reserva</button>
+                <button type="button" class="back-button" onclick="window.history.back()">Volver</button>
             </div>
         </form>
+		<div class="overlay" id="overlay"></div>
+		
+		<div id="successPopup" class="success-popup">
+		    <img src="https://img.freepik.com/vector-premium/gato-enojado-trabajando-ilustracion-ordenador-portatil_138676-305.jpg?w=360" alt="Success Icon">
+		    <h4>Registro exitoso!</h4>
+		    <p>La reserva del libro ha sido creada correctamente.</p>
+		</div>
+		<script>
+		    document.addEventListener("DOMContentLoaded", function() {
+		        const saveButton = document.querySelector(".save-button");
+		        const overlay = document.getElementById("overlay");
+		        const successPopup = document.getElementById("successPopup");
+		
+		        saveButton.addEventListener("click", function(event) {
+		            event.preventDefault(); // Evitar que el formulario se envíe
+		
+		            // Mostrar el overlay y el mensaje emergente de éxito
+		            overlay.style.display = "block";
+		            successPopup.style.display = "block";
+		
+		            // Ocultar el mensaje emergente después de 3 segundos (3000 milisegundos)
+		            setTimeout(function() {
+		                overlay.style.display = "none";
+		                successPopup.style.display = "none";
+		                
+		                // Redirigir a guardardetalles.jsp
+		                window.location.href = "guardarDetalleReserva.jsp";
+		            }, 3000); // Cambia el valor si deseas ajustar la duración
+		        });
+		    });
+		</script>
+
     </div>
 </body>
 </html>

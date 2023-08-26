@@ -15,5 +15,9 @@ El proyecto de Gestion de Biblioteca Reserva los Libros Reservados es un sistema
 - /data
   - archivo_datos.csv
 
+## Recursos Adicionales
+- [Documentación](https://link-a-documentacion.com)
+- [Tutorial en Video](https://link-a-tutorial.com)
+
 ## Licencia
 Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.

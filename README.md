@@ -8,3 +8,9 @@ El proyecto de Gestion de Biblioteca Reserva los Libros Reservados es un sistema
 - Gestión eficiente: Los bibliotecarios tienen acceso a un panel de control que les permite administrar las reservas, verificar el inventario y resolver posibles conflictos de reservas.
 - Historial de reservas: Tanto los usuarios como los bibliotecarios pueden acceder al historial de reservas, lo que facilita el seguimiento de las transacciones y la planificación futura.
 - Integración con el sistema de préstamos: El sistema de reservas puede integrarse con el sistema de préstamos existente de la biblioteca, asegurando una experiencia cohesiva para los usuarios.
+
+## Estructura del Proyecto
+- /src
+  - main.py
+- /data
+  - archivo_datos.csv

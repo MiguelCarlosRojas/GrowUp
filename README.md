@@ -1,6 +1,6 @@
 # T_Carlos
 ## Capturas de Pantalla
-[![Captura.png](https://i.postimg.cc/5NCzz4Pg/Captura.png)](https://postimg.cc/kB7D3mPR)
+[![seete.png](https://i.postimg.cc/vmkgTCWk/seete.png)](https://postimg.cc/1g05YC7r)
 
 El proyecto de Gestion de Biblioteca Reserva los Libros Reservados es un sistema automatizado diseñado para facilitar la gestión de reservas de libros en bibliotecas. Permite a los usuarios realizar reservas en línea de los libros deseados y garantiza que los libros reservados estén disponibles para su recogida en la biblioteca.
 

@@ -115,6 +115,80 @@
             resize: none;
             overflow: hidden;
         }
+
+		/* Estilo para el fondo semitransparente */
+		.overlay {
+		    display: none;
+		    position: fixed;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+		    background-color: rgba(128, 128, 128, 0.5); /* Semitransparente gris claro */
+		    z-index: 1000; /* Asegura que el fondo esté por encima de otros elementos */
+		}
+		
+		.success-popup {
+		    display: none;
+		    position: fixed;
+		    top: 50%;
+		    left: 50%;
+		    transform: translate(-50%, -50%);
+		    background-color: #fff;
+		    border-radius: 10px;
+		    padding: 20px;
+		    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+		    text-align: center;
+		    z-index: 1001; /* Asegura que el popup esté por encima del fondo */
+		}
+		
+		.success-popup h4 {
+		    color: #00CED1;
+		    font-size: 24px;
+		    margin: 0;
+		}
+		
+		.success-popup p {
+		    font-size: 18px;
+		    margin-top: 10px;
+		}
+    </style>
+    <style>
+        /* ... (estilos existentes) ... */
+
+        /* Estilo para la notificación de error */
+        .error-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .error-icon {
+            font-size: 24px;
+            margin-right: 10px;
+            color: #f44336; /* Color rojo */
+        }
+
+        .error-content {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .error-icon,
+        .error-content {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .error-notification.show {
+            display: block;
+            animation: slideInUp 0.3s ease-in-out;
+        }
     </style>
 </head>
   <jsp:include page="menu.jsp" />
@@ -203,26 +277,18 @@
                 <textarea id="observations" name="observations" class="auto-resize-textarea" oninput="adjustTextareaHeight(this)"><%= observations %></textarea>
             </div>
             <div class="form-group">
-                <button type="submit" class="save-btn" disabled>Guardar Cambios</button>
+                <button type="submit" id="saveBtn" class="save-btn" disabled>Guardar Cambios</button>
                 <button type="button" class="back-btn" onclick="window.history.back()">Volver Atrás</button>
             </div>
+
 		    <script>
 		        // Función para ajustar la altura del textarea automáticamente
 		        function adjustTextareaHeight(element) {
 		            element.style.height = "auto";
 		            element.style.height = (element.scrollHeight) + "px";
 		        }
-		    </script>
-            <script>
-                // Habilitar el botón "Guardar Cambios" cuando se realice algún cambio en el formulario
-                const form = document.querySelector("form");
-                const saveBtn = document.querySelector(".save-btn");
+		    </script> 
 
-                form.addEventListener("change", () => {
-                    saveBtn.classList.add("active");
-                    saveBtn.removeAttribute("disabled");
-                });
-            </script>
             <% 
                     } else {
                         out.println("<p>Reserva no encontrada.</p>");
@@ -243,6 +309,60 @@
                 }
             %>
         </form>
+       <!-- Notificación de error -->
+        <div class="error-notification" id="errorNotification">
+            <div class="error-icon">!</div>
+            <div class="error-content"></div>
+        </div>
+
+		<div class="overlay" id="overlay"></div>
+		
+		<div id="successPopup" class="success-popup">
+		    <img src="https://img.freepik.com/vector-premium/gato-enojado-trabajando-ilustracion-ordenador-portatil_138676-305.jpg?w=360" alt="Success Icon">
+		    <h4>Registro exitoso!</h4>
+		    <p>Los cambios se han guardado correctamente.</p>
+		</div>	
+	    <script>
+	        const form = document.querySelector("form");
+	        const saveBtn = document.querySelector(".save-btn");
+	        const errorNotification = document.getElementById("errorNotification");
+	
+	        form.addEventListener("change", () => {
+	            saveBtn.classList.add("active");
+	            saveBtn.removeAttribute("disabled");
+	            clearTimeout(successPopupTimeout);
+	        });
+	
+	        saveBtn.addEventListener("click", function (event) {
+	            event.preventDefault();
+	
+	            const dateAvailableInput = document.getElementById("dateAvailable");
+	            const dateReturnInput = document.getElementById("dateReturn");
+	
+	            if (dateAvailableInput.value === "" || dateReturnInput.value === "") {
+	                showErrorNotification("Por favor, completa las fechas de inicio y devolución.");
+	                return;
+	            }
+	
+	            overlay.style.display = "block";
+	            successPopup.style.display = "block";
+	
+	            setTimeout(function () {
+	                overlay.style.display = "none";
+	                successPopup.style.display = "none";
+	                form.submit();
+	            }, 5000); // Oculta el popup después de 5 segundos y envía el formulario
+	        });
+	
+	        function showErrorNotification(message) {
+	            errorNotification.querySelector(".error-content").textContent = message;
+	            errorNotification.classList.add("show");
+	
+	            setTimeout(function () {
+	                errorNotification.classList.remove("show");
+	            }, 3000); // Oculta la notificación después de 3 segundos
+	        }
+	    </script>
     </div>
 </body>
 </html>

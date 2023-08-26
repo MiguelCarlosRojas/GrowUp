@@ -147,14 +147,53 @@
             background-color: #ffeb3b; /* Amarillo */
             color: #000;
         }
+        
+		.search-container {
+		    margin-bottom: 10px;
+		    text-align: center;
+		}
+		
+		#book-search {
+		    padding: 5px;
+		    width: 60%;
+		    border: 1px solid #ccc;
+		    border-radius: 5px;
+		}
+		
+		table tr.matched-row {
+		    background-color: #ffffcc; /* Color de fondo para filas coincidentes */
+		}
+
+		.button-search-container {
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		    margin-bottom: 10px;
+		}
+		
+		.search-container {
+		    flex: 1;
+		    margin-right: 0;
+		    margin-left: 20px; /* Ajusta este valor para mover más a la izquierda */
+		}
+		
+		.button-container {
+		    flex: 0;
+		}
     </style>
 </head>
   <jsp:include page="menu.jsp" />
 <body>
     <h1>Listado de Reservas</h1>
-	<div class="button-container" style="display: flex; justify-content: flex-end;">
-	    <button class="create-btn" style="background-color: #00CED1;" onclick="window.location.href = 'crearReserva.jsp'">Nuevo</button>
+	<div class="button-search-container">
+	    <div class="search-container">
+	        <input type="text" id="book-search" placeholder="Buscar libro por título...">
+	    </div>
+	    <div class="button-container">
+	        <button class="create-btn" style="background-color: #00CED1;" onclick="window.location.href = 'crearReserva.jsp'">Nuevo</button>
+	    </div>
 	</div>
+
     <table>
 	    <tr>
 	        <th>Apellidos y Nombres</th>
@@ -262,6 +301,43 @@
         </div>
     </div>
 
+	<script>
+		const bookSearchInput = document.getElementById('book-search');
+		const tableRows = document.querySelectorAll('table tr:not(:first-child)');
+	
+		let searchTimeout; // Variable para el temporizador
+	
+		bookSearchInput.addEventListener('input', function() {
+		    clearTimeout(searchTimeout); // Reinicia el temporizador en cada entrada
+	
+		    const searchText = bookSearchInput.value.trim().toLocaleLowerCase();
+	
+		    tableRows.forEach(row => {
+		        const titleCell = row.querySelector('td:nth-child(4)'); // Columna de título
+	
+		        if (titleCell) {
+		            const titleText = titleCell.textContent.trim();
+		            const normalizedTitle = titleText.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+	
+		            if (normalizedTitle.toLocaleLowerCase().includes(searchText)) {
+		                row.classList.add('matched-row');
+		            } else {
+		                row.classList.remove('matched-row');
+		            }
+		        }
+		    });
+	
+		    // Establece un temporizador para quitar la clase después de 4 segundos si el campo de búsqueda está vacío
+		    searchTimeout = setTimeout(() => {
+		        if (!searchText) {
+		            tableRows.forEach(row => {
+		                row.classList.remove('matched-row');
+		            });
+		        }
+		    }, 1000); // 1000 ms = 1 segundos
+		});
+	</script>
+	
 	<script>
 	    // Variables para almacenar el ID de la reserva a eliminar y el cuadro de diálogo de confirmación
 	    let reservationIdToDelete = null;

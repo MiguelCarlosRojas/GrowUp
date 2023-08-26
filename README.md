@@ -3,7 +3,6 @@ El proyecto de Gestion de Biblioteca Reserva los Libros Reservados es un sistema
 
 # Comando: Diseñar diapositivas (usar herramienta de diseño)
 $ herramienta-diseño [opciones]
-Características clave:
 
 *Reservas en línea: Los usuarios pueden navegar por el catálogo en línea de la biblioteca y realizar reservas de libros a través de una plataforma intuitiva.
 Disponibilidad en tiempo real: El sistema actualiza automáticamente el estado de disponibilidad de los libros, asegurando que solo se puedan reservar los libros disponibles.

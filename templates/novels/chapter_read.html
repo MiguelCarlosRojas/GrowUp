@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Capítulo {{ chapter.chapter_number }} - {{ novel.title }} | GrowUp{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-9 col-xl-8">
+        <!-- Reader Navigation Header -->
+        <div class="card bg-dark border-secondary p-3 rounded-4 shadow-sm mb-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="text-decoration-none text-muted small">
+                        <i class="bi bi-arrow-left"></i> Volver a la novela
+                    </a>
+                    <h5 class="fw-bold text-white mb-0 mt-1">{{ novel.title }}</h5>
+                    <span class="text-warning small fw-semibold">Capítulo {{ chapter.chapter_number }}: {{ chapter.title }}</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <!-- Font size controls -->
+                    <button class="btn btn-sm btn-outline-secondary" onclick="adjustFontSize(-2)" title="Disminuir letra">A-</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="adjustFontSize(2)" title="Aumentar letra">A+</button>
+                    {% if user == novel.author %}
+                        <a href="{% url 'novels:chapter_edit' novel_slug=novel.slug chapter_number=chapter.chapter_number %}" class="btn btn-sm btn-outline-warning">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Author Notes if any -->
+        {% if chapter.author_notes %}
+        <div class="alert alert-warning bg-warning bg-opacity-10 border-warning border-opacity-25 rounded-3 mb-4">
+            <h6 class="fw-bold text-warning mb-1"><i class="bi bi-chat-quote-fill me-1"></i> Notas del Autor:</h6>
+            <p class="mb-0 small text-light">{{ chapter.author_notes }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Chapter Content Box -->
+        <div class="card bg-dark border-secondary p-4 p-md-5 rounded-4 shadow mb-4">
+            <h3 class="fw-bold text-white mb-4 pb-3 border-bottom border-secondary text-center">
+                Capítulo {{ chapter.chapter_number }}: {{ chapter.title }}
+            </h3>
+            
+            <div id="reader-text" class="text-light" style="font-size: 1.15rem; line-height: 2.1; white-space: pre-wrap; font-family: 'Plus Jakarta Sans', Georgia, serif;">
+{{ chapter.content }}
+            </div>
+        </div>
+
+        <!-- Reader Navigation Footer -->
+        <div class="d-flex justify-content-between align-items-center p-3 bg-dark border border-secondary rounded-4 shadow-sm mb-5">
+            {% if prev_chapter %}
+                <a href="{% url 'novels:chapter_read' novel_slug=novel.slug chapter_number=prev_chapter.chapter_number %}" class="btn btn-outline-light">
+                    <i class="bi bi-chevron-left me-1"></i> Cap. Anterior
+                </a>
+            {% else %}
+                <button class="btn btn-outline-secondary" disabled>Inicio de la obra</button>
+            {% endif %}
+
+            <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="btn btn-outline-warning">
+                <i class="bi bi-list"></i> Índice
+            </a>
+
+            {% if next_chapter %}
+                <a href="{% url 'novels:chapter_read' novel_slug=novel.slug chapter_number=next_chapter.chapter_number %}" class="btn btn-accent">
+                    Siguiente Cap. <i class="bi bi-chevron-right ms-1"></i>
+                </a>
+            {% else %}
+                <button class="btn btn-outline-secondary" disabled>Último capítulo</button>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let currentSize = 1.15;
+    function adjustFontSize(delta) {
+        currentSize += (delta * 0.05);
+        if (currentSize < 0.9) currentSize = 0.9;
+        if (currentSize > 1.8) currentSize = 1.8;
+        document.getElementById('reader-text').style.fontSize = currentSize + 'rem';
+    }
+</script>
+{% endblock %}

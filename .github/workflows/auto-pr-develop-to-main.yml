@@ -1,0 +1,71 @@
+name: Auto PR Develop to Main
+
+on:
+  push:
+    branches:
+      - develop
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  verify-and-open-pr-main:
+    name: Verify Compilation & Open PR to Main
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Verify Django Compilation & Checks on Develop
+        run: |
+          python manage.py check
+          python manage.py makemigrations --check --dry-run
+          python manage.py test
+
+      - name: Create or Update Pull Request to main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_TITLE="[Release]: Merge develop into main"
+          PR_BODY="### 🌟 Release Pull Request Automático hacia Main
+          
+          **Rama origen:** \`develop\`
+          **Rama destino:** \`main\`
+          
+          #### ✅ Estado de Integración:
+          - [x] Verificación de integridad en rama develop aprobada.
+          - [x] Todas las pruebas unitarias y de sistema pasaron en verde.
+          - [x] Listo para despliegue y producción.
+          
+          #### 📋 Resumen del Release:
+          - Plataforma completa GrowUp para Manga, Anime y Novelas Ligeras.
+          - Backend en Django puro con Prisma Postgres.
+          - Datos en tiempo real de Jikan API.
+          - Sistema de reseñas, clasificación, debates (Q&A) y módulo de escritores.
+          
+          *Este Pull Request fue generado automáticamente por GitHub Actions tras la compilación exitosa en develop.*"
+          
+          EXISTING_PR=$(gh pr list --head "develop" --base "main" --json number -q '.[0].number')
+          
+          if [ -z "$EXISTING_PR" ]; then
+            echo "Opening new PR develop -> main..."
+            gh pr create --base main --head develop --title "${PR_TITLE}" --body "${PR_BODY}" || {
+              echo "::warning::GitHub Actions does not have permission to create pull requests directly. Enable it in Repository Settings -> Actions -> General -> Workflow permissions -> 'Allow GitHub Actions to create and approve pull requests'."
+            }
+          else
+            echo "PR #${EXISTING_PR} already exists for develop -> main. Skipping."
+          fi

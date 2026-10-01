@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ novel.title }} - Novela Ligera en GrowUp{% endblock %}
+
+{% block content %}
+<div class="card bg-dark border-secondary p-4 rounded-4 shadow-lg mb-4">
+    <div class="row g-4">
+        <!-- Cover and author controls -->
+        <div class="col-md-4 col-lg-3 text-center">
+            <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="img-fluid rounded-3 shadow border border-secondary mb-3 w-100" style="max-height: 400px; object-fit: cover;">
+            
+            {% if user == novel.author or user.is_staff %}
+                <div class="d-flex flex-column gap-2 mb-3">
+                    <a href="{% url 'novels:chapter_create' novel_slug=novel.slug %}" class="btn btn-warning btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i> Publicar Nuevo Capítulo
+                    </a>
+                    <a href="{% url 'novels:novel_edit' slug=novel.slug %}" class="btn btn-outline-light btn-sm">
+                        <i class="bi bi-pencil-square me-1"></i> Editar Novela
+                    </a>
+                </div>
+            {% endif %}
+
+            <!-- Bookmark -->
+            {% if user.is_authenticated %}
+                <form action="{% url 'catalog:toggle_bookmark' item_type='original_novel' item_id=novel.slug %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_title" value="{{ novel.title }}">
+                    <input type="hidden" name="item_image" value="{{ novel.final_cover }}">
+                    <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                        <i class="bi bi-bookmark-heart"></i> Añadir a Favoritos
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+
+        <!-- Info Column -->
+        <div class="col-md-8 col-lg-9">
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                <span class="badge bg-warning text-dark text-uppercase">Novela de la Comunidad</span>
+                <span class="badge bg-secondary-subtle text-secondary-emphasis">{{ novel.get_status_display }}</span>
+                <span class="badge bg-dark border border-secondary">{{ novel.get_demography_display }}</span>
+                <span class="badge bg-dark border border-secondary">{{ novel.language }}</span>
+            </div>
+
+            <h1 class="text-white fw-bold mb-1">{{ novel.title }}</h1>
+            <p class="text-muted mb-3"><i class="bi bi-person-fill text-danger"></i> Escrito por <strong>{{ novel.author.username }}</strong> &bull; {{ novel.created_at|date:"d M Y" }}</p>
+
+            <!-- Categories -->
+            <div class="d-flex flex-wrap gap-2 mb-3">
+                {% for cat in novel.categories.all %}
+                    <span class="tag-badge fs-6">{{ cat.name }}</span>
+                {% endfor %}
+            </div>
+
+            <!-- Synopsis -->
+            <h5 class="text-white fw-bold mb-2">Sinopsis</h5>
+            <p class="text-light" style="line-height: 1.7; white-space: pre-line;">
+                {{ novel.synopsis }}
+            </p>
+
+            <div class="d-flex gap-4 pt-3 border-top border-secondary text-muted small">
+                <span><i class="bi bi-journal-check"></i> {{ chapters|length }} Capítulos</span>
+                <span><i class="bi bi-eye"></i> {{ novel.views_count }} Lecturas</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chapters List -->
+<div class="card bg-dark border-secondary p-4 rounded-4 shadow-sm mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="text-white fw-bold mb-0 d-flex align-items-center gap-2">
+            <i class="bi bi-list-ol text-warning"></i> Índice de Capítulos
+        </h4>
+        {% if user == novel.author %}
+            <a href="{% url 'novels:chapter_create' novel_slug=novel.slug %}" class="btn btn-sm btn-outline-warning">
+                <i class="bi bi-plus-lg"></i> Agregar Capítulo
+            </a>
+        {% endif %}
+    </div>
+
+    {% if chapters %}
+    <div class="list-group list-group-flush bg-transparent">
+        {% for ch in chapters %}
+        <div class="list-group-item bg-black border-secondary d-flex justify-content-between align-items-center py-3 px-3 mb-2 rounded-3">
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-secondary text-white py-2 px-3 fw-bold">Cap. {{ ch.chapter_number }}</span>
+                <div>
+                    <h6 class="mb-0 text-white fw-semibold">
+                        <a href="{% url 'novels:chapter_read' novel_slug=novel.slug chapter_number=ch.chapter_number %}" class="text-white text-decoration-none hover-light">
+                            {{ ch.title }}
+                        </a>
+                    </h6>
+                    <small class="text-muted">{{ ch.words_count }} palabras &bull; Publicado el {{ ch.published_at|date:"d M Y" }}</small>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                {% if user == novel.author %}
+                    <a href="{% url 'novels:chapter_edit' novel_slug=novel.slug chapter_number=ch.chapter_number %}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                {% endif %}
+                <a href="{% url 'novels:chapter_read' novel_slug=novel.slug chapter_number=ch.chapter_number %}" class="btn btn-sm btn-accent">
+                    Leer <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-4 text-muted">
+        <i class="bi bi-journal-text mb-2" style="font-size: 2rem;"></i>
+        <p class="mb-0">El autor aún no ha subido ningún capítulo público para esta novela.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Community Reviews & Opinions + Discussions for Original Novel -->
+<div class="row g-4">
+    <!-- Reviews Column -->
+    <div class="col-lg-6">
+        <div class="card bg-dark border-secondary p-4 rounded-4 shadow-sm h-100">
+            <h4 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                <i class="bi bi-star-half text-warning"></i> Opiniones y Clasificación
+            </h4>
+
+            {% if user.is_authenticated %}
+                <div class="bg-black p-3 rounded-3 border border-secondary mb-4">
+                    <h6 class="text-white fw-bold mb-2">Clasificar esta Novela Ligera</h6>
+                    <form action="{% url 'catalog:add_review' item_type='original_novel' item_id=novel.slug %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="item_title" value="{{ novel.title }}">
+                        <input type="hidden" name="item_image" value="{{ novel.final_cover }}">
+                        
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Calificación (Estrellas)</label>
+                            <select name="rating" class="form-select bg-dark text-white border-secondary">
+                                <option value="5">5 ★ - Obra Maestra</option>
+                                <option value="4">4 ★ - Muy Bueno</option>
+                                <option value="3">3 ★ - Bueno</option>
+                                <option value="2">2 ★ - Regular</option>
+                                <option value="1">1 ★ - Malo</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Título de la Opinión</label>
+                            <input type="text" name="headline" class="form-control bg-dark text-white border-secondary" placeholder="Ej: Una historia atrapante desde el capítulo 1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Tu Reseña Detallada</label>
+                            <textarea name="opinion" rows="3" class="form-control bg-dark text-white border-secondary" placeholder="Comparte tus impresiones de la narrativa y personajes..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-accent btn-sm w-100">Publicar Opinión</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="alert alert-secondary text-center small mb-4">
+                    <a href="{% url 'accounts:login' %}" class="alert-link">Inicia sesión</a> para opinar y calificar esta novela.
+                </div>
+            {% endif %}
+
+            <!-- List of Reviews -->
+            <div class="d-flex flex-column gap-3">
+                {% if reviews %}
+                    {% for rev in reviews %}
+                    <div class="p-3 bg-black rounded-3 border border-secondary">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <span class="fw-bold text-white"><i class="bi bi-person-circle"></i> {{ rev.user.username }}</span>
+                                <span class="text-muted small ms-2">{{ rev.created_at|date:"d M Y" }}</span>
+                            </div>
+                            <span class="badge bg-warning text-dark fw-bold">{{ rev.rating }} ★</span>
+                        </div>
+                        <h6 class="text-light fw-bold mb-1">{{ rev.headline }}</h6>
+                        <p class="text-muted small mb-0">{{ rev.opinion }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-4">Aún no hay opiniones de lectores. ¡Sé el primero en apoyar al escritor!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Discussions / Q&A Column -->
+    <div class="col-lg-6">
+        <div class="card bg-dark border-secondary p-4 rounded-4 shadow-sm h-100">
+            <h4 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                <i class="bi bi-chat-dots-fill text-info"></i> Preguntas al Autor & Discusión
+            </h4>
+
+            {% if user.is_authenticated %}
+                <div class="bg-black p-3 rounded-3 border border-secondary mb-4">
+                    <h6 class="text-white fw-bold mb-2">Preguntar o Comentar</h6>
+                    <form action="{% url 'catalog:add_discussion' item_type='original_novel' item_id=novel.slug %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="item_title" value="{{ novel.title }}">
+                        <div class="mb-2">
+                            <select name="discussion_type" class="form-select bg-dark text-white border-secondary">
+                                <option value="comment">Comentario para el autor</option>
+                                <option value="question">Pregunta sobre la trama</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <textarea name="content" rows="3" class="form-control bg-dark text-white border-secondary" placeholder="Escribe tu mensaje respetuoso para el escritor..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-outline-info btn-sm w-100">Enviar Mensaje</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="alert alert-secondary text-center small mb-4">
+                    <a href="{% url 'accounts:login' %}" class="alert-link">Inicia sesión</a> para hacer preguntas al escritor.
+                </div>
+            {% endif %}
+
+            <!-- List of Discussions -->
+            <div class="d-flex flex-column gap-3">
+                {% if discussions %}
+                    {% for disc in discussions %}
+                    <div class="p-3 bg-black rounded-3 border border-secondary">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <span class="fw-bold text-white"><i class="bi bi-person"></i> {{ disc.user.username }}</span>
+                                <span class="badge {% if disc.discussion_type == 'question' %}bg-primary{% else %}bg-secondary{% endif %} ms-2 small">
+                                    {{ disc.get_discussion_type_display }}
+                                </span>
+                            </div>
+                            <span class="text-muted small">{{ disc.created_at|date:"d M H:i" }}</span>
+                        </div>
+                        <p class="text-light small mb-2">{{ disc.content }}</p>
+
+                        <!-- Replies -->
+                        {% if disc.replies.all %}
+                            <div class="ms-3 ps-3 border-start border-secondary mt-2 d-flex flex-column gap-2">
+                                {% for rep in disc.replies.all %}
+                                <div class="bg-dark p-2 rounded small">
+                                    <div class="d-flex justify-content-between">
+                                        <strong class="text-info">{{ rep.user.username }} {% if rep.user == novel.author %}<span class="badge bg-warning text-dark">Autor</span>{% endif %}</strong>
+                                        <span class="text-muted" style="font-size: 0.75rem;">{{ rep.created_at|date:"d M H:i" }}</span>
+                                    </div>
+                                    <div class="text-light mt-1">{{ rep.content }}</div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if user.is_authenticated %}
+                            <details class="mt-2">
+                                <summary class="text-muted small cursor-pointer" style="cursor: pointer;">Responder</summary>
+                                <form action="{% url 'catalog:add_discussion' item_type='original_novel' item_id=novel.slug %}" method="POST" class="mt-2">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="item_title" value="{{ novel.title }}">
+                                    <input type="hidden" name="parent_id" value="{{ disc.id }}">
+                                    <input type="hidden" name="discussion_type" value="comment">
+                                    <div class="input-group">
+                                        <input type="text" name="content" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Escribe una respuesta..." required>
+                                        <button type="submit" class="btn btn-sm btn-info">Responder</button>
+                                    </div>
+                                </form>
+                            </details>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-4">No hay preguntas ni comentarios. ¡Deja el tuyo!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

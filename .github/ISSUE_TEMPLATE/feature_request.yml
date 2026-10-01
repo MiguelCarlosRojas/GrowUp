@@ -1,0 +1,22 @@
+name: 💡 Solicitud de Nueva Funcionalidad (Feature Request)
+description: Sugiere una idea o mejora para la plataforma GrowUp
+title: "[FEATURE]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: Gracias por proponer mejoras para GrowUp Manga, Anime & Novelas.
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Descripción de la funcionalidad
+      description: Explica claramente qué te gustaría ver o cómo debería funcionar.
+    validations:
+      required: true
+  - type: textarea
+    id: user-story
+    attributes:
+      label: Caso de uso
+      description: Como usuario/lector/escritor, deseo... para...
+    validations:
+      required: false

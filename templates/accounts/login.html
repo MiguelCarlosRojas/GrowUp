@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión - GrowUp{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center my-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card bg-dark border-secondary p-4 p-md-5 rounded-4 shadow-lg">
+            <div class="text-center mb-4">
+                <i class="bi bi-fire text-danger" style="font-size: 2.8rem;"></i>
+                <h3 class="fw-bold text-white mt-2">Iniciar Sesión</h3>
+                <p class="text-muted small">Ingresa a tu cuenta de GrowUp para clasificar obras y publicar novelas.</p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="form-label text-light fw-semibold">Usuario</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-black border-secondary text-muted"><i class="bi bi-person"></i></span>
+                        <input type="text" name="username" class="form-control bg-black text-white border-secondary" placeholder="Tu nombre de usuario" required autofocus>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-light fw-semibold">Contraseña</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-black border-secondary text-muted"><i class="bi bi-lock"></i></span>
+                        <input type="password" name="password" class="form-control bg-black text-white border-secondary" placeholder="••••••••" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-accent w-100 py-2 mb-3">Ingresar</button>
+            </form>
+
+            <div class="text-center pt-3 border-top border-secondary">
+                <p class="text-muted small mb-0">¿Aún no tienes cuenta? <a href="{% url 'accounts:register' %}" class="text-danger fw-semibold text-decoration-none">Regístrate aquí</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

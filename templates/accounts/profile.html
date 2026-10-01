@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Mi Perfil - GrowUp{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- Left Column: User details & edit form -->
+    <div class="col-lg-5">
+        <div class="card bg-dark border-secondary p-4 rounded-4 shadow">
+            <div class="text-center mb-4">
+                <img src="{{ profile.avatar_url|default:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' }}" alt="Avatar" class="rounded-circle shadow border border-danger mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                <h4 class="fw-bold text-white mb-0">{{ user.username }}</h4>
+                <span class="badge bg-warning text-dark fw-bold mt-1">{{ profile.get_role_display }}</span>
+                <p class="text-muted small mt-2">{{ profile.bio|default:'Sin biografía aún.' }}</p>
+            </div>
+
+            <h5 class="fw-bold text-white mb-3 pt-3 border-top border-secondary">Actualizar Datos de Perfil</h5>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <label class="form-label text-muted small">Nombre</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label text-muted small">Apellidos</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Correo Electrónico</label>
+                    {{ form.email }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Rol</label>
+                    {{ form.role }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Avatar URL</label>
+                    {{ form.avatar_url }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-muted small">Géneros Favoritos</label>
+                    {{ form.favorite_genres }}
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-muted small">Biografía</label>
+                    {{ form.bio }}
+                </div>
+
+                <button type="submit" class="btn btn-accent w-100">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right Column: User activity (Reviews & Novels) -->
+    <div class="col-lg-7">
+        <!-- Novels if author -->
+        {% if profile.is_author %}
+        <div class="card bg-dark border-secondary p-4 rounded-4 shadow-sm mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold text-white mb-0"><i class="bi bi-feather text-warning"></i> Mis Novelas Publicadas</h5>
+                <a href="{% url 'novels:author_dashboard' %}" class="btn btn-sm btn-outline-warning">Ir al Taller</a>
+            </div>
+            {% if user_novels %}
+                <div class="d-flex flex-column gap-2">
+                    {% for n in user_novels %}
+                    <div class="p-2 bg-black rounded-3 border border-secondary d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="{{ n.final_cover }}" alt="" class="rounded" style="width: 45px; height: 55px; object-fit: cover;">
+                            <div>
+                                <h6 class="text-white mb-0 fw-semibold">{{ n.title }}</h6>
+                                <small class="text-muted">{{ n.chapters.count }} caps &bull; {{ n.views_count }} lecturas</small>
+                            </div>
+                        </div>
+                        <a href="{% url 'novels:novel_detail' slug=n.slug %}" class="btn btn-sm btn-outline-light">Ver</a>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted small mb-0">Aún no has publicado novelas en la plataforma.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Reviews History -->
+        <div class="card bg-dark border-secondary p-4 rounded-4 shadow-sm">
+            <h5 class="fw-bold text-white mb-3"><i class="bi bi-star-fill text-warning"></i> Mis Reseñas y Clasificaciones</h5>
+            {% if user_reviews %}
+                <div class="d-flex flex-column gap-3">
+                    {% for rev in user_reviews %}
+                    <div class="p-3 bg-black rounded-3 border border-secondary">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <h6 class="text-white fw-bold mb-0">{{ rev.item_title }}</h6>
+                            <span class="badge bg-warning text-dark fw-bold">{{ rev.rating }} ★</span>
+                        </div>
+                        <span class="text-light small fw-semibold">{{ rev.headline }}</span>
+                        <p class="text-muted small mb-0 mt-1">{{ rev.opinion }}</p>
+                        <small class="text-muted" style="font-size: 0.75rem;">{{ rev.created_at|date:"d M Y" }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted small mb-0">No has escrito opiniones aún. ¡Explora mangas, animes o novelas y comparte tu veredicto!</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+name: Auto PR Feature to Develop
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  verify-and-open-pr:
+    name: Verify Compilation & Open PR to Develop
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Verify Django Compilation & Checks
+        run: |
+          python manage.py check
+          python manage.py makemigrations --check --dry-run
+          python manage.py test
+
+      - name: Extract Branch Name
+        id: branch_info
+        run: |
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          echo "branch=${BRANCH_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Create or Update Pull Request to develop
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="${{ steps.branch_info.outputs.branch }}"
+          PR_TITLE="[Feature]: Merge ${BRANCH} into develop"
+          PR_BODY="### 🚀 Pull Request Automático de Feature
+          
+          **Rama origen:** \`${BRANCH}\`
+          **Rama destino:** \`develop\`
+          
+          #### ✅ Estado de Compilación y Calidad:
+          - [x] Django \`manage.py check\` superado sin advertencias.
+          - [x] Migraciones verificadas con \`makemigrations --check\`.
+          - [x] Suite de pruebas automatizadas \`manage.py test\` completadas exitosamente.
+          
+          #### 📦 Cambios Incluidos:
+          - Biblioteca de Manga, Anime y Novelas Ligeras en Django puro.
+          - Integración en tiempo real con Jikan API v4 (MyAnimeList).
+          - Soporte para base de datos Prisma Postgres y SQLite local.
+          - Sistema de clasificación (estrellas 1-5), opiniones y reseñas detalladas.
+          - Sección de preguntas, respuestas (Q&A) y comentarios anidados.
+          - Taller de Escritores: publicación completa de novelas ligeras y capítulos con lector interactivo.
+          - Filtros avanzados en landing page y explorador.
+          
+          *Este Pull Request fue generado automáticamente por GitHub Actions tras la compilación exitosa.*"
+          
+          # Check if PR already exists
+          EXISTING_PR=$(gh pr list --head "${BRANCH}" --base "develop" --json number -q '.[0].number')
+          
+          if [ -z "$EXISTING_PR" ]; then
+            echo "Opening new PR for ${BRANCH} -> develop..."
+            gh pr create --base develop --head "${BRANCH}" --title "${PR_TITLE}" --body "${PR_BODY}"
+          else
+            echo "PR #${EXISTING_PR} already exists for ${BRANCH} -> develop. Skipping."
+          fi

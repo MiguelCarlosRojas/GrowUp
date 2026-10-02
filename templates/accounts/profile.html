@@ -36,10 +36,15 @@
                     <span><i class="bi bi-shield-check text-success me-1"></i> Sesión Criptográfica Protegida</span>
                 </div>
             </div>
+            <div class="d-flex align-items-center gap-3 ms-md-auto">
+                <button type="button" class="btn btn-accent px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                    <i class="bi bi-pencil-square"></i> Editar Perfil
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- Profile Header & Settings Card -->
+    <!-- Profile Information Overview Card -->
     <div class="p-4 p-md-5 rounded-4 shadow-lg" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
         <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary border-opacity-25 flex-wrap gap-3">
             <div>
@@ -47,63 +52,102 @@
                     <span class="section-accent-bar" style="background: linear-gradient(135deg, #0284c7, #06b6d4);"></span>
                     <h3 class="text-white fw-bold mb-0">Configuración de Perfil</h3>
                 </div>
-                <p class="text-muted small mb-0">Actualiza tus datos de usuario, biografía y tipo de cuenta (Lector o Escritor / Autor).</p>
+                <p class="text-muted small mb-0">Detalles de tu cuenta en GrowUp. Puedes modificarlos en cualquier momento desde el modal de edición.</p>
             </div>
-            <div class="d-flex align-items-center gap-2">
-                <span class="badge px-3 py-2 fw-bold" style="background: rgba(255, 42, 84, 0.18); border: 1px solid rgba(255, 42, 84, 0.35); color: #ffffff;">
-                    {{ profile.get_role_display }}
-                </span>
-            </div>
+            <button type="button" class="btn btn-outline-light btn-sm px-3 py-2 fw-semibold d-inline-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                <i class="bi bi-sliders"></i> Ajustes
+            </button>
         </div>
 
-        <form method="POST">
-            {% csrf_token %}
-            <div class="row g-4 mb-3">
-                <div class="col-md-6">
-                    <label class="form-label text-muted small fw-semibold">Nombre</label>
-                    {{ form.first_name }}
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label text-muted small fw-semibold">Apellidos</label>
-                    {{ form.last_name }}
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="p-3 rounded-3 h-100" style="background: rgba(6, 9, 16, 0.6); border: 1px solid var(--border-subtle);">
+                    <small class="text-muted d-block mb-1 fw-semibold">Biografía</small>
+                    <p class="text-light mb-0" style="font-size: 0.92rem; line-height: 1.5;">
+                        {{ profile.bio|default:"No has registrado una biografía aún. Haz clic en 'Editar Perfil' para añadir una breve descripción sobre ti." }}
+                    </p>
                 </div>
             </div>
-
-            <div class="row g-4 mb-3">
-                <div class="col-md-6">
-                    <label class="form-label text-muted small fw-semibold">Correo Electrónico</label>
-                    {{ form.email }}
+            <div class="col-md-6">
+                <div class="p-3 rounded-3 h-100" style="background: rgba(6, 9, 16, 0.6); border: 1px solid var(--border-subtle);">
+                    <small class="text-muted d-block mb-1 fw-semibold">Géneros Favoritos</small>
+                    <div class="text-light" style="font-size: 0.92rem;">
+                        {% if profile.favorite_genres %}
+                            <span class="badge bg-secondary bg-opacity-25 border border-secondary border-opacity-50 text-light px-3 py-2">
+                                <i class="bi bi-tags me-1"></i> {{ profile.favorite_genres }}
+                            </span>
+                        {% else %}
+                            <span class="text-muted">No especificado</span>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label text-muted small fw-semibold">Tipo de Cuenta (Rol)</label>
-                    {{ form.role }}
-                    <small class="text-muted d-block mt-1" style="font-size: 0.76rem;">
-                        Al seleccionar Escritor / Autor, se habilita la publicación y gestión de novelas ligeras en tu Taller.
-                    </small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 Modal for Profile Editing -->
+    <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="background: #0e1420; border: 1px solid var(--border-subtle); color: #f1f5f9; border-radius: 20px; box-shadow: 0 24px 48px rgba(0, 0, 0, 0.7);">
+                <div class="modal-header border-secondary border-opacity-25 pb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #0284c7, #06b6d4);"></span>
+                        <h5 class="modal-title fw-bold text-white mb-0" id="editProfileModalLabel">Editar Perfil de Usuario</h5>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-            </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="modal-body p-4">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-semibold">Nombre</label>
+                                {{ form.first_name }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-semibold">Apellidos</label>
+                                {{ form.last_name }}
+                            </div>
+                        </div>
 
-            <div class="mb-3">
-                <label class="form-label text-muted small fw-semibold">Avatar URL (Opcional - por defecto se usan tus iniciales dinámicas)</label>
-                {{ form.avatar_url }}
-            </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-semibold">Correo Electrónico</label>
+                                {{ form.email }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted small fw-semibold">Tipo de Cuenta (Rol)</label>
+                                {{ form.role }}
+                                <small class="text-muted d-block mt-1" style="font-size: 0.76rem;">
+                                    Al seleccionar Escritor / Autor, se habilita la publicación y gestión de novelas ligeras en tu Taller.
+                                </small>
+                            </div>
+                        </div>
 
-            <div class="mb-3">
-                <label class="form-label text-muted small fw-semibold">Géneros Favoritos</label>
-                {{ form.favorite_genres }}
-            </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-semibold">Avatar URL (Opcional - por defecto se usan tus iniciales dinámicas)</label>
+                            {{ form.avatar_url }}
+                        </div>
 
-            <div class="mb-4">
-                <label class="form-label text-muted small fw-semibold">Biografía</label>
-                {{ form.bio }}
-            </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-semibold">Géneros Favoritos</label>
+                            {{ form.favorite_genres }}
+                        </div>
 
-            <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-accent px-4 py-2 fw-bold">
-                    <i class="bi bi-check2-circle me-1"></i> Guardar Cambios
-                </button>
+                        <div class="mb-2">
+                            <label class="form-label text-muted small fw-semibold">Biografía</label>
+                            {{ form.bio }}
+                        </div>
+                    </div>
+                    <div class="modal-footer border-secondary border-opacity-25 pt-3">
+                        <button type="button" class="btn btn-outline-secondary px-3 py-2 fw-semibold" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-accent px-4 py-2 fw-bold">
+                            <i class="bi bi-check2-circle me-1"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 
     <!-- Security & Protected Session Card (UID Hidden) -->

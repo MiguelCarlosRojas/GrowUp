@@ -306,5 +306,36 @@ class AccountsTests(TestCase):
         self.assertEqual(resp_dash.status_code, 200)
         self.assertNotContains(resp_dash, f"UID: {user.profile.uid}")
 
+    def test_profile_modal_popup_present(self):
+        user = User.objects.create_user(username='modal_tester', password='password123')
+        self.client.login(username='modal_tester', password='password123')
+        resp = self.client.get(reverse('accounts:profile'))
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, 'id="editProfileModal"')
+        self.assertContains(resp, 'Editar Perfil')
+
+    def test_reviews_and_discussions_filtro_param(self):
+        user = User.objects.create_user(username='filtro_tester', password='password123')
+        self.client.login(username='filtro_tester', password='password123')
+        
+        # Test reviews with filtro parameter
+        resp_rev = self.client.get(reverse('accounts:dashboard_reviews') + '?filtro=5')
+        self.assertEqual(resp_rev.status_code, 200)
+        self.assertEqual(resp_rev.context.get('active_filtro'), '5')
+
+        # Test discussions with filtro parameter
+        resp_disc = self.client.get(reverse('accounts:dashboard_discussions') + '?filtro=questions')
+        self.assertEqual(resp_disc.status_code, 200)
+        self.assertEqual(resp_disc.context.get('active_filtro'), 'questions')
+
+    def test_api_live_notifications_endpoint(self):
+        resp = self.client.get(reverse('catalog:api_live_notifications'))
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data.get('status'), 'success')
+        self.assertIn('notifications', data)
+        self.assertTrue(len(data['notifications']) >= 1)
+
+
 
 

@@ -17,6 +17,7 @@ urlpatterns = [
     # Optimized Single-Query REST Endpoints
     path('api/novels/', api_views.api_novels_optimized_view, name='api_novels'),
     path('api/live/metrics/', api_views.api_live_metrics_view, name='api_live_metrics'),
+    path('api/live/notifications/', api_views.api_live_notifications_view, name='api_live_notifications'),
 
     # Sobre nosotros
     path('sobre-nosotros/quienes-somos/', pages_views.quienes_somos_view, name='quienes_somos'),

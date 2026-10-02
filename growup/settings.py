@@ -17,6 +17,13 @@ DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 't')
 
 ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', '*').split(',') if host.strip()]
 
+# Jikan API v4 configuration
+JIKAN_API_BASE_URL = os.getenv('JIKAN_API_BASE_URL', 'https://api.jikan.moe/v4')
+JIKAN_API_TIMEOUT = int(os.getenv('JIKAN_API_TIMEOUT', '6'))
+JIKAN_CACHE_TTL = int(os.getenv('JIKAN_CACHE_TTL', '900'))
+JIKAN_TOP_LIMIT = int(os.getenv('JIKAN_TOP_LIMIT', '12'))
+JIKAN_SEARCH_LIMIT = int(os.getenv('JIKAN_SEARCH_LIMIT', '18'))
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',

@@ -116,7 +116,16 @@ Copia la plantilla `.env.example` a `.env`:
 ```bash
 cp .env.example .env
 ```
-Edita `.env` con tus credenciales de Prisma Postgres o PostgreSQL.
+Edita `.env` con tus credenciales de Prisma Postgres o PostgreSQL y la configuración de Jikan API v4:
+
+```env
+DATABASE_URL=postgresql://...
+JIKAN_API_BASE_URL=https://api.jikan.moe/v4
+JIKAN_API_TIMEOUT=6
+JIKAN_CACHE_TTL=900
+JIKAN_TOP_LIMIT=12
+JIKAN_SEARCH_LIMIT=18
+```
 
 ### 5. Aplicar migraciones y datos iniciales
 ```bash

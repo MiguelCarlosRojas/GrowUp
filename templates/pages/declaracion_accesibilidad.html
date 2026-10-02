@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Declaración de Accesibilidad - GrowUp{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-3">
+    <div class="col-lg-10 col-xl-9">
+        <!-- Header -->
+        <div class="mb-5 text-center">
+            <span class="badge px-3 py-1 mb-3" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.35); color: #ffffff;">
+                Inclusión & Accesibilidad Web
+            </span>
+            <h1 class="display-5 fw-bold text-white mb-3">Declaración de Accesibilidad</h1>
+            <p class="text-muted lead mx-auto" style="max-width: 720px;">
+                Nuestro compromiso formal con la accesibilidad digital para garantizar que todos los usuarios, independientemente de sus capacidades técnicas o físicas, puedan disfrutar de la lectura y exploración del catálogo.
+            </p>
+        </div>
+
+        <div class="p-4 p-md-5 rounded-4 mb-5 text-secondary" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle); line-height: 1.8;">
+            <h4 class="text-white fw-bold mb-3">1. Compromiso con los Estándares WCAG 2.1</h4>
+            <p>
+                GrowUp Media & Technology S.A.C. se compromete a hacer accesible su sitio web de conformidad con las Pautas de Accesibilidad para el Contenido Web (<strong class="text-white">WCAG 2.1</strong>) en su <strong class="text-white">Nivel AA</strong>.
+            </p>
+
+            <h4 class="text-white fw-bold mb-3">2. Medidas de Accesibilidad Implementadas</h4>
+            <p>
+                En el diseño y desarrollo de la plataforma se han integrado las siguientes características técnicas:
+            </p>
+            <ul>
+                <li><strong class="text-white">Contraste de Color Óptimo:</strong> Paleta Obsidian de alto contraste que supera la relación de 4.5:1 para texto normal y 3:1 para elementos de interfaz gráfica.</li>
+                <li><strong class="text-white">Navegación Total por Teclado:</strong> Todos los elementos interactivos (botones, selectores, campos de búsqueda y menús desplegables) son completamente operables mediante el tabulador del teclado, con anillos de foco visibles y destacados.</li>
+                <li><strong class="text-white">Herramientas en el Lector de Capítulos:</strong> Opciones para cambiar entre tres temas de lectura (Modo Oscuro, Sepia de bajo deslumbramiento y OLED de contraste absoluto), además de controles interactivos para aumentar o disminuir dinámicamente el tamaño de fuente.</li>
+                <li><strong class="text-white">Diseño Totalmente Responsivo:</strong> Interfaz fluida basada en unidades dinámicas (clamp, rem, vw) que permite un zoom de hasta el 200% sin pérdida de contenido ni desplazamiento horizontal involuntario.</li>
+                <li><strong class="text-white">Etiquetado Semántico y Atributos ARIA:</strong> Estructura HTML5 correcta con encabezados jerárquicos (H1 a H6), etiquetas de formulario explícitas y textos alternativos descriptivos en todas las portadas e imágenes.</li>
+            </ul>
+
+            <h4 class="text-white fw-bold mb-3">3. Observaciones y Sugerencias de Accesibilidad</h4>
+            <p>
+                Si experimentas cualquier dificultad de acceso, detectas algún incumplimiento o deseas hacernos una consulta para mejorar la accesibilidad de la plataforma, puedes contactarnos directamente en:
+            </p>
+            <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
+                <span class="text-white fw-semibold d-block mb-1"><i class="bi bi-universal-access-circle text-info me-2"></i>Oficina de Accesibilidad Digital</span>
+                <span class="text-muted">Correo directo: <code class="text-white">accesibilidad@growup-media.org</code></span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

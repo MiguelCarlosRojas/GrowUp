@@ -52,3 +52,24 @@ class CatalogTests(TestCase):
         disc = ItemDiscussion.objects.filter(item_id='5114', user=self.user).first()
         self.assertIsNotNone(disc)
         self.assertEqual(disc.discussion_type, 'question')
+
+    def test_corporate_and_legal_pages(self):
+        page_names = [
+            'catalog:quienes_somos',
+            'catalog:nuestra_historia',
+            'catalog:donde_estamos',
+            'catalog:blog',
+            'catalog:ayuda',
+            'catalog:preguntas_frecuentes',
+            'catalog:contacto',
+            'catalog:aviso_legal',
+            'catalog:politica_cookies',
+            'catalog:condiciones_uso',
+            'catalog:politica_privacidad',
+            'catalog:declaracion_accesibilidad',
+            'accounts:login',
+            'accounts:register',
+        ]
+        for name in page_names:
+            response = self.client.get(reverse(name))
+            self.assertEqual(response.status_code, 200, f"Page {name} returned status {response.status_code}")

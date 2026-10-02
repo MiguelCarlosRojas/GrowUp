@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Centro de Ayuda - GrowUp{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-3">
+    <div class="col-lg-10 col-xl-9">
+        <!-- Header -->
+        <div class="mb-5 text-center">
+            <span class="badge px-3 py-1 mb-3" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.35); color: #ffffff;">
+                Soporte & Asistencia
+            </span>
+            <h1 class="display-5 fw-bold text-white mb-3">Centro de Ayuda</h1>
+            <p class="text-muted lead mx-auto" style="max-width: 720px;">
+                Encuentra guías paso a paso, soluciones a problemas frecuentes y asistencia personalizada para lectores y creadores.
+            </p>
+        </div>
+
+        <!-- Help Topics Grid -->
+        <div class="row row-cols-1 row-cols-md-2 g-4 mb-5">
+            <!-- Topic 1 -->
+            <div class="col">
+                <div class="p-4 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="badge p-3 rounded-3" style="background: rgba(255, 42, 84, 0.15); color: #ff2a54;">
+                            <i class="bi bi-person-gear fs-4"></i>
+                        </div>
+                        <h5 class="text-white fw-bold mb-0">Gestión de Cuenta y Perfil</h5>
+                    </div>
+                    <p class="text-secondary small mb-3" style="line-height: 1.8;">
+                        Cómo registrarte, cambiar tu contraseña, actualizar tu avatar, seleccionar tus géneros favoritos y cambiar tu rol entre lector y autor.
+                    </p>
+                    <ul class="list-unstyled small text-muted mb-0" style="line-height: 2;">
+                        <li><i class="bi bi-check2 text-danger me-2"></i>Recuperación de contraseña segura</li>
+                        <li><i class="bi bi-check2 text-danger me-2"></i>Configuración de preferencias de lectura</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Topic 2 -->
+            <div class="col">
+                <div class="p-4 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="badge p-3 rounded-3" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">
+                            <i class="bi bi-feather fs-4"></i>
+                        </div>
+                        <h5 class="text-white fw-bold mb-0">Publicación en el Taller de Autores</h5>
+                    </div>
+                    <p class="text-secondary small mb-3" style="line-height: 1.8;">
+                        Guía para subir novelas originales, gestión de portadas, asignación de categorías, numeración secuencial de capítulos y notas del autor.
+                    </p>
+                    <ul class="list-unstyled small text-muted mb-0" style="line-height: 2;">
+                        <li><i class="bi bi-check2 text-warning me-2"></i>Formato de texto y conteo de palabras automático</li>
+                        <li><i class="bi bi-check2 text-warning me-2"></i>Publicación instantánea vs modo borrador</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Topic 3 -->
+            <div class="col">
+                <div class="p-4 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="badge p-3 rounded-3" style="background: rgba(6, 182, 212, 0.15); color: #06b6d4;">
+                            <i class="bi bi-star-half fs-4"></i>
+                        </div>
+                        <h5 class="text-white fw-bold mb-0">Sistema de Reseñas y Debates</h5>
+                    </div>
+                    <p class="text-secondary small mb-3" style="line-height: 1.8;">
+                        Cómo calificar de 1 a 5 estrellas, redactar opiniones constructivas, abrir preguntas de la trama y responder en hilos anidados.
+                    </p>
+                    <ul class="list-unstyled small text-muted mb-0" style="line-height: 2;">
+                        <li><i class="bi bi-check2 text-info me-2"></i>Pautas de convivencia de la comunidad</li>
+                        <li><i class="bi bi-check2 text-info me-2"></i>Cálculo de puntuaciones ponderadas</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Topic 4 -->
+            <div class="col">
+                <div class="p-4 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="badge p-3 rounded-3" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                            <i class="bi bi-shield-lock fs-4"></i>
+                        </div>
+                        <h5 class="text-white fw-bold mb-0">Seguridad & Privacidad</h5>
+                    </div>
+                    <p class="text-secondary small mb-3" style="line-height: 1.8;">
+                        Información sobre cómo se protegen tus datos, nuestra política de cero publicidad intrusiva y las garantías de cifrado de contraseñas.
+                    </p>
+                    <ul class="list-unstyled small text-muted mb-0" style="line-height: 2;">
+                        <li><i class="bi bi-check2 text-success me-2"></i>Cifrado PBKDF2 de credenciales</li>
+                        <li><i class="bi bi-check2 text-success me-2"></i>Solicitudes de exportación o baja de datos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Links Box -->
+        <div class="p-4 rounded-4 text-center" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+            <h4 class="text-white fw-bold mb-2">¿No encontraste lo que buscabas?</h4>
+            <p class="text-muted mb-3">Nuestro equipo de soporte está disponible para atender cualquier duda o inconveniente técnico.</p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="{% url 'catalog:preguntas_frecuentes' %}" class="btn btn-outline-glow px-4 py-2">
+                    <i class="bi bi-question-circle me-1"></i> Ver Preguntas Frecuentes
+                </a>
+                <a href="{% url 'catalog:contacto' %}" class="btn btn-accent px-4 py-2">
+                    <i class="bi bi-envelope me-1"></i> Contactar al Equipo de Soporte
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

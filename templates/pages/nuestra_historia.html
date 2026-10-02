@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Nuestra Historia - GrowUp{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-3">
+    <div class="col-lg-10 col-xl-9">
+        <!-- Header -->
+        <div class="mb-5 text-center">
+            <span class="badge px-3 py-1 mb-3" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.35); color: #ffffff;">
+                Trayectoria & Evolución
+            </span>
+            <h1 class="display-5 fw-bold text-white mb-3">Nuestra Historia</h1>
+            <p class="text-muted lead mx-auto" style="max-width: 720px;">
+                Cómo una pequeña iniciativa de aficionados al anime se convirtió en una plataforma integral de catalogación y publicación de novelas ligeras.
+            </p>
+        </div>
+
+        <!-- Timeline -->
+        <div class="p-4 p-md-5 rounded-4 mb-5" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+            <div class="d-flex flex-column gap-5 position-relative">
+                
+                <!-- 2024 -->
+                <div class="d-flex gap-4 align-items-start">
+                    <div class="badge p-3 rounded-circle" style="background: var(--grad-primary); width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="bi bi-lightbulb-fill text-white fs-5"></i>
+                    </div>
+                    <div>
+                        <span class="text-danger fw-bold small text-uppercase">Primer Semestre 2024</span>
+                        <h4 class="text-white fw-bold mb-2">El Nacimiento de GrowUp</h4>
+                        <p class="text-secondary" style="line-height: 1.8;">
+                            GrowUp comenzó como un proyecto colaborativo de código abierto diseñado para resolver la dispersión de información sobre mangas y animes en español. La meta inicial fue ofrecer una interfaz rápida, limpia y libre de anuncios intrusivos para explorar catálogos sincronizados directamente con la base de datos de MyAnimeList.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Late 2024 -->
+                <div class="d-flex gap-4 align-items-start">
+                    <div class="badge p-3 rounded-circle" style="background: linear-gradient(135deg, #f59e0b, #ef4444); width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="bi bi-feather text-white fs-5"></i>
+                    </div>
+                    <div>
+                        <span class="text-warning fw-bold small text-uppercase">Segundo Semestre 2024</span>
+                        <h4 class="text-white fw-bold mb-2">Lanzamiento del Taller de Autores</h4>
+                        <p class="text-secondary" style="line-height: 1.8;">
+                            Identificamos que miles de talentosos escritores de fantasía, isekai y romance carecían de una plataforma moderna para dar a conocer sus novelas ligeras. Diseñamos el módulo de autor, incorporando gestión de capítulos, portadas personalizadas y un sistema inmersivo de lectura con modos oscuro, sepia y OLED.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 2025 -->
+                <div class="d-flex gap-4 align-items-start">
+                    <div class="badge p-3 rounded-circle" style="background: linear-gradient(135deg, #06b6d4, #6366f1); width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="bi bi-database-fill-check text-white fs-5"></i>
+                    </div>
+                    <div>
+                        <span class="text-info fw-bold small text-uppercase">Año 2025</span>
+                        <h4 class="text-white fw-bold mb-2">Migración a Prisma Postgres & CI/CD</h4>
+                        <p class="text-secondary" style="line-height: 1.8;">
+                            Para soportar el creciente volumen de lectores y garantizar una latencia inferior a 50ms, la base de datos evolucionó a Prisma Postgres en cloud con pooler de alto rendimiento y pipelines automáticos de integración y despliegue continuo con GitHub Actions.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Present -->
+                <div class="d-flex gap-4 align-items-start">
+                    <div class="badge p-3 rounded-circle" style="background: linear-gradient(135deg, #10b981, #059669); width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="bi bi-rocket-takeoff-fill text-white fs-5"></i>
+                    </div>
+                    <div>
+                        <span class="text-success fw-bold small text-uppercase">Actualidad</span>
+                        <h4 class="text-white fw-bold mb-2">Ecosistema Global & Comunidad Activa</h4>
+                        <p class="text-secondary" style="line-height: 1.8;">
+                            Hoy GrowUp conecta a más de decenas de miles de lectores con obras oficiales de la industria y novelas independientes, manteniendo su compromiso original: rendimiento óptimo, accesibilidad universal y protección irrestricta de los derechos de autor.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

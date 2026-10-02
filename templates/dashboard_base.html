@@ -1,0 +1,219 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Workspace de Usuario - GrowUp{% endblock %}</title>
+    
+    <!-- Multi-Resolution Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+    <link rel="icon" type="image/png" sizes="256x256" href="{% static 'images/favicon.png' %}">
+    <link rel="apple-touch-icon" sizes="256x256" href="{% static 'images/favicon.png' %}">
+    
+    <!-- Bootstrap 5 & Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Design System Styles -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="app-workspace-body">
+
+    <!-- Floating Pop-up Toast Notifications Container -->
+    <div id="toastNotificationContainer" class="toast-popup-container" aria-live="polite" aria-atomic="true">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="toast-popup-card toast-{{ message.tags|default:'info' }}" data-auto-dismiss="4500" role="alert">
+                    <div class="toast-popup-body">
+                        <div class="toast-icon-wrap">
+                            {% if message.tags == 'success' %}
+                                <i class="bi bi-check-circle-fill"></i>
+                            {% elif message.tags == 'error' or message.tags == 'danger' %}
+                                <i class="bi bi-exclamation-octagon-fill"></i>
+                            {% elif message.tags == 'warning' %}
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                            {% else %}
+                                <i class="bi bi-info-circle-fill"></i>
+                            {% endif %}
+                        </div>
+                        <div class="toast-message-content">
+                            <span class="toast-message-title">
+                                {% if message.tags == 'success' %}Éxito
+                                {% elif message.tags == 'error' or message.tags == 'danger' %}Atención
+                                {% elif message.tags == 'warning' %}Aviso
+                                {% else %}Notificación
+                                {% endif %}
+                            </span>
+                            <div class="toast-message-text">{{ message }}</div>
+                        </div>
+                        <button type="button" class="toast-popup-close" onclick="dismissToast(this.closest('.toast-popup-card'))" aria-label="Cerrar">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                    <div class="toast-progress-bar">
+                        <div class="toast-progress-fill"></div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Modern App Topbar -->
+    <header class="app-topbar">
+        <div class="d-flex align-items-center gap-3">
+            <a href="{% url 'catalog:home' %}" class="d-flex align-items-center text-decoration-none">
+                <img src="{% static 'images/logo.png' %}" alt="GrowUp" class="brand-logo-img" style="height: 38px;">
+            </a>
+            <div class="vr bg-secondary opacity-25 d-none d-sm-block" style="height: 24px;"></div>
+            <span class="app-workspace-badge d-none d-sm-inline-flex">
+                <i class="bi bi-shield-check"></i> Workspace de Usuario
+            </span>
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+            <a href="{% url 'catalog:home' %}" class="btn-app-action">
+                <i class="bi bi-compass"></i>
+                <span class="d-none d-md-inline">Volver al Catálogo</span>
+            </a>
+
+            <div class="dropdown">
+                <button class="user-nav-pill-btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="user-avatar-initials-sm" style="background: {{ user.profile.avatar_gradient }};">
+                        {{ user.initials }}
+                    </div>
+                    <span class="user-nav-name d-none d-sm-inline">{{ user.username }}</span>
+                    <i class="bi bi-chevron-down user-nav-chevron"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end user-nav-dropdown-menu shadow-lg">
+                    <li>
+                        <a class="dropdown-item user-nav-dropdown-item" href="{% url 'accounts:profile' %}">
+                            <i class="bi bi-person-circle text-info"></i> Mi Perfil
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider border-secondary border-opacity-25 my-1"></li>
+                    <li>
+                        <a class="dropdown-item user-nav-dropdown-item user-nav-logout" href="{% url 'accounts:logout' %}">
+                            <i class="bi bi-box-arrow-right text-danger"></i> Cerrar Sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- App Shell Layout (Full Screen / Full Width) -->
+    <div class="app-shell-layout">
+        <!-- Sidebar Column -->
+        <aside class="app-sidebar-v2">
+            {% include 'accounts/dashboard_sidebar.html' %}
+        </aside>
+
+        <!-- Main Workspace Canvas -->
+        <main class="app-main-workspace">
+            <div class="app-workspace-content">
+                {% block content %}{% endblock %}
+            </div>
+
+            <!-- Minimal App Workspace Footer -->
+            <footer class="app-workspace-footer">
+                <span>&copy; {% now "Y" %} GrowUp Workspace. Entorno Privado y Cifrado.</span>
+                <span class="d-none d-md-inline">Prisma Postgres Cloud DB &bull; Sesión Cifrada JWT</span>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Bootstrap 5 JavaScript Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/websocket_client.js' %}"></script>
+    <script>
+        function dismissToast(card) {
+            if (!card) return;
+            card.classList.add('toast-dismissing');
+            setTimeout(function() {
+                if (card.parentNode) {
+                    card.parentNode.removeChild(card);
+                }
+            }, 320);
+        }
+
+        window.showToast = function(message, type, duration) {
+            type = type || 'info';
+            duration = duration || 4500;
+            var container = document.getElementById('toastNotificationContainer');
+            if (!container) return;
+
+            var iconMap = {
+                'success': 'bi-check-circle-fill',
+                'error': 'bi-exclamation-octagon-fill',
+                'danger': 'bi-exclamation-octagon-fill',
+                'warning': 'bi-exclamation-triangle-fill',
+                'info': 'bi-info-circle-fill'
+            };
+
+            var titleMap = {
+                'success': 'Éxito',
+                'error': 'Atención',
+                'danger': 'Atención',
+                'warning': 'Aviso',
+                'info': 'Notificación'
+            };
+
+            var icon = iconMap[type] || 'bi-info-circle-fill';
+            var title = titleMap[type] || 'Notificación';
+
+            var card = document.createElement('div');
+            card.className = 'toast-popup-card toast-' + type;
+            card.setAttribute('role', 'alert');
+
+            card.innerHTML = 
+                '<div class="toast-popup-body">' +
+                    '<div class="toast-icon-wrap"><i class="bi ' + icon + '"></i></div>' +
+                    '<div class="toast-message-content">' +
+                        '<span class="toast-message-title">' + title + '</span>' +
+                        '<div class="toast-message-text">' + message + '</div>' +
+                    '</div>' +
+                    '<button type="button" class="toast-popup-close" aria-label="Cerrar">' +
+                        '<i class="bi bi-x-lg"></i>' +
+                    '</button>' +
+                '</div>' +
+                '<div class="toast-progress-bar">' +
+                    '<div class="toast-progress-fill" style="animation-duration: ' + duration + 'ms;"></div>' +
+                '</div>';
+
+            var closeBtn = card.querySelector('.toast-popup-close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    dismissToast(card);
+                });
+            }
+
+            container.appendChild(card);
+
+            setTimeout(function() {
+                dismissToast(card);
+            }, duration);
+        };
+
+        // Initialize server-rendered toasts
+        document.addEventListener('DOMContentLoaded', function() {
+            var toasts = document.querySelectorAll('.toast-popup-card');
+            toasts.forEach(function(toast) {
+                var duration = parseInt(toast.getAttribute('data-auto-dismiss') || '4500', 10);
+                var progress = toast.querySelector('.toast-progress-fill');
+                if (progress) {
+                    progress.style.animationDuration = duration + 'ms';
+                }
+                setTimeout(function() {
+                    dismissToast(toast);
+                }, duration);
+            });
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

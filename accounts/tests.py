@@ -169,4 +169,30 @@ class AccountsTests(TestCase):
         self.assertEqual(resp_disc.status_code, 200)
         self.assertContains(resp_disc, 'Preguntas, Respuestas y Debates')
 
+    def test_user_navbar_dropdown_simplified(self):
+        user = User.objects.create_user(username='nav_tester', password='password123')
+        self.client.login(username='nav_tester', password='password123')
+        response = self.client.get(reverse('catalog:home'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Mi Perfil')
+        self.assertContains(response, 'Cerrar Sesión')
+        self.assertContains(response, 'user-nav-pill-btn')
+        # Navbar dropdown should NOT contain the old extra links
+        self.assertNotContains(response, 'Mi Dashboard')
+
+    def test_uid_hidden_from_profile_and_dashboard(self):
+        user = User.objects.create_user(username='uid_tester', password='password123')
+        self.client.login(username='uid_tester', password='password123')
+        
+        # In profile view, visible UID text should NOT be present
+        resp_prof = self.client.get(reverse('accounts:profile'))
+        self.assertEqual(resp_prof.status_code, 200)
+        self.assertNotContains(resp_prof, f"UID: {user.profile.uid}")
+        
+        # In dashboard view, visible UID text should NOT be present
+        resp_dash = self.client.get(reverse('accounts:dashboard'))
+        self.assertEqual(resp_dash.status_code, 200)
+        self.assertNotContains(resp_dash, f"UID: {user.profile.uid}")
+
+
 

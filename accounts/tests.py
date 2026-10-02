@@ -89,3 +89,69 @@ class AccountsTests(TestCase):
         # Redirects either to google OAuth URL or to login with warning if not configured
         self.assertIn(response.status_code, (302, 301))
 
+    def test_profile_view_without_field_error(self):
+        user = User.objects.create_user(username='reviewer_user', password='password123')
+        from catalog.models import ItemReview
+        ItemReview.objects.create(
+            user=user,
+            item_type='anime',
+            item_id='52991',
+            item_title='Frieren: Beyond Journey\'s End',
+            rating=5,
+            headline='Obra maestra absoluta',
+            opinion='Una de las mejores historias de fantasía y reflexión.'
+        )
+        self.client.login(username='reviewer_user', password='password123')
+        response = self.client.get(reverse('accounts:profile'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Frieren: Beyond Journey&#x27;s End')
+        self.assertContains(response, 'Configuración de Perfil')
+
+    def test_reader_dashboard_sidebar(self):
+        user = User.objects.create_user(username='reader_user', password='password123')
+        user.profile.role = 'reader'
+        user.profile.save()
+        self.client.login(username='reader_user', password='password123')
+
+        response = self.client.get(reverse('accounts:dashboard'))
+        self.assertEqual(response.status_code, 200)
+        # Should contain reader items
+        self.assertContains(response, 'Dashboard')
+        self.assertContains(response, 'Opiniones y Calificación')
+        self.assertContains(response, 'Preguntas, Respuestas y Debates')
+        self.assertContains(response, 'Profile')
+        self.assertContains(response, 'Cerrar Sesión')
+        # Should NOT contain author workshop
+        self.assertNotContains(response, 'Mi Taller de Escritor')
+
+    def test_author_dashboard_sidebar(self):
+        user = User.objects.create_user(username='author_user', password='password123')
+        user.profile.role = 'author'
+        user.profile.save()
+        self.client.login(username='author_user', password='password123')
+
+        response = self.client.get(reverse('accounts:dashboard'))
+        self.assertEqual(response.status_code, 200)
+        # Should contain author items including workshop
+        self.assertContains(response, 'Dashboard')
+        self.assertContains(response, 'Opiniones y Calificación')
+        self.assertContains(response, 'Preguntas, Respuestas y Debates')
+        self.assertContains(response, 'Mi Taller de Escritor')
+        self.assertContains(response, 'Profile')
+        self.assertContains(response, 'Cerrar Sesión')
+
+    def test_dashboard_reviews_and_discussions_views(self):
+        user = User.objects.create_user(username='community_user', password='password123')
+        self.client.login(username='community_user', password='password123')
+
+        # Test reviews page
+        resp_reviews = self.client.get(reverse('accounts:dashboard_reviews'))
+        self.assertEqual(resp_reviews.status_code, 200)
+        self.assertContains(resp_reviews, 'Opiniones y Calificación')
+
+        # Test discussions page
+        resp_disc = self.client.get(reverse('accounts:dashboard_discussions'))
+        self.assertEqual(resp_disc.status_code, 200)
+        self.assertContains(resp_disc, 'Preguntas, Respuestas y Debates')
+
+

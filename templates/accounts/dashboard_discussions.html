@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Preguntas y Debates - GrowUp{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- Left Column: Role-Aware Sidebar -->
+    <div class="col-lg-4 col-xl-3">
+        {% include 'accounts/dashboard_sidebar.html' %}
+    </div>
+
+    <!-- Right Column: Discussions Content -->
+    <div class="col-lg-8 col-xl-9">
+        <div class="p-4 rounded-4 mb-4" style="background: linear-gradient(135deg, rgba(18, 25, 40, 0.95) 0%, rgba(10, 15, 26, 0.98) 100%); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #3b82f6);"></span>
+                        <h2 class="text-white fw-bold mb-0">Preguntas, Respuestas y Debates</h2>
+                    </div>
+                    <p class="text-muted mb-0 small">Historial de tus preguntas, comentarios e intervenciones en los debates de la comunidad.</p>
+                </div>
+                <div class="d-flex gap-3 align-items-center">
+                    <div class="text-end">
+                        <span class="d-block text-muted small">Preguntas Formuladas</span>
+                        <strong class="fs-4 text-info"><i class="bi bi-question-circle me-1"></i>{{ questions_count }}</strong>
+                    </div>
+                    <div class="vr bg-secondary opacity-50" style="height: 40px;"></div>
+                    <div class="text-end">
+                        <span class="d-block text-muted small">Total Intervenciones</span>
+                        <strong class="fs-4 text-white">{{ total_discussions }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if discussions %}
+            <div class="d-flex flex-column gap-3">
+                {% for disc in discussions %}
+                    <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle);">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+                            <div>
+                                <span class="badge {% if disc.discussion_type == 'question' %}bg-info text-dark{% else %}bg-secondary text-white{% endif %} me-2" style="font-size: 0.72rem;">
+                                    {{ disc.get_discussion_type_display }}
+                                </span>
+                                <h5 class="text-white fw-bold d-inline align-middle mb-0">
+                                    {{ disc.item_title|default:'Debate en Obra' }}
+                                </h5>
+                            </div>
+                            <span class="badge bg-dark border border-secondary text-secondary small">
+                                {{ disc.get_item_type_display }}
+                            </span>
+                        </div>
+                        <p class="text-light small mb-3" style="line-height: 1.7; font-size: 0.95rem;">{{ disc.content }}</p>
+                        <div class="d-flex justify-content-between align-items-center pt-2 border-top border-secondary border-opacity-25 small text-muted">
+                            <span>
+                                <i class="bi bi-clock me-1"></i> {{ disc.created_at|date:"d M Y, H:i" }}
+                                {% if disc.parent %}
+                                    &bull; <span class="text-info"><i class="bi bi-reply-fill"></i> Respuesta a comentario</span>
+                                {% endif %}
+                            </span>
+                            {% if disc.item_type == 'original_novel' %}
+                                <a href="{% url 'novels:novel_detail' slug=disc.item_id %}" class="btn btn-sm btn-outline-glow py-1 px-3">
+                                    <i class="bi bi-chat-dots me-1"></i> Ir al Debate
+                                </a>
+                            {% else %}
+                                <a href="{% url 'catalog:item_detail' item_type=disc.item_type item_id=disc.item_id %}" class="btn btn-sm btn-outline-glow py-1 px-3">
+                                    <i class="bi bi-chat-dots me-1"></i> Ir al Debate
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="p-5 rounded-4 text-center" style="background: rgba(14, 20, 32, 0.9); border: 1px dashed var(--border-subtle);">
+                <i class="bi bi-chat-left-dots text-info mb-3 d-block" style="font-size: 3rem;"></i>
+                <h4 class="text-white fw-bold">Aún no has participado en debates o preguntas</h4>
+                <p class="text-muted small mb-4">Únete a las discusiones en las páginas de tus animes, mangas y novelas favoritas.</p>
+                <a href="{% url 'catalog:home' %}" class="btn btn-accent px-4 py-2">
+                    <i class="bi bi-compass me-1"></i> Explorar Catálogo
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

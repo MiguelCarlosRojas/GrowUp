@@ -7,6 +7,9 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
+    path('dashboard/', views.dashboard_view, name='dashboard'),
+    path('dashboard/reviews/', views.dashboard_reviews_view, name='dashboard_reviews'),
+    path('dashboard/discussions/', views.dashboard_discussions_view, name='dashboard_discussions'),
     path('profile/', views.profile_view, name='profile'),
 
     # OAuth 2.0 Endpoints

@@ -1,0 +1,63 @@
+<!-- Role-Aware Dashboard Sidebar Navigation Component -->
+<div class="dashboard-sidebar-card shadow-lg">
+    <!-- User Profile Header in Sidebar -->
+    <div class="sidebar-user-header text-center mb-4 pb-3 border-bottom border-secondary border-opacity-25">
+        {% if user.profile.avatar_url %}
+            <img src="{{ user.profile.avatar_url }}" alt="{{ user.username }}" class="rounded-circle shadow mb-2" style="width: 76px; height: 76px; object-fit: cover; border: 2.5px solid var(--accent-primary);">
+        {% else %}
+            <div class="user-avatar-initials-md mx-auto mb-2 shadow" style="width: 76px; height: 76px; font-size: 1.6rem; background: {{ user.profile.avatar_gradient }};">
+                {{ user.initials }}
+            </div>
+        {% endif %}
+        <h5 class="text-white fw-bold mb-1">{{ user.get_full_name|default:user.username }}</h5>
+        <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+            {% if user.profile.role == 'author' %}
+                <span class="badge px-3 py-1 fw-bold" style="background: rgba(245, 158, 11, 0.18); border: 1px solid rgba(245, 158, 11, 0.35); color: #f59e0b;">
+                    <i class="bi bi-feather me-1"></i> Escritor / Autor
+                </span>
+            {% else %}
+                <span class="badge px-3 py-1 fw-bold" style="background: rgba(6, 182, 212, 0.18); border: 1px solid rgba(6, 182, 212, 0.35); color: #06b6d4;">
+                    <i class="bi bi-book-half me-1"></i> Lector
+                </span>
+            {% endif %}
+        </div>
+        <small class="text-muted text-break d-block font-monospace" style="font-size: 0.72rem;">
+            UID: {{ user.profile.uid }}
+        </small>
+    </div>
+
+    <!-- Navigation Menu Items Conditional on Account Type / Role -->
+    <nav class="sidebar-nav-menu d-flex flex-column gap-2">
+        <a href="{% url 'accounts:dashboard' %}" class="sidebar-nav-item {% if active_tab == 'dashboard' %}active{% endif %}">
+            <i class="bi bi-speedometer2"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="{% url 'accounts:dashboard_reviews' %}" class="sidebar-nav-item {% if active_tab == 'reviews' %}active{% endif %}">
+            <i class="bi bi-star-fill text-warning"></i>
+            <span>Opiniones y Calificación</span>
+        </a>
+
+        <a href="{% url 'accounts:dashboard_discussions' %}" class="sidebar-nav-item {% if active_tab == 'discussions' %}active{% endif %}">
+            <i class="bi bi-chat-left-text-fill text-info"></i>
+            <span>Preguntas, Respuestas y Debates</span>
+        </a>
+
+        {% if user.profile.role == 'author' %}
+            <a href="{% url 'novels:author_dashboard' %}" class="sidebar-nav-item {% if active_tab == 'workshop' %}active{% endif %}">
+                <i class="bi bi-feather text-warning"></i>
+                <span>Mi Taller de Escritor</span>
+            </a>
+        {% endif %}
+
+        <a href="{% url 'accounts:profile' %}" class="sidebar-nav-item {% if active_tab == 'profile' %}active{% endif %}">
+            <i class="bi bi-person-fill text-primary"></i>
+            <span>Profile</span>
+        </a>
+
+        <a href="{% url 'accounts:logout' %}" class="sidebar-nav-item sidebar-nav-logout text-danger">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Cerrar Sesión</span>
+        </a>
+    </nav>
+</div>

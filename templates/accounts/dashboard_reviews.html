@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Opiniones y Calificaciones - GrowUp{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <!-- Left Column: Role-Aware Sidebar -->
+    <div class="col-lg-4 col-xl-3">
+        {% include 'accounts/dashboard_sidebar.html' %}
+    </div>
+
+    <!-- Right Column: Reviews Content -->
+    <div class="col-lg-8 col-xl-9">
+        <div class="p-4 rounded-4 mb-4" style="background: linear-gradient(135deg, rgba(18, 25, 40, 0.95) 0%, rgba(10, 15, 26, 0.98) 100%); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #f59e0b, #eab308);"></span>
+                        <h2 class="text-white fw-bold mb-0">Opiniones y Calificación</h2>
+                    </div>
+                    <p class="text-muted mb-0 small">Historial completo de tus valoraciones, críticas y estrellas otorgadas en GrowUp.</p>
+                </div>
+                <div class="d-flex gap-3 align-items-center">
+                    <div class="text-end">
+                        <span class="d-block text-muted small">Promedio Otorgado</span>
+                        <strong class="fs-4 text-warning"><i class="bi bi-star-fill me-1"></i>{{ avg_rating }} / 5.0</strong>
+                    </div>
+                    <div class="vr bg-secondary opacity-50" style="height: 40px;"></div>
+                    <div class="text-end">
+                        <span class="d-block text-muted small">Total Reseñas</span>
+                        <strong class="fs-4 text-white">{{ total_reviews }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if reviews %}
+            <div class="d-flex flex-column gap-3">
+                {% for rev in reviews %}
+                    <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle);">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+                            <div>
+                                <span class="badge bg-dark border border-secondary text-secondary me-2 text-uppercase" style="font-size: 0.72rem;">{{ rev.get_item_type_display }}</span>
+                                <h5 class="text-white fw-bold d-inline align-middle mb-0">{{ rev.item_title }}</h5>
+                            </div>
+                            <span class="badge bg-warning text-dark fw-bold px-3 py-2" style="font-size: 0.85rem;">
+                                <i class="bi bi-star-fill me-1"></i>{{ rev.rating }} / 5 Estrellas
+                            </span>
+                        </div>
+                        <h6 class="text-light fw-bold mb-2">{{ rev.headline }}</h6>
+                        <p class="text-muted small mb-3" style="line-height: 1.7;">{{ rev.opinion }}</p>
+                        <div class="d-flex justify-content-between align-items-center pt-2 border-top border-secondary border-opacity-25 small text-muted">
+                            <span><i class="bi bi-calendar3 me-1"></i> Publicado el {{ rev.created_at|date:"d M Y, H:i" }}</span>
+                            {% if rev.item_type == 'original_novel' %}
+                                <a href="{% url 'novels:novel_detail' slug=rev.item_id %}" class="btn btn-sm btn-outline-glow py-1 px-3">
+                                    <i class="bi bi-eye me-1"></i> Ver Obra
+                                </a>
+                            {% else %}
+                                <a href="{% url 'catalog:item_detail' item_type=rev.item_type item_id=rev.item_id %}" class="btn btn-sm btn-outline-glow py-1 px-3">
+                                    <i class="bi bi-eye me-1"></i> Ver Obra
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="p-5 rounded-4 text-center" style="background: rgba(14, 20, 32, 0.9); border: 1px dashed var(--border-subtle);">
+                <i class="bi bi-star text-warning mb-3 d-block" style="font-size: 3rem;"></i>
+                <h4 class="text-white fw-bold">Aún no has dejado ninguna reseña</h4>
+                <p class="text-muted small mb-4">Explora el catálogo de Anime, Manga o Novelas Ligeras y comparte tu opinión con la comunidad.</p>
+                <a href="{% url 'catalog:home' %}" class="btn btn-accent px-4 py-2">
+                    <i class="bi bi-compass me-1"></i> Explorar Catálogo
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

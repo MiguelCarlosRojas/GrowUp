@@ -1393,5 +1393,108 @@ h1, h2, h3, h4, h5, h6, .brand-font {
     margin-top: 1rem;
 }
 
+/* ==========================================================================
+   User Dashboard & Role-Aware Sidebar Navigation (Reader & Author)
+   ========================================================================== */
+.dashboard-sidebar-card {
+    background: rgba(14, 20, 32, 0.95);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 1.5rem;
+    position: sticky;
+    top: 90px;
+    backdrop-filter: var(--glass-blur);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+.sidebar-user-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar-nav-menu {
+    width: 100%;
+}
+
+.sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+}
+
+.sidebar-nav-item i {
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.sidebar-nav-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
+.sidebar-nav-item.active {
+    background: linear-gradient(135deg, rgba(255, 42, 84, 0.18) 0%, rgba(255, 42, 84, 0.08) 100%);
+    border: 1px solid rgba(255, 42, 84, 0.35);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(255, 42, 84, 0.18);
+}
+
+.sidebar-nav-item.active i {
+    color: #ff2a54 !important;
+}
+
+.sidebar-nav-logout:hover {
+    background: rgba(239, 68, 68, 0.15) !important;
+    border-color: rgba(239, 68, 68, 0.35) !important;
+    color: #ef4444 !important;
+}
+
+.dashboard-stat-card {
+    background: rgba(14, 20, 32, 0.9);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 1.25rem;
+    height: 100%;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: var(--glass-blur);
+}
+
+.dashboard-stat-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.stat-icon-wrap {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+}
+
+.stat-value {
+    font-size: 1.6rem;
+    line-height: 1.2;
+}
+
+.stat-label {
+    display: block;
+    margin-top: 0.25rem;
+}
+
 
 

@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}GrowUp - Biblioteca de Manga, Anime y Novelas Ligeras{% endblock %}</title>
     
-    <!-- High-Definition PNG Favicon & App Icons -->
-    <link rel="icon" type="image/png" sizes="128x128" href="{% static 'images/favicon.png' %}">
-    <link rel="apple-touch-icon" sizes="128x128" href="{% static 'images/logo-icon.png' %}">
+    <!-- High-Definition PNG Favicon & App Icons (Large 256x256) -->
+    <link rel="icon" type="image/png" sizes="256x256" href="{% static 'images/favicon.png' %}">
+    <link rel="apple-touch-icon" sizes="256x256" href="{% static 'images/logo-icon.png' %}">
     
     <!-- Bootstrap 5 & Bootstrap Icons (Zero Emojis) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -21,10 +21,10 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- Global Navigation Header (Glassmorphism & Brand PNG) -->
-    <nav class="navbar navbar-expand-lg navbar-custom sticky-top py-2">
+    <!-- Global Navigation Header (Glassmorphism & Large Brand PNG) -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top py-3">
         <div class="container-full d-flex align-items-center justify-content-between">
-            <!-- Brand Logo PNG -->
+            <!-- Brand Logo PNG (Large & Prominent) -->
             <a class="navbar-brand d-flex align-items-center py-0 me-3 me-xl-4" href="{% url 'catalog:home' %}">
                 <img src="{% static 'images/logo.png' %}" alt="GrowUp" class="brand-logo-img">
             </a>
@@ -34,41 +34,13 @@
                 <i class="bi bi-list fs-2 text-danger"></i>
             </button>
 
-            <!-- Navigation Links & Fast Search -->
-            <div class="collapse navbar-collapse" id="navMain">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
-                    <li class="nav-item">
-                        <a class="nav-link-custom {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'catalog:home' %}">
-                            <i class="bi bi-house-door"></i> Inicio
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link-custom {% if request.GET.type == 'anime' %}active{% endif %}" href="{% url 'catalog:explore' %}?type=anime">
-                            <i class="bi bi-tv"></i> Anime
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link-custom {% if request.GET.type == 'manga' %}active{% endif %}" href="{% url 'catalog:explore' %}?type=manga">
-                            <i class="bi bi-book"></i> Manga
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link-custom {% if request.GET.type == 'lightnovel' %}active{% endif %}" href="{% url 'catalog:explore' %}?type=lightnovel">
-                            <i class="bi bi-journal-bookmark"></i> Novelas Ligeras
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link-custom {% if 'novels' in request.path %}active{% endif %}" href="{% url 'novels:novel_list' %}">
-                            <i class="bi bi-feather"></i> Comunidad & Taller
-                        </a>
-                    </li>
-                </ul>
-
+            <!-- Navigation Bar: Search & User Controls -->
+            <div class="collapse navbar-collapse justify-content-end" id="navMain">
                 <!-- Fast Search Bar -->
                 <form class="d-flex my-2 my-lg-0 me-lg-3 flex-grow-1 flex-lg-grow-0" action="{% url 'catalog:explore' %}" method="GET">
-                    <div class="nav-search-wrap">
+                    <div class="nav-search-wrap" style="min-width: 300px;">
                         <i class="bi bi-search nav-search-icon"></i>
-                        <input class="form-control nav-search-input" type="search" name="q" placeholder="Buscar obras o autores..." aria-label="Buscar">
+                        <input class="form-control nav-search-input" type="search" name="q" placeholder="Buscar mangas, animes, novelas..." aria-label="Buscar">
                     </div>
                 </form>
 
@@ -145,24 +117,31 @@
                         </a>
                     </div>
                 </div>
+
+                <!-- Column: Sobre nosotros -->
                 <div class="col-6 col-sm-4 col-lg-2">
-                    <h6 class="text-white fw-bold mb-3">Explorar Catálogo</h6>
+                    <h6 class="text-white fw-bold mb-3">Sobre nosotros</h6>
                     <ul class="list-unstyled mb-0">
-                        <li><a href="{% url 'catalog:explore' %}?type=anime" class="footer-link">Animes Populares</a></li>
-                        <li><a href="{% url 'catalog:explore' %}?type=manga" class="footer-link">Mangas Destacados</a></li>
-                        <li><a href="{% url 'catalog:explore' %}?type=lightnovel" class="footer-link">Novelas Ligeras</a></li>
-                        <li><a href="{% url 'catalog:explore' %}?type=anime&status=airing" class="footer-link">En Emisión</a></li>
+                        <li><a href="#" class="footer-link">Quiénes somos</a></li>
+                        <li><a href="#" class="footer-link">Nuestra Historia</a></li>
+                        <li><a href="#" class="footer-link">Dónde estamos</a></li>
+                        <li><a href="#" class="footer-link">Blog</a></li>
                     </ul>
                 </div>
+
+                <!-- Column: Ayuda & Contacto -->
                 <div class="col-6 col-sm-4 col-lg-2">
-                    <h6 class="text-white fw-bold mb-3">Comunidad & Autores</h6>
+                    <h6 class="text-white fw-bold mb-3">Ayuda & Contacto</h6>
                     <ul class="list-unstyled mb-0">
-                        <li><a href="{% url 'novels:novel_list' %}" class="footer-link">Biblioteca de Autores</a></li>
-                        <li><a href="{% url 'novels:novel_create' %}" class="footer-link">Publicar mi Novela</a></li>
-                        <li><a href="{% url 'catalog:home' %}" class="footer-link">Reseñas y Q&A</a></li>
-                        <li><a href="{% url 'accounts:register' %}" class="footer-link">Unirse a GrowUp</a></li>
+                        <li><a href="#" class="footer-link">Ayuda</a></li>
+                        <li><a href="#" class="footer-link">Preguntas frecuentes</a></li>
+                        <li><a href="#" class="footer-link">Contacte con nosotros</a></li>
+                        <li><a href="#" class="footer-link">Aviso Legal</a></li>
+                        <li><a href="#" class="footer-link">Política de cookies</a></li>
                     </ul>
                 </div>
+
+                <!-- Column: Infraestructura & Base de Datos -->
                 <div class="col-12 col-sm-4 col-lg-4">
                     <h6 class="text-white fw-bold mb-3">Infraestructura & Datos</h6>
                     <div class="p-3 rounded-3" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
@@ -182,12 +161,13 @@
                 </div>
             </div>
             
+            <!-- Bottom Legal Bar: Condiciones de uso, Política de privacidad, Declaración de accesibilidad -->
             <div class="pt-3 border-top border-secondary border-opacity-25 d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 text-muted small">
                 <span>&copy; {% now "Y" %} GrowUp Platform. Todos los derechos reservados.</span>
-                <div class="d-flex gap-3">
-                    <a href="{% url 'catalog:home' %}" class="text-muted text-decoration-none">Inicio</a>
-                    <a href="https://github.com/MiguelCarlosRojas/GrowUp/blob/main/CODE_OF_CONDUCT.md" target="_blank" class="text-muted text-decoration-none">Código de Conducta</a>
-                    <a href="https://github.com/MiguelCarlosRojas/GrowUp/blob/main/COPYRIGHT.md" target="_blank" class="text-muted text-decoration-none">Licencia & Copyright</a>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="#" class="text-muted text-decoration-none">Condiciones de uso</a>
+                    <a href="#" class="text-muted text-decoration-none">Política de privacidad</a>
+                    <a href="#" class="text-muted text-decoration-none">Declaración de accesibilidad</a>
                 </div>
             </div>
         </div>

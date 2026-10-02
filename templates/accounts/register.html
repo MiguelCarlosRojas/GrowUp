@@ -4,71 +4,111 @@
 {% block title %}Crear Cuenta - GrowUp{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center my-4">
-    <div class="col-md-7 col-lg-6">
-        <div class="p-4 p-md-5 rounded-4 shadow-lg" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
-            <div class="text-center mb-4">
-                <img src="{% static 'images/logo.png' %}" alt="GrowUp" class="brand-logo-img mb-3" style="height: 48px;">
-                <h3 class="fw-bold text-white mt-1">Crear Cuenta en GrowUp</h3>
-                <p class="text-muted small">Únete a la mayor comunidad de manga, anime y novelas ligeras.</p>
-            </div>
+<div class="auth-wrapper">
+    <div class="auth-ambient-glow"></div>
+    
+    <div class="auth-card-luxury auth-card-luxury-wide text-center">
+        <!-- Brand Logo (Large) -->
+        <a href="{% url 'catalog:home' %}" class="d-inline-block mb-3">
+            <img src="{% static 'images/logo.png' %}" alt="GrowUp" class="brand-logo-img" style="height: clamp(58px, 6vw, 76px);">
+        </a>
+        
+        <div class="mb-4">
+            <span class="auth-badge-pill mb-2">
+                <i class="bi bi-stars text-danger"></i> Registro Oficial de Miembros
+            </span>
+            <h3 class="fw-bold text-white mt-2 mb-1">Crea tu Cuenta en GrowUp</h3>
+            <p class="text-muted small mb-0">Únete a la mayor biblioteca y comunidad de Manga, Anime y Novelas Ligeras.</p>
+        </div>
 
-            <form method="POST">
-                {% csrf_token %}
-                
-                <div class="mb-3">
+        <form method="POST" class="text-start">
+            {% csrf_token %}
+            
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
                     <label class="form-label text-light fw-semibold small">Nombre de Usuario</label>
-                    {{ form.username }}
+                    <div class="auth-input-wrap">
+                        <i class="bi bi-person auth-input-icon"></i>
+                        {{ form.username }}
+                    </div>
                     {% if form.username.errors %}<div class="text-danger small mt-1">{{ form.username.errors.0 }}</div>{% endif %}
                 </div>
 
-                <div class="mb-3">
+                <div class="col-md-6">
                     <label class="form-label text-light fw-semibold small">Correo Electrónico</label>
-                    {{ form.email }}
+                    <div class="auth-input-wrap">
+                        <i class="bi bi-envelope auth-input-icon"></i>
+                        {{ form.email }}
+                    </div>
                     {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>{% endif %}
                 </div>
+            </div>
 
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label text-light fw-semibold small">Nombre</label>
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label text-light fw-semibold small">Nombre</label>
+                    <div class="auth-input-wrap">
+                        <i class="bi bi-card-text auth-input-icon"></i>
                         {{ form.first_name }}
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label text-light fw-semibold small">Apellidos</label>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-light fw-semibold small">Apellidos</label>
+                    <div class="auth-input-wrap">
+                        <i class="bi bi-card-text auth-input-icon"></i>
                         {{ form.last_name }}
                     </div>
                 </div>
+            </div>
 
-                <div class="mb-3">
-                    <label class="form-label text-light fw-semibold small">Tipo de Cuenta</label>
+            <div class="mb-3">
+                <label class="form-label text-light fw-semibold small">Tipo de Cuenta</label>
+                <div class="auth-input-wrap">
+                    <i class="bi bi-award auth-input-icon"></i>
                     {{ form.role }}
-                    <small class="text-muted d-block mt-1">{{ form.role.help_text }}</small>
                 </div>
+                <small class="text-muted d-block mt-1" style="font-size: 0.78rem;">{{ form.role.help_text }}</small>
+            </div>
 
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label text-light fw-semibold small">Contraseña</label>
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label text-light fw-semibold small">Contraseña</label>
+                    <div class="auth-input-wrap">
+                        <i class="bi bi-lock auth-input-icon"></i>
                         {{ form.password }}
-                        {% if form.password.errors %}<div class="text-danger small mt-1">{{ form.password.errors.0 }}</div>{% endif %}
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label text-light fw-semibold small">Confirmar Contraseña</label>
-                        {{ form.password_confirm }}
-                        {% if form.password_confirm.errors %}<div class="text-danger small mt-1">{{ form.password_confirm.errors.0 }}</div>{% endif %}
-                    </div>
+                    {% if form.password.errors %}<div class="text-danger small mt-1">{{ form.password.errors.0 }}</div>{% endif %}
                 </div>
+                <div class="col-md-6">
+                    <label class="form-label text-light fw-semibold small">Confirmar Contraseña</label>
+                    <div class="auth-input-wrap">
+                        <i class="bi bi-shield-lock auth-input-icon"></i>
+                        {{ form.password_confirm }}
+                    </div>
+                    {% if form.password_confirm.errors %}<div class="text-danger small mt-1">{{ form.password_confirm.errors.0 }}</div>{% endif %}
+                </div>
+            </div>
 
-                <div class="mb-4">
-                    <label class="form-label text-light fw-semibold small">Biografía Breve (Opcional)</label>
+            <div class="mb-4">
+                <label class="form-label text-light fw-semibold small">Biografía Breve (Opcional)</label>
+                <div class="auth-input-wrap">
+                    <i class="bi bi-chat-left-quote auth-input-icon"></i>
                     {{ form.bio }}
                 </div>
-
-                <button type="submit" class="btn btn-accent w-100 py-2 mb-3">Registrarse en GrowUp</button>
-            </form>
-
-            <div class="text-center pt-3 border-top border-secondary border-opacity-25">
-                <p class="text-muted small mb-0">¿Ya tienes una cuenta? <a href="{% url 'accounts:login' %}" class="text-danger fw-semibold text-decoration-none">Inicia sesión</a></p>
             </div>
+
+            <button type="submit" class="auth-btn-submit mb-4">
+                <i class="bi bi-person-check-fill"></i> Completar Registro en GrowUp
+            </button>
+        </form>
+
+        <div class="pt-3 border-top border-secondary border-opacity-25 text-center">
+            <p class="text-muted small mb-0">
+                ¿Ya posees una cuenta registrada? 
+                <a href="{% url 'accounts:login' %}" class="text-danger fw-bold text-decoration-none ms-1">
+                    Inicia sesión aquí <i class="bi bi-arrow-right"></i>
+                </a>
+            </p>
         </div>
     </div>
 </div>

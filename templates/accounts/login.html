@@ -4,40 +4,56 @@
 {% block title %}Iniciar Sesión - GrowUp{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center my-5">
-    <div class="col-md-6 col-lg-5">
-        <div class="p-4 p-md-5 rounded-4 shadow-lg" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
-            <div class="text-center mb-4">
-                <img src="{% static 'images/logo.png' %}" alt="GrowUp" class="brand-logo-img mb-3" style="height: 48px;">
-                <h3 class="fw-bold text-white mt-1">Iniciar Sesión</h3>
-                <p class="text-muted small">Ingresa a tu cuenta de GrowUp para clasificar obras y publicar novelas.</p>
+<div class="auth-wrapper">
+    <div class="auth-ambient-glow"></div>
+    
+    <div class="auth-card-luxury text-center">
+        <!-- Brand Logo (Large) -->
+        <a href="{% url 'catalog:home' %}" class="d-inline-block mb-3">
+            <img src="{% static 'images/logo.png' %}" alt="GrowUp" class="brand-logo-img" style="height: clamp(58px, 6vw, 76px);">
+        </a>
+        
+        <div class="mb-4">
+            <span class="auth-badge-pill mb-2">
+                <i class="bi bi-shield-check text-danger"></i> Portal de Acceso Seguro
+            </span>
+            <h3 class="fw-bold text-white mt-2 mb-1">Bienvenido a GrowUp</h3>
+            <p class="text-muted small mb-0">Ingresa tus credenciales para calificar obras, participar en debates y acceder al taller de autores.</p>
+        </div>
+
+        <form method="POST" class="text-start">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label class="form-label text-light fw-semibold small">Usuario o Nickname</label>
+                <div class="auth-input-wrap">
+                    <i class="bi bi-person auth-input-icon"></i>
+                    <input type="text" name="username" class="form-control" placeholder="Ingresa tu nombre de usuario" required autofocus>
+                </div>
             </div>
 
-            <form method="POST">
-                {% csrf_token %}
-                
-                <div class="mb-3">
-                    <label class="form-label text-light fw-semibold small">Usuario</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-black border-secondary border-opacity-50 text-muted"><i class="bi bi-person"></i></span>
-                        <input type="text" name="username" class="form-control filter-input-pro" placeholder="Tu nombre de usuario" required autofocus>
-                    </div>
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <label class="form-label text-light fw-semibold small mb-0">Contraseña</label>
                 </div>
-
-                <div class="mb-4">
-                    <label class="form-label text-light fw-semibold small">Contraseña</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-black border-secondary border-opacity-50 text-muted"><i class="bi bi-lock"></i></span>
-                        <input type="password" name="password" class="form-control filter-input-pro" placeholder="••••••••" required>
-                    </div>
+                <div class="auth-input-wrap">
+                    <i class="bi bi-lock auth-input-icon"></i>
+                    <input type="password" name="password" class="form-control" placeholder="••••••••••••" required>
                 </div>
-
-                <button type="submit" class="btn btn-accent w-100 py-2 mb-3">Ingresar a GrowUp</button>
-            </form>
-
-            <div class="text-center pt-3 border-top border-secondary border-opacity-25">
-                <p class="text-muted small mb-0">¿Aún no tienes cuenta? <a href="{% url 'accounts:register' %}" class="text-danger fw-semibold text-decoration-none">Regístrate aquí</a></p>
             </div>
+
+            <button type="submit" class="auth-btn-submit mb-4">
+                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión en GrowUp
+            </button>
+        </form>
+
+        <div class="pt-3 border-top border-secondary border-opacity-25 text-center">
+            <p class="text-muted small mb-0">
+                ¿Aún no eres miembro de GrowUp? 
+                <a href="{% url 'accounts:register' %}" class="text-danger fw-bold text-decoration-none ms-1">
+                    Crear cuenta gratis <i class="bi bi-arrow-right"></i>
+                </a>
+            </p>
         </div>
     </div>
 </div>

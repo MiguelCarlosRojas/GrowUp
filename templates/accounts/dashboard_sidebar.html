@@ -18,11 +18,11 @@
         <span class="app-nav-group-title">Comunidad</span>
         <a href="{% url 'accounts:dashboard_reviews' %}" class="app-sidebar-link sidebar-nav-item {% if active_tab == 'reviews' %}active{% endif %}">
             <i class="bi bi-star-fill text-warning"></i>
-            <span>Opiniones y Calificación</span>
+            <span>Opiniones</span>
         </a>
         <a href="{% url 'accounts:dashboard_discussions' %}" class="app-sidebar-link sidebar-nav-item {% if active_tab == 'discussions' %}active{% endif %}">
             <i class="bi bi-chat-left-text-fill text-info"></i>
-            <span>Preguntas, Respuestas y Debates</span>
+            <span>Debates</span>
         </a>
     </div>
 
@@ -30,7 +30,7 @@
     {% if user.profile.role == 'author' %}
         <div class="app-nav-group">
             <span class="app-nav-group-title">Taller Creativo</span>
-            <a href="{% url 'novels:author_dashboard' %}" class="app-sidebar-link sidebar-nav-item {% if active_tab == 'workshop' %}active{% endif %}">
+            <a href="{% url 'novels:author_dashboard' %}" class="app-sidebar-link sidebar-nav-item {% if active_tab == 'workshop' or request.resolver_match.app_name == 'novels' %}active{% endif %}">
                 <i class="bi bi-feather text-warning"></i>
                 <span>Mi Taller de Escritor</span>
             </a>

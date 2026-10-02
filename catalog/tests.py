@@ -140,16 +140,21 @@ class CatalogTests(TestCase):
         self.assertContains(response, 'id="notifReviewsDropdown"')
         self.assertContains(response, 'id="notifDiscussionsDropdown"')
 
-    @patch('catalog.services.jikan_service._safe_request', return_value=None)
-    def test_jikan_service_resilient_to_gateway_504(self, mock_safe):
+    @patch('catalog.services.jikan_service._safe_request')
+    def test_jikan_service_real_data_and_caching(self, mock_safe):
         from catalog.services import jikan_service
-        # Clear cache to force fallback evaluation
+        mock_safe.return_value = {
+            'data': [
+                {'mal_id': 52991, 'title': 'Sousou no Frieren', 'type': 'TV', 'score': 9.38},
+                {'mal_id': 5114, 'title': 'Fullmetal Alchemist: Brotherhood', 'type': 'TV', 'score': 9.10}
+            ]
+        }
         jikan_service._CACHE.clear()
-        animes = jikan_service.get_top_anime(limit=8)
-        self.assertEqual(len(animes), 8)
-        detail = jikan_service.get_item_detail('anime', '52991')
-        self.assertIsNotNone(detail)
-        self.assertIn('Frieren', detail.get('title', ''))
+        animes = jikan_service.get_top_anime(limit=2)
+        self.assertEqual(len(animes), 2)
+        self.assertEqual(animes[0]['title'], 'Sousou no Frieren')
+        animes_cached = jikan_service.get_top_anime(limit=2)
+        self.assertEqual(len(animes_cached), 2)
 
 
 

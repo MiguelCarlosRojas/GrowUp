@@ -1,15 +1,15 @@
 {% if user.is_authenticated %}
 <div class="d-flex align-items-center gap-2">
-    <!-- Notification 1: Calificaciones y Reseñas (Estrella Dorada) -->
+    <!-- Notification 1: Opiniones (Estrella Dorada) -->
     <div class="dropdown">
-        <button class="app-topbar-notif-btn" type="button" id="notifReviewsDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Calificaciones y Reseñas">
+        <button class="app-topbar-notif-btn" type="button" id="notifReviewsDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Opiniones">
             <i class="bi bi-star-fill text-warning"></i>
             <span class="app-notif-dot bg-warning" id="badgeReviewsDot"></span>
         </button>
         <div class="dropdown-menu dropdown-menu-end app-notif-dropdown shadow-lg p-0" aria-labelledby="notifReviewsDropdown">
             <div class="app-notif-dropdown-header d-flex justify-content-between align-items-center p-3 border-bottom border-secondary border-opacity-25">
                 <span class="fw-bold text-white small d-flex align-items-center gap-2">
-                    <i class="bi bi-star-fill text-warning"></i> Calificaciones y Reseñas
+                    <i class="bi bi-star-fill text-warning"></i> Opiniones
                 </span>
                 <span class="badge bg-warning bg-opacity-25 text-warning fw-bold" style="font-size: 0.72rem;">
                     {% if user.profile.role == 'author' %}Autor{% else %}Lector{% endif %}
@@ -37,22 +37,22 @@
                     </div>
                 </div>
                 <a href="{% url 'accounts:dashboard_reviews' %}" class="btn btn-sm btn-outline-warning w-100 fw-bold d-flex align-items-center justify-content-center gap-2">
-                    <i class="bi bi-box-arrow-up-right"></i> Ver Todas las Reseñas
+                    <i class="bi bi-box-arrow-up-right"></i> Ver Opiniones
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- Notification 2: Preguntas, Respuestas y Debates (Mensaje Celeste) -->
+    <!-- Notification 2: Debates (Mensaje Celeste) -->
     <div class="dropdown">
-        <button class="app-topbar-notif-btn" type="button" id="notifDiscussionsDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Preguntas, Respuestas y Debates">
+        <button class="app-topbar-notif-btn" type="button" id="notifDiscussionsDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Debates">
             <i class="bi bi-chat-left-dots-fill text-info"></i>
             <span class="app-notif-dot bg-info" id="badgeDiscussionsDot"></span>
         </button>
         <div class="dropdown-menu dropdown-menu-end app-notif-dropdown shadow-lg p-0" aria-labelledby="notifDiscussionsDropdown">
             <div class="app-notif-dropdown-header d-flex justify-content-between align-items-center p-3 border-bottom border-secondary border-opacity-25">
                 <span class="fw-bold text-white small d-flex align-items-center gap-2">
-                    <i class="bi bi-chat-left-dots-fill text-info"></i> Preguntas y Debates
+                    <i class="bi bi-chat-left-dots-fill text-info"></i> Debates
                 </span>
                 <span class="badge bg-info bg-opacity-25 text-info fw-bold" style="font-size: 0.72rem;">Comunidad</span>
             </div>
@@ -69,7 +69,7 @@
                     </div>
                 </div>
                 <a href="{% url 'accounts:dashboard_discussions' %}" class="btn btn-sm btn-outline-info w-100 fw-bold d-flex align-items-center justify-content-center gap-2">
-                    <i class="bi bi-box-arrow-up-right"></i> Ver Preguntas y Debates
+                    <i class="bi bi-box-arrow-up-right"></i> Ver Debates
                 </a>
             </div>
         </div>

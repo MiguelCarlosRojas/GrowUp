@@ -46,6 +46,8 @@
                     const message = JSON.parse(event.data);
                     if (message.event === 'live_metrics' && message.data) {
                         updateLiveElements(message.data);
+                    } else if (message.event === 'live_notifications' && Array.isArray(message.notifications)) {
+                        displayLiveNotifications(message.notifications);
                     }
                 } catch (e) {
                     // Ignore malformed payloads
@@ -60,6 +62,7 @@
                     setTimeout(initWebSocket, timeout);
                 } else {
                     fetchFallbackMetrics();
+                    fetchFallbackNotifications();
                 }
             };
 
@@ -69,7 +72,23 @@
 
         } catch (err) {
             fetchFallbackMetrics();
+            fetchFallbackNotifications();
         }
+    }
+
+    function displayLiveNotifications(notifications) {
+        if (!Array.isArray(notifications) || !window.showToast) return;
+        notifications.slice(0, 2).forEach(function(item, idx) {
+            setTimeout(function() {
+                window.showToast(
+                    item.text,
+                    item.type || 'info',
+                    item.duration || 5000,
+                    item.title,
+                    item.icon
+                );
+            }, 600 + (idx * 1400));
+        });
     }
 
     function updateLiveElements(data) {
@@ -87,6 +106,19 @@
             .then(function(payload) {
                 if (payload.status === 'success' && payload.metrics) {
                     updateLiveElements(payload.metrics);
+                }
+            })
+            .catch(function() {
+                // Silently ignore network failures
+            });
+    }
+
+    function fetchFallbackNotifications() {
+        fetch('/api/live/notifications/')
+            .then(function(res) { return res.json(); })
+            .then(function(payload) {
+                if (payload.status === 'success' && Array.isArray(payload.notifications)) {
+                    displayLiveNotifications(payload.notifications);
                 }
             })
             .catch(function() {

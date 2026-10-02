@@ -90,3 +90,62 @@ def api_live_metrics_view(request):
             'latest_discussions': latest_discussions,
         }
     })
+
+
+@require_GET
+def api_live_notifications_view(request):
+    """
+    Single consolidated query endpoint for notifications, returning role-differentiated
+    notifications (reviews/ratings and questions/discussions) with minimal fields.
+    """
+    from catalog.models import ItemReview, ItemDiscussion
+
+    notifications = []
+
+    latest_review = ItemReview.objects.select_related('user').only(
+        'id', 'item_title', 'rating', 'headline', 'user__username'
+    ).order_by('-created_at').first()
+
+    if latest_review:
+        notifications.append({
+            'type': 'review',
+            'icon': 'bi-star-fill text-warning',
+            'title': 'Nueva Calificación / Reseña',
+            'text': f"@{latest_review.user.username} calificó '{latest_review.item_title}' con {latest_review.rating} estrellas: \"{latest_review.headline}\"",
+            'duration': 5000,
+        })
+    else:
+        notifications.append({
+            'type': 'review',
+            'icon': 'bi-star-fill text-warning',
+            'title': 'Nueva Calificación / Reseña',
+            'text': 'Califica y reseña tus animes, mangas y novelas favoritas para enriquecer la comunidad.',
+            'duration': 5000,
+        })
+
+    latest_discussion = ItemDiscussion.objects.select_related('user').only(
+        'id', 'item_title', 'discussion_type', 'content', 'user__username'
+    ).order_by('-created_at').first()
+
+    if latest_discussion:
+        disc_type = 'Pregunta' if latest_discussion.discussion_type == 'question' else 'Debate'
+        notifications.append({
+            'type': 'discussion',
+            'icon': 'bi-chat-left-dots-fill text-info',
+            'title': f'Nueva Participación ({disc_type})',
+            'text': f"@{latest_discussion.user.username} en '{latest_discussion.item_title}': \"{latest_discussion.content[:65]}...\"",
+            'duration': 5000,
+        })
+    else:
+        notifications.append({
+            'type': 'discussion',
+            'icon': 'bi-chat-left-dots-fill text-info',
+            'title': 'Preguntas y Respuestas',
+            'text': 'Participa en debates e intercambia opiniones con otros miembros de GrowUp.',
+            'duration': 5000,
+        })
+
+    return JsonResponse({
+        'status': 'success',
+        'notifications': notifications
+    })

@@ -191,27 +191,28 @@ def dashboard_reviews_view(request):
 
     profile = request.user.profile
     is_author = profile.is_author
+    filtro = request.GET.get('filtro', '').strip().lower()
 
-    # Reviews written by the user across the community
-    my_reviews = request.user.reviews.only(
+    # Base query of reviews written by the user across the community
+    all_my_reviews = request.user.reviews.only(
         'id', 'user_id', 'item_type', 'item_id', 'item_title', 'item_image', 'rating', 'headline', 'opinion', 'created_at'
     ).order_by('-created_at')
 
-    my_total_reviews = my_reviews.count()
-    my_avg_rating = my_reviews.aggregate(avg=Avg('rating'))['avg'] or 0.0
+    my_total_reviews = all_my_reviews.count()
+    my_avg_rating = all_my_reviews.aggregate(avg=Avg('rating'))['avg'] or 0.0
 
     # Rating distribution given by the user
     rating_distribution = {
-        5: my_reviews.filter(rating=5).count(),
-        4: my_reviews.filter(rating=4).count(),
-        3: my_reviews.filter(rating=3).count(),
-        2: my_reviews.filter(rating=2).count(),
-        1: my_reviews.filter(rating=1).count(),
+        5: all_my_reviews.filter(rating=5).count(),
+        4: all_my_reviews.filter(rating=4).count(),
+        3: all_my_reviews.filter(rating=3).count(),
+        2: all_my_reviews.filter(rating=2).count(),
+        1: all_my_reviews.filter(rating=1).count(),
     }
 
     # Author specific metrics: reviews and ratings received on their own novels
     author_novels = []
-    received_reviews = []
+    all_received_reviews = []
     author_received_count = 0
     author_received_avg = 0.0
 
@@ -219,7 +220,7 @@ def dashboard_reviews_view(request):
         author_novels = list(Novel.objects.filter(author=request.user).only('id', 'slug', 'title', 'cover_image', 'cover_url'))
         author_novel_slugs = [n.slug for n in author_novels]
         if author_novel_slugs:
-            received_reviews = list(ItemReview.objects.filter(
+            all_received_reviews = list(ItemReview.objects.filter(
                 item_type='original_novel',
                 item_id__in=author_novel_slugs
             ).select_related('user', 'user__profile').only(
@@ -227,20 +228,50 @@ def dashboard_reviews_view(request):
                 'user__username', 'user__first_name', 'user__last_name', 'user__profile__role', 'user__profile__avatar_url'
             ).order_by('-created_at'))
 
-            author_received_count = len(received_reviews)
+            author_received_count = len(all_received_reviews)
             if author_received_count > 0:
-                author_received_avg = sum(r.rating for r in received_reviews) / author_received_count
+                author_received_avg = sum(r.rating for r in all_received_reviews) / author_received_count
 
             # Attach per-novel metrics
             for n in author_novels:
-                nov_revs = [r for r in received_reviews if r.item_id == n.slug]
+                nov_revs = [r for r in all_received_reviews if r.item_id == n.slug]
                 n.reviews_count = len(nov_revs)
                 n.avg_rating = round(sum(r.rating for r in nov_revs) / len(nov_revs), 1) if nov_revs else 0.0
+
+    # Apply ?filtro= logic
+    my_reviews = all_my_reviews
+    received_reviews = all_received_reviews
+
+    if filtro in ('5_estrellas', '5'):
+        my_reviews = my_reviews.filter(rating=5)
+        received_reviews = [r for r in received_reviews if r.rating == 5]
+    elif filtro in ('4_estrellas', '4'):
+        my_reviews = my_reviews.filter(rating=4)
+        received_reviews = [r for r in received_reviews if r.rating == 4]
+    elif filtro in ('3_estrellas', '3'):
+        my_reviews = my_reviews.filter(rating=3)
+        received_reviews = [r for r in received_reviews if r.rating == 3]
+    elif filtro in ('2_estrellas', '2'):
+        my_reviews = my_reviews.filter(rating=2)
+        received_reviews = [r for r in received_reviews if r.rating == 2]
+    elif filtro in ('1_estrella', '1'):
+        my_reviews = my_reviews.filter(rating=1)
+        received_reviews = [r for r in received_reviews if r.rating == 1]
+    elif filtro == 'anime':
+        my_reviews = my_reviews.filter(item_type='anime')
+        received_reviews = []
+    elif filtro == 'manga':
+        my_reviews = my_reviews.filter(item_type='manga')
+        received_reviews = []
+    elif filtro in ('novela', 'novelas'):
+        my_reviews = my_reviews.filter(item_type__in=['lightnovel', 'original_novel'])
 
     context = {
         'profile': profile,
         'active_tab': 'reviews',
         'is_author': is_author,
+        'selected_filtro': filtro,
+        'active_filtro': filtro,
         # Backward compatibility for existing tests
         'reviews': my_reviews,
         'total_reviews': my_total_reviews,
@@ -265,30 +296,28 @@ def dashboard_discussions_view(request):
 
     profile = request.user.profile
     is_author = profile.is_author
+    filtro = request.GET.get('filtro', '').strip().lower()
 
     # Discussions started or replied by the user
-    my_discussions = list(request.user.discussions.select_related('parent').prefetch_related('replies').only(
+    all_my_discussions = list(request.user.discussions.select_related('parent').prefetch_related('replies').only(
         'id', 'user_id', 'item_type', 'item_id', 'item_title', 'discussion_type', 'content', 'created_at', 'parent_id'
     ).order_by('-created_at'))
 
-    my_questions = [d for d in my_discussions if d.discussion_type == 'question' and d.parent_id is None]
-    my_comments = [d for d in my_discussions if d.discussion_type == 'comment' or d.parent_id is not None]
-
-    my_total_discussions = len(my_discussions)
-    my_questions_count = len(my_questions)
-    my_comments_count = len(my_comments)
+    my_total_discussions = len(all_my_discussions)
+    my_questions_count = sum(1 for d in all_my_discussions if d.discussion_type == 'question' and d.parent_id is None)
+    my_comments_count = sum(1 for d in all_my_discussions if d.discussion_type == 'comment' or d.parent_id is not None)
 
     # Breakdown by medium for readers and authors
     breakdown_by_type = {
-        'anime': sum(1 for d in my_discussions if d.item_type == 'anime'),
-        'manga': sum(1 for d in my_discussions if d.item_type == 'manga'),
-        'lightnovel': sum(1 for d in my_discussions if d.item_type == 'lightnovel'),
-        'original_novel': sum(1 for d in my_discussions if d.item_type == 'original_novel'),
+        'anime': sum(1 for d in all_my_discussions if d.item_type == 'anime'),
+        'manga': sum(1 for d in all_my_discussions if d.item_type == 'manga'),
+        'lightnovel': sum(1 for d in all_my_discussions if d.item_type == 'lightnovel'),
+        'original_novel': sum(1 for d in all_my_discussions if d.item_type == 'original_novel'),
     }
 
     # Author specific: questions and debates raised by readers on author's works
     author_novels = []
-    received_discussions = []
+    all_received_discussions = []
     received_questions_count = 0
     received_comments_count = 0
 
@@ -296,7 +325,7 @@ def dashboard_discussions_view(request):
         author_novels = list(Novel.objects.filter(author=request.user).only('id', 'slug', 'title'))
         author_novel_slugs = [n.slug for n in author_novels]
         if author_novel_slugs:
-            received_discussions = list(ItemDiscussion.objects.filter(
+            all_received_discussions = list(ItemDiscussion.objects.filter(
                 item_type='original_novel',
                 item_id__in=author_novel_slugs
             ).exclude(user=request.user).select_related('user', 'user__profile', 'parent').prefetch_related('replies').only(
@@ -304,13 +333,37 @@ def dashboard_discussions_view(request):
                 'user__username', 'user__first_name', 'user__last_name', 'user__profile__role', 'user__profile__avatar_url'
             ).order_by('-created_at'))
 
-            received_questions_count = sum(1 for d in received_discussions if d.discussion_type == 'question')
-            received_comments_count = sum(1 for d in received_discussions if d.discussion_type == 'comment')
+            received_questions_count = sum(1 for d in all_received_discussions if d.discussion_type == 'question')
+            received_comments_count = sum(1 for d in all_received_discussions if d.discussion_type == 'comment')
+
+    # Apply ?filtro= logic
+    my_discussions = all_my_discussions
+    received_discussions = all_received_discussions
+
+    if filtro == 'preguntas':
+        my_discussions = [d for d in my_discussions if d.discussion_type == 'question' and d.parent_id is None]
+        received_discussions = [d for d in received_discussions if d.discussion_type == 'question']
+    elif filtro == 'debates':
+        my_discussions = [d for d in my_discussions if d.discussion_type == 'comment' or d.parent_id is not None]
+        received_discussions = [d for d in received_discussions if d.discussion_type == 'comment']
+    elif filtro == 'anime':
+        my_discussions = [d for d in my_discussions if d.item_type == 'anime']
+        received_discussions = []
+    elif filtro == 'manga':
+        my_discussions = [d for d in my_discussions if d.item_type == 'manga']
+        received_discussions = []
+    elif filtro in ('novela', 'novelas'):
+        my_discussions = [d for d in my_discussions if d.item_type in ('lightnovel', 'original_novel')]
+
+    my_questions = [d for d in my_discussions if d.discussion_type == 'question' and d.parent_id is None]
+    my_comments = [d for d in my_discussions if d.discussion_type == 'comment' or d.parent_id is not None]
 
     context = {
         'profile': profile,
         'active_tab': 'discussions',
         'is_author': is_author,
+        'selected_filtro': filtro,
+        'active_filtro': filtro,
         # Backward compatibility
         'discussions': my_discussions,
         'total_discussions': my_total_discussions,
@@ -326,10 +379,11 @@ def dashboard_discussions_view(request):
         'breakdown_by_type': breakdown_by_type,
         'author_novels': author_novels,
         'received_discussions': received_discussions,
-        'received_total_discussions': len(received_discussions),
+        'received_total_discussions': len(all_received_discussions),
         'received_questions_count': received_questions_count,
         'received_comments_count': received_comments_count,
     }
+    return render(request, 'accounts/dashboard_discussions.html', context)
     return render(request, 'accounts/dashboard_discussions.html', context)
 
 

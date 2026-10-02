@@ -1661,6 +1661,34 @@ h1, h2, h3, h4, h5, h6, .brand-font {
     background: #06b6d4;
 }
 
+.toast-review {
+    border-left: 4px solid #f59e0b !important;
+}
+.toast-review .toast-icon-wrap {
+    background: rgba(245, 158, 11, 0.18);
+    color: #f59e0b;
+}
+.toast-review .toast-message-title {
+    color: #f59e0b;
+}
+.toast-review .toast-progress-fill {
+    background: #f59e0b;
+}
+
+.toast-discussion {
+    border-left: 4px solid #06b6d4 !important;
+}
+.toast-discussion .toast-icon-wrap {
+    background: rgba(6, 182, 212, 0.18);
+    color: #06b6d4;
+}
+.toast-discussion .toast-message-title {
+    color: #06b6d4;
+}
+.toast-discussion .toast-progress-fill {
+    background: #06b6d4;
+}
+
 @keyframes toastSlideIn {
     from {
         opacity: 0;

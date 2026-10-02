@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -128,6 +129,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+WHITENOISE_MANIFEST_STRICT = False
 
 # Media files (User uploads for novels, covers, etc.)
 MEDIA_URL = '/media/'
@@ -141,8 +144,8 @@ LOGOUT_REDIRECT_URL = 'catalog:home'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Jikan REST API Configuration (Loaded strictly from .env)
-JIKAN_API_BASE_URL = os.getenv('JIKAN_API_BASE_URL', '').rstrip('/')
+# Jikan REST API Configuration (Loaded strictly from .env with production fallback)
+JIKAN_API_BASE_URL = os.getenv('JIKAN_API_BASE_URL', 'https://api.jikan.moe/v4').rstrip('/') or 'https://api.jikan.moe/v4'
 
 # JSON Web Token (JWT) Configuration
 JWT_ACCESS_MINUTES = int(os.getenv('JWT_ACCESS_MINUTES', 60))

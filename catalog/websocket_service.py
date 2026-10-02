@@ -48,6 +48,65 @@ def get_live_metrics_data():
     }
 
 
+@sync_to_async
+def get_live_notifications_data():
+    """
+    Consolidated query returning 2 real-time notifications with role-differentiated
+    icons (bi-star-fill text-warning for reviews, bi-chat-left-dots-fill text-info for discussions).
+    Fetches only strictly required fields.
+    """
+    from catalog.models import ItemReview, ItemDiscussion
+
+    notifications = []
+
+    # 1 query fetching only needed fields for recent review
+    latest_review = ItemReview.objects.select_related('user').only(
+        'id', 'item_title', 'rating', 'headline', 'user__username'
+    ).order_by('-created_at').first()
+
+    if latest_review:
+        notifications.append({
+            'type': 'review',
+            'icon': 'bi-star-fill text-warning',
+            'title': 'Nueva Calificación / Reseña',
+            'text': f"@{latest_review.user.username} calificó '{latest_review.item_title}' con {latest_review.rating} estrellas: \"{latest_review.headline}\"",
+            'duration': 5000
+        })
+    else:
+        notifications.append({
+            'type': 'review',
+            'icon': 'bi-star-fill text-warning',
+            'title': 'Nueva Calificación / Reseña',
+            'text': 'Califica y reseña tus animes, mangas y novelas favoritas para enriquecer la comunidad.',
+            'duration': 5000
+        })
+
+    # 1 query fetching only needed fields for recent discussion/question
+    latest_discussion = ItemDiscussion.objects.select_related('user').only(
+        'id', 'item_title', 'discussion_type', 'content', 'user__username'
+    ).order_by('-created_at').first()
+
+    if latest_discussion:
+        disc_type = 'Pregunta' if latest_discussion.discussion_type == 'question' else 'Debate'
+        notifications.append({
+            'type': 'discussion',
+            'icon': 'bi-chat-left-dots-fill text-info',
+            'title': f'Nueva Participación ({disc_type})',
+            'text': f"@{latest_discussion.user.username} en '{latest_discussion.item_title}': \"{latest_discussion.content[:65]}...\"",
+            'duration': 5000
+        })
+    else:
+        notifications.append({
+            'type': 'discussion',
+            'icon': 'bi-chat-left-dots-fill text-info',
+            'title': 'Preguntas y Respuestas',
+            'text': 'Participa en debates e intercambia opiniones con otros miembros de GrowUp.',
+            'duration': 5000
+        })
+
+    return notifications
+
+
 async def websocket_application(scope, receive, send):
     """
     Native ASGI 3.0 WebSocket application.
@@ -74,6 +133,16 @@ async def websocket_application(scope, receive, send):
                     })
                 })
 
+                # Push real-time notifications with role-differentiated icons
+                notifications = await get_live_notifications_data()
+                await send({
+                    'type': 'websocket.send',
+                    'text': json.dumps({
+                        'event': 'live_notifications',
+                        'notifications': notifications,
+                    })
+                })
+
             elif event_type == 'websocket.receive':
                 text_data = event.get('text', '{}')
                 try:
@@ -95,6 +164,15 @@ async def websocket_application(scope, receive, send):
                         'text': json.dumps({
                             'event': 'live_metrics',
                             'data': metrics,
+                        })
+                    })
+                elif action == 'get_notifications':
+                    notifications = await get_live_notifications_data()
+                    await send({
+                        'type': 'websocket.send',
+                        'text': json.dumps({
+                            'event': 'live_notifications',
+                            'notifications': notifications,
                         })
                     })
                 elif action == 'subscribe':

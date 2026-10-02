@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from django.urls import reverse
+from unittest.mock import patch
 from catalog.models import ItemReview, ItemDiscussion
 
 
@@ -74,7 +75,18 @@ class CatalogTests(TestCase):
             response = self.client.get(reverse(name))
             self.assertEqual(response.status_code, 200, f"Page {name} returned status {response.status_code}")
 
-    def test_platforms_and_social_sharing_in_item_detail(self):
+    @patch('catalog.services.jikan_service.get_item_detail')
+    def test_platforms_and_social_sharing_in_item_detail(self, mock_get_item):
+        mock_get_item.return_value = {
+            'mal_id': 52991,
+            'title': "Sousou no Frieren",
+            'images': {'jpg': {'large_image_url': 'https://cdn.myanimelist.net/images/anime/1015/138062l.jpg'}},
+            'synopsis': "Durante su viaje de una década para derrotar al Rey Demonio...",
+            'score': 9.3,
+            'type': 'TV',
+            'status': 'Finalizado',
+            'genres': [{'name': 'Aventura'}, {'name': 'Fantasía'}],
+        }
         response = self.client.get(reverse('catalog:item_detail', kwargs={'item_type': 'anime', 'item_id': '52991'}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Compartir esta obra")

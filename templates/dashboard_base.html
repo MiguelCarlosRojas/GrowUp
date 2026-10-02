@@ -141,18 +141,20 @@
             }, 320);
         }
 
-        window.showToast = function(message, type, duration) {
+        window.showToast = function(message, type, duration, customTitle, customIcon) {
             type = type || 'info';
-            duration = duration || 4500;
+            duration = duration || 5000;
             var container = document.getElementById('toastNotificationContainer');
             if (!container) return;
 
             var iconMap = {
-                'success': 'bi-check-circle-fill',
-                'error': 'bi-exclamation-octagon-fill',
-                'danger': 'bi-exclamation-octagon-fill',
-                'warning': 'bi-exclamation-triangle-fill',
-                'info': 'bi-info-circle-fill'
+                'success': 'bi-check-circle-fill text-success',
+                'error': 'bi-exclamation-octagon-fill text-danger',
+                'danger': 'bi-exclamation-octagon-fill text-danger',
+                'warning': 'bi-exclamation-triangle-fill text-warning',
+                'info': 'bi-info-circle-fill text-info',
+                'review': 'bi-star-fill text-warning',
+                'discussion': 'bi-chat-left-dots-fill text-info'
             };
 
             var titleMap = {
@@ -160,11 +162,13 @@
                 'error': 'Atención',
                 'danger': 'Atención',
                 'warning': 'Aviso',
-                'info': 'Notificación'
+                'info': 'Notificación',
+                'review': 'Nueva Calificación / Reseña',
+                'discussion': 'Nueva Pregunta / Debate'
             };
 
-            var icon = iconMap[type] || 'bi-info-circle-fill';
-            var title = titleMap[type] || 'Notificación';
+            var icon = customIcon || iconMap[type] || 'bi-info-circle-fill text-info';
+            var title = customTitle || titleMap[type] || 'Notificación';
 
             var card = document.createElement('div');
             card.className = 'toast-popup-card toast-' + type;

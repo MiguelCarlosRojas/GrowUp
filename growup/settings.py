@@ -10,7 +10,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-growup-dev-key-change-in-production')
+import sys
+SECRET_KEY = os.getenv('SECRET_KEY')
+if not SECRET_KEY:
+    if 'test' in sys.argv:
+        SECRET_KEY = 'django-insecure-test-environment-key'
+    else:
+        raise ValueError("CRITICO: SECRET_KEY no esta configurado en las variables de entorno (.env).")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 't')
@@ -65,7 +71,6 @@ WSGI_APPLICATION = 'growup.wsgi.application'
 # Database Configuration
 # Supports Prisma Postgres or standard PostgreSQL via DATABASE_URL, with local fallback
 # When running tests, use fast and isolated SQLite
-import sys
 if 'test' in sys.argv:
     DATABASES = {
         'default': {
@@ -131,7 +136,7 @@ LOGOUT_REDIRECT_URL = 'catalog:home'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Jikan REST API Configuration (Loaded strictly from .env)
-JIKAN_API_BASE_URL = os.getenv('JIKAN_API_BASE_URL', 'https://api.jikan.moe/v4').rstrip('/')
+JIKAN_API_BASE_URL = os.getenv('JIKAN_API_BASE_URL', '').rstrip('/')
 
 # JSON Web Token (JWT) Configuration
 JWT_ACCESS_MINUTES = int(os.getenv('JWT_ACCESS_MINUTES', 60))

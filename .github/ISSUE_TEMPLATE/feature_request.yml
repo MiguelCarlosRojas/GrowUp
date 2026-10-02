@@ -1,4 +1,4 @@
-name: 💡 Solicitud de Nueva Funcionalidad (Feature Request)
+name: Solicitud de Nueva Funcionalidad (Feature Request)
 description: Sugiere una idea o mejora para la plataforma GrowUp
 title: "[FEATURE]: "
 labels: ["enhancement"]
@@ -9,8 +9,8 @@ body:
   - type: textarea
     id: feature-description
     attributes:
-      label: Descripción de la funcionalidad
-      description: Explica claramente qué te gustaría ver o cómo debería funcionar.
+      label: Descripcion de la funcionalidad
+      description: Explica claramente que te gustaria ver o como deberia funcionar.
     validations:
       required: true
   - type: textarea

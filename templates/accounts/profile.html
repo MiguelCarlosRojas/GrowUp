@@ -7,8 +7,13 @@
     <!-- Left Column: User details & edit form -->
     <div class="col-lg-5">
         <div class="p-4 rounded-4 shadow-lg" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
-            <div class="text-center mb-4">
-                <img src="{{ profile.avatar_url|default:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' }}" alt="Avatar" class="rounded-circle shadow mb-3" style="width: 100px; height: 100px; object-fit: cover; border: 3px solid var(--accent-primary);">
+                {% if profile.avatar_url %}
+                    <img src="{{ profile.avatar_url }}" alt="Avatar" class="rounded-circle shadow mb-3" style="width: 100px; height: 100px; object-fit: cover; border: 3px solid var(--accent-primary);">
+                {% else %}
+                    <div class="user-avatar-initials-lg mx-auto mb-3 shadow" style="background: {{ profile.avatar_gradient }};">
+                        {{ profile.initials }}
+                    </div>
+                {% endif %}
                 <h4 class="fw-bold text-white mb-0">{{ user.username }}</h4>
                 <span class="badge px-3 py-1 fw-bold mt-2" style="background: rgba(255, 42, 84, 0.18); border: 1px solid rgba(255, 42, 84, 0.35); color: #ffffff;">{{ profile.get_role_display }}</span>
                 <p class="text-muted small mt-2">{{ profile.bio|default:'Sin biografía aún.' }}</p>

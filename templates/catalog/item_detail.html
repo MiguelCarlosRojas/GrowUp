@@ -73,11 +73,24 @@
                 {% endfor %}
             </div>
 
-            <!-- Synopsis -->
-            <h5 class="text-white fw-bold mb-2">Sinopsis</h5>
-            <p class="text-light" style="line-height: 1.7; font-size: clamp(0.92rem, 1.2vw, 1rem); word-break: break-word; color: #cbd5e1 !important;">
-                {{ item.synopsis|default:'Sin sinopsis disponible actualmente.' }}
-            </p>
+            <!-- Synopsis (Expandable) -->
+            <div class="synopsis-wrapper mb-3">
+                <h5 class="text-white fw-bold mb-2">Sinopsis</h5>
+                {% if item.synopsis %}
+                    <div id="synopsisContainer" class="synopsis-collapsed">
+                        <p class="text-light synopsis-text mb-0" id="synopsisText">
+                            {{ item.synopsis }}
+                        </p>
+                    </div>
+                    {% if item.synopsis|length > 200 %}
+                        <button type="button" class="btn-synopsis-toggle" id="btnSynopsisToggle" onclick="toggleSynopsis()">
+                            <span id="btnSynopsisText">Ver más</span> <i class="bi bi-chevron-down ms-1" id="btnSynopsisIcon"></i>
+                        </button>
+                    {% endif %}
+                {% else %}
+                    <p class="text-muted fst-italic mb-0">Sin sinopsis disponible actualmente.</p>
+                {% endif %}
+            </div>
 
             <!-- Technical details -->
             <div class="row g-2 pt-2 border-top border-secondary border-opacity-25 text-muted small">
@@ -98,39 +111,39 @@
     </div>
 </div>
 
-<!-- Social Media Sharing Bar -->
+<!-- Social Media Sharing Bar (Icon-only buttons) -->
 <div class="share-bar-container">
     <div class="d-flex align-items-center gap-2">
         <i class="bi bi-share-fill text-danger fs-5"></i>
         <div>
             <strong class="text-white d-block" style="font-size: 0.95rem;">Compartir esta obra</strong>
-            <small class="text-muted">Recomienda {{ item.title }} a tus amigos en redes y comunidades</small>
+            <small class="text-muted">Difunde {{ item.title }} directamente en tus redes favoritas</small>
         </div>
     </div>
     <div class="d-flex flex-wrap gap-2 align-items-center">
         <!-- WhatsApp -->
-        <a href="https://api.whatsapp.com/send?text={{ item.title|urlencode }}%20-%20Desc%C3%BAbrelo%20en%20GrowUp%3A%20{{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-item share-whatsapp" title="Compartir en WhatsApp">
-            <i class="bi bi-whatsapp"></i> WhatsApp
+        <a href="https://api.whatsapp.com/send?text={{ item.title|urlencode }}%20-%20Desc%C3%BAbrelo%20en%20GrowUp%3A%20{{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-icon-only share-whatsapp" title="WhatsApp" aria-label="WhatsApp">
+            <i class="bi bi-whatsapp"></i>
         </a>
         <!-- Facebook -->
-        <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-item share-facebook" title="Compartir en Facebook">
-            <i class="bi bi-facebook"></i> Facebook
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-icon-only share-facebook" title="Facebook" aria-label="Facebook">
+            <i class="bi bi-facebook"></i>
         </a>
         <!-- X (Twitter) -->
-        <a href="https://twitter.com/intent/tweet?text={{ item.title|urlencode }}%20en%20GrowUp&url={{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-item share-x" title="Compartir en X">
-            <i class="bi bi-twitter-x"></i> X
+        <a href="https://twitter.com/intent/tweet?text={{ item.title|urlencode }}%20en%20GrowUp&url={{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-icon-only share-x" title="X (Twitter)" aria-label="X (Twitter)">
+            <i class="bi bi-twitter-x"></i>
         </a>
         <!-- Telegram -->
-        <a href="https://t.me/share/url?url={{ share_url|urlencode }}&text={{ item.title|urlencode }}%20en%20GrowUp" target="_blank" rel="noopener noreferrer" class="share-btn-item share-telegram" title="Compartir en Telegram">
-            <i class="bi bi-telegram"></i> Telegram
+        <a href="https://t.me/share/url?url={{ share_url|urlencode }}&text={{ item.title|urlencode }}%20en%20GrowUp" target="_blank" rel="noopener noreferrer" class="share-btn-icon-only share-telegram" title="Telegram" aria-label="Telegram">
+            <i class="bi bi-telegram"></i>
         </a>
         <!-- Email -->
-        <a href="mailto:?subject={{ item.title|urlencode }}%20en%20GrowUp&body=Te%20recomiendo%20ver%20esta%20obra%20en%20GrowUp%3A%20{{ share_url|urlencode }}" class="share-btn-item share-email" title="Compartir por Correo">
-            <i class="bi bi-envelope-fill"></i> Email
+        <a href="mailto:?subject={{ item.title|urlencode }}%20en%20GrowUp&body=Te%20recomiendo%20ver%20esta%20obra%20en%20GrowUp%3A%20{{ share_url|urlencode }}" class="share-btn-icon-only share-email" title="Enviar por Email" aria-label="Enviar por Email">
+            <i class="bi bi-envelope-fill"></i>
         </a>
         <!-- Copiar Enlace -->
-        <button type="button" class="share-btn-item share-copy" id="copyShareBtn" onclick="copyPageLink()" title="Copiar enlace al portapapeles">
-            <i class="bi bi-link-45deg fs-6" id="copyIcon"></i> <span id="copyText">Copiar Enlace</span>
+        <button type="button" class="share-btn-icon-only share-copy" id="copyShareBtn" onclick="copyPageLink()" title="Copiar Enlace" aria-label="Copiar Enlace">
+            <i class="bi bi-link-45deg" id="copyIcon"></i>
         </button>
     </div>
 </div>
@@ -138,67 +151,92 @@
 <!-- Platforms Section (Official & Alternative Streaming / Reading) -->
 {% if platforms %}
 <div class="platforms-section-card mb-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-        <div class="d-flex align-items-center gap-2">
-            <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #3b82f6);"></span>
-            <h4 class="text-white fw-bold mb-0">
-                {% if item_type == 'anime' %}Dónde Ver este Anime
-                {% elif item_type == 'manga' %}Dónde Leer este Manga
-                {% else %}Dónde Leer esta Novela Ligera
-                {% endif %}
-            </h4>
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="platform-header-icon-wrap">
+                <i class="bi bi-play-circle-fill text-danger fs-4"></i>
+            </div>
+            <div>
+                <h4 class="text-white fw-bold mb-0">
+                    {% if item_type == 'anime' %}Dónde Ver este Anime
+                    {% elif item_type == 'manga' %}Dónde Leer este Manga
+                    {% else %}Dónde Leer esta Novela Ligera
+                    {% endif %}
+                </h4>
+                <small class="text-muted">Enlaces verificados a servidores oficiales y bibliotecas comunitarias</small>
+            </div>
         </div>
-        <span class="text-muted small">
-            <i class="bi bi-info-circle me-1"></i> Enlaces directos a plataformas oficiales y comunitarias
+        <span class="badge bg-dark border border-secondary px-3 py-2 text-secondary d-flex align-items-center gap-2">
+            <span class="status-dot"></span> Disponibilidad en línea
         </span>
     </div>
 
     <div class="row g-4">
         <!-- Official Platforms -->
         <div class="col-12 col-lg-6">
-            <div class="platform-group-title">
-                <i class="bi bi-patch-check-fill text-success"></i> Plataformas Oficiales & Simulcast
-            </div>
-            <div class="d-flex flex-column gap-2">
-                {% for plat in platforms.official %}
-                <a href="{{ plat.url }}" target="_blank" rel="noopener noreferrer" class="platform-pill-btn">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi {{ plat.icon }} fs-5" style="color: #cbd5e1;"></i>
-                        <div>
-                            <span class="d-block text-white fw-semibold">{{ plat.name }}</span>
-                            <small class="text-muted d-block" style="font-size: 0.76rem;">{{ plat.description }}</small>
+            <div class="platform-column-card">
+                <div class="platform-group-header mb-3">
+                    <span class="badge-status-icon bg-success bg-opacity-10 text-success border border-success border-opacity-25">
+                        <i class="bi bi-patch-check-fill"></i>
+                    </span>
+                    <div>
+                        <h6 class="text-white fw-bold mb-0">Plataformas Oficiales & Simulcast</h6>
+                        <small class="text-muted" style="font-size: 0.76rem;">Licencia oficial y alta calidad garantizada</small>
+                    </div>
+                </div>
+                <div class="d-flex flex-column gap-2">
+                    {% for plat in platforms.official %}
+                    <a href="{{ plat.url }}" target="_blank" rel="noopener noreferrer" class="platform-pill-btn">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="platform-icon-wrap platform-icon-official">
+                                <i class="bi {{ plat.icon }}"></i>
+                            </div>
+                            <div>
+                                <span class="d-block text-white fw-semibold platform-name">{{ plat.name }}</span>
+                                <small class="text-muted d-block platform-desc">{{ plat.description }}</small>
+                            </div>
                         </div>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="{{ plat.badge_class }}">{{ plat.tag }}</span>
-                        <i class="bi bi-box-arrow-up-right small text-muted"></i>
-                    </div>
-                </a>
-                {% endfor %}
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="{{ plat.badge_class }}">{{ plat.tag }}</span>
+                            <i class="bi bi-box-arrow-up-right platform-external-arrow"></i>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
 
         <!-- Community / Alternative Platforms -->
         <div class="col-12 col-lg-6">
-            <div class="platform-group-title">
-                <i class="bi bi-globe-americas text-warning"></i> Plataformas Comunitarias & Alternativas
-            </div>
-            <div class="d-flex flex-column gap-2">
-                {% for plat in platforms.community %}
-                <a href="{{ plat.url }}" target="_blank" rel="noopener noreferrer" class="platform-pill-btn">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="bi {{ plat.icon }} fs-5" style="color: #cbd5e1;"></i>
-                        <div>
-                            <span class="d-block text-white fw-semibold">{{ plat.name }}</span>
-                            <small class="text-muted d-block" style="font-size: 0.76rem;">{{ plat.description }}</small>
+            <div class="platform-column-card">
+                <div class="platform-group-header mb-3">
+                    <span class="badge-status-icon bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">
+                        <i class="bi bi-globe-americas"></i>
+                    </span>
+                    <div>
+                        <h6 class="text-white fw-bold mb-0">Plataformas Comunitarias & Alternativas</h6>
+                        <small class="text-muted" style="font-size: 0.76rem;">Portales alternativos compartidos por la comunidad</small>
+                    </div>
+                </div>
+                <div class="d-flex flex-column gap-2">
+                    {% for plat in platforms.community %}
+                    <a href="{{ plat.url }}" target="_blank" rel="noopener noreferrer" class="platform-pill-btn">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="platform-icon-wrap platform-icon-community">
+                                <i class="bi {{ plat.icon }}"></i>
+                            </div>
+                            <div>
+                                <span class="d-block text-white fw-semibold platform-name">{{ plat.name }}</span>
+                                <small class="text-muted d-block platform-desc">{{ plat.description }}</small>
+                            </div>
                         </div>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="{{ plat.badge_class }}">{{ plat.tag }}</span>
-                        <i class="bi bi-box-arrow-up-right small text-muted"></i>
-                    </div>
-                </a>
-                {% endfor %}
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="{{ plat.badge_class }}">{{ plat.tag }}</span>
+                            <i class="bi bi-box-arrow-up-right platform-external-arrow"></i>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
@@ -206,17 +244,38 @@
 {% endif %}
 
 <script>
+function toggleSynopsis() {
+    var container = document.getElementById('synopsisContainer');
+    var btnText = document.getElementById('btnSynopsisText');
+    var btnIcon = document.getElementById('btnSynopsisIcon');
+    if (!container) return;
+    if (container.classList.contains('synopsis-collapsed')) {
+        container.classList.remove('synopsis-collapsed');
+        container.classList.add('synopsis-expanded');
+        if (btnText) btnText.textContent = 'Ver menos';
+        if (btnIcon) {
+            btnIcon.className = 'bi bi-chevron-up ms-1';
+        }
+    } else {
+        container.classList.remove('synopsis-expanded');
+        container.classList.add('synopsis-collapsed');
+        if (btnText) btnText.textContent = 'Ver más';
+        if (btnIcon) {
+            btnIcon.className = 'bi bi-chevron-down ms-1';
+        }
+    }
+}
+
 function copyPageLink() {
     navigator.clipboard.writeText(window.location.href).then(function() {
         var copyBtn = document.getElementById('copyShareBtn');
         var copyIcon = document.getElementById('copyIcon');
-        var copyText = document.getElementById('copyText');
-        if (copyIcon && copyText) {
-            copyIcon.className = 'bi bi-check2-circle text-success fs-6';
-            copyText.textContent = '¡Copiado!';
+        if (copyIcon && copyBtn) {
+            copyIcon.className = 'bi bi-check-lg text-success';
+            copyBtn.setAttribute('title', '¡Enlace copiado!');
             setTimeout(function() {
-                copyIcon.className = 'bi bi-link-45deg fs-6';
-                copyText.textContent = 'Copiar Enlace';
+                copyIcon.className = 'bi bi-link-45deg';
+                copyBtn.setAttribute('title', 'Copiar Enlace');
             }, 2500);
         }
     }).catch(function() {

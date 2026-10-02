@@ -20,9 +20,7 @@ CACHE_TTL = 900  # 15 minutes
 
 
 def get_base_url():
-    url = getattr(settings, 'JIKAN_API_BASE_URL', os.getenv('JIKAN_API_BASE_URL', ''))
-    if not url:
-        url = os.getenv('JIKAN_API_BASE_URL', 'https://api.jikan.moe/v4')
+    url = getattr(settings, 'JIKAN_API_BASE_URL', None) or os.getenv('JIKAN_API_BASE_URL', '')
     return url.rstrip('/')
 
 

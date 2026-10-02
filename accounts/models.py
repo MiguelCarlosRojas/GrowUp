@@ -15,7 +15,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='reader')
     bio = models.TextField(blank=True, max_length=500, help_text="Biografía corta del usuario")
-    avatar_url = models.URLField(blank=True, default="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150")
+    avatar_url = models.URLField(blank=True, default="")
     favorite_genres = models.CharField(max_length=255, blank=True, help_text="Géneros favoritos separados por comas")
     
     # OAuth 2.0 and JWT Tracking
@@ -32,10 +32,38 @@ class UserProfile(models.Model):
     def is_author(self):
         return self.role == 'author' or self.user.is_staff
 
+    @property
+    def initials(self):
+        name = (self.user.get_full_name() or self.user.username or '').strip()
+        parts = name.split()
+        if len(parts) >= 2 and parts[0] and parts[1]:
+            return (parts[0][0] + parts[1][0]).upper()
+        elif len(name) >= 2:
+            return name[:2].upper()
+        elif len(name) == 1:
+            return name[0].upper()
+        return 'GU'
+
+    @property
+    def avatar_gradient(self):
+        palette = [
+            'linear-gradient(135deg, #ff2a54, #ff6243)',
+            'linear-gradient(135deg, #7c3aed, #a855f7)',
+            'linear-gradient(135deg, #0284c7, #06b6d4)',
+            'linear-gradient(135deg, #10b981, #059669)',
+            'linear-gradient(135deg, #f59e0b, #d97706)',
+            'linear-gradient(135deg, #ec4899, #f43f5e)',
+        ]
+        username = self.user.username or 'user'
+        idx = sum(ord(c) for c in username) % len(palette)
+        return palette[idx]
+
 
 # Helper property on User to access uid directly
 if not hasattr(User, 'uid'):
     User.add_to_class('uid', property(lambda u: str(u.profile.uid) if hasattr(u, 'profile') and u.profile.uid else ''))
+if not hasattr(User, 'initials'):
+    User.add_to_class('initials', property(lambda u: u.profile.initials if hasattr(u, 'profile') else 'GU'))
 
 
 @receiver(post_save, sender=User)

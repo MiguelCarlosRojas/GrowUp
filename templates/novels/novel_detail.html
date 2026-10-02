@@ -55,11 +55,24 @@
                 {% endfor %}
             </div>
 
-            <!-- Synopsis -->
-            <h5 class="text-white fw-bold mb-2">Sinopsis</h5>
-            <p class="text-light" style="line-height: 1.7; font-size: clamp(0.92rem, 1.2vw, 1rem); word-break: break-word; color: #cbd5e1 !important;">
-                {{ novel.synopsis }}
-            </p>
+            <!-- Synopsis (Expandable) -->
+            <div class="synopsis-wrapper mb-3">
+                <h5 class="text-white fw-bold mb-2">Sinopsis</h5>
+                {% if novel.synopsis %}
+                    <div id="synopsisContainerNovel" class="synopsis-collapsed">
+                        <p class="text-light synopsis-text mb-0" id="synopsisTextNovel">
+                            {{ novel.synopsis }}
+                        </p>
+                    </div>
+                    {% if novel.synopsis|length > 200 %}
+                        <button type="button" class="btn-synopsis-toggle" id="btnSynopsisToggleNovel" onclick="toggleSynopsisNovel()">
+                            <span id="btnSynopsisTextNovel">Ver más</span> <i class="bi bi-chevron-down ms-1" id="btnSynopsisIconNovel"></i>
+                        </button>
+                    {% endif %}
+                {% else %}
+                    <p class="text-muted fst-italic mb-0">Sin sinopsis disponible actualmente.</p>
+                {% endif %}
+            </div>
 
             <div class="d-flex gap-4 pt-3 border-top border-secondary border-opacity-25 text-muted small">
                 <span><i class="bi bi-journal-check me-1"></i> {{ chapters|length }} Capítulos</span>
@@ -69,54 +82,76 @@
     </div>
 </div>
 
-<!-- Social Media Sharing Bar -->
+<!-- Social Media Sharing Bar (Icon-only buttons) -->
 <div class="share-bar-container">
     <div class="d-flex align-items-center gap-2">
         <i class="bi bi-share-fill text-danger fs-5"></i>
         <div>
             <strong class="text-white d-block" style="font-size: 0.95rem;">Compartir esta novela de la comunidad</strong>
-            <small class="text-muted">Apoya al autor {{ novel.author.username }} compartiendo su obra en redes sociales</small>
+            <small class="text-muted">Apoya al autor {{ novel.author.username }} compartiendo su obra</small>
         </div>
     </div>
     <div class="d-flex flex-wrap gap-2 align-items-center">
         <!-- WhatsApp -->
-        <a href="https://api.whatsapp.com/send?text={{ novel.title|urlencode }}%20por%20{{ novel.author.username|urlencode }}%20-%20L%C3%A9ela%20en%20GrowUp%3A%20{{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-item share-whatsapp" title="Compartir en WhatsApp">
-            <i class="bi bi-whatsapp"></i> WhatsApp
+        <a href="https://api.whatsapp.com/send?text={{ novel.title|urlencode }}%20por%20{{ novel.author.username|urlencode }}%20-%20L%C3%A9ela%20en%20GrowUp%3A%20{{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-icon-only share-whatsapp" title="WhatsApp" aria-label="WhatsApp">
+            <i class="bi bi-whatsapp"></i>
         </a>
         <!-- Facebook -->
-        <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-item share-facebook" title="Compartir en Facebook">
-            <i class="bi bi-facebook"></i> Facebook
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-icon-only share-facebook" title="Facebook" aria-label="Facebook">
+            <i class="bi bi-facebook"></i>
         </a>
         <!-- X (Twitter) -->
-        <a href="https://twitter.com/intent/tweet?text=Lee%20{{ novel.title|urlencode }}%20de%20{{ novel.author.username|urlencode }}%20en%20GrowUp&url={{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-item share-x" title="Compartir en X">
-            <i class="bi bi-twitter-x"></i> X
+        <a href="https://twitter.com/intent/tweet?text=Lee%20{{ novel.title|urlencode }}%20de%20{{ novel.author.username|urlencode }}%20en%20GrowUp&url={{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-icon-only share-x" title="X (Twitter)" aria-label="X (Twitter)">
+            <i class="bi bi-twitter-x"></i>
         </a>
         <!-- Telegram -->
-        <a href="https://t.me/share/url?url={{ share_url|urlencode }}&text=Lee%20{{ novel.title|urlencode }}%20en%20GrowUp" target="_blank" rel="noopener noreferrer" class="share-btn-item share-telegram" title="Compartir en Telegram">
-            <i class="bi bi-telegram"></i> Telegram
+        <a href="https://t.me/share/url?url={{ share_url|urlencode }}&text=Lee%20{{ novel.title|urlencode }}%20en%20GrowUp" target="_blank" rel="noopener noreferrer" class="share-btn-icon-only share-telegram" title="Telegram" aria-label="Telegram">
+            <i class="bi bi-telegram"></i>
         </a>
         <!-- Email -->
-        <a href="mailto:?subject={{ novel.title|urlencode }}%20en%20GrowUp&body=Te%20invito%20a%20leer%20esta%20novela%20en%20GrowUp%3A%20{{ share_url|urlencode }}" class="share-btn-item share-email" title="Compartir por Correo">
-            <i class="bi bi-envelope-fill"></i> Email
+        <a href="mailto:?subject={{ novel.title|urlencode }}%20en%20GrowUp&body=Te%20invito%20a%20leer%20esta%20novela%20en%20GrowUp%3A%20{{ share_url|urlencode }}" class="share-btn-icon-only share-email" title="Enviar por Email" aria-label="Enviar por Email">
+            <i class="bi bi-envelope-fill"></i>
         </a>
         <!-- Copiar Enlace -->
-        <button type="button" class="share-btn-item share-copy" id="copyShareBtnNovel" onclick="copyNovelPageLink()" title="Copiar enlace al portapapeles">
-            <i class="bi bi-link-45deg fs-6" id="copyIconNovel"></i> <span id="copyTextNovel">Copiar Enlace</span>
+        <button type="button" class="share-btn-icon-only share-copy" id="copyShareBtnNovel" onclick="copyNovelPageLink()" title="Copiar Enlace" aria-label="Copiar Enlace">
+            <i class="bi bi-link-45deg" id="copyIconNovel"></i>
         </button>
     </div>
 </div>
 
 <script>
+function toggleSynopsisNovel() {
+    var container = document.getElementById('synopsisContainerNovel');
+    var btnText = document.getElementById('btnSynopsisTextNovel');
+    var btnIcon = document.getElementById('btnSynopsisIconNovel');
+    if (!container) return;
+    if (container.classList.contains('synopsis-collapsed')) {
+        container.classList.remove('synopsis-collapsed');
+        container.classList.add('synopsis-expanded');
+        if (btnText) btnText.textContent = 'Ver menos';
+        if (btnIcon) {
+            btnIcon.className = 'bi bi-chevron-up ms-1';
+        }
+    } else {
+        container.classList.remove('synopsis-expanded');
+        container.classList.add('synopsis-collapsed');
+        if (btnText) btnText.textContent = 'Ver más';
+        if (btnIcon) {
+            btnIcon.className = 'bi bi-chevron-down ms-1';
+        }
+    }
+}
+
 function copyNovelPageLink() {
     navigator.clipboard.writeText(window.location.href).then(function() {
+        var copyBtn = document.getElementById('copyShareBtnNovel');
         var copyIcon = document.getElementById('copyIconNovel');
-        var copyText = document.getElementById('copyTextNovel');
-        if (copyIcon && copyText) {
-            copyIcon.className = 'bi bi-check2-circle text-success fs-6';
-            copyText.textContent = '¡Copiado!';
+        if (copyIcon && copyBtn) {
+            copyIcon.className = 'bi bi-check-lg text-success';
+            copyBtn.setAttribute('title', '¡Enlace copiado!');
             setTimeout(function() {
-                copyIcon.className = 'bi bi-link-45deg fs-6';
-                copyText.textContent = 'Copiar Enlace';
+                copyIcon.className = 'bi bi-link-45deg';
+                copyBtn.setAttribute('title', 'Copiar Enlace');
             }, 2500);
         }
     }).catch(function() {

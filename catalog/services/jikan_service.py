@@ -16,6 +16,10 @@ def get_base_url():
 # In-memory simple cache with TTL (15 minutes)
 _CACHE = {}
 CACHE_TTL = 900
+MAX_RETRIES = 3
+RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
+RETRY_BACKOFF_SECONDS = 0.6
+_SESSION = requests.Session()
 
 
 def _get_cache(key):
@@ -32,6 +36,11 @@ def _set_cache(key, data):
     _CACHE[key] = (data, time.time() + CACHE_TTL)
 
 
+def _sleep_before_retry(attempt):
+    if attempt < MAX_RETRIES - 1:
+        time.sleep(RETRY_BACKOFF_SECONDS * (attempt + 1))
+
+
 def _safe_request(endpoint_path, params=None, timeout=8):
     base_url = get_base_url()
     if not base_url:
@@ -44,16 +53,18 @@ def _safe_request(endpoint_path, params=None, timeout=8):
     if cached is not None:
         return cached
 
-    for attempt in range(2):
+    for attempt in range(MAX_RETRIES):
         try:
-            response = requests.get(url, params=params, timeout=timeout)
+            response = _SESSION.get(url, params=params, timeout=timeout)
             if response.status_code == 200:
                 data = response.json()
                 _set_cache(cache_key, data)
                 return data
-            elif response.status_code == 429:
-                logger.warning(f"Jikan API rate limit (429) on attempt {attempt + 1}. Waiting 0.6s...")
-                time.sleep(0.6)
+            elif response.status_code in RETRYABLE_STATUS_CODES:
+                logger.warning(
+                    f"Jikan API responded with {response.status_code} on attempt {attempt + 1}/{MAX_RETRIES} for {url}"
+                )
+                _sleep_before_retry(attempt)
                 continue
             elif response.status_code == 404:
                 logger.info(f"Jikan resource not found (404): {url}")
@@ -61,8 +72,12 @@ def _safe_request(endpoint_path, params=None, timeout=8):
             else:
                 logger.warning(f"Jikan API responded with status {response.status_code} for {url}")
                 return None
+        except requests.RequestException as e:
+            logger.warning(f"Transient error connecting to Jikan API at {url} on attempt {attempt + 1}/{MAX_RETRIES}: {e}")
+            _sleep_before_retry(attempt)
+            continue
         except Exception as e:
-            logger.error(f"Error connecting to Jikan API at {url}: {e}")
+            logger.error(f"Unexpected error connecting to Jikan API at {url}: {e}")
             return None
 
     return None

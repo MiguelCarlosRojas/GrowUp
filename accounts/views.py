@@ -95,9 +95,9 @@ def profile_view(request):
         }
         form = ProfileUpdateForm(instance=profile, initial=initial)
 
-    # Use single queries with only necessary fields
-    user_reviews = request.user.reviews.select_related('user').only(
-        'id', 'item_type', 'item_id', 'item_title', 'rating', 'headline', 'created_at'
+    # Use single queries with only necessary fields - no conflicting select_related on self relation
+    user_reviews = request.user.reviews.only(
+        'id', 'user_id', 'item_type', 'item_id', 'item_title', 'rating', 'headline', 'opinion', 'created_at'
     ).order_by('-created_at')[:10]
     
     user_novels = []
@@ -109,11 +109,104 @@ def profile_view(request):
     context = {
         'form': form,
         'profile': profile,
+        'active_tab': 'profile',
         'user_reviews': user_reviews,
         'user_novels': user_novels,
         'jwt_tokens': generate_jwt_tokens(request.user),
     }
     return render(request, 'accounts/profile.html', context)
+
+
+@login_required
+def dashboard_view(request):
+    profile = request.user.profile
+    
+    reviews_count = request.user.reviews.count()
+    discussions_count = request.user.discussions.count()
+    bookmarks_count = request.user.bookmarks.count()
+
+    recent_reviews = request.user.reviews.only(
+        'id', 'user_id', 'item_type', 'item_id', 'item_title', 'item_image', 'rating', 'headline', 'opinion', 'created_at'
+    ).order_by('-created_at')[:5]
+
+    recent_discussions = request.user.discussions.select_related('parent').only(
+        'id', 'user_id', 'item_type', 'item_id', 'item_title', 'discussion_type', 'content', 'created_at', 'parent_id'
+    ).order_by('-created_at')[:5]
+
+    recent_bookmarks = request.user.bookmarks.only(
+        'id', 'user_id', 'item_type', 'item_id', 'item_title', 'item_image', 'status', 'created_at'
+    ).order_by('-created_at')[:6]
+
+    author_stats = {}
+    user_novels = []
+    if profile.is_author:
+        from novels.models import Novel, Chapter
+        user_novels = Novel.objects.filter(author=request.user).prefetch_related('chapters').order_by('-created_at')[:5]
+        total_novels = request.user.novels.count()
+        total_views = sum(n.views_count for n in request.user.novels.only('views_count'))
+        total_chapters = Chapter.objects.filter(novel__author=request.user).count()
+        author_stats = {
+            'total_novels': total_novels,
+            'total_views': total_views,
+            'total_chapters': total_chapters,
+        }
+
+    context = {
+        'profile': profile,
+        'active_tab': 'dashboard',
+        'reviews_count': reviews_count,
+        'discussions_count': discussions_count,
+        'bookmarks_count': bookmarks_count,
+        'recent_reviews': recent_reviews,
+        'recent_discussions': recent_discussions,
+        'recent_bookmarks': recent_bookmarks,
+        'user_novels': user_novels,
+        'author_stats': author_stats,
+    }
+    return render(request, 'accounts/dashboard.html', context)
+
+
+@login_required
+def dashboard_reviews_view(request):
+    from django.db.models import Avg
+    profile = request.user.profile
+    reviews = request.user.reviews.only(
+        'id', 'user_id', 'item_type', 'item_id', 'item_title', 'item_image', 'rating', 'headline', 'opinion', 'created_at'
+    ).order_by('-created_at')
+
+    total_reviews = reviews.count()
+    avg_rating = reviews.aggregate(avg=Avg('rating'))['avg'] or 0
+
+    context = {
+        'profile': profile,
+        'active_tab': 'reviews',
+        'reviews': reviews,
+        'total_reviews': total_reviews,
+        'avg_rating': round(avg_rating, 1),
+    }
+    return render(request, 'accounts/dashboard_reviews.html', context)
+
+
+@login_required
+def dashboard_discussions_view(request):
+    profile = request.user.profile
+    discussions = request.user.discussions.select_related('parent').only(
+        'id', 'user_id', 'item_type', 'item_id', 'item_title', 'discussion_type', 'content', 'created_at', 'parent_id'
+    ).order_by('-created_at')
+
+    total_discussions = discussions.count()
+    questions_count = discussions.filter(discussion_type='question').count()
+    comments_count = discussions.filter(discussion_type='comment').count()
+
+    context = {
+        'profile': profile,
+        'active_tab': 'discussions',
+        'discussions': discussions,
+        'total_discussions': total_discussions,
+        'questions_count': questions_count,
+        'comments_count': comments_count,
+    }
+    return render(request, 'accounts/dashboard_discussions.html', context)
 
 
 # ==============================================================================

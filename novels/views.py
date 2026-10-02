@@ -138,7 +138,7 @@ def author_dashboard(request):
         request.user.profile.save()
 
     novels = Novel.objects.filter(author=request.user).prefetch_related('chapters')
-    return render(request, 'novels/author_dashboard.html', {'novels': novels})
+    return render(request, 'novels/author_dashboard.html', {'novels': novels, 'active_tab': 'workshop'})
 
 
 @login_required
@@ -155,7 +155,7 @@ def novel_create(request):
     else:
         form = NovelForm()
 
-    return render(request, 'novels/novel_form.html', {'form': form, 'title': 'Publicar Nueva Novela Ligera'})
+    return render(request, 'novels/novel_form.html', {'form': form, 'title': 'Publicar Nueva Novela Ligera', 'active_tab': 'workshop'})
 
 
 @login_required
@@ -184,7 +184,7 @@ def novel_edit(request, slug):
     else:
         form = NovelForm(instance=novel)
 
-    return render(request, 'novels/novel_form.html', {'form': form, 'title': f'Editar Novela: {novel.title}', 'novel': novel})
+    return render(request, 'novels/novel_form.html', {'form': form, 'title': f'Editar Novela: {novel.title}', 'novel': novel, 'active_tab': 'workshop'})
 
 
 @login_required
@@ -205,7 +205,7 @@ def chapter_create(request, novel_slug):
     else:
         form = ChapterForm(initial={'chapter_number': next_num, 'is_published': True})
 
-    return render(request, 'novels/chapter_form.html', {'form': form, 'novel': novel, 'title': f'Añadir Capítulo a {novel.title}'})
+    return render(request, 'novels/chapter_form.html', {'form': form, 'novel': novel, 'title': f'Añadir Capítulo a {novel.title}', 'active_tab': 'workshop'})
 
 
 @login_required
@@ -222,5 +222,5 @@ def chapter_edit(request, novel_slug, chapter_number):
     else:
         form = ChapterForm(instance=chapter)
 
-    return render(request, 'novels/chapter_form.html', {'form': form, 'novel': novel, 'title': f'Editar Capítulo {chapter.chapter_number}'})
+    return render(request, 'novels/chapter_form.html', {'form': form, 'novel': novel, 'title': f'Editar Capítulo {chapter.chapter_number}', 'active_tab': 'workshop'})
 

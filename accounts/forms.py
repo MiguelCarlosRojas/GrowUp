@@ -61,10 +61,9 @@ class ProfileUpdateForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['role', 'bio', 'avatar_url', 'favorite_genres']
+        fields = ['role', 'bio', 'favorite_genres']
         widgets = {
             'role': forms.Select(attrs={'class': 'form-select'}),
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'avatar_url': forms.URLInput(attrs={'class': 'form-control', 'placeholder': 'https://...'}),
             'favorite_genres': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Isekai, Shonen, Fantasía...'}),
         }

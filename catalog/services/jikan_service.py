@@ -7,20 +7,21 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-from .jikan_seed_data import SEED_ANIMES, SEED_MANGAS, SEED_LIGHTNOVELS
-
 # Request Headers matching realistic modern browsers
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
     'Accept': 'application/json, text/plain, */*',
     'Accept-Language': 'es-ES,es;q=0.9,en;q=0.8',
-    'Cache-Control': 'no-cache',
 }
 
-# In-memory cache for API responses and real items catalog
+# Shared HTTP session with connection pooling for extreme fluidity
+_SESSION = requests.Session()
+_SESSION.headers.update(HEADERS)
+
+# Fast in-memory cache for instant page navigation
 _CACHE = {}
 _ITEMS_REGISTRY = {}
-CACHE_TTL = 7200  # 2 hours cache for stability
+CACHE_TTL = 3600  # 1 hour cache for ultra-fluid page loads
 
 
 def get_base_url():
@@ -44,18 +45,14 @@ def _set_cache(key, data):
 
 def _register_items(items):
     """Registers real items in memory for fast lookup during detail views and search fallback."""
+    if not items:
+        return
     for it in items:
         if isinstance(it, dict) and it.get('mal_id'):
             _ITEMS_REGISTRY[str(it['mal_id'])] = it
 
 
-# Pre-register verified seed catalog into in-memory registry
-_register_items(SEED_ANIMES)
-_register_items(SEED_MANGAS)
-_register_items(SEED_LIGHTNOVELS)
-
-
-def _safe_request(endpoint_path, params=None, timeout=4):
+def _safe_request(endpoint_path, params=None, timeout=5):
     base_url = get_base_url()
     if not base_url:
         return None
@@ -67,13 +64,16 @@ def _safe_request(endpoint_path, params=None, timeout=4):
         return cached
 
     try:
-        response = requests.get(url, params=params, headers=HEADERS, timeout=timeout)
+        response = _SESSION.get(url, params=params, timeout=timeout)
         if response.status_code == 200:
             data = response.json()
             _set_cache(cache_key, data)
             return data
-        elif response.status_code in (504, 502, 503, 429):
-            logger.warning(f"Jikan API gateway {response.status_code} on {url}. Using cached fallback.")
+        elif response.status_code == 429:
+            logger.warning(f"Jikan API rate limit (429) on {url}")
+            return None
+        elif response.status_code in (504, 502, 503):
+            logger.warning(f"Jikan API gateway status {response.status_code} on {url}")
             return None
         elif response.status_code == 404:
             return None
@@ -81,65 +81,73 @@ def _safe_request(endpoint_path, params=None, timeout=4):
             logger.warning(f"Jikan API responded with status {response.status_code} for {url}")
             return None
     except Exception as e:
-        logger.warning(f"Jikan API transient connection issue on {url}: {e}. Using cached fallback.")
+        logger.warning(f"Jikan API connection issue on {url}: {e}")
         return None
 
 
-def _fetch_pool(endpoints, cache_key, fallback_items):
-    """Fetches and aggregates unique items from Jikan, seamlessly falling back to seed items if 504."""
-    cached = _get_cache(cache_key)
-    if cached is not None and len(cached) > 0:
-        return cached
-
-    seen = set()
-    aggregated = []
-    for ep in endpoints:
-        data = _safe_request(ep)
-        if data and 'data' in data and data['data']:
-            for it in data['data']:
-                mid = it.get('mal_id')
-                if mid and mid not in seen:
-                    seen.add(mid)
-                    aggregated.append(it)
-
-    if not aggregated:
-        # Graceful fallback when Jikan returns 504 or Cloudflare rate limits in cloud environments
-        aggregated = list(fallback_items)
-
-    _set_cache(cache_key, aggregated)
-    _register_items(aggregated)
-    return aggregated
-
-
-def get_all_anime_pool():
-    return _fetch_pool(['/top/anime', '/anime', '/seasons/now'], 'all_real_anime_pool', SEED_ANIMES)
-
-
-def get_all_manga_and_novels_pool():
-    return _fetch_pool(['/top/manga', '/manga'], 'all_real_manga_and_novels_pool', SEED_MANGAS + SEED_LIGHTNOVELS)
-
-
 def get_top_anime(limit=8):
-    pool = get_all_anime_pool()
-    return pool[:limit]
+    """Fetches real top anime from Jikan with instant caching for fluid page transitions."""
+    cached = _get_cache('real_top_anime_list')
+    if cached is not None:
+        return cached[:limit]
+
+    data = _safe_request('/top/anime', params={'limit': 24, 'sfw': 'true'})
+    if data and isinstance(data, dict) and data.get('data'):
+        items = data['data']
+        _register_items(items)
+        _set_cache('real_top_anime_list', items)
+        return items[:limit]
+
+    # If API call returned None, return any previously registered anime
+    registered = [it for it in _ITEMS_REGISTRY.values() if it.get('type') in ('TV', 'Movie', 'OVA', 'Special')]
+    return registered[:limit]
 
 
 def get_top_manga(limit=8):
-    pool = get_all_manga_and_novels_pool()
-    mangas = [
-        it for it in pool
-        if it.get('type') in ('Manga', 'Manhwa', 'Manhua', 'One-shot', None, '')
-    ]
-    return mangas[:limit]
+    """Fetches real top manga from Jikan with instant caching for fluid page transitions."""
+    cached = _get_cache('real_top_manga_list')
+    if cached is not None:
+        return cached[:limit]
+
+    data = _safe_request('/top/manga', params={'type': 'manga', 'limit': 24, 'sfw': 'true'})
+    if data and isinstance(data, dict) and data.get('data'):
+        items = data['data']
+        _register_items(items)
+        _set_cache('real_top_manga_list', items)
+        return items[:limit]
+
+    registered = [it for it in _ITEMS_REGISTRY.values() if it.get('type') in ('Manga', 'Manhwa', 'Manhua', 'One-shot')]
+    return registered[:limit]
 
 
 def get_top_lightnovels(limit=8):
-    pool = get_all_manga_and_novels_pool()
-    novels = [
-        it for it in pool
-        if it.get('type') in ('Novel', 'Lightnovel', 'Light Novel')
-    ]
-    return novels[:limit]
+    """Fetches real top light novels from Jikan with instant caching for fluid page transitions."""
+    cached = _get_cache('real_top_ln_list')
+    if cached is not None:
+        return cached[:limit]
+
+    data = _safe_request('/top/manga', params={'type': 'lightnovel', 'limit': 24, 'sfw': 'true'})
+    if data and isinstance(data, dict) and data.get('data'):
+        items = data['data']
+        _register_items(items)
+        _set_cache('real_top_ln_list', items)
+        return items[:limit]
+
+    registered = [it for it in _ITEMS_REGISTRY.values() if it.get('type') in ('Novel', 'Lightnovel', 'Light Novel')]
+    return registered[:limit]
+
+
+def get_all_anime_pool():
+    cached = _get_cache('real_top_anime_list')
+    if cached is not None:
+        return cached
+    return get_top_anime(limit=24)
+
+
+def get_all_manga_and_novels_pool():
+    mangas = get_top_manga(limit=24)
+    lns = get_top_lightnovels(limit=24)
+    return mangas + lns
 
 
 def search_items(category='anime', query='', genre='', status='', order_by='score', sort='desc', page=1, per_page=24):
@@ -235,13 +243,6 @@ def get_item_detail(item_type, mal_id):
         item = data_full['data']
         _ITEMS_REGISTRY[str_id] = item
         return item
-
-    # Search across all seed collections
-    for pool in (SEED_ANIMES, SEED_MANGAS, SEED_LIGHTNOVELS):
-        for it in pool:
-            if str(it.get('mal_id')) == str_id:
-                _ITEMS_REGISTRY[str_id] = it
-                return it
 
     return None
 

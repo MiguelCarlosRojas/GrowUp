@@ -73,3 +73,21 @@ class CatalogTests(TestCase):
         for name in page_names:
             response = self.client.get(reverse(name))
             self.assertEqual(response.status_code, 200, f"Page {name} returned status {response.status_code}")
+
+    def test_platforms_and_social_sharing_in_item_detail(self):
+        response = self.client.get(reverse('catalog:item_detail', kwargs={'item_type': 'anime', 'item_id': '52991'}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Compartir esta obra")
+        self.assertContains(response, "WhatsApp")
+        self.assertContains(response, "Facebook")
+        self.assertContains(response, "Telegram")
+        self.assertContains(response, "Copiar Enlace")
+        self.assertContains(response, "Plataformas Oficiales")
+        self.assertContains(response, "Plataformas Comunitarias")
+
+    def test_explore_pagination_structure(self):
+        response = self.client.get(reverse('catalog:explore') + '?type=anime&page=1')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('pagination', response.context)
+        self.assertEqual(response.context['pagination']['per_page'], 24)
+        self.assertContains(response, "Resultados")

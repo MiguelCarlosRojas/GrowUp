@@ -89,10 +89,15 @@
 </div>
 
 <!-- Results Header -->
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h5 class="text-white fw-bold mb-0">
-        Resultados ({{ items|length }})
-    </h5>
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+        <h5 class="text-white fw-bold mb-0">
+            Resultados ({% if pagination %}{{ pagination.total_items }}{% else %}{{ items|length }}{% endif %})
+            {% if pagination and pagination.total_pages > 1 %}
+                <span class="text-muted fw-normal fs-6 ms-2">Mostrando {{ pagination.start_index }} - {{ pagination.end_index }} (Pág. {{ pagination.current_page }} de {{ pagination.total_pages }})</span>
+            {% endif %}
+        </h5>
+    </div>
     <span class="badge px-3 py-1" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.3); color: #ffffff;">
         {% if selected_type == 'anime' %}Animes
         {% elif selected_type == 'manga' %}Mangas
@@ -153,6 +158,46 @@
     </div>
     {% endfor %}
 </div>
+
+<!-- 24-Records Pagination Controls -->
+{% if pagination and pagination.total_pages > 1 %}
+<nav aria-label="Navegación del catálogo" class="mt-4">
+    <div class="pagination-pro-container">
+        <!-- Previous Page -->
+        {% if pagination.has_previous_page %}
+            <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}&page={{ pagination.previous_page_number }}" class="page-btn-pro" title="Página Anterior">
+                <i class="bi bi-chevron-left me-1"></i> Anterior
+            </a>
+        {% else %}
+            <span class="page-btn-pro disabled">
+                <i class="bi bi-chevron-left me-1"></i> Anterior
+            </span>
+        {% endif %}
+
+        <!-- Page Numbers -->
+        {% for p_num in pagination.page_range %}
+            {% if p_num == pagination.current_page %}
+                <span class="page-btn-pro active">{{ p_num }}</span>
+            {% else %}
+                <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}&page={{ p_num }}" class="page-btn-pro">
+                    {{ p_num }}
+                </a>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Next Page -->
+        {% if pagination.has_next_page %}
+            <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}&page={{ pagination.next_page_number }}" class="page-btn-pro" title="Página Siguiente">
+                Siguiente <i class="bi bi-chevron-right ms-1"></i>
+            </a>
+        {% else %}
+            <span class="page-btn-pro disabled">
+                Siguiente <i class="bi bi-chevron-right ms-1"></i>
+            </span>
+        {% endif %}
+    </div>
+</nav>
+{% endif %}
 {% else %}
 <!-- Empty State -->
 <div class="text-center py-5 my-5 p-4 rounded-4" style="background: rgba(18, 24, 38, 0.6); border: 1px dashed var(--border-subtle);">

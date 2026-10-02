@@ -80,6 +80,46 @@
     </div>
     {% endfor %}
 </div>
+
+<!-- 24-Records Pagination Controls -->
+{% if paginator.num_pages > 1 %}
+<nav aria-label="Navegación de novelas" class="mt-4">
+    <div class="pagination-pro-container">
+        <!-- Previous Page -->
+        {% if page_obj.has_previous %}
+            <a href="?{% if selected_q %}q={{ selected_q }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_order %}order={{ selected_order }}&{% endif %}page={{ page_obj.previous_page_number }}" class="page-btn-pro" title="Página Anterior">
+                <i class="bi bi-chevron-left me-1"></i> Anterior
+            </a>
+        {% else %}
+            <span class="page-btn-pro disabled">
+                <i class="bi bi-chevron-left me-1"></i> Anterior
+            </span>
+        {% endif %}
+
+        <!-- Page Numbers -->
+        {% for p_num in paginator.page_range %}
+            {% if p_num == page_obj.number %}
+                <span class="page-btn-pro active">{{ p_num }}</span>
+            {% else %}
+                <a href="?{% if selected_q %}q={{ selected_q }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_order %}order={{ selected_order }}&{% endif %}page={{ p_num }}" class="page-btn-pro">
+                    {{ p_num }}
+                </a>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Next Page -->
+        {% if page_obj.has_next %}
+            <a href="?{% if selected_q %}q={{ selected_q }}&{% endif %}{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_order %}order={{ selected_order }}&{% endif %}page={{ page_obj.next_page_number }}" class="page-btn-pro" title="Página Siguiente">
+                Siguiente <i class="bi bi-chevron-right ms-1"></i>
+            </a>
+        {% else %}
+            <span class="page-btn-pro disabled">
+                Siguiente <i class="bi bi-chevron-right ms-1"></i>
+            </span>
+        {% endif %}
+    </div>
+</nav>
+{% endif %}
 {% else %}
 <div class="text-center py-5 my-5 p-4 rounded-4" style="background: rgba(18, 24, 38, 0.6); border: 1px dashed var(--border-subtle);">
     <i class="bi bi-journal-x fs-1 text-muted mb-3 d-block"></i>

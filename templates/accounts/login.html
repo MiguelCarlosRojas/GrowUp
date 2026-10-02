@@ -87,12 +87,31 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="auth-btn-submit mb-4">
+                    <button type="submit" class="auth-btn-submit mb-3">
                         <i class="bi bi-box-arrow-in-right"></i> Entrar a mi Cuenta
                     </button>
                 </form>
 
-                <div class="pt-3 border-top border-secondary border-opacity-25 text-center">
+                <!-- OAuth 2.0 Social Login Options -->
+                <div class="oauth-divider">
+                    <span>O ingresa mediante OAuth 2.0</span>
+                </div>
+
+                <div class="oauth-btn-group">
+                    <a href="{% url 'accounts:oauth_login' provider='google' %}" class="oauth-btn oauth-btn-google">
+                        <i class="bi bi-google"></i> Continuar con Google
+                    </a>
+                    <a href="{% url 'accounts:oauth_login' provider='github' %}" class="oauth-btn oauth-btn-github">
+                        <i class="bi bi-github"></i> Continuar con GitHub
+                    </a>
+                </div>
+
+                <div class="jwt-security-badge">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    <span>Autenticación protegida con JWT & OAuth 2.0</span>
+                </div>
+
+                <div class="pt-3 border-top border-secondary border-opacity-25 text-center mt-3">
                     <p class="text-muted small mb-0">
                         ¿Aún no tienes una cuenta? 
                         <a href="{% url 'accounts:register' %}" class="text-danger fw-bold text-decoration-none ms-1">

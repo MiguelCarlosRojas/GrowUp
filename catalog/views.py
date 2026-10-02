@@ -15,8 +15,13 @@ def home_view(request):
     top_mangas = jikan_service.get_top_manga(limit=8)
     top_lightnovels = jikan_service.get_top_lightnovels(limit=8)
 
-    # Community original light novels from local database
-    original_novels = Novel.objects.exclude(status='draft').order_by('-views_count')[:6]
+    # Community original light novels from local database - single query with only needed fields
+    original_novels = Novel.objects.exclude(status='draft').select_related(
+        'author', 'author__profile'
+    ).only(
+        'id', 'slug', 'title', 'cover_image', 'cover_url', 'synopsis', 'views_count',
+        'author__username', 'author__profile__uid'
+    ).order_by('-views_count')[:6]
 
     # Quick stats
     hero_item = top_animes[0] if top_animes else None
@@ -50,7 +55,12 @@ def explore_view(request):
     per_page = 24
 
     if media_type == 'original_novel':
-        novels = Novel.objects.exclude(status='draft')
+        novels = Novel.objects.exclude(status='draft').select_related(
+            'author', 'author__profile'
+        ).prefetch_related('categories').only(
+            'id', 'slug', 'title', 'cover_image', 'cover_url', 'status', 'synopsis', 'views_count', 'created_at',
+            'author__username', 'author__profile__uid'
+        )
         if q:
             novels = novels.filter(title__icontains=q)
         if genre:
@@ -146,15 +156,19 @@ def item_detail_view(request, item_type, item_id):
         messages.error(request, "No se pudo obtener la información de esta obra.")
         return redirect('catalog:explore')
 
-    # Fetch ratings, reviews, discussions from database
-    reviews = ItemReview.objects.filter(item_type=item_type, item_id=str(item_id)).select_related('user')
+    # Fetch ratings, reviews, discussions from database with single queries and only needed fields
+    reviews = ItemReview.objects.filter(item_type=item_type, item_id=str(item_id)).select_related(
+        'user', 'user__profile'
+    ).only('id', 'item_type', 'item_id', 'rating', 'headline', 'opinion', 'created_at', 'user__username', 'user__profile__uid')
     stats = reviews.aggregate(avg_score=Avg('rating'), count=Count('id'))
 
     discussions = ItemDiscussion.objects.filter(
         item_type=item_type,
         item_id=str(item_id),
         parent__isnull=True
-    ).select_related('user').prefetch_related('replies__user')
+    ).select_related('user', 'user__profile').prefetch_related('replies__user', 'replies__user__profile').only(
+        'id', 'item_type', 'item_id', 'discussion_type', 'content', 'created_at', 'parent_id', 'user__username', 'user__profile__uid'
+    )
 
     is_bookmarked = False
     if request.user.is_authenticated:

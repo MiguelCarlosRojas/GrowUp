@@ -9,68 +9,65 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}">
     
-    <!-- Google Fonts & Bootstrap -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
-    <!-- Custom Stylesheet (Scrollbar, Full-Width, Branding) -->
+    <!-- Professional Stylesheet -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     
     {% block extra_css %}{% endblock %}
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- Navigation Header (Full Width Fluid) -->
-    <nav class="navbar navbar-expand-lg sticky-top border-bottom border-secondary border-opacity-25" style="background: rgba(10, 12, 19, 0.96); backdrop-filter: blur(14px);">
+    <!-- Navigation Header (Ultra Pro Glassmorphic) -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top py-2">
         <div class="container-full d-flex align-items-center justify-content-between">
             <!-- Brand Logo -->
-            <a class="navbar-brand d-flex align-items-center py-1" href="{% url 'catalog:home' %}">
+            <a class="navbar-brand d-flex align-items-center py-1 me-3" href="{% url 'catalog:home' %}">
                 <img src="{% static 'images/logo.svg' %}" alt="GrowUp" class="brand-logo-img">
             </a>
 
             <!-- Mobile Toggle Button -->
-            <button class="navbar-toggler border-secondary text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Navegación">
-                <i class="bi bi-list fs-2"></i>
+            <button class="navbar-toggler border-0 text-white p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Navegación">
+                <i class="bi bi-list fs-1 text-danger"></i>
             </button>
 
             <!-- Nav Links & Search -->
-            <div class="collapse navbar-collapse ms-lg-4" id="navMain">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1 gap-lg-2">
+            <div class="collapse navbar-collapse" id="navMain">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
                     <li class="nav-item">
-                        <a class="nav-link text-white-50 hover-light" href="{% url 'catalog:home' %}">
-                            <i class="bi bi-house-door me-1"></i> Inicio
+                        <a class="nav-link-custom" href="{% url 'catalog:home' %}">
+                            <i class="bi bi-grid-fill"></i> Inicio
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50 hover-light" href="{% url 'catalog:explore' %}?type=manga">
-                            <i class="bi bi-book me-1"></i> Mangas
+                        <a class="nav-link-custom" href="{% url 'catalog:explore' %}?type=manga">
+                            <i class="bi bi-book"></i> Mangas
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50 hover-light" href="{% url 'catalog:explore' %}?type=anime">
-                            <i class="bi bi-tv me-1"></i> Animes
+                        <a class="nav-link-custom" href="{% url 'catalog:explore' %}?type=anime">
+                            <i class="bi bi-tv"></i> Animes
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50 hover-light" href="{% url 'catalog:explore' %}?type=lightnovel">
-                            <i class="bi bi-journal-bookmark me-1"></i> Novelas Ligeras
+                        <a class="nav-link-custom" href="{% url 'catalog:explore' %}?type=lightnovel">
+                            <i class="bi bi-journal-bookmark"></i> Novelas Ligeras
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white-50 hover-light" href="{% url 'novels:novel_list' %}">
-                            <i class="bi bi-feather me-1"></i> Comunidad & Taller
+                        <a class="nav-link-custom" href="{% url 'novels:novel_list' %}">
+                            <i class="bi bi-feather"></i> Comunidad & Taller
                         </a>
                     </li>
                 </ul>
 
-                <!-- Quick Search -->
+                <!-- Fast Search Bar -->
                 <form class="d-flex my-2 my-lg-0 me-lg-3 flex-grow-1 flex-lg-grow-0" action="{% url 'catalog:explore' %}" method="GET">
-                    <div class="input-group w-100" style="min-width: 240px;">
-                        <input class="form-control bg-dark bg-opacity-50 text-white border-secondary" type="search" name="q" placeholder="Buscar título..." aria-label="Buscar">
-                        <button class="btn btn-outline-secondary" type="submit" title="Buscar"><i class="bi bi-search"></i></button>
+                    <div class="input-group" style="min-width: 250px;">
+                        <span class="input-group-text bg-black border-secondary border-opacity-50 text-muted"><i class="bi bi-search"></i></span>
+                        <input class="form-control bg-black border-secondary border-opacity-50 text-white shadow-none" type="search" name="q" placeholder="Buscar mangas, animes..." aria-label="Buscar">
                     </div>
                 </form>
 
@@ -78,7 +75,7 @@
                 <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
                     {% if user.is_authenticated %}
                         {% if user.profile.is_author %}
-                            <a href="{% url 'novels:author_dashboard' %}" class="btn btn-outline-warning btn-sm d-flex align-items-center gap-1">
+                            <a href="{% url 'novels:author_dashboard' %}" class="btn btn-outline-warning btn-sm d-flex align-items-center gap-1 fw-bold">
                                 <i class="bi bi-pencil-square"></i> Mi Taller
                             </a>
                         {% endif %}
@@ -86,15 +83,15 @@
                             <button class="btn btn-dark dropdown-toggle d-flex align-items-center gap-2 border-secondary" type="button" data-bs-toggle="dropdown">
                                 <i class="bi bi-person-circle text-danger"></i> {{ user.username }}
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow">
-                                <li><a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="bi bi-person me-2"></i> Mi Perfil</a></li>
-                                <li><a class="dropdown-item" href="{% url 'novels:author_dashboard' %}"><i class="bi bi-journal-plus me-2"></i> Publicar Novela</a></li>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow-lg border-secondary">
+                                <li><a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="bi bi-person me-2 text-info"></i> Mi Perfil</a></li>
+                                <li><a class="dropdown-item" href="{% url 'novels:author_dashboard' %}"><i class="bi bi-journal-plus me-2 text-warning"></i> Publicar Novela</a></li>
                                 <li><hr class="dropdown-divider border-secondary"></li>
                                 <li><a class="dropdown-item text-danger" href="{% url 'accounts:logout' %}"><i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión</a></li>
                             </ul>
                         </div>
                     {% else %}
-                        <a href="{% url 'accounts:login' %}" class="btn btn-outline-light btn-sm px-3">Ingresar</a>
+                        <a href="{% url 'accounts:login' %}" class="btn btn-outline-glow btn-sm px-3">Ingresar</a>
                         <a href="{% url 'accounts:register' %}" class="btn btn-accent btn-sm px-3">Registrarse</a>
                     {% endif %}
                 </div>
@@ -106,7 +103,7 @@
     <div class="container-full mt-3">
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show border-0 shadow-sm" role="alert">
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show border-0 shadow" role="alert">
                     {% if message.tags == 'success' %}<i class="bi bi-check-circle-fill me-2"></i>{% endif %}
                     {% if message.tags == 'error' or message.tags == 'danger' %}<i class="bi bi-exclamation-triangle-fill me-2"></i>{% endif %}
                     {{ message }}
@@ -122,7 +119,7 @@
     </main>
 
     <!-- Footer (Fluid Full-Width) -->
-    <footer class="py-5 mt-auto border-top border-secondary border-opacity-25" style="background: #06070b;">
+    <footer class="py-5 mt-auto border-top border-secondary border-opacity-25" style="background: #05060a;">
         <div class="container-full">
             <div class="row g-4 mb-4">
                 <div class="col-lg-4">
@@ -165,7 +162,7 @@
             <hr class="border-secondary opacity-25">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small text-muted gap-2">
                 <span>&copy; 2026 GrowUp. Todos los derechos reservados.</span>
-                <span>Desarrollado en Django Framework con integración Jikan API</span>
+                <span>Desarrollado en Django Framework con integración Jikan API & Prisma Postgres</span>
             </div>
         </div>
     </footer>

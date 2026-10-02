@@ -133,3 +133,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Jikan REST API Configuration (Loaded strictly from .env)
 JIKAN_API_BASE_URL = os.getenv('JIKAN_API_BASE_URL', 'https://api.jikan.moe/v4').rstrip('/')
 
+# JSON Web Token (JWT) Configuration
+JWT_ACCESS_MINUTES = int(os.getenv('JWT_ACCESS_MINUTES', 60))
+JWT_REFRESH_DAYS = int(os.getenv('JWT_REFRESH_DAYS', 7))
+
+# OAuth 2.0 Providers Configuration
+OAUTH_GOOGLE_CLIENT_ID = os.getenv('OAUTH_GOOGLE_CLIENT_ID', '')
+OAUTH_GOOGLE_CLIENT_SECRET = os.getenv('OAUTH_GOOGLE_CLIENT_SECRET', '')
+OAUTH_GITHUB_CLIENT_ID = os.getenv('OAUTH_GITHUB_CLIENT_ID', '')
+OAUTH_GITHUB_CLIENT_SECRET = os.getenv('OAUTH_GITHUB_CLIENT_SECRET', '')
+
+

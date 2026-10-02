@@ -9,7 +9,12 @@ from catalog.models import ItemReview, ItemDiscussion
 
 
 def novel_list(request):
-    novels = Novel.objects.exclude(status='draft').select_related('author').prefetch_related('categories')
+    novels = Novel.objects.exclude(status='draft').select_related(
+        'author', 'author__profile'
+    ).prefetch_related('categories').only(
+        'id', 'slug', 'title', 'cover_image', 'cover_url', 'synopsis', 'status', 'views_count', 'created_at',
+        'author__username', 'author__profile__uid'
+    )
 
     q = request.GET.get('q', '').strip()
     category_slug = request.GET.get('category', '').strip()
@@ -61,9 +66,12 @@ def novel_list(request):
 
 
 def novel_detail(request, slug):
-    novel = get_object_or_404(Novel.objects.select_related('author').prefetch_related('categories'), slug=slug)
+    novel = get_object_or_404(
+        Novel.objects.select_related('author', 'author__profile').prefetch_related('categories'),
+        slug=slug
+    )
     
-    # Increment views
+    # Increment views atomically
     Novel.objects.filter(pk=novel.pk).update(views_count=novel.views_count + 1)
     novel.views_count += 1
 
@@ -71,8 +79,15 @@ def novel_detail(request, slug):
     if request.user == novel.author or request.user.is_staff:
         chapters = novel.chapters.all().order_by('chapter_number')
 
-    reviews = ItemReview.objects.filter(item_type='original_novel', item_id=novel.slug).select_related('user')
-    discussions = ItemDiscussion.objects.filter(item_type='original_novel', item_id=novel.slug, parent__isnull=True).select_related('user').prefetch_related('replies__user')
+    reviews = ItemReview.objects.filter(item_type='original_novel', item_id=novel.slug).select_related(
+        'user', 'user__profile'
+    ).only('id', 'item_type', 'item_id', 'rating', 'headline', 'opinion', 'created_at', 'user__username', 'user__profile__uid')
+    
+    discussions = ItemDiscussion.objects.filter(
+        item_type='original_novel', item_id=novel.slug, parent__isnull=True
+    ).select_related('user', 'user__profile').prefetch_related('replies__user', 'replies__user__profile').only(
+        'id', 'item_type', 'item_id', 'discussion_type', 'content', 'created_at', 'parent_id', 'user__username', 'user__profile__uid'
+    )
 
     share_url = request.build_absolute_uri()
     share_title = novel.title
@@ -89,8 +104,15 @@ def novel_detail(request, slug):
 
 
 def chapter_read(request, novel_slug, chapter_number):
-    novel = get_object_or_404(Novel, slug=novel_slug)
-    chapter = get_object_or_404(Chapter, novel=novel, chapter_number=chapter_number)
+    novel = get_object_or_404(Novel.objects.only('id', 'slug', 'title', 'author_id'), slug=novel_slug)
+    chapter = get_object_or_404(
+        Chapter.objects.select_related('novel').only(
+            'id', 'novel_id', 'chapter_number', 'title', 'content', 'author_notes', 'is_published', 'words_count', 'published_at',
+            'novel__id', 'novel__slug', 'novel__title', 'novel__author_id'
+        ),
+        novel=novel,
+        chapter_number=chapter_number
+    )
 
     if not chapter.is_published and request.user != novel.author and not request.user.is_staff:
         messages.error(request, "Este capítulo aún no ha sido publicado por el autor.")

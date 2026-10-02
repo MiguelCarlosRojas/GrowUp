@@ -91,3 +91,20 @@ class CatalogTests(TestCase):
         self.assertIn('pagination', response.context)
         self.assertEqual(response.context['pagination']['per_page'], 24)
         self.assertContains(response, "Resultados")
+
+    def test_api_novels_optimized_single_query(self):
+        response = self.client.get(reverse('catalog:api_novels'))
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data.get('status'), 'success')
+        self.assertIn('items', data)
+
+    def test_api_live_metrics(self):
+        response = self.client.get(reverse('catalog:api_live_metrics'))
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data.get('status'), 'success')
+        self.assertIn('metrics', data)
+        self.assertIn('total_novels', data['metrics'])
+        self.assertIn('total_views', data['metrics'])
+

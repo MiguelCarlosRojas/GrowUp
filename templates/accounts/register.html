@@ -141,12 +141,35 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="auth-btn-submit mb-4">
+                    <button type="submit" class="auth-btn-submit mb-3">
                         <i class="bi bi-person-check-fill"></i> Completar Registro en GrowUp
                     </button>
                 </form>
 
-                <div class="pt-3 border-top border-secondary border-opacity-25 text-center">
+                <!-- OAuth 2.0 Social Register Options -->
+                <div class="oauth-divider">
+                    <span>O regístrate rápidamente con OAuth 2.0</span>
+                </div>
+
+                <div class="row g-2 mb-3">
+                    <div class="col-sm-6">
+                        <a href="{% url 'accounts:oauth_login' provider='google' %}" class="oauth-btn oauth-btn-google w-100">
+                            <i class="bi bi-google"></i> Google
+                        </a>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="{% url 'accounts:oauth_login' provider='github' %}" class="oauth-btn oauth-btn-github w-100">
+                            <i class="bi bi-github"></i> GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <div class="jwt-security-badge">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    <span>Identificador criptográfico UID y tokens JWT emitidos</span>
+                </div>
+
+                <div class="pt-3 border-top border-secondary border-opacity-25 text-center mt-3">
                     <p class="text-muted small mb-0">
                         ¿Ya posees una cuenta registrada? 
                         <a href="{% url 'accounts:login' %}" class="text-danger fw-bold text-decoration-none ms-1">

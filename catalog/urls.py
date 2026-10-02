@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from . import pages_views
+from . import api_views
 
 app_name = 'catalog'
 
@@ -12,6 +13,10 @@ urlpatterns = [
     path('review/<str:item_type>/<str:item_id>/', views.add_review_view, name='add_review'),
     path('discussion/<str:item_type>/<str:item_id>/', views.add_discussion_view, name='add_discussion'),
     path('bookmark/<str:item_type>/<str:item_id>/', views.toggle_bookmark_view, name='toggle_bookmark'),
+
+    # Optimized Single-Query REST Endpoints
+    path('api/novels/', api_views.api_novels_optimized_view, name='api_novels'),
+    path('api/live/metrics/', api_views.api_live_metrics_view, name='api_live_metrics'),
 
     # Sobre nosotros
     path('sobre-nosotros/quienes-somos/', pages_views.quienes_somos_view, name='quienes_somos'),

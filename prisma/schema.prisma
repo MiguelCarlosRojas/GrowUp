@@ -8,14 +8,20 @@ datasource db {
 
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model accounts_userprofile {
-  id              BigInt    @id @default(autoincrement())
-  role            String    @db.VarChar(20)
-  bio             String
-  avatar_url      String    @db.VarChar(200)
-  favorite_genres String    @db.VarChar(255)
-  created_at      DateTime  @db.Timestamptz(6)
-  user_id         Int       @unique
-  auth_user       auth_user @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounts_userprofile_user_id_92240672_fk_auth_user_id")
+  id                BigInt    @id @default(autoincrement())
+  uid               String    @unique @default(uuid()) @db.Uuid
+  role              String    @db.VarChar(20)
+  bio               String
+  avatar_url        String    @db.VarChar(200)
+  favorite_genres   String    @db.VarChar(255)
+  oauth_provider    String?   @db.VarChar(50)
+  oauth_uid         String?   @db.VarChar(150)
+  jwt_token_version Int       @default(1)
+  created_at        DateTime  @db.Timestamptz(6)
+  user_id           Int       @unique
+  auth_user         auth_user @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounts_userprofile_user_id_92240672_fk_auth_user_id")
+
+  @@index([uid], map: "accounts_userprofile_uid_idx")
 }
 
 model auth_group {

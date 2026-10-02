@@ -97,6 +97,7 @@ class Chapter(models.Model):
     author_notes = models.TextField(blank=True, help_text="Notas o comentarios del autor")
     is_published = models.BooleanField(default=True)
     words_count = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     published_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

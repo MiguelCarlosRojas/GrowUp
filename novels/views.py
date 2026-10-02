@@ -107,7 +107,7 @@ def chapter_read(request, novel_slug, chapter_number):
     novel = get_object_or_404(Novel.objects.only('id', 'slug', 'title', 'author_id'), slug=novel_slug)
     chapter = get_object_or_404(
         Chapter.objects.select_related('novel').only(
-            'id', 'novel_id', 'chapter_number', 'title', 'content', 'author_notes', 'is_published', 'words_count', 'published_at',
+            'id', 'novel_id', 'chapter_number', 'title', 'content', 'author_notes', 'is_published', 'words_count', 'created_at', 'published_at', 'updated_at',
             'novel__id', 'novel__slug', 'novel__title', 'novel__author_id'
         ),
         novel=novel,
@@ -150,12 +150,26 @@ def novel_create(request):
             novel.author = request.user
             novel.save()
             form.save_m2m()
-            messages.success(request, f"¡Novela '{novel.title}' creada con éxito!")
-            return redirect('novels:author_dashboard')
+            messages.success(request, f"Novela '{novel.title}' creada con éxito. Procede a redactar su primer capítulo.")
+            return redirect('novels:chapter_create', novel_slug=novel.slug)
     else:
         form = NovelForm()
 
     return render(request, 'novels/novel_form.html', {'form': form, 'title': 'Publicar Nueva Novela Ligera'})
+
+
+@login_required
+def toggle_novel_visibility(request, slug):
+    novel = get_object_or_404(Novel, slug=slug, author=request.user)
+    if request.method == 'POST':
+        if novel.status == 'draft':
+            novel.status = 'ongoing'
+            messages.success(request, f"La novela '{novel.title}' ahora está Pública (En Emisión) en el catálogo.")
+        else:
+            novel.status = 'draft'
+            messages.info(request, f"La novela '{novel.title}' ahora está en modo Privado (Borrador).")
+        novel.save(update_fields=['status'])
+    return redirect('novels:author_dashboard')
 
 
 @login_required
@@ -165,7 +179,7 @@ def novel_edit(request, slug):
         form = NovelForm(request.POST, request.FILES, instance=novel)
         if form.is_valid():
             form.save()
-            messages.success(request, f"¡Novela '{novel.title}' actualizada!")
+            messages.success(request, f"Novela '{novel.title}' actualizada.")
             return redirect('novels:author_dashboard')
     else:
         form = NovelForm(instance=novel)
@@ -183,8 +197,11 @@ def chapter_create(request, novel_slug):
             chapter = form.save(commit=False)
             chapter.novel = novel
             chapter.save()
-            messages.success(request, f"¡Capítulo {chapter.chapter_number} publicado con éxito!")
-            return redirect('novels:novel_detail', slug=novel.slug)
+            messages.success(request, f"Capítulo {chapter.chapter_number} guardado con éxito.")
+            action = request.POST.get('action')
+            if action == 'add_another':
+                return redirect('novels:chapter_create', novel_slug=novel.slug)
+            return redirect('novels:author_dashboard')
     else:
         form = ChapterForm(initial={'chapter_number': next_num, 'is_published': True})
 
@@ -200,9 +217,10 @@ def chapter_edit(request, novel_slug, chapter_number):
         form = ChapterForm(request.POST, instance=chapter)
         if form.is_valid():
             form.save()
-            messages.success(request, f"¡Capítulo {chapter.chapter_number} actualizado con éxito!")
-            return redirect('novels:novel_detail', slug=novel.slug)
+            messages.success(request, f"Capítulo {chapter.chapter_number} actualizado con éxito.")
+            return redirect('novels:author_dashboard')
     else:
         form = ChapterForm(instance=chapter)
 
     return render(request, 'novels/chapter_form.html', {'form': form, 'novel': novel, 'title': f'Editar Capítulo {chapter.chapter_number}'})
+

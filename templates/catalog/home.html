@@ -18,10 +18,10 @@
                         <i class="bi bi-fire me-1"></i> TOP #1 RANKING GLOBAL
                     </span>
                     <span class="badge-top-right position-static">
-                        <i class="bi bi-star-fill text-warning"></i> {{ hero_item.score|default:'9.10' }}
+                        <i class="bi bi-star-fill text-warning"></i> {{ hero_item.score|default:'N/A' }}
                     </span>
                     <span class="badge bg-black bg-opacity-75 border border-secondary border-opacity-50 text-light px-2 py-1">
-                        {{ hero_item.type }} &bull; {{ hero_item.year|default:'2024' }}
+                        {{ hero_item.type }}{% if hero_item.year %} &bull; {{ hero_item.year }}{% endif %}
                     </span>
                     <span class="small text-white-50 ms-1">
                         <span class="status-dot me-1"></span> Sincronizado en Vivo
@@ -63,6 +63,26 @@
                     <img src="{{ hero_item.images.jpg.large_image_url }}" alt="{{ hero_item.title }}" class="img-fluid" style="width: 100%; aspect-ratio: 2/3; object-fit: cover;">
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="hero-billboard py-5 text-center mb-4">
+    <div class="hero-content-wrap py-4">
+        <span class="badge px-3 py-1 fw-bold text-uppercase mb-3" style="background: var(--grad-primary); letter-spacing: 0.05em; font-size: 0.75rem;">
+            <i class="bi bi-stars me-1"></i> Plataforma Oficial GrowUp
+        </span>
+        <h1 class="hero-title mb-3">Biblioteca Global de Manga, Anime y Novelas Ligeras</h1>
+        <p class="hero-synopsis mx-auto mb-4" style="max-width: 720px;">
+            Explora miles de obras sincronizadas en tiempo real con Jikan API v4, descubre novelas originales publicadas por autores de nuestra comunidad y comparte tus opiniones, debates y reseñas.
+        </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'catalog:explore' %}?type=anime" class="btn btn-accent px-4 py-3">
+                <i class="bi bi-compass fs-5"></i> Explorar Catálogo
+            </a>
+            <a href="{% url 'novels:novel_list' %}" class="btn btn-outline-glow px-4 py-3">
+                <i class="bi bi-feather fs-5"></i> Taller de Escritores
+            </a>
         </div>
     </div>
 </div>
@@ -176,6 +196,11 @@
                 </div>
             </div>
         </div>
+        {% empty %}
+        <div class="col-12 py-5 text-center text-muted">
+            <i class="bi bi-broadcast fs-2 d-block mb-2 text-danger"></i>
+            <p class="mb-0">Sincronizando información en tiempo real con Jikan API v4...</p>
+        </div>
         {% endfor %}
     </div>
 </div>
@@ -231,6 +256,11 @@
                 </div>
             </div>
         </div>
+        {% empty %}
+        <div class="col-12 py-5 text-center text-muted">
+            <i class="bi bi-book fs-2 d-block mb-2 text-warning"></i>
+            <p class="mb-0">Sincronizando información en tiempo real con Jikan API v4...</p>
+        </div>
         {% endfor %}
     </div>
 </div>
@@ -285,6 +315,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+        {% empty %}
+        <div class="col-12 py-5 text-center text-muted">
+            <i class="bi bi-journal-bookmark fs-2 d-block mb-2 text-info"></i>
+            <p class="mb-0">Sincronizando información en tiempo real con Jikan API v4...</p>
         </div>
         {% endfor %}
     </div>

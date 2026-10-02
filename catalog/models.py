@@ -32,7 +32,7 @@ class ItemReview(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.user.username} - {self.item_title} ({self.rating}★)"
+        return f"{self.user.username} - {self.item_title} ({self.rating}/5)"
 
 
 class ItemDiscussion(models.Model):

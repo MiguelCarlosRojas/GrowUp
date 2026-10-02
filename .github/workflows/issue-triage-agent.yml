@@ -1,0 +1,30 @@
+name: GrowUp Issue Agent & Triage
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+
+jobs:
+  triage-issue:
+    name: GitHub Issue Agent Triage & Response
+    runs-on: ubuntu-latest
+    steps:
+      - name: Automatic Triage & Labeling Agent
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: |
+          echo "Processing issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}"
+          
+          # Auto-comment from GrowUp Automation Agent
+          gh issue comment "${ISSUE_NUMBER}" --body "Hola @${{ github.actor }}, gracias por registrar esta incidencia o requerimiento.
+
+El **GrowUp Automation Agent** ha recibido y clasificado tu solicitud. El equipo de ingenieria y los flujos automatizados de CI/CD procesaran este ticket dentro del sprint correspondiente.
+
+- Estado: Registrado
+- Triage: Automatizado por GitHub Actions Agent"

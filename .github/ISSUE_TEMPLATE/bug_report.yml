@@ -1,13 +1,13 @@
-name: 🐛 Reporte de Error (Bug Report)
-description: Reporta un fallo o comportamiento anómalo en la plataforma GrowUp
+name: Reporte de Error (Bug Report)
+description: Reporta un fallo o comportamiento anomalo en la plataforma GrowUp
 title: "[BUG]: "
 labels: ["bug"]
 body:
   - type: textarea
     id: bug-description
     attributes:
-      label: Descripción del problema
-      description: Describe qué ocurrió de forma concisa.
+      label: Descripcion del problema
+      description: Describe que ocurrio de forma concisa.
     validations:
       required: true
   - type: textarea
@@ -21,6 +21,6 @@ body:
     id: expected-behavior
     attributes:
       label: Comportamiento esperado
-      description: Qué se suponía que debía suceder.
+      description: Que se suponia que debia suceder.
     validations:
       required: true

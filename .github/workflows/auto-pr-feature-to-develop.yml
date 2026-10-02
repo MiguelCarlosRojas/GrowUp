@@ -48,26 +48,26 @@ jobs:
         run: |
           BRANCH="${{ steps.branch_info.outputs.branch }}"
           PR_TITLE="[Feature]: Merge ${BRANCH} into develop"
-          PR_BODY="### 🚀 Pull Request Automático de Feature
+          PR_BODY="### Pull Request Automatico de Feature
           
           **Rama origen:** \`${BRANCH}\`
           **Rama destino:** \`develop\`
           
-          #### ✅ Estado de Compilación y Calidad:
+          #### Estado de Compilacion y Calidad:
           - [x] Django \`manage.py check\` superado sin advertencias.
           - [x] Migraciones verificadas con \`makemigrations --check\`.
           - [x] Suite de pruebas automatizadas \`manage.py test\` completadas exitosamente.
           
-          #### 📦 Cambios Incluidos:
+          #### Cambios Incluidos:
           - Biblioteca de Manga, Anime y Novelas Ligeras en Django puro.
-          - Integración en tiempo real con Jikan API v4 (MyAnimeList).
+          - Integracion en tiempo real con Jikan API v4 (MyAnimeList).
           - Soporte para base de datos Prisma Postgres y SQLite local.
-          - Sistema de clasificación (estrellas 1-5), opiniones y reseñas detalladas.
-          - Sección de preguntas, respuestas (Q&A) y comentarios anidados.
-          - Taller de Escritores: publicación completa de novelas ligeras y capítulos con lector interactivo.
+          - Sistema de clasificacion (estrellas 1-5), opiniones y resenas detalladas.
+          - Seccion de preguntas, respuestas (Q&A) y comentarios anidados.
+          - Taller de Escritores: publicacion completa de novelas ligeras y capitulos con lector interactivo.
           - Filtros avanzados en landing page y explorador.
           
-          *Este Pull Request fue generado automáticamente por GitHub Actions tras la compilación exitosa.*"
+          *Este Pull Request fue generado automaticamente por GitHub Actions tras la compilacion exitosa.*"
           
           # Check if PR already exists
           EXISTING_PR=$(gh pr list --head "${BRANCH}" --base "develop" --json number -q '.[0].number')

@@ -1,9 +1,14 @@
 from django import forms
 from .models import ItemReview, ItemDiscussion
 
-
 class ReviewForm(forms.ModelForm):
-    RATING_CHOICES = [(5, '5 ★ - Obra Maestra'), (4, '4 ★ - Muy Bueno'), (3, '3 ★ - Bueno'), (2, '2 ★ - Regular'), (1, '1 ★ - Malo')]
+    RATING_CHOICES = [
+        (5, '5 de 5 - Obra Maestra'),
+        (4, '4 de 5 - Muy Bueno'),
+        (3, '3 de 5 - Bueno'),
+        (2, '2 de 5 - Regular'),
+        (1, '1 de 5 - Malo')
+    ]
 
     rating = forms.ChoiceField(
         choices=RATING_CHOICES,

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" width="400" height="100">
+  <defs>
+    <linearGradient id="growUpGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF3366" />
+      <stop offset="50%" stop-color="#FF5252" />
+      <stop offset="100%" stop-color="#FF7A00" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#70A1FF" />
+      <stop offset="100%" stop-color="#9B51E0" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#FF3366" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <!-- Icon Symbol: Stylized Ascending Anime Wing & Open Portal / Book -->
+  <g transform="translate(10, 10)">
+    <!-- Shield / Diamond Background Backdrop -->
+    <path d="M40 0 L76 22 L76 58 L40 80 L4 58 L4 22 Z" fill="#141724" stroke="url(#growUpGrad)" stroke-width="2.5" />
+    
+    <!-- Ascending Shonen Energy Wings -->
+    <path d="M40 12 L64 26 L52 50 L40 38 L28 50 L16 26 Z" fill="url(#growUpGrad)" filter="url(#glow)" />
+    
+    <!-- Central Rising Core -->
+    <path d="M40 22 L48 42 L40 68 L32 42 Z" fill="#FFFFFF" opacity="0.95" />
+    
+    <!-- Cyan Energy Accent Dot -->
+    <circle cx="40" cy="42" r="3.5" fill="url(#accentGrad)" />
+  </g>
+
+  <!-- Typography: GROWUP -->
+  <text x="105" y="58" font-family="'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif" font-weight="900" font-size="38" letter-spacing="1.5" fill="#FFFFFF">
+    GROW<tspan fill="url(#growUpGrad)">UP</tspan>
+  </text>
+
+  <!-- Subtitle Tagline -->
+  <text x="107" y="78" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-weight="600" font-size="11.5" letter-spacing="3.2" fill="#8892B0">
+    MANGA &bull; ANIME &bull; NOVELS
+  </text>
+</svg>

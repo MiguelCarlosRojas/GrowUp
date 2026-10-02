@@ -108,3 +108,10 @@ class CatalogTests(TestCase):
         self.assertIn('total_novels', data['metrics'])
         self.assertIn('total_views', data['metrics'])
 
+    def test_toast_notification_container_present(self):
+        response = self.client.get(reverse('catalog:home'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'toastNotificationContainer')
+        self.assertContains(response, 'toast-popup-container')
+
+

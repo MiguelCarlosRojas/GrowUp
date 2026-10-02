@@ -2,6 +2,7 @@ import json
 import secrets
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -42,20 +43,36 @@ def register_view(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('catalog:home')
+        return redirect('accounts:dashboard')
 
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            tokens = generate_jwt_tokens(user)
-            request.session['jwt_access_token'] = tokens['access_token']
-            messages.success(request, f"¡Bienvenido de vuelta, {user.username}!")
-            next_url = request.GET.get('next') or 'catalog:home'
-            return redirect(next_url)
+        login_input = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+
+        # Allow logging in with either username or email (case-insensitive)
+        user_obj = None
+        if '@' in login_input:
+            user_obj = User.objects.filter(email__iexact=login_input).first()
+        if not user_obj:
+            user_obj = User.objects.filter(username__iexact=login_input).first()
+
+        target_username = user_obj.username if user_obj else login_input
+        user = authenticate(request, username=target_username, password=password)
+
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                tokens = generate_jwt_tokens(user)
+                request.session['jwt_access_token'] = tokens['access_token']
+                messages.success(request, f"¡Bienvenido de vuelta, {user.username}!")
+                next_url = request.GET.get('next') or request.POST.get('next') or 'accounts:dashboard'
+                return redirect(next_url)
+            else:
+                messages.error(request, "Esta cuenta ha sido desactivada.")
         else:
-            messages.error(request, "Usuario o contraseña inválidos.")
+            messages.error(request, "Usuario/correo o contraseña inválidos.")
+
+        form = AuthenticationForm(initial={'username': login_input})
     else:
         form = AuthenticationForm()
 

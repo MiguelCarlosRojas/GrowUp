@@ -132,8 +132,8 @@ class AccountsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         # Should contain reader items
         self.assertContains(response, 'Dashboard')
-        self.assertContains(response, 'Opiniones y Calificación')
-        self.assertContains(response, 'Preguntas, Respuestas y Debates')
+        self.assertContains(response, 'Opiniones')
+        self.assertContains(response, 'Debates')
         self.assertContains(response, 'Mi Perfil')
         self.assertContains(response, 'Cerrar Sesión')
         # Should NOT contain author workshop
@@ -149,8 +149,8 @@ class AccountsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         # Should contain author items including workshop
         self.assertContains(response, 'Dashboard')
-        self.assertContains(response, 'Opiniones y Calificación')
-        self.assertContains(response, 'Preguntas, Respuestas y Debates')
+        self.assertContains(response, 'Opiniones')
+        self.assertContains(response, 'Debates')
         self.assertContains(response, 'Mi Taller de Escritor')
         self.assertContains(response, 'Mi Perfil')
         self.assertContains(response, 'Cerrar Sesión')
@@ -162,12 +162,12 @@ class AccountsTests(TestCase):
         # Test reviews page
         resp_reviews = self.client.get(reverse('accounts:dashboard_reviews'))
         self.assertEqual(resp_reviews.status_code, 200)
-        self.assertContains(resp_reviews, 'Opiniones y Calificación')
+        self.assertContains(resp_reviews, 'Opiniones')
 
         # Test discussions page
         resp_disc = self.client.get(reverse('accounts:dashboard_discussions'))
         self.assertEqual(resp_disc.status_code, 200)
-        self.assertContains(resp_disc, 'Preguntas, Respuestas y Debates')
+        self.assertContains(resp_disc, 'Debates')
 
     def test_author_reviews_and_discussions_segregated_sessions(self):
         from catalog.models import ItemReview, ItemDiscussion

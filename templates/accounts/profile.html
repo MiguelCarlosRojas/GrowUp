@@ -8,13 +8,9 @@
     <div class="p-4 p-md-5 rounded-4 shadow-lg" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
         <div class="d-flex align-items-center gap-4 flex-wrap flex-md-nowrap">
             <div class="app-user-avatar-wrap position-relative flex-shrink-0">
-                {% if user.profile.avatar_url %}
-                    <img src="{{ user.profile.avatar_url }}" alt="{{ user.username }}" class="rounded-circle shadow" style="width: 88px; height: 88px; object-fit: cover; border: 3px solid var(--accent-primary);">
-                {% else %}
-                    <div class="app-avatar-initials shadow" style="width: 88px; height: 88px; font-size: 2rem; background: {{ user.profile.avatar_gradient }};">
-                        {{ user.initials }}
-                    </div>
-                {% endif %}
+                <div class="app-avatar-initials shadow" style="width: 88px; height: 88px; font-size: 2rem; background: {{ user.profile.avatar_gradient }};">
+                    {{ user.initials }}
+                </div>
                 <span class="app-avatar-online-dot" style="width: 14px; height: 14px; bottom: 4px; right: 4px;" title="En línea"></span>
             </div>
             <div class="flex-grow-1">
@@ -122,11 +118,6 @@
                                     Al seleccionar Escritor / Autor, se habilita la publicación y gestión de novelas ligeras en tu Taller.
                                 </small>
                             </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label text-muted small fw-semibold">Avatar URL (Opcional - por defecto se usan tus iniciales dinámicas)</label>
-                            {{ form.avatar_url }}
                         </div>
 
                         <div class="mb-3">

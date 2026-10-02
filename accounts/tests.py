@@ -169,6 +169,118 @@ class AccountsTests(TestCase):
         self.assertEqual(resp_disc.status_code, 200)
         self.assertContains(resp_disc, 'Preguntas, Respuestas y Debates')
 
+    def test_author_reviews_and_discussions_segregated_sessions(self):
+        from catalog.models import ItemReview, ItemDiscussion
+        from novels.models import Novel
+
+        author = User.objects.create_user(username='author_creator', password='password123')
+        author.profile.role = 'author'
+        author.profile.save()
+
+        reader = User.objects.create_user(username='reader_fan', password='password123')
+        reader.profile.role = 'reader'
+        reader.profile.save()
+
+        novel = Novel.objects.create(
+            author=author,
+            title='La Leyenda del Nigromante',
+            slug='leyenda-nigromante',
+            synopsis='Sinopsis épica',
+            status='ongoing'
+        )
+
+        # Reader leaves review on author's novel
+        ItemReview.objects.create(
+            user=reader,
+            item_type='original_novel',
+            item_id=novel.slug,
+            item_title=novel.title,
+            rating=5,
+            headline='Excelente inicio',
+            opinion='Me encanto la construccion de mundo y el protagonista.'
+        )
+
+        # Author leaves review on an external anime
+        ItemReview.objects.create(
+            user=author,
+            item_type='anime',
+            item_id='1',
+            item_title='Cowboy Bebop',
+            rating=4,
+            headline='Clasico indispensable',
+            opinion='Una joya de la animacion de los 90s.'
+        )
+
+        # Reader leaves question on author's novel
+        ItemDiscussion.objects.create(
+            user=reader,
+            item_type='original_novel',
+            item_id=novel.slug,
+            item_title=novel.title,
+            discussion_type='question',
+            content='¿Con que frecuencia se publicaran los siguientes capitulos?'
+        )
+
+        # Login as author
+        self.client.login(username='author_creator', password='password123')
+
+        # Reviews view for author
+        resp_rev = self.client.get(reverse('accounts:dashboard_reviews'))
+        self.assertEqual(resp_rev.status_code, 200)
+        self.assertContains(resp_rev, 'Panel de Escritor')
+        self.assertContains(resp_rev, 'Reseñas Recibidas en mis Novelas')
+        self.assertContains(resp_rev, 'Mis Opiniones a otras Obras')
+        self.assertContains(resp_rev, 'Excelente inicio')
+        self.assertContains(resp_rev, 'Cowboy Bebop')
+
+        # Discussions view for author
+        resp_disc = self.client.get(reverse('accounts:dashboard_discussions'))
+        self.assertEqual(resp_disc.status_code, 200)
+        self.assertContains(resp_disc, 'Panel de Escritor')
+        self.assertContains(resp_disc, 'Preguntas y Debates de Lectores en mis Obras')
+        self.assertContains(resp_disc, '¿Con que frecuencia se publicaran los siguientes capitulos?')
+
+    def test_reader_reviews_and_discussions_breakdown(self):
+        from catalog.models import ItemReview, ItemDiscussion
+
+        reader = User.objects.create_user(username='reader_critic', password='password123')
+        reader.profile.role = 'reader'
+        reader.profile.save()
+
+        ItemReview.objects.create(
+            user=reader,
+            item_type='manga',
+            item_id='100',
+            item_title='Berserk',
+            rating=5,
+            headline='Obra cumbre',
+            opinion='Inigualable en arte y trama.'
+        )
+
+        q = ItemDiscussion.objects.create(
+            user=reader,
+            item_type='anime',
+            item_id='200',
+            item_title='Steins;Gate',
+            discussion_type='question',
+            content='¿En que orden cronologico se deben ver los episodios especiales?'
+        )
+
+        self.client.login(username='reader_critic', password='password123')
+
+        resp_rev = self.client.get(reverse('accounts:dashboard_reviews'))
+        self.assertEqual(resp_rev.status_code, 200)
+        self.assertContains(resp_rev, 'Perfil Lector')
+        self.assertContains(resp_rev, '5 Estrellas')
+        self.assertContains(resp_rev, 'Berserk')
+
+        resp_disc = self.client.get(reverse('accounts:dashboard_discussions'))
+        self.assertEqual(resp_disc.status_code, 200)
+        self.assertContains(resp_disc, 'Perfil Lector')
+        self.assertContains(resp_disc, 'Mis Preguntas Formuladas')
+        self.assertContains(resp_disc, 'En Animes')
+        self.assertContains(resp_disc, 'Steins;Gate')
+
     def test_user_navbar_dropdown_simplified(self):
         user = User.objects.create_user(username='nav_tester', password='password123')
         self.client.login(username='nav_tester', password='password123')

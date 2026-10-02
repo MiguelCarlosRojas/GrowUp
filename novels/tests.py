@@ -44,3 +44,26 @@ class NovelsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "El Despertar")
         self.assertContains(response, "bosque encantado")
+
+    def test_novel_detail_share_bar_and_list_view(self):
+        novel = Novel.objects.create(
+            author=self.author,
+            title='Prueba de Novela con Compartir',
+            slug='prueba-novela-compartir',
+            synopsis='Sinopsis para probar botones de compartir en redes sociales.',
+            status='ongoing',
+            demography='general',
+            language='Español'
+        )
+        response = self.client.get(reverse('novels:novel_detail', kwargs={'slug': novel.slug}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Compartir esta novela de la comunidad")
+        self.assertContains(response, "WhatsApp")
+        self.assertContains(response, "Facebook")
+        self.assertContains(response, "Telegram")
+        self.assertContains(response, "Copiar Enlace")
+
+        # Test novel list view
+        list_response = self.client.get(reverse('novels:novel_list'))
+        self.assertEqual(list_response.status_code, 200)
+        self.assertContains(list_response, "Prueba de Novela con Compartir")

@@ -98,6 +98,133 @@
     </div>
 </div>
 
+<!-- Social Media Sharing Bar -->
+<div class="share-bar-container">
+    <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-share-fill text-danger fs-5"></i>
+        <div>
+            <strong class="text-white d-block" style="font-size: 0.95rem;">Compartir esta obra</strong>
+            <small class="text-muted">Recomienda {{ item.title }} a tus amigos en redes y comunidades</small>
+        </div>
+    </div>
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+        <!-- WhatsApp -->
+        <a href="https://api.whatsapp.com/send?text={{ item.title|urlencode }}%20-%20Desc%C3%BAbrelo%20en%20GrowUp%3A%20{{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-item share-whatsapp" title="Compartir en WhatsApp">
+            <i class="bi bi-whatsapp"></i> WhatsApp
+        </a>
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-item share-facebook" title="Compartir en Facebook">
+            <i class="bi bi-facebook"></i> Facebook
+        </a>
+        <!-- X (Twitter) -->
+        <a href="https://twitter.com/intent/tweet?text={{ item.title|urlencode }}%20en%20GrowUp&url={{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-item share-x" title="Compartir en X">
+            <i class="bi bi-twitter-x"></i> X
+        </a>
+        <!-- Telegram -->
+        <a href="https://t.me/share/url?url={{ share_url|urlencode }}&text={{ item.title|urlencode }}%20en%20GrowUp" target="_blank" rel="noopener noreferrer" class="share-btn-item share-telegram" title="Compartir en Telegram">
+            <i class="bi bi-telegram"></i> Telegram
+        </a>
+        <!-- Email -->
+        <a href="mailto:?subject={{ item.title|urlencode }}%20en%20GrowUp&body=Te%20recomiendo%20ver%20esta%20obra%20en%20GrowUp%3A%20{{ share_url|urlencode }}" class="share-btn-item share-email" title="Compartir por Correo">
+            <i class="bi bi-envelope-fill"></i> Email
+        </a>
+        <!-- Copiar Enlace -->
+        <button type="button" class="share-btn-item share-copy" id="copyShareBtn" onclick="copyPageLink()" title="Copiar enlace al portapapeles">
+            <i class="bi bi-link-45deg fs-6" id="copyIcon"></i> <span id="copyText">Copiar Enlace</span>
+        </button>
+    </div>
+</div>
+
+<!-- Platforms Section (Official & Alternative Streaming / Reading) -->
+{% if platforms %}
+<div class="platforms-section-card mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+        <div class="d-flex align-items-center gap-2">
+            <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #3b82f6);"></span>
+            <h4 class="text-white fw-bold mb-0">
+                {% if item_type == 'anime' %}Dónde Ver este Anime
+                {% elif item_type == 'manga' %}Dónde Leer este Manga
+                {% else %}Dónde Leer esta Novela Ligera
+                {% endif %}
+            </h4>
+        </div>
+        <span class="text-muted small">
+            <i class="bi bi-info-circle me-1"></i> Enlaces directos a plataformas oficiales y comunitarias
+        </span>
+    </div>
+
+    <div class="row g-4">
+        <!-- Official Platforms -->
+        <div class="col-12 col-lg-6">
+            <div class="platform-group-title">
+                <i class="bi bi-patch-check-fill text-success"></i> Plataformas Oficiales & Simulcast
+            </div>
+            <div class="d-flex flex-column gap-2">
+                {% for plat in platforms.official %}
+                <a href="{{ plat.url }}" target="_blank" rel="noopener noreferrer" class="platform-pill-btn">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi {{ plat.icon }} fs-5" style="color: #cbd5e1;"></i>
+                        <div>
+                            <span class="d-block text-white fw-semibold">{{ plat.name }}</span>
+                            <small class="text-muted d-block" style="font-size: 0.76rem;">{{ plat.description }}</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="{{ plat.badge_class }}">{{ plat.tag }}</span>
+                        <i class="bi bi-box-arrow-up-right small text-muted"></i>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Community / Alternative Platforms -->
+        <div class="col-12 col-lg-6">
+            <div class="platform-group-title">
+                <i class="bi bi-globe-americas text-warning"></i> Plataformas Comunitarias & Alternativas
+            </div>
+            <div class="d-flex flex-column gap-2">
+                {% for plat in platforms.community %}
+                <a href="{{ plat.url }}" target="_blank" rel="noopener noreferrer" class="platform-pill-btn">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi {{ plat.icon }} fs-5" style="color: #cbd5e1;"></i>
+                        <div>
+                            <span class="d-block text-white fw-semibold">{{ plat.name }}</span>
+                            <small class="text-muted d-block" style="font-size: 0.76rem;">{{ plat.description }}</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="{{ plat.badge_class }}">{{ plat.tag }}</span>
+                        <i class="bi bi-box-arrow-up-right small text-muted"></i>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+function copyPageLink() {
+    navigator.clipboard.writeText(window.location.href).then(function() {
+        var copyBtn = document.getElementById('copyShareBtn');
+        var copyIcon = document.getElementById('copyIcon');
+        var copyText = document.getElementById('copyText');
+        if (copyIcon && copyText) {
+            copyIcon.className = 'bi bi-check2-circle text-success fs-6';
+            copyText.textContent = '¡Copiado!';
+            setTimeout(function() {
+                copyIcon.className = 'bi bi-link-45deg fs-6';
+                copyText.textContent = 'Copiar Enlace';
+            }, 2500);
+        }
+    }).catch(function() {
+        alert('No se pudo copiar el enlace.');
+    });
+}
+</script>
+
 <!-- Community Reviews & Opinions + Discussions (Fluid Full-Width) -->
 <div class="row g-4">
     <!-- Reviews Column -->

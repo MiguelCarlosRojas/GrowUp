@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Novel, Chapter, Category
 from .forms import NovelForm, ChapterForm
 from catalog.models import ItemReview, ItemDiscussion
@@ -29,10 +30,27 @@ def novel_list(request):
     }
     novels = novels.order_by(valid_orders.get(order, '-created_at'))
 
+    # 24 records per page
+    per_page = 24
+    paginator = Paginator(novels, per_page)
+    try:
+        page = int(request.GET.get('page', 1))
+        if page < 1:
+            page = 1
+    except (ValueError, TypeError):
+        page = 1
+
+    try:
+        page_obj = paginator.page(page)
+    except (EmptyPage, PageNotAnInteger):
+        page_obj = paginator.page(1)
+
     categories = Category.objects.all()
 
     context = {
-        'novels': novels,
+        'novels': page_obj,
+        'page_obj': page_obj,
+        'paginator': paginator,
         'categories': categories,
         'selected_q': q,
         'selected_category': category_slug,
@@ -56,11 +74,16 @@ def novel_detail(request, slug):
     reviews = ItemReview.objects.filter(item_type='original_novel', item_id=novel.slug).select_related('user')
     discussions = ItemDiscussion.objects.filter(item_type='original_novel', item_id=novel.slug, parent__isnull=True).select_related('user').prefetch_related('replies__user')
 
+    share_url = request.build_absolute_uri()
+    share_title = novel.title
+
     context = {
         'novel': novel,
         'chapters': chapters,
         'reviews': reviews,
         'discussions': discussions,
+        'share_url': share_url,
+        'share_title': share_title,
     }
     return render(request, 'novels/novel_detail.html', context)
 

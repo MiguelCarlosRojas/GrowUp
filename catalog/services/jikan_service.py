@@ -1,5 +1,6 @@
 import os
 import time
+import urllib.parse
 import requests
 import logging
 from django.conf import settings
@@ -85,123 +86,129 @@ def _safe_request(endpoint_path, params=None, timeout=10):
     return None
 
 
-def get_top_anime(limit=8):
-    # Fetch from Jikan pre-cached /top/anime (without query params to avoid 504 on Jikan)
-    data = _safe_request("/top/anime")
-    items = []
-    if data and 'data' in data and data['data']:
-        items = data['data']
-    else:
-        season_data = _safe_request("/seasons/now")
-        if season_data and 'data' in season_data and season_data['data']:
-            items = season_data['data']
-
-    _register_items(items)
-    return items[:limit]
-
-
-def _fetch_all_top_manga():
-    """Fetches real top manga and light novels from Jikan's pre-cached server endpoint."""
-    cache_key = "all_top_manga_cached"
+def _fetch_pool(endpoints, cache_key):
+    """Fetches and aggregates unique items from multiple stable cached Jikan endpoints."""
     cached = _get_cache(cache_key)
     if cached is not None:
         return cached
 
-    data = _safe_request("/top/manga")
-    if data and 'data' in data and data['data']:
-        items = data['data']
-        _set_cache(cache_key, items)
-        _register_items(items)
-        return items
+    seen = set()
+    aggregated = []
+    for ep in endpoints:
+        data = _safe_request(ep)
+        if data and 'data' in data and data['data']:
+            for it in data['data']:
+                mid = it.get('mal_id')
+                if mid and mid not in seen:
+                    seen.add(mid)
+                    aggregated.append(it)
 
-    return []
+    _set_cache(cache_key, aggregated)
+    _register_items(aggregated)
+    return aggregated
+
+
+def get_all_anime_pool():
+    return _fetch_pool(['/top/anime', '/anime', '/seasons/now'], 'all_real_anime_pool')
+
+
+def get_all_manga_and_novels_pool():
+    return _fetch_pool(['/top/manga', '/manga'], 'all_real_manga_and_novels_pool')
+
+
+def get_top_anime(limit=8):
+    pool = get_all_anime_pool()
+    return pool[:limit]
 
 
 def get_top_manga(limit=8):
-    all_items = _fetch_all_top_manga()
+    pool = get_all_manga_and_novels_pool()
     mangas = [
-        it for it in all_items
+        it for it in pool
         if it.get('type') in ('Manga', 'Manhwa', 'Manhua', 'One-shot', None, '')
     ]
     return mangas[:limit]
 
 
 def get_top_lightnovels(limit=8):
-    all_items = _fetch_all_top_manga()
+    pool = get_all_manga_and_novels_pool()
     novels = [
-        it for it in all_items
+        it for it in pool
         if it.get('type') in ('Novel', 'Lightnovel', 'Light Novel')
     ]
     return novels[:limit]
 
 
-def search_items(category='anime', query='', genre='', status='', order_by='score', sort='desc', page=1):
+def search_items(category='anime', query='', genre='', status='', order_by='score', sort='desc', page=1, per_page=24):
     """
-    Search mangas, animes or light novels with real-time filters via Jikan API v4.
+    Search mangas, animes or light novels with real-time filters and 24-record pagination.
     """
-    # First, ensure baseline catalog is loaded into memory
     if category == 'anime':
-        base_pool = get_top_anime(limit=25)
+        pool = list(get_all_anime_pool())
     elif category == 'lightnovel':
-        base_pool = get_top_lightnovels(limit=25)
+        all_mn = get_all_manga_and_novels_pool()
+        pool = [it for it in all_mn if it.get('type') in ('Novel', 'Lightnovel', 'Light Novel')]
     else:
-        base_pool = get_top_manga(limit=25)
+        all_mn = get_all_manga_and_novels_pool()
+        pool = [it for it in all_mn if it.get('type') in ('Manga', 'Manhwa', 'Manhua', 'One-shot', None, '')]
 
-    params = {
-        'page': page,
-        'sfw': 'true',
-    }
-    if query:
-        params['q'] = query
-    if genre:
-        params['genres'] = genre
-    if status:
-        params['status'] = status
-    if order_by:
-        params['order_by'] = order_by
-    if sort:
-        params['sort'] = sort
-
-    endpoint = "/anime" if category == 'anime' else "/manga"
-    data = _safe_request(endpoint, params=params)
-
-    if data and 'data' in data and data['data']:
-        items = data['data']
-        _register_items(items)
-        if category == 'lightnovel':
-            items = [it for it in items if it.get('type') in ('Novel', 'Lightnovel', 'Light Novel')]
-        elif category == 'manga':
-            items = [it for it in items if it.get('type') in ('Manga', 'Manhwa', 'Manhua', 'One-shot', None, '')]
-
-        return {
-            'items': items,
-            'pagination': data.get('pagination', {}),
-        }
-
-    # If live search was rate-limited or timed out, filter the real baseline pool
-    filtered = base_pool
+    # Filter by text query
     if query:
         q_lower = query.lower()
-        filtered = [
-            it for it in filtered
-            if q_lower in it.get('title', '').lower() or q_lower in str(it.get('title_japanese', '')).lower()
+        pool = [
+            it for it in pool
+            if q_lower in str(it.get('title', '')).lower() or q_lower in str(it.get('title_japanese', '')).lower()
         ]
 
+    # Filter by genre
     if genre:
-        filtered = [
-            it for it in filtered
+        pool = [
+            it for it in pool
             if any(str(g.get('mal_id')) == str(genre) for g in it.get('genres', []))
         ]
 
+    # Filter by status
     if status:
-        filtered = [
-            it for it in filtered
-            if status.lower() in str(it.get('status', '')).lower()
+        status_lower = status.lower()
+        pool = [
+            it for it in pool
+            if status_lower in str(it.get('status', '')).lower()
         ]
 
+    # Sorting
+    if order_by == 'title':
+        pool.sort(key=lambda x: str(x.get('title', '')).lower(), reverse=(sort == 'desc'))
+    elif order_by == 'popularity':
+        pool.sort(key=lambda x: x.get('members') or x.get('popularity') or 0, reverse=(sort == 'desc'))
+    else:  # default 'score'
+        pool.sort(key=lambda x: float(x.get('score') or 0), reverse=(sort != 'asc'))
+
+    # Pagination calculation (24 records per page)
+    total_items = len(pool)
+    total_pages = max(1, (total_items + per_page - 1) // per_page)
+    current_page = max(1, min(page, total_pages)) if total_items > 0 else 1
+
+    start = (current_page - 1) * per_page
+    end = start + per_page
+    page_items = pool[start:end]
+
+    pagination = {
+        'current_page': current_page,
+        'total_pages': total_pages,
+        'total_items': total_items,
+        'per_page': per_page,
+        'has_previous_page': current_page > 1,
+        'has_next_page': current_page < total_pages,
+        'previous_page_number': current_page - 1 if current_page > 1 else None,
+        'next_page_number': current_page + 1 if current_page < total_pages else None,
+        'page_range': list(range(1, total_pages + 1)),
+        'start_index': start + 1 if total_items > 0 else 0,
+        'end_index': min(end, total_items),
+    }
+
     return {
-        'items': filtered,
-        'pagination': {'has_next_page': False, 'current_page': page, 'items': {'count': len(filtered)}}
+        'items': page_items,
+        'pagination': pagination,
     }
 
 
@@ -245,3 +252,224 @@ def get_common_genres():
         {'id': 37, 'name': 'Sobrenatural'},
         {'id': 62, 'name': 'Isekai'},
     ]
+
+
+def get_platforms(item_type, title, mal_id=None):
+    """
+    Returns official and community streaming/reading platform links for an anime, manga or light novel.
+    """
+    title_enc = urllib.parse.quote(str(title).strip())
+    platforms = {
+        'official': [],
+        'community': []
+    }
+
+    if item_type == 'anime':
+        platforms['official'] = [
+            {
+                'name': 'Crunchyroll',
+                'url': f'https://www.crunchyroll.com/es/search?q={title_enc}',
+                'icon': 'bi-play-circle-fill',
+                'tag': 'Oficial',
+                'badge_class': 'platform-tag-official',
+                'description': 'Simulcast oficial con doblaje y subtitulos'
+            },
+            {
+                'name': 'Netflix',
+                'url': f'https://www.netflix.com/search?q={title_enc}',
+                'icon': 'bi-film',
+                'tag': 'Oficial',
+                'badge_class': 'platform-tag-official',
+                'description': 'Catalogo global en alta definicion'
+            },
+            {
+                'name': 'Prime Video',
+                'url': f'https://www.primevideo.com/search/ref=atv_nb_sr?phrase={title_enc}',
+                'icon': 'bi-play-btn-fill',
+                'tag': 'Oficial',
+                'badge_class': 'platform-tag-official',
+                'description': 'Transmision oficial de Amazon Studios'
+            },
+            {
+                'name': 'Anime Onegai',
+                'url': f'https://www.animeonegai.com/es/search?q={title_enc}',
+                'icon': 'bi-tv-fill',
+                'tag': 'Oficial',
+                'badge_class': 'platform-tag-official',
+                'description': 'Doblaje y transmision para Latinoamerica'
+            },
+            {
+                'name': 'HIDIVE',
+                'url': f'https://www.hidive.com/search?q={title_enc}',
+                'icon': 'bi-camera-reels-fill',
+                'tag': 'Oficial',
+                'badge_class': 'platform-tag-official',
+                'description': 'Emisiones exclusivas de Sentai Filmworks'
+            }
+        ]
+        platforms['community'] = [
+            {
+                'name': 'AnimeFLV',
+                'url': f'https://www3.animeflv.net/browse?q={title_enc}',
+                'icon': 'bi-broadcast',
+                'tag': 'Comunidad',
+                'badge_class': 'platform-tag-community',
+                'description': 'Portal alternativo de transmision en espanol'
+            },
+            {
+                'name': 'JKAnime',
+                'url': f'https://jkanime.net/buscar/{title_enc}/',
+                'icon': 'bi-collection-play-fill',
+                'tag': 'Comunidad',
+                'badge_class': 'platform-tag-community',
+                'description': 'Servidor veloz de episodios online'
+            },
+            {
+                'name': 'AnimeID',
+                'url': f'https://www.animeid.tv/buscar?q={title_enc}',
+                'icon': 'bi-display-fill',
+                'tag': 'Comunidad',
+                'badge_class': 'platform-tag-community',
+                'description': 'Directorio comunitario de series en emision'
+            },
+            {
+                'name': 'MonosChinos',
+                'url': f'https://monoschinos2.com/buscar?q={title_enc}',
+                'icon': 'bi-play-circle',
+                'tag': 'Comunidad',
+                'badge_class': 'platform-tag-community',
+                'description': 'Streaming alternativo con multiples reproductores'
+            }
+        ]
+    elif item_type == 'manga':
+        platforms['official'] = [
+            {
+                'name': 'MANGA Plus (Shueisha)',
+                'url': f'https://mangaplus.shueisha.co.jp/search_result?keyword={title_enc}',
+                'icon': 'bi-book-half',
+                'tag': 'Oficial',
+                'badge_class': 'platform-tag-official',
+                'description': 'Lanzamiento oficial y simultaneo de Shonen Jump'
+            },
+            {
+                'name': 'VIZ Media',
+                'url': f'https://www.viz.com/search?search={title_enc}',
+                'icon': 'bi-journal-bookmark-fill',
+                'tag': 'Oficial',
+                'badge_class': 'platform-tag-official',
+                'description': 'Editor y distribuidor oficial de manga en occidente'
+            },
+            {
+                'name': 'Comick',
+                'url': f'https://comick.io/search?q={title_enc}',
+                'icon': 'bi-book',
+                'tag': 'Oficial / Lector',
+                'badge_class': 'platform-tag-official',
+                'description': 'Lector moderno de obras oficiales y scanlations'
+            }
+        ]
+        platforms['community'] = [
+            {
+                'name': 'TuMangaOnline (TMO)',
+                'url': f'https://visortmo.com/library?_pg=1&title={title_enc}',
+                'icon': 'bi-eyeglasses',
+                'tag': 'Comunidad',
+                'badge_class': 'platform-tag-community',
+                'description': 'La mayor plataforma comunitaria de lectura en espanol'
+            },
+            {
+                'name': 'MangaDex',
+                'url': f'https://mangadex.org/search?q={title_enc}',
+                'icon': 'bi-collection-fill',
+                'tag': 'Comunidad',
+                'badge_class': 'platform-tag-community',
+                'description': 'Repositorio global y colaborativo de scanlations'
+            },
+            {
+                'name': 'InManga',
+                'url': f'https://inmanga.com/search?query={title_enc}',
+                'icon': 'bi-journal-richtext',
+                'tag': 'Comunidad',
+                'badge_class': 'platform-tag-community',
+                'description': 'Lector alternativo rapido sin recarga de pagina'
+            },
+            {
+                'name': 'Lectormanga',
+                'url': f'https://lectormanga.com/library?_pg=1&title={title_enc}',
+                'icon': 'bi-book-fill',
+                'tag': 'Comunidad',
+                'badge_class': 'platform-tag-community',
+                'description': 'Comunidad de fansub y traduccion de mangas'
+            }
+        ]
+    else:  # lightnovel
+        platforms['official'] = [
+            {
+                'name': 'BookWalker Global',
+                'url': f'https://global.bookwalker.jp/search/?word={title_enc}',
+                'icon': 'bi-journal-text',
+                'tag': 'Oficial',
+                'badge_class': 'platform-tag-official',
+                'description': 'Tienda y visor digital oficial de Kadokawa'
+            },
+            {
+                'name': 'Yen Press',
+                'url': f'https://yenpress.com/search-list/?q={title_enc}',
+                'icon': 'bi-bookmark-star-fill',
+                'tag': 'Oficial',
+                'badge_class': 'platform-tag-official',
+                'description': 'Editorial lider en novelas ligeras en occidente'
+            },
+            {
+                'name': 'J-Novel Club',
+                'url': f'https://j-novel.club/series?search={title_enc}',
+                'icon': 'bi-journal-check',
+                'tag': 'Oficial',
+                'badge_class': 'platform-tag-official',
+                'description': 'Publicacion digital capitulo a capitulo directa de Japon'
+            },
+            {
+                'name': 'Amazon Kindle',
+                'url': f'https://www.amazon.com/s?k={title_enc}+light+novel',
+                'icon': 'bi-cart-fill',
+                'tag': 'Oficial',
+                'badge_class': 'platform-tag-official',
+                'description': 'Ediciones digitales certificadas en Kindle Store'
+            }
+        ]
+        platforms['community'] = [
+            {
+                'name': 'NovelUpdates',
+                'url': f'https://www.novelupdates.com/?s={title_enc}',
+                'icon': 'bi-translate',
+                'tag': 'Comunidad',
+                'badge_class': 'platform-tag-community',
+                'description': 'Directorio internacional de traducciones de novelas'
+            },
+            {
+                'name': 'TuNovelaLigera',
+                'url': f'https://tunovelaligera.com/?s={title_enc}',
+                'icon': 'bi-journal-code',
+                'tag': 'Comunidad',
+                'badge_class': 'platform-tag-community',
+                'description': 'Comunidad de traduccion de novelas ligeras al espanol'
+            },
+            {
+                'name': 'Skythewood',
+                'url': f'https://skythewood.blogspot.com/search?q={title_enc}',
+                'icon': 'bi-feather',
+                'tag': 'Comunidad',
+                'badge_class': 'platform-tag-community',
+                'description': 'Traducciones comunitarias y notas de autor'
+            },
+            {
+                'name': 'Einherjar Project',
+                'url': f'https://einherjarproject.net/?s={title_enc}',
+                'icon': 'bi-book-half',
+                'tag': 'Comunidad',
+                'badge_class': 'platform-tag-community',
+                'description': 'Grupo hispano de lectura y localizacion de novelas'
+            }
+        ]
+
+    return platforms

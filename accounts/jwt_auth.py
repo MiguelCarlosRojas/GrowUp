@@ -12,7 +12,7 @@ DEFAULT_REFRESH_DAYS = 7
 
 
 def _get_secret_key():
-    return getattr(settings, 'SECRET_KEY', 'growup-secure-jwt-secret-key-fallback')
+    return settings.SECRET_KEY
 
 
 def generate_jwt_tokens(user):

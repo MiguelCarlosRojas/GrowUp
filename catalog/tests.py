@@ -13,7 +13,7 @@ class CatalogTests(TestCase):
         response = self.client.get(reverse('catalog:home'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "GrowUp")
-        self.assertContains(response, "Animes Legendarios")
+        self.assertContains(response, "Animes en Tendencia & Aclamados")
 
     def test_explore_page_status_and_filters(self):
         response = self.client.get(reverse('catalog:explore') + '?type=manga&q=Berserk')

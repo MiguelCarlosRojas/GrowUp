@@ -5,7 +5,7 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-12 col-md-11 col-lg-10 col-xl-9">
-        <!-- Reader Navigation Header -->
+        <!-- Reader Navigation & Toolbar Header -->
         <div class="card bg-dark border-secondary p-3 rounded-4 shadow-sm mb-4">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                 <div class="overflow-hidden">
@@ -15,9 +15,21 @@
                     <h5 class="fw-bold text-white mb-0 mt-1 text-truncate" title="{{ novel.title }}">{{ novel.title }}</h5>
                     <span class="text-warning small fw-semibold">Capítulo {{ chapter.chapter_number }}: {{ chapter.title }}</span>
                 </div>
-                <div class="d-flex align-items-center gap-2">
-                    <button class="btn btn-sm btn-outline-secondary px-2" onclick="adjustFontSize(-2)" title="Disminuir letra">A-</button>
-                    <button class="btn btn-sm btn-outline-secondary px-2" onclick="adjustFontSize(2)" title="Aumentar letra">A+</button>
+                <!-- Reading Mode & Size Controls -->
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <!-- Theme Toggles -->
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-outline-secondary active" onclick="setReadingTheme('dark')" title="Tema Oscuro">Dark</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="setReadingTheme('sepia')" title="Tema Sepia">Sepia</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="setReadingTheme('black')" title="Tema Negro Puro">OLED</button>
+                    </div>
+
+                    <!-- Font size controls -->
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-secondary px-2" onclick="adjustFontSize(-2)" title="Disminuir letra">A-</button>
+                        <button class="btn btn-outline-secondary px-2" onclick="adjustFontSize(2)" title="Aumentar letra">A+</button>
+                    </div>
+
                     {% if user == novel.author %}
                         <a href="{% url 'novels:chapter_edit' novel_slug=novel.slug chapter_number=chapter.chapter_number %}" class="btn btn-sm btn-outline-warning">
                             <i class="bi bi-pencil me-1"></i> Editar
@@ -35,13 +47,13 @@
         </div>
         {% endif %}
 
-        <!-- Chapter Content Box -->
-        <div class="card bg-dark border-secondary p-3 p-sm-4 p-md-5 rounded-4 shadow mb-4">
-            <h3 class="fw-bold text-white mb-4 pb-3 border-bottom border-secondary text-center" style="word-break: break-word;">
+        <!-- Chapter Content Box (Professional Reader Box) -->
+        <div id="reader-container" class="reader-box-pro mb-4 reader-theme-dark">
+            <h3 class="fw-bold mb-4 pb-3 border-bottom border-secondary border-opacity-50 text-center" style="word-break: break-word;">
                 Capítulo {{ chapter.chapter_number }}: {{ chapter.title }}
             </h3>
             
-            <div id="reader-text" class="text-light mx-auto" style="max-width: 900px; font-size: 1.15rem; line-height: 2.1; white-space: pre-wrap; word-break: break-word;">
+            <div id="reader-text" class="mx-auto" style="max-width: 860px; font-size: 1.15rem; line-height: 2.2; white-space: pre-wrap; word-break: break-word; font-family: 'Plus Jakarta Sans', Georgia, serif;">
 {{ chapter.content }}
             </div>
         </div>
@@ -80,6 +92,18 @@
         if (currentSize < 0.85) currentSize = 0.85;
         if (currentSize > 1.85) currentSize = 1.85;
         document.getElementById('reader-text').style.fontSize = currentSize + 'rem';
+    }
+
+    function setReadingTheme(theme) {
+        const box = document.getElementById('reader-container');
+        box.classList.remove('reader-theme-dark', 'reader-theme-sepia', 'reader-theme-black');
+        if (theme === 'sepia') {
+            box.classList.add('reader-theme-sepia');
+        } else if (theme === 'black') {
+            box.classList.add('reader-theme-black');
+        } else {
+            box.classList.add('reader-theme-dark');
+        }
     }
 </script>
 {% endblock %}

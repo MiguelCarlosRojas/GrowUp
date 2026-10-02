@@ -1,14 +1,15 @@
-# 📖 GrowUp - Plataforma de Manga, Anime y Novelas Ligeras
+# GrowUp - Plataforma de Manga, Anime y Novelas Ligeras
 
 [![CI Compilation & Test Suite](https://github.com/MiguelCarlosRojas/GrowUp/actions/workflows/ci.yml/badge.svg)](https://github.com/MiguelCarlosRojas/GrowUp/actions/workflows/ci.yml)
 [![Python Version](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/django-5.1%2B%20%7C%206.1-green.svg)](https://www.djangoproject.com/)
 [![Database](https://img.shields.io/badge/database-Prisma%20Postgres-3963F7.svg)](https://www.prisma.io/postgres)
+[![Prisma CLI](https://img.shields.io/badge/prisma-7.10%2B-5A67D8.svg)](https://www.prisma.io/)
 [![API](https://img.shields.io/badge/api-Jikan%20API%20v4-2e51a2.svg)](https://jikan.moe/)
 
 ---
 
-### 🏷️ Metadatos del Repositorio de GitHub
+### Metadatos del Repositorio de GitHub
 
 > **Description:**  
 > Plataforma interactiva de Manga, Anime y Novelas Ligeras desarrollada en Django puro con Prisma Postgres, Jikan API v4, Taller de Escritores, sistema de reseñas y CI/CD automatizado con GitHub Actions.
@@ -21,55 +22,70 @@
 
 ---
 
-## 🌟 Características Principales
+## Caracteristicas Principales
 
-1. **Catálogo & Landing Page Dinámica:**
-   - Información real y actualizada en tiempo real mediante **Jikan API v4** (MyAnimeList).
-   - Obras maestras y estrenos de anime, manga y novelas ligeras oficiales.
-   - Variedad amplia de filtros interactivos: por tipo de obra (Anime, Manga, Novela Ligera, Novelas de la Comunidad), término de búsqueda, géneros múltiples, estado de emisión y criterios de ordenamiento (mayor puntuación, popularidad, orden alfabético).
+1. **Diseño Visual Ultra-Profesional:**
+   - Estética inspirada en plataformas como Crunchyroll y AniList con **Glassmorphism**, iluminación ambiental (*ambient glow*) y modo oscuro de alto contraste.
+   - **Logotipo SVG Oficial** e icono de pestaña (*favicon*) vectoriales de alta definición.
+   - **Custom Scrollbar** con degradado continuo y bordes redondeados.
+   - **Disposición de Ancho Completo (*Full-Width Fluid*):** Diseñada para aprovechar pantallas panorámicas y monitores ultrawide sin márgenes estrechos.
+   - **Responsividad Total:** Tipografía fluida `clamp()`, tarjetas con relación de aspecto adaptable (2:3 y 3:4) y paneles táctiles en smartphones.
+   - **Lector de Capítulos Inmersivo:** Modos de lectura seleccionables (*Dark*, *Sepia Clásico*, *Negro OLED*), tamaño de letra ajustable y navegación secuencial.
 
 2. **Base de Datos con Prisma Postgres:**
-   - Configuración lista para **Prisma Postgres** / PostgreSQL en producción mediante variables de entorno seguras (`DATABASE_URL`).
+   - Conexión configurada hacia **Prisma Postgres** (`pooled.db.prisma.io:5432`) mediante variables de entorno seguras (`DATABASE_URL`).
+   - Soporte para **Prisma CLI** (`npx prisma db pull`, `npx prisma generate`, `npx prisma studio`).
    - Modo de resiliencia con fallback a SQLite local para testing y CI sin dependencias de red externas.
 
-3. **Sistema de Clasificación, Opiniones y Discusiones (Q&A):**
-   - Calificación interactiva de 1 a 5 estrellas con cálculo automático de promedios de la comunidad.
+3. **Catálogo & Landing Page Dinámica (Jikan API v4):**
+   - Sincronización en tiempo real con MyAnimeList.
+   - Obras maestras y estrenos de anime, manga y novelas ligeras oficiales.
+   - Filtros avanzados: por medio (*Anime, Manga, Novela Ligera, Obras de la Comunidad*), término de búsqueda, géneros múltiples, estado de emisión y ordenamiento.
+
+4. **Sistema de Clasificación, Opiniones y Discusiones (Q&A):**
+   - Calificación interactiva de 1 a 5 con cálculo automático de promedios de la comunidad.
    - Reseñas con título y opinión detallada.
-   - Foro de discusión por obra: comentarios generales y preguntas con hilos de respuestas anidadas.
+   - Foro de discusión por obra: comentarios y preguntas con respuestas anidadas en hilos.
 
-4. **Taller de Escritores (Novelas Ligeras Originales):**
-   - Módulo para autores donde pueden subir sus obras completas:
-     - Título, sinopsis, imagen de portada (archivo o URL), demografía, idioma y categorías/géneros (Isekai, Fantasía, Acción, Romance, etc.).
-     - Gestión de capítulos: numeración, título, contenido completo, conteo de palabras y notas del autor.
-     - Lector web de capítulos integrado con control de tamaño de fuente y navegación secuencial.
-
-5. **Autenticación & Perfiles:**
-   - Registro con selección de rol (Lector o Escritor).
-   - Login, logout y gestión de perfil (biografía, géneros preferidos, historial de reseñas y panel de autor).
+5. **Taller de Escritores (Novelas Ligeras Originales):**
+   - Módulo completo para autores: título, sinopsis, imagen de portada, demografía, idioma y categorías/géneros (*Isekai, Fantasía, Acción, Romance, etc.*).
+   - Gestión de capítulos: numeración, título, contenido completo, conteo de palabras y notas del autor.
 
 ---
 
-## 🏗️ Flujo de Ramas & Automatización CI/CD con GitHub Actions
+## Herramientas de Prisma Postgres
 
-El repositorio cuenta con integración continua (CI) y automatización total del ciclo de entrega:
+El proyecto cuenta con soporte para el ecosistema de Prisma:
+
+```bash
+# Inspeccionar o sincronizar las tablas de la base de datos
+npx prisma db pull
+
+# Generar el cliente de Prisma
+npx prisma generate
+
+# Abrir Prisma Studio para explorar la base de datos en el navegador
+npx prisma studio
+```
+
+---
+
+## Flujo de Ramas & Automatizacion CI/CD con GitHub Actions
 
 ```mermaid
 flowchart LR
-    A["feature/sp*"] -->|Push / Compilación OK| B["Auto PR a develop"]
-    B -->|Merge a develop / Compilación OK| C["Auto PR a main"]
-    C -->|Merge| D["Producción / main"]
+    A["feature/sp*"] -->|Push / Compilacion OK| B["Auto PR a develop"]
+    B -->|Merge a develop / Compilacion OK| C["Auto PR a main"]
+    C -->|Merge| D["Produccion / main"]
 ```
-
-- **`feature/**`:** Ramas de trabajo donde se desarrollan las nuevas características.
-- **Workflow `Auto PR Feature to Develop`:** Al hacer `git push` a cualquier rama `feature/**`, GitHub Actions compila el proyecto y ejecuta la suite de pruebas. Si todo es exitoso, crea automáticamente el Pull Request hacia la rama `develop`.
-- **Workflow `Auto PR Develop to Main`:** Al consolidar cambios en `develop`, si el proyecto compila y pasa todas las verificaciones, se genera automáticamente el Pull Request hacia la rama `main`.
 
 ---
 
-## 🚀 Instalación y Ejecución Local
+## Instalacion y Ejecucion Local
 
 ### Prerrequisitos
 - Python 3.12 o superior.
+- Node.js v20+ y npm.
 - Git.
 
 ### 1. Clonar el repositorio y acceder
@@ -89,9 +105,10 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3. Instalar dependencias
+### 3. Instalar dependencias de Python y Node.js
 ```bash
 pip install -r requirements.txt
+npm install
 ```
 
 ### 4. Configurar Variables de Entorno
@@ -99,9 +116,7 @@ Copia la plantilla `.env.example` a `.env`:
 ```bash
 cp .env.example .env
 ```
-Edita `.env` con tus credenciales de Prisma Postgres o PostgreSQL si lo deseas (o déjalo en blanco para usar la base de datos SQLite predeterminada).
-
-> ⚠️ **Seguridad:** El archivo `.env` nunca debe subirse al repositorio. Está protegido en `.gitignore`.
+Edita `.env` con tus credenciales de Prisma Postgres o PostgreSQL.
 
 ### 5. Aplicar migraciones y datos iniciales
 ```bash
@@ -122,31 +137,5 @@ Accede en tu navegador a: `http://127.0.0.1:8000/`
 
 ---
 
-## 📁 Estructura del Proyecto
-
-```text
-GrowUp/
-├── .github/
-│   ├── workflows/
-│   │   ├── ci.yml                           # Workflow de verificación continua
-│   │   ├── auto-pr-feature-to-develop.yml   # PR automático feature -> develop
-│   │   └── auto-pr-develop-to-main.yml      # PR automático develop -> main
-│   ├── ISSUE_TEMPLATE/                      # Plantillas de issues de GitHub
-│   └── pull_request_template.md             # Plantilla de Pull Request
-├── accounts/                                # Autenticación, roles y perfil
-├── catalog/                                 # Landing page, Jikan API, filtros, reseñas y Q&A
-├── novels/                                  # Taller de escritores, novelas ligeras y lector
-├── growup/                                  # Configuración central Django (settings, urls, wsgi)
-├── templates/                               # Plantillas HTML con Bootstrap 5 & Dark Theme
-├── static/                                  # Archivos estáticos (CSS, JS, iconos)
-├── .env.example                             # Plantilla pública de variables de entorno
-├── CODE_OF_CONDUCT.md                       # Código de conducta para la comunidad
-├── COPYRIGHT.md                             # Declaración de derechos de autor y Jikan
-├── requirements.txt                         # Dependencias del proyecto
-└── manage.py                                # Gestor CLI de Django
-```
-
----
-
-## 📄 Licencia y Conducta
+## Licencia y Conducta
 Consulta [COPYRIGHT.md](COPYRIGHT.md) y [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) para más detalles.

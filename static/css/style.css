@@ -1,52 +1,68 @@
 /* ==========================================================================
-   GROWUP - Modern Anime, Manga & Novels Platform
-   Styles: Custom Scrollbar, Fluid Full-Width Layout & Mobile Responsiveness
+   GROWUP - Ultra Professional Anime, Manga & Light Novels Platform UI
+   Design: Cyberpunk Elegance, Deep Dark Glassmorphism, Microinteractions,
+           Custom Scrollbars & Edge-to-Edge Responsive Fluidity
    ========================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Cinzel:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
 :root {
-    --primary-accent: #ff3366;
-    --primary-gradient: linear-gradient(135deg, #ff3366 0%, #ff5252 50%, #ff7a00 100%);
-    --secondary-accent: #70a1ff;
-    --bg-dark: #0a0c13;
-    --card-bg: #121524;
-    --card-hover-bg: #181c30;
-    --card-border: rgba(255, 255, 255, 0.08);
-    --border-highlight: rgba(255, 51, 102, 0.4);
-    --text-primary: #f8fafc;
-    --text-muted: #94a3b8;
-    --scrollbar-track: #07090e;
-    --scrollbar-thumb: linear-gradient(180deg, #ff3366, #ff7a00);
-    --scrollbar-thumb-hover: linear-gradient(180deg, #ff5252, #ffa502);
+    --primary-hue: 345;
+    --primary-accent: #ff2a5f;
+    --primary-hover: #ff4777;
+    --primary-glow: rgba(255, 42, 95, 0.45);
+    
+    --accent-orange: #ff7700;
+    --accent-cyan: #00d2d3;
+    --accent-purple: #8854d0;
+    --accent-gold: #ffbe0b;
+
+    --primary-gradient: linear-gradient(135deg, #ff2a5f 0%, #ff5e3a 50%, #ff8c00 100%);
+    --accent-gradient: linear-gradient(135deg, #00d2d3 0%, #54a0ff 100%);
+    --card-gradient: linear-gradient(180deg, rgba(22, 26, 42, 0.75) 0%, rgba(13, 16, 26, 0.95) 100%);
+    --glass-bg: rgba(14, 17, 28, 0.85);
+
+    --bg-dark: #07090e;
+    --bg-surface: #0e111a;
+    --card-bg: #121624;
+    --card-hover-bg: #171c2f;
+    --card-border: rgba(255, 255, 255, 0.07);
+    --border-glow: rgba(255, 42, 95, 0.45);
+
+    --text-primary: #ffffff;
+    --text-secondary: #cbd5e1;
+    --text-muted: #8392a5;
+    --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-serif: 'Cinzel', Georgia, serif;
+    --font-mono: 'JetBrains Mono', monospace;
 }
 
-/* Custom Scrollbar (Global & Elements) */
+/* Custom Scrollbar */
 * {
     scrollbar-width: thin;
-    scrollbar-color: #ff3366 #07090e;
+    scrollbar-color: #ff2a5f #07090e;
 }
 
 ::-webkit-scrollbar {
-    width: 9px;
-    height: 9px;
+    width: 8px;
+    height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--scrollbar-track);
-    border-radius: 6px;
+    background: #07090e;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb);
-    border-radius: 6px;
+    background: linear-gradient(180deg, #ff2a5f, #ff7700);
+    border-radius: 999px;
     border: 2px solid #07090e;
-    transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-thumb-hover);
+    background: linear-gradient(180deg, #ff5e3a, #ffbe0b);
 }
 
-/* Global Reset & Fluid Layout */
+/* Body & Base */
 html, body {
     width: 100%;
     min-height: 100vh;
@@ -55,176 +71,361 @@ html, body {
     overflow-x: hidden;
     background-color: var(--bg-dark);
     color: var(--text-primary);
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-family: var(--font-heading);
     -webkit-font-smoothing: antialiased;
+    background-image: 
+        radial-gradient(circle at 15% 15%, rgba(255, 42, 95, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(0, 210, 211, 0.06) 0%, transparent 45%);
+    background-attachment: fixed;
 }
 
-/* Navbar Logo & Brand */
-.brand-logo-img {
-    height: 38px;
-    width: auto;
-    max-width: 170px;
-    object-fit: contain;
-    transition: transform 0.25s ease;
-}
-
-.brand-logo-img:hover {
-    transform: scale(1.03);
-}
-
-/* Full Width Fluid Container */
+/* Fluid Full Width Container */
 .container-full {
     width: 100%;
-    padding-right: clamp(1rem, 3vw, 3rem);
-    padding-left: clamp(1rem, 3vw, 3rem);
+    padding-right: clamp(1rem, 3.5vw, 3.5rem);
+    padding-left: clamp(1rem, 3.5vw, 3.5rem);
     margin-right: auto;
     margin-left: auto;
 }
 
-/* Fluid Hero Banner */
-.hero-banner-fluid {
-    width: 100%;
-    border-radius: 16px;
-    overflow: hidden;
-    position: relative;
-    background: linear-gradient(180deg, rgba(10, 12, 19, 0.4) 0%, rgba(10, 12, 19, 0.98) 100%);
-    border: 1px solid var(--card-border);
-    padding: clamp(1.5rem, 4vw, 3.5rem);
-    margin-bottom: 2.5rem;
+/* Navigation Bar */
+.navbar-custom {
+    background: rgba(7, 9, 14, 0.88);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.3s ease;
 }
 
-.hero-img-bg {
+.brand-logo-img {
+    height: 42px;
+    width: auto;
+    max-width: 180px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(255, 42, 95, 0.35));
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.brand-logo-img:hover {
+    transform: scale(1.04);
+}
+
+.nav-link-custom {
+    color: #94a3b8 !important;
+    font-weight: 600;
+    font-size: 0.92rem;
+    padding: 0.55rem 0.9rem !important;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.nav-link-custom:hover, .nav-link-custom.active {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Cinematic Hero Banner */
+.hero-cinematic {
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 35px rgba(255, 42, 95, 0.15);
+    background: #090b12;
+    padding: clamp(1.8rem, 5vw, 4rem);
+    margin-bottom: 3rem;
+}
+
+.hero-backdrop-img {
     position: absolute;
     inset: 0;
     background-size: cover;
-    background-position: center 25%;
-    filter: blur(16px) brightness(0.32);
+    background-position: center 30%;
+    filter: blur(20px) brightness(0.28) saturate(1.4);
+    transform: scale(1.08);
     z-index: 1;
 }
 
-.hero-content {
-    position: relative;
+.hero-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 75% 45%, rgba(7, 9, 14, 0.2) 0%, rgba(7, 9, 14, 0.96) 90%),
+                linear-gradient(180deg, rgba(7, 9, 14, 0.3) 0%, #07090e 100%);
     z-index: 2;
 }
 
-/* Responsive Cards & Aspect Ratio */
-.anime-card {
+.hero-content-layer {
+    position: relative;
+    z-index: 3;
+}
+
+.hero-poster-glow {
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 42, 95, 0.3);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hero-poster-glow:hover {
+    transform: scale(1.03) translateY(-4px);
+}
+
+/* Professional Cards Grid */
+.anime-card-pro {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     height: 100%;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
-.anime-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
-    border-color: var(--border-highlight);
+.anime-card-pro:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 20px rgba(255, 42, 95, 0.25);
+    border-color: var(--border-glow);
     background: var(--card-hover-bg);
 }
 
-.anime-card .card-img-wrap {
+.anime-card-pro .card-media-wrap {
     position: relative;
     width: 100%;
     aspect-ratio: 2/3;
     overflow: hidden;
-    background: #06070a;
+    background: #040508;
 }
 
-.anime-card .card-img-wrap img {
+.anime-card-pro .card-media-wrap img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.35s ease;
+    transition: transform 0.5s ease;
 }
 
-.anime-card:hover .card-img-wrap img {
-    transform: scale(1.05);
+.anime-card-pro:hover .card-media-wrap img {
+    transform: scale(1.07);
 }
 
-.score-badge-clean {
-    background: rgba(10, 12, 19, 0.85);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 6px;
+.anime-card-pro .media-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(7, 9, 14, 0.95) 100%);
+    opacity: 0.85;
+    transition: opacity 0.3s ease;
+}
+
+.badge-score-pill {
+    background: rgba(7, 9, 14, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
     padding: 3px 8px;
-    font-weight: 700;
-    color: #ffb800;
-    font-size: 0.82rem;
+    font-weight: 800;
+    font-size: 0.8rem;
+    color: #ffbe0b;
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
-.tag-badge {
+.status-dot-airing {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #00d2d3;
+    display: inline-block;
+    box-shadow: 0 0 8px #00d2d3;
+}
+
+.status-dot-completed {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #70a1ff;
+    display: inline-block;
+}
+
+.tag-pill {
     font-size: 0.72rem;
-    background: rgba(255, 255, 255, 0.06);
-    color: #cbd5e1;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 6px;
-    padding: 3px 8px;
+    padding: 2px 7px;
     text-decoration: none;
     transition: all 0.2s ease;
 }
 
-.tag-badge:hover {
-    background: rgba(255, 51, 102, 0.15);
-    color: #ff3366;
-    border-color: rgba(255, 51, 102, 0.3);
+.tag-pill:hover {
+    background: rgba(255, 42, 95, 0.15);
+    color: #ff2a5f;
+    border-color: rgba(255, 42, 95, 0.3);
 }
 
-/* Button Styling */
+/* Premium Filter Tabs & Search Bar */
+.filter-panel-pro {
+    background: rgba(14, 17, 28, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    margin-bottom: 2.5rem;
+}
+
+.catalog-pill-btn {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: #94a3b8;
+    font-weight: 600;
+    font-size: 0.88rem;
+    border-radius: 10px;
+    padding: 0.5rem 1.1rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.25s ease;
+}
+
+.catalog-pill-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.catalog-pill-btn.active {
+    background: var(--primary-gradient);
+    color: #ffffff !important;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(255, 42, 95, 0.35);
+}
+
+/* Buttons & Microinteractions */
 .btn-accent {
     background: var(--primary-gradient);
     color: #ffffff !important;
     border: none;
-    font-weight: 600;
-    box-shadow: 0 4px 16px rgba(255, 51, 102, 0.35);
-    transition: all 0.25s ease;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    box-shadow: 0 4px 18px rgba(255, 42, 95, 0.38);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .btn-accent:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 22px rgba(255, 51, 102, 0.5);
+    box-shadow: 0 8px 25px rgba(255, 42, 95, 0.55);
 }
 
-/* Mobile & Fluid Typography */
-h1, .h1 {
-    font-size: clamp(1.75rem, 4vw, 3rem);
+.btn-accent:active {
+    transform: translateY(0);
 }
 
-h2, .h2 {
-    font-size: clamp(1.4rem, 3vw, 2.2rem);
+.btn-outline-glow {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    font-weight: 600;
+    transition: all 0.25s ease;
 }
 
-h3, .h3 {
-    font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+.btn-outline-glow:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #ffffff;
 }
 
-/* Mobile responsive adjustments */
+/* Readers & Novels Section */
+.workshop-banner-pro {
+    background: linear-gradient(135deg, #13172c 0%, #080911 100%);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.workshop-banner-pro::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 190, 11, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* Detail Page Poster Reflective Glow */
+.poster-detail-wrap {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.poster-detail-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Reading Experience Modes */
+.reader-box-pro {
+    background: #0f121d;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: clamp(1.5rem, 5vw, 4rem);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.reader-theme-dark {
+    background-color: #0f121d !important;
+    color: #e2e8f0 !important;
+}
+
+.reader-theme-sepia {
+    background-color: #1e1b18 !important;
+    color: #f1e7d0 !important;
+}
+
+.reader-theme-black {
+    background-color: #000000 !important;
+    color: #d1d5db !important;
+}
+
+/* Responsive Breakpoints & Mobile Adaptability */
 @media (max-width: 768px) {
     .container-full {
-        padding-left: 0.85rem;
-        padding-right: 0.85rem;
+        padding-left: 0.9rem;
+        padding-right: 0.9rem;
     }
 
-    .hero-banner-fluid {
+    .hero-cinematic {
         padding: 1.25rem;
-        border-radius: 12px;
+        border-radius: 14px;
     }
 
-    .anime-card .card-img-wrap {
+    .anime-card-pro .card-media-wrap {
         aspect-ratio: 3/4;
     }
 
-    .navbar-collapse {
-        background: #0d101a;
+    .filter-panel-pro {
         padding: 1rem;
-        border-radius: 10px;
-        margin-top: 0.5rem;
-        border: 1px solid var(--card-border);
+        border-radius: 12px;
     }
 }

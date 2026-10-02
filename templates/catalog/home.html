@@ -3,57 +3,68 @@
 {% block title %}GrowUp - Biblioteca de Manga, Anime y Novelas Ligeras{% endblock %}
 
 {% block content %}
-<!-- Hero Banner (Fluid Full-Width) -->
+<!-- Cinematic Hero Banner -->
 {% if hero_item %}
-<div class="hero-banner-fluid shadow-lg mb-5">
-    <div class="hero-img-bg" style="background-image: url('{{ hero_item.images.jpg.large_image_url }}');"></div>
-    <div class="row align-items-center hero-content g-4">
+<div class="hero-cinematic mb-5">
+    <div class="hero-backdrop-img" style="background-image: url('{{ hero_item.images.jpg.large_image_url }}');"></div>
+    <div class="hero-vignette"></div>
+    <div class="row align-items-center hero-content-layer g-4">
         <div class="col-lg-8 col-xl-9">
-            <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
-                <span class="badge bg-danger text-uppercase px-2 py-1"><i class="bi bi-award-fill me-1"></i> Obra Destacada</span>
-                <span class="score-badge-clean"><i class="bi bi-star-fill text-warning"></i> {{ hero_item.score }}</span>
-                <span class="badge bg-dark border border-secondary text-light">{{ hero_item.type }} ({{ hero_item.year|default:'2024' }})</span>
+            <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+                <span class="badge bg-danger text-uppercase px-2 py-1 fw-bold" style="letter-spacing: 0.5px;">
+                    <i class="bi bi-fire me-1"></i> TOP #1 RANKING GLOBAL
+                </span>
+                <span class="badge-score-pill"><i class="bi bi-star-fill text-warning"></i> {{ hero_item.score }}</span>
+                <span class="badge bg-black bg-opacity-75 border border-secondary border-opacity-50 text-light">{{ hero_item.type }} &bull; {{ hero_item.year|default:'2024' }}</span>
+                <span class="small text-white-50"><span class="status-dot-airing me-1"></span> Sincronizado en tiempo real</span>
             </div>
-            <h1 class="fw-bold text-white mb-2">{{ hero_item.title }}</h1>
+            <h1 class="display-5 fw-bold text-white mb-2" style="font-weight: 800; letter-spacing: -0.5px;">{{ hero_item.title }}</h1>
             {% if hero_item.title_japanese %}
                 <p class="text-white-50 font-monospace mb-3 small">{{ hero_item.title_japanese }}</p>
             {% endif %}
-            <p class="lead text-light mb-4" style="max-width: 850px; line-height: 1.6; font-size: clamp(0.95rem, 1.5vw, 1.15rem);">
+            <p class="lead text-light mb-4" style="max-width: 820px; line-height: 1.7; font-size: clamp(0.95rem, 1.4vw, 1.15rem); color: #cbd5e1 !important;">
                 {{ hero_item.synopsis|truncatewords:45 }}
             </p>
             <div class="d-flex flex-wrap gap-2 mb-4">
                 {% for genre in hero_item.genres %}
-                    <span class="tag-badge">{{ genre.name }}</span>
+                    <span class="tag-pill">{{ genre.name }}</span>
                 {% endfor %}
             </div>
-            <div class="d-flex flex-wrap gap-2 gap-sm-3">
-                <a href="{% url 'catalog:item_detail' item_type='anime' item_id=hero_item.mal_id %}" class="btn btn-accent px-4 py-2">
-                    <i class="bi bi-info-circle me-1"></i> Ver Ficha & Opiniones
+            <div class="d-flex flex-wrap gap-3">
+                <a href="{% url 'catalog:item_detail' item_type='anime' item_id=hero_item.mal_id %}" class="btn btn-accent btn-lg px-4 py-2 d-flex align-items-center gap-2">
+                    <i class="bi bi-play-circle-fill fs-5"></i> Ver Ficha & Opiniones
                 </a>
-                <a href="{% url 'catalog:explore' %}?type=anime" class="btn btn-outline-light px-4 py-2">
-                    <i class="bi bi-compass me-1"></i> Explorar Catálogo
+                <a href="{% url 'catalog:explore' %}?type=anime" class="btn btn-outline-glow btn-lg px-4 py-2 d-flex align-items-center gap-2">
+                    <i class="bi bi-compass"></i> Explorar Catálogo
                 </a>
             </div>
         </div>
         <div class="col-lg-4 col-xl-3 text-center d-none d-lg-block">
-            <img src="{{ hero_item.images.jpg.large_image_url }}" alt="{{ hero_item.title }}" class="img-fluid rounded-4 shadow-lg border border-secondary" style="max-height: 380px; width: 100%; object-fit: cover;">
+            <img src="{{ hero_item.images.jpg.large_image_url }}" alt="{{ hero_item.title }}" class="img-fluid hero-poster-glow" style="max-height: 400px; width: 100%; object-fit: cover;">
         </div>
     </div>
 </div>
 {% endif %}
 
-<!-- Advanced Search and Filters Bar (Full-Width Responsive) -->
-<div class="card bg-dark border-secondary p-3 p-md-4 rounded-4 shadow-sm mb-5">
+<!-- Professional Filter & Search Bar with Pill Tabs -->
+<div class="filter-panel-pro mb-5">
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-        <h4 class="mb-0 text-white fw-bold d-flex align-items-center gap-2">
-            <i class="bi bi-sliders text-danger"></i> Buscador Avanzado y Filtros
-        </h4>
-        <span class="text-muted small">Explora mangas, animes o novelas con filtros en tiempo real</span>
+        <h5 class="mb-0 text-white fw-bold d-flex align-items-center gap-2">
+            <i class="bi bi-sliders2 text-danger"></i> Buscador Avanzado & Filtros en Vivo
+        </h5>
+        <!-- Pill Media Selectors -->
+        <div class="d-flex gap-1 flex-wrap">
+            <a href="{% url 'catalog:explore' %}?type=anime" class="catalog-pill-btn active"><i class="bi bi-tv"></i> Anime</a>
+            <a href="{% url 'catalog:explore' %}?type=manga" class="catalog-pill-btn"><i class="bi bi-book"></i> Manga</a>
+            <a href="{% url 'catalog:explore' %}?type=lightnovel" class="catalog-pill-btn"><i class="bi bi-journal-bookmark"></i> Novelas Ligeras</a>
+            <a href="{% url 'novels:novel_list' %}" class="catalog-pill-btn"><i class="bi bi-feather"></i> Comunidad</a>
+        </div>
     </div>
+    
     <form action="{% url 'catalog:explore' %}" method="GET" class="row g-2 g-md-3">
         <div class="col-12 col-sm-6 col-lg-3">
-            <label class="form-label text-muted small fw-semibold">Tipo de Obra</label>
-            <select name="type" class="form-select bg-black text-white border-secondary">
+            <label class="form-label text-muted small fw-semibold">Tipo de Catálogo</label>
+            <select name="type" class="form-select bg-black text-white border-secondary border-opacity-50">
                 <option value="anime">Anime (Jikan API)</option>
                 <option value="manga">Manga (Jikan API)</option>
                 <option value="lightnovel">Novela Ligera (MAL / Jikan)</option>
@@ -61,12 +72,15 @@
             </select>
         </div>
         <div class="col-12 col-sm-6 col-lg-3">
-            <label class="form-label text-muted small fw-semibold">Palabra clave o Título</label>
-            <input type="text" name="q" class="form-control bg-black text-white border-secondary" placeholder="Ej: Solo Leveling, Frieren, Titan...">
+            <label class="form-label text-muted small fw-semibold">Buscar por Título / Palabra clave</label>
+            <div class="input-group">
+                <span class="input-group-text bg-black border-secondary border-opacity-50 text-muted"><i class="bi bi-search"></i></span>
+                <input type="text" name="q" class="form-control bg-black text-white border-secondary border-opacity-50" placeholder="Ej: Solo Leveling, Frieren, Titan...">
+            </div>
         </div>
         <div class="col-6 col-sm-4 col-lg-2">
             <label class="form-label text-muted small fw-semibold">Género Principal</label>
-            <select name="genre" class="form-select bg-black text-white border-secondary">
+            <select name="genre" class="form-select bg-black text-white border-secondary border-opacity-50">
                 <option value="">Todos los Géneros</option>
                 {% for g in genres %}
                     <option value="{{ g.id }}">{{ g.name }}</option>
@@ -75,52 +89,53 @@
         </div>
         <div class="col-6 col-sm-4 col-lg-2">
             <label class="form-label text-muted small fw-semibold">Ordenar Por</label>
-            <select name="order_by" class="form-select bg-black text-white border-secondary">
+            <select name="order_by" class="form-select bg-black text-white border-secondary border-opacity-50">
                 <option value="score">Mayor Puntuación</option>
                 <option value="popularity">Más Popular</option>
-                <option value="title">Título Alfabético</option>
+                <option value="title">Título Alfabético (A-Z)</option>
             </select>
         </div>
         <div class="col-12 col-sm-4 col-lg-2 d-flex align-items-end">
             <button type="submit" class="btn btn-accent w-100 py-2">
-                <i class="bi bi-search me-1"></i> Filtrar Catálogo
+                <i class="bi bi-funnel me-1"></i> Filtrar Catálogo
             </button>
         </div>
     </form>
 </div>
 
-<!-- Section: Top Animes (Full-Width Responsive Grid) -->
+<!-- Section: Top Animes (Pro Cards) -->
 <div class="mb-5">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <h3 class="fw-bold text-white mb-0 d-flex align-items-center gap-2">
-                <i class="bi bi-tv text-danger"></i> Animes Legendarios & Populares
+                <i class="bi bi-tv text-danger"></i> Animes en Tendencia & Aclamados
             </h3>
             <span class="text-muted small">Información en tiempo real sincronizada con Jikan API v4</span>
         </div>
-        <a href="{% url 'catalog:explore' %}?type=anime" class="btn btn-sm btn-outline-danger">Ver todos <i class="bi bi-arrow-right"></i></a>
+        <a href="{% url 'catalog:explore' %}?type=anime" class="btn btn-sm btn-outline-glow">Ver todos <i class="bi bi-arrow-right ms-1"></i></a>
     </div>
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 g-md-4">
         {% for anime in top_animes %}
         <div class="col">
-            <div class="anime-card position-relative">
-                <a href="{% url 'catalog:item_detail' item_type='anime' item_id=anime.mal_id %}" class="card-img-wrap text-decoration-none">
+            <div class="anime-card-pro">
+                <a href="{% url 'catalog:item_detail' item_type='anime' item_id=anime.mal_id %}" class="card-media-wrap text-decoration-none">
                     <img src="{{ anime.images.jpg.large_image_url }}" alt="{{ anime.title }}" loading="lazy">
+                    <div class="media-overlay"></div>
                 </a>
-                <div class="position-absolute top-0 end-0 m-2">
-                    <span class="score-badge-clean"><i class="bi bi-star-fill"></i> {{ anime.score|default:'N/A' }}</span>
+                <div class="position-absolute top-0 end-0 m-2" style="z-index: 2;">
+                    <span class="badge-score-pill"><i class="bi bi-star-fill"></i> {{ anime.score|default:'N/A' }}</span>
                 </div>
                 <div class="p-3 d-flex flex-column flex-grow-1">
                     <h6 class="fw-bold text-white text-truncate mb-1" title="{{ anime.title }}">{{ anime.title }}</h6>
                     <div class="d-flex justify-content-between align-items-center mb-2 small text-muted">
-                        <span>{{ anime.type }}</span>
+                        <span><span class="status-dot-airing me-1"></span>{{ anime.type }}</span>
                         <span>{{ anime.episodes|default:'?' }} eps</span>
                     </div>
                     <p class="text-muted small mb-3 flex-grow-1 text-truncate-2" style="max-height: 38px; overflow: hidden; font-size: 0.78rem;">
                         {{ anime.synopsis|truncatewords:12 }}
                     </p>
-                    <a href="{% url 'catalog:item_detail' item_type='anime' item_id=anime.mal_id %}" class="btn btn-sm btn-outline-light w-100 mt-auto">
-                        Detalles & Opiniones
+                    <a href="{% url 'catalog:item_detail' item_type='anime' item_id=anime.mal_id %}" class="btn btn-sm btn-outline-glow w-100 mt-auto">
+                        Ver Ficha
                     </a>
                 </div>
             </div>
@@ -129,26 +144,27 @@
     </div>
 </div>
 
-<!-- Section: Top Mangas (Full-Width Responsive Grid) -->
+<!-- Section: Top Mangas (Pro Cards) -->
 <div class="mb-5">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <h3 class="fw-bold text-white mb-0 d-flex align-items-center gap-2">
-                <i class="bi bi-book text-warning"></i> Mangas Aclamados por la Crítica
+                <i class="bi bi-book text-warning"></i> Mangas Imprescindibles
             </h3>
-            <span class="text-muted small">Obras maestras con reseñas y preguntas de lectores</span>
+            <span class="text-muted small">Obras maestras del cómic japonés con opiniones de la comunidad</span>
         </div>
-        <a href="{% url 'catalog:explore' %}?type=manga" class="btn btn-sm btn-outline-warning">Ver todos <i class="bi bi-arrow-right"></i></a>
+        <a href="{% url 'catalog:explore' %}?type=manga" class="btn btn-sm btn-outline-glow">Ver todos <i class="bi bi-arrow-right ms-1"></i></a>
     </div>
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 g-md-4">
         {% for manga in top_mangas %}
         <div class="col">
-            <div class="anime-card position-relative">
-                <a href="{% url 'catalog:item_detail' item_type='manga' item_id=manga.mal_id %}" class="card-img-wrap text-decoration-none">
+            <div class="anime-card-pro">
+                <a href="{% url 'catalog:item_detail' item_type='manga' item_id=manga.mal_id %}" class="card-media-wrap text-decoration-none">
                     <img src="{{ manga.images.jpg.large_image_url }}" alt="{{ manga.title }}" loading="lazy">
+                    <div class="media-overlay"></div>
                 </a>
-                <div class="position-absolute top-0 end-0 m-2">
-                    <span class="score-badge-clean"><i class="bi bi-star-fill"></i> {{ manga.score|default:'N/A' }}</span>
+                <div class="position-absolute top-0 end-0 m-2" style="z-index: 2;">
+                    <span class="badge-score-pill"><i class="bi bi-star-fill"></i> {{ manga.score|default:'N/A' }}</span>
                 </div>
                 <div class="p-3 d-flex flex-column flex-grow-1">
                     <h6 class="fw-bold text-white text-truncate mb-1" title="{{ manga.title }}">{{ manga.title }}</h6>
@@ -159,8 +175,8 @@
                     <p class="text-muted small mb-3 flex-grow-1 text-truncate-2" style="max-height: 38px; overflow: hidden; font-size: 0.78rem;">
                         {{ manga.synopsis|truncatewords:12 }}
                     </p>
-                    <a href="{% url 'catalog:item_detail' item_type='manga' item_id=manga.mal_id %}" class="btn btn-sm btn-outline-light w-100 mt-auto">
-                        Detalles & Opiniones
+                    <a href="{% url 'catalog:item_detail' item_type='manga' item_id=manga.mal_id %}" class="btn btn-sm btn-outline-glow w-100 mt-auto">
+                        Ver Ficha
                     </a>
                 </div>
             </div>
@@ -169,26 +185,27 @@
     </div>
 </div>
 
-<!-- Section: Top Light Novels (Full-Width Responsive Grid) -->
+<!-- Section: Top Light Novels (Pro Cards) -->
 <div class="mb-5">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <h3 class="fw-bold text-white mb-0 d-flex align-items-center gap-2">
                 <i class="bi bi-journal-bookmark text-info"></i> Novelas Ligeras (Light Novels)
             </h3>
-            <span class="text-muted small">Historias oficiales sincronizadas con Jikan API</span>
+            <span class="text-muted small">Historias oficiales con datos de MyAnimeList / Jikan API</span>
         </div>
-        <a href="{% url 'catalog:explore' %}?type=lightnovel" class="btn btn-sm btn-outline-info">Ver todas <i class="bi bi-arrow-right"></i></a>
+        <a href="{% url 'catalog:explore' %}?type=lightnovel" class="btn btn-sm btn-outline-glow">Ver todas <i class="bi bi-arrow-right ms-1"></i></a>
     </div>
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 g-md-4">
         {% for novel in top_lightnovels %}
         <div class="col">
-            <div class="anime-card position-relative">
-                <a href="{% url 'catalog:item_detail' item_type='lightnovel' item_id=novel.mal_id %}" class="card-img-wrap text-decoration-none">
+            <div class="anime-card-pro">
+                <a href="{% url 'catalog:item_detail' item_type='lightnovel' item_id=novel.mal_id %}" class="card-media-wrap text-decoration-none">
                     <img src="{{ novel.images.jpg.large_image_url }}" alt="{{ novel.title }}" loading="lazy">
+                    <div class="media-overlay"></div>
                 </a>
-                <div class="position-absolute top-0 end-0 m-2">
-                    <span class="score-badge-clean"><i class="bi bi-star-fill"></i> {{ novel.score|default:'N/A' }}</span>
+                <div class="position-absolute top-0 end-0 m-2" style="z-index: 2;">
+                    <span class="badge-score-pill"><i class="bi bi-star-fill"></i> {{ novel.score|default:'N/A' }}</span>
                 </div>
                 <div class="p-3 d-flex flex-column flex-grow-1">
                     <h6 class="fw-bold text-white text-truncate mb-1" title="{{ novel.title }}">{{ novel.title }}</h6>
@@ -199,8 +216,8 @@
                     <p class="text-muted small mb-3 flex-grow-1 text-truncate-2" style="max-height: 38px; overflow: hidden; font-size: 0.78rem;">
                         {{ novel.synopsis|truncatewords:12 }}
                     </p>
-                    <a href="{% url 'catalog:item_detail' item_type='lightnovel' item_id=novel.mal_id %}" class="btn btn-sm btn-outline-light w-100 mt-auto">
-                        Detalles & Opiniones
+                    <a href="{% url 'catalog:item_detail' item_type='lightnovel' item_id=novel.mal_id %}" class="btn btn-sm btn-outline-glow w-100 mt-auto">
+                        Ver Ficha
                     </a>
                 </div>
             </div>
@@ -209,40 +226,40 @@
     </div>
 </div>
 
-<!-- Section: Taller de Escritores de GrowUp (Fluid Full-Width) -->
-<div class="p-4 p-md-5 rounded-4 border border-secondary shadow mb-5" style="background: linear-gradient(135deg, #16182e 0%, #0a0c13 100%);">
+<!-- Section: Taller de Escritores de GrowUp (Pro Glassmorphism) -->
+<div class="workshop-banner-pro p-4 p-md-5 mb-5">
     <div class="row align-items-center g-4 mb-4">
         <div class="col-lg-8 col-xl-9">
-            <span class="badge bg-warning text-dark fw-bold mb-2"><i class="bi bi-feather"></i> Taller del Escritor</span>
-            <h2 class="fw-bold text-white">¿Eres autor o deseas escribir novelas ligeras?</h2>
-            <p class="text-light mb-0">
-                Sube tus obras completas con portada, sinopsis, categorías, gestión de capítulos y permite que la comunidad clasifique, opine y comente en tus historias.
+            <span class="badge bg-warning text-dark fw-bold mb-2 px-3 py-1"><i class="bi bi-feather me-1"></i> Taller del Escritor GrowUp</span>
+            <h2 class="fw-bold text-white mb-2">¿Eres autor o sueñas con escribir novelas ligeras?</h2>
+            <p class="text-light mb-0" style="max-width: 780px; line-height: 1.7;">
+                Sube tus obras completas con portada, sinopsis, categorías, gestión de capítulos y permite que la comunidad clasifique, opine y debata sobre tus historias.
             </p>
         </div>
         <div class="col-lg-4 col-xl-3 text-lg-end">
-            <a href="{% url 'novels:novel_create' %}" class="btn btn-accent btn-lg w-100 w-lg-auto px-4">
+            <a href="{% url 'novels:novel_create' %}" class="btn btn-accent btn-lg w-100 w-lg-auto px-4 py-2">
                 <i class="bi bi-plus-circle me-1"></i> Publicar Mi Novela
             </a>
         </div>
     </div>
 
     {% if original_novels %}
-    <h5 class="text-white fw-semibold mb-3"><i class="bi bi-fire text-danger me-1"></i> Novelas Originales de Nuestra Comunidad</h5>
+    <h5 class="text-white fw-bold mb-3"><i class="bi bi-stars text-warning me-1"></i> Obras Publicadas por la Comunidad</h5>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3">
         {% for novel in original_novels %}
         <div class="col">
-            <div class="card bg-dark bg-opacity-75 border-secondary h-100 p-3 flex-row gap-3">
-                <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="rounded shadow-sm" style="width: 85px; height: 120px; object-fit: cover;">
-                <div class="d-flex flex-column flex-grow-1">
+            <div class="card bg-black bg-opacity-60 border-secondary border-opacity-50 h-100 p-3 flex-row gap-3 rounded-3">
+                <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="rounded shadow-sm" style="width: 85px; height: 120px; object-fit: cover; flex-shrink: 0;">
+                <div class="d-flex flex-column flex-grow-1 overflow-hidden">
                     <h6 class="fw-bold text-white mb-1 text-truncate" title="{{ novel.title }}">{{ novel.title }}</h6>
-                    <span class="small text-muted mb-1"><i class="bi bi-person"></i> Por {{ novel.author.username }}</span>
+                    <span class="small text-muted mb-1 text-truncate"><i class="bi bi-person me-1"></i> {{ novel.author.username }}</span>
                     <div class="d-flex gap-1 flex-wrap mb-2">
                         {% for cat in novel.categories.all|slice:":2" %}
-                            <span class="tag-badge" style="font-size: 0.68rem;">{{ cat.name }}</span>
+                            <span class="tag-pill" style="font-size: 0.68rem;">{{ cat.name }}</span>
                         {% endfor %}
                     </div>
                     <div class="mt-auto d-flex justify-content-between align-items-center">
-                        <span class="small text-muted"><i class="bi bi-eye"></i> {{ novel.views_count }}</span>
+                        <span class="small text-muted"><i class="bi bi-eye me-1"></i> {{ novel.views_count }}</span>
                         <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="btn btn-sm btn-outline-warning">Leer</a>
                     </div>
                 </div>

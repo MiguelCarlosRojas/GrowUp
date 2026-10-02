@@ -4,26 +4,27 @@
 
 {% block content %}
 <div class="mb-4">
-    <h2 class="fw-bold text-white mb-1 d-flex align-items-center gap-2">
-        <i class="bi bi-compass text-danger"></i> Explorar Mangas, Animes y Novelas Ligeras
-    </h2>
-    <p class="text-muted">Filtros dinámicos en tiempo real con datos de MyAnimeList / Jikan API y la comunidad de autores.</p>
+    <div class="d-flex align-items-center gap-2 mb-1">
+        <span class="section-accent-bar"></span>
+        <h2 class="fw-bold text-white mb-0">Explorar Mangas, Animes y Novelas Ligeras</h2>
+    </div>
+    <p class="text-muted">Filtros dinámicos en vivo con datos de Jikan API v4 y la comunidad de escritores de GrowUp.</p>
 </div>
 
 <!-- Advanced Filter Panel with Pill Selectors -->
-<div class="filter-panel-pro mb-4">
+<div class="filter-bar-pro mb-4">
     <!-- Quick Type Selectors -->
     <div class="d-flex gap-2 mb-3 flex-wrap">
-        <a href="{% url 'catalog:explore' %}?type=anime{% if selected_q %}&q={{ selected_q }}{% endif %}" class="catalog-pill-btn {% if selected_type == 'anime' %}active{% endif %}">
+        <a href="{% url 'catalog:explore' %}?type=anime{% if selected_q %}&q={{ selected_q }}{% endif %}" class="btn-subtle-pill {% if selected_type == 'anime' %}active{% endif %}">
             <i class="bi bi-tv"></i> Animes
         </a>
-        <a href="{% url 'catalog:explore' %}?type=manga{% if selected_q %}&q={{ selected_q }}{% endif %}" class="catalog-pill-btn {% if selected_type == 'manga' %}active{% endif %}">
+        <a href="{% url 'catalog:explore' %}?type=manga{% if selected_q %}&q={{ selected_q }}{% endif %}" class="btn-subtle-pill {% if selected_type == 'manga' %}active{% endif %}">
             <i class="bi bi-book"></i> Mangas
         </a>
-        <a href="{% url 'catalog:explore' %}?type=lightnovel{% if selected_q %}&q={{ selected_q }}{% endif %}" class="catalog-pill-btn {% if selected_type == 'lightnovel' %}active{% endif %}">
+        <a href="{% url 'catalog:explore' %}?type=lightnovel{% if selected_q %}&q={{ selected_q }}{% endif %}" class="btn-subtle-pill {% if selected_type == 'lightnovel' %}active{% endif %}">
             <i class="bi bi-journal-bookmark"></i> Novelas Ligeras
         </a>
-        <a href="{% url 'catalog:explore' %}?type=original_novel{% if selected_q %}&q={{ selected_q }}{% endif %}" class="catalog-pill-btn {% if selected_type == 'original_novel' %}active{% endif %}">
+        <a href="{% url 'catalog:explore' %}?type=original_novel{% if selected_q %}&q={{ selected_q }}{% endif %}" class="btn-subtle-pill {% if selected_type == 'original_novel' %}active{% endif %}">
             <i class="bi bi-feather"></i> Obras de la Comunidad
         </a>
     </div>
@@ -34,16 +35,13 @@
         <!-- Text Query -->
         <div class="col-12 col-sm-6 col-lg-4">
             <label class="form-label text-muted small fw-semibold">Buscar por Título</label>
-            <div class="input-group">
-                <span class="input-group-text bg-black border-secondary border-opacity-50 text-muted"><i class="bi bi-search"></i></span>
-                <input type="text" name="q" value="{{ selected_q }}" class="form-control bg-black text-white border-secondary border-opacity-50" placeholder="Ej: Naruto, Bleach, Berserk...">
-            </div>
+            <input type="text" name="q" value="{{ selected_q }}" class="form-control filter-input-pro" placeholder="Ej: Naruto, Bleach, Berserk...">
         </div>
 
         <!-- Genre Selection -->
         <div class="col-6 col-sm-3 col-lg-3">
             <label class="form-label text-muted small fw-semibold">Género</label>
-            <select name="genre" class="form-select bg-black text-white border-secondary border-opacity-50">
+            <select name="genre" class="form-select filter-select-pro">
                 <option value="">Todos los Géneros</option>
                 {% if selected_type == 'original_novel' %}
                     {% for cat in novel_categories %}
@@ -60,7 +58,7 @@
         <!-- Status Filter -->
         <div class="col-6 col-sm-3 col-lg-2">
             <label class="form-label text-muted small fw-semibold">Estado</label>
-            <select name="status" class="form-select bg-black text-white border-secondary border-opacity-50">
+            <select name="status" class="form-select filter-select-pro">
                 <option value="">Cualquier Estado</option>
                 <option value="airing" {% if selected_status == 'airing' %}selected{% endif %}>En Emisión</option>
                 <option value="complete" {% if selected_status == 'complete' %}selected{% endif %}>Finalizado</option>
@@ -71,7 +69,7 @@
         <!-- Sort Option -->
         <div class="col-12 col-sm-6 col-lg-3">
             <label class="form-label text-muted small fw-semibold">Ordenar Por</label>
-            <select name="order_by" class="form-select bg-black text-white border-secondary border-opacity-50">
+            <select name="order_by" class="form-select filter-select-pro">
                 <option value="score" {% if selected_order_by == 'score' %}selected{% endif %}>Mayor Puntuación</option>
                 <option value="popularity" {% if selected_order_by == 'popularity' %}selected{% endif %}>Mayor Popularidad</option>
                 <option value="title" {% if selected_order_by == 'title' %}selected{% endif %}>Título Alfabético (A-Z)</option>
@@ -79,7 +77,7 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="col-12 d-flex flex-column flex-sm-row justify-content-end gap-2 pt-3 border-top border-secondary border-opacity-50">
+        <div class="col-12 d-flex flex-column flex-sm-row justify-content-end gap-2 pt-3 border-top border-secondary border-opacity-25">
             <a href="{% url 'catalog:explore' %}?type={{ selected_type }}" class="btn btn-outline-glow w-100 w-sm-auto">
                 <i class="bi bi-x-circle me-1"></i> Limpiar Filtros
             </a>
@@ -90,82 +88,80 @@
     </form>
 </div>
 
-<!-- Results Counter -->
+<!-- Results Header -->
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h5 class="text-white fw-bold mb-0">
-        Obras Encontradas ({{ items|length }})
+        Resultados ({{ items|length }})
     </h5>
-    <span class="badge bg-secondary-subtle text-secondary-emphasis">
+    <span class="badge px-3 py-1" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.3); color: #ffffff;">
         {% if selected_type == 'anime' %}Animes
         {% elif selected_type == 'manga' %}Mangas
         {% elif selected_type == 'lightnovel' %}Novelas Ligeras
-        {% else %}Obras de Escritores
+        {% else %}Obras de la Comunidad
         {% endif %}
     </span>
 </div>
 
-<!-- Grid of Results (Full-Width Responsive Pro Grid) -->
+<!-- Grid of Results (Full-Width Responsive Modern Grid) -->
 {% if items %}
 <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 g-md-4">
     {% for item in items %}
     <div class="col">
-        <div class="anime-card-pro">
+        <div class="media-card">
             {% if item.is_original %}
-                <a href="{% url 'novels:novel_detail' slug=item.mal_id %}" class="card-media-wrap text-decoration-none">
-                    <img src="{{ item.images.jpg.large_image_url }}" alt="{{ item.title }}" loading="lazy">
-                    <div class="media-overlay"></div>
-                </a>
+                <a href="{% url 'novels:novel_detail' slug=item.mal_id %}" class="text-decoration-none">
             {% else %}
-                <a href="{% url 'catalog:item_detail' item_type=selected_type item_id=item.mal_id %}" class="card-media-wrap text-decoration-none">
-                    <img src="{{ item.images.jpg.large_image_url }}" alt="{{ item.title }}" loading="lazy">
-                    <div class="media-overlay"></div>
-                </a>
+                <a href="{% url 'catalog:item_detail' item_type=selected_type item_id=item.mal_id %}" class="text-decoration-none">
             {% endif %}
+                <div class="media-poster-box">
+                    <img src="{{ item.images.jpg.large_image_url }}" alt="{{ item.title }}" loading="lazy" class="media-poster-img">
+                    <div class="media-poster-overlay"></div>
+                    
+                    <!-- Badges -->
+                    <span class="badge-top-left">{{ item.type|default:'OBRA' }}</span>
+                    {% if item.score %}
+                    <span class="badge-top-right">
+                        <i class="bi bi-star-fill"></i> {{ item.score }}
+                    </span>
+                    {% endif %}
 
-            <div class="position-absolute top-0 end-0 m-2" style="z-index: 2;">
-                <span class="badge-score-pill"><i class="bi bi-star-fill"></i> {{ item.score|default:'N/A' }}</span>
-            </div>
+                    <!-- Hover overlay -->
+                    <div class="media-hover-overlay">
+                        <span class="hover-icon-circle"><i class="bi bi-eye-fill"></i></span>
+                        <span class="hover-label">Ver Detalle</span>
+                    </div>
+                </div>
+            </a>
 
-            <div class="p-3 d-flex flex-column flex-grow-1">
-                <h6 class="fw-bold text-white text-truncate mb-1" title="{{ item.title }}">{{ item.title }}</h6>
-                <div class="d-flex justify-content-between align-items-center mb-2 small text-muted">
+            <div class="media-info-wrap">
+                {% if item.is_original %}
+                    <a href="{% url 'novels:novel_detail' slug=item.mal_id %}" class="text-decoration-none">
+                        <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
+                    </a>
+                {% else %}
+                    <a href="{% url 'catalog:item_detail' item_type=selected_type item_id=item.mal_id %}" class="text-decoration-none">
+                        <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
+                    </a>
+                {% endif %}
+
+                <div class="media-meta-line">
                     <span>{{ item.type|default:'Serie' }}</span>
                     <span>{{ item.status|default:'' }}</span>
                 </div>
-
-                <div class="d-flex flex-wrap gap-1 mb-2">
-                    {% for g in item.genres|slice:":2" %}
-                        <span class="tag-pill">{{ g.name }}</span>
-                    {% endfor %}
-                </div>
-
-                <p class="text-muted small mb-3 flex-grow-1 text-truncate-2" style="max-height: 38px; overflow: hidden; font-size: 0.78rem;">
-                    {{ item.synopsis|truncatewords:12 }}
-                </p>
-
-                {% if item.is_original %}
-                    <a href="{% url 'novels:novel_detail' slug=item.mal_id %}" class="btn btn-sm btn-outline-warning w-100 mt-auto">
-                        <i class="bi bi-book-half me-1"></i> Leer Novela
-                    </a>
-                {% else %}
-                    <a href="{% url 'catalog:item_detail' item_type=selected_type item_id=item.mal_id %}" class="btn btn-sm btn-outline-glow w-100 mt-auto">
-                        <i class="bi bi-info-circle me-1"></i> Ver Ficha
-                    </a>
-                {% endif %}
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
 {% else %}
-<div class="text-center py-5 card bg-dark border-secondary rounded-4">
-    <i class="bi bi-search text-muted mb-3" style="font-size: 3rem;"></i>
-    <h4 class="text-white fw-bold">No se encontraron resultados</h4>
-    <p class="text-muted">Intenta cambiar los términos de búsqueda o relajar los filtros aplicados.</p>
-    <div class="mt-2">
-        <a href="{% url 'catalog:explore' %}?type={{ selected_type }}" class="btn btn-outline-secondary">Reiniciar Filtros</a>
-    </div>
+<!-- Empty State -->
+<div class="text-center py-5 my-5 p-4 rounded-4" style="background: rgba(18, 24, 38, 0.6); border: 1px dashed var(--border-subtle);">
+    <i class="bi bi-search fs-1 text-muted mb-3 d-block"></i>
+    <h4 class="text-white fw-bold mb-2">No se encontraron resultados</h4>
+    <p class="text-muted mb-4">Intenta ajustar los términos de búsqueda o cambiar de género y filtros.</p>
+    <a href="{% url 'catalog:explore' %}?type={{ selected_type }}" class="btn btn-accent px-4 py-2">
+        Restablecer Filtros
+    </a>
 </div>
 {% endif %}
-
 {% endblock %}

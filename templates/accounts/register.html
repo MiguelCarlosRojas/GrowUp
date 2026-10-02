@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Crear Cuenta - GrowUp{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center my-4">
     <div class="col-md-7 col-lg-6">
-        <div class="card bg-dark border-secondary p-4 p-md-5 rounded-4 shadow-lg">
+        <div class="p-4 p-md-5 rounded-4 shadow-lg" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
             <div class="text-center mb-4">
-                <i class="bi bi-person-plus-fill text-danger" style="font-size: 2.8rem;"></i>
-                <h3 class="fw-bold text-white mt-2">Crear Cuenta en GrowUp</h3>
+                <img src="{% static 'images/logo.png' %}" alt="GrowUp" class="brand-logo-img mb-3" style="height: 48px;">
+                <h3 class="fw-bold text-white mt-1">Crear Cuenta en GrowUp</h3>
                 <p class="text-muted small">Únete a la mayor comunidad de manga, anime y novelas ligeras.</p>
             </div>
 
@@ -16,57 +17,57 @@
                 {% csrf_token %}
                 
                 <div class="mb-3">
-                    <label class="form-label text-light fw-semibold">Nombre de Usuario</label>
+                    <label class="form-label text-light fw-semibold small">Nombre de Usuario</label>
                     {{ form.username }}
                     {% if form.username.errors %}<div class="text-danger small mt-1">{{ form.username.errors.0 }}</div>{% endif %}
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label text-light fw-semibold">Correo Electrónico</label>
+                    <label class="form-label text-light fw-semibold small">Correo Electrónico</label>
                     {{ form.email }}
                     {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>{% endif %}
                 </div>
 
                 <div class="row g-3 mb-3">
                     <div class="col-md-6">
-                        <label class="form-label text-light fw-semibold">Nombre</label>
+                        <label class="form-label text-light fw-semibold small">Nombre</label>
                         {{ form.first_name }}
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label text-light fw-semibold">Apellidos</label>
+                        <label class="form-label text-light fw-semibold small">Apellidos</label>
                         {{ form.last_name }}
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label text-light fw-semibold">Tipo de Cuenta</label>
+                    <label class="form-label text-light fw-semibold small">Tipo de Cuenta</label>
                     {{ form.role }}
-                    <small class="text-muted">{{ form.role.help_text }}</small>
+                    <small class="text-muted d-block mt-1">{{ form.role.help_text }}</small>
                 </div>
 
                 <div class="row g-3 mb-3">
                     <div class="col-md-6">
-                        <label class="form-label text-light fw-semibold">Contraseña</label>
+                        <label class="form-label text-light fw-semibold small">Contraseña</label>
                         {{ form.password }}
                         {% if form.password.errors %}<div class="text-danger small mt-1">{{ form.password.errors.0 }}</div>{% endif %}
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label text-light fw-semibold">Confirmar</label>
+                        <label class="form-label text-light fw-semibold small">Confirmar Contraseña</label>
                         {{ form.password_confirm }}
                         {% if form.password_confirm.errors %}<div class="text-danger small mt-1">{{ form.password_confirm.errors.0 }}</div>{% endif %}
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label text-light fw-semibold">Biografía o Presentación (Opcional)</label>
+                    <label class="form-label text-light fw-semibold small">Biografía Breve (Opcional)</label>
                     {{ form.bio }}
                 </div>
 
                 <button type="submit" class="btn btn-accent w-100 py-2 mb-3">Registrarse en GrowUp</button>
             </form>
 
-            <div class="text-center pt-3 border-top border-secondary">
-                <p class="text-muted small mb-0">¿Ya tienes cuenta? <a href="{% url 'accounts:login' %}" class="text-danger fw-semibold text-decoration-none">Inicia sesión</a></p>
+            <div class="text-center pt-3 border-top border-secondary border-opacity-25">
+                <p class="text-muted small mb-0">¿Ya tienes una cuenta? <a href="{% url 'accounts:login' %}" class="text-danger fw-semibold text-decoration-none">Inicia sesión</a></p>
             </div>
         </div>
     </div>

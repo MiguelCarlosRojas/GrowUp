@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Dónde Estamos - GrowUp{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-3">
+    <div class="col-lg-10 col-xl-9">
+        <!-- Header -->
+        <div class="mb-5 text-center">
+            <span class="badge px-3 py-1 mb-3" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.35); color: #ffffff;">
+                Ubicación & Presencia Global
+            </span>
+            <h1 class="display-5 fw-bold text-white mb-3">Dónde Estamos</h1>
+            <p class="text-muted lead mx-auto" style="max-width: 720px;">
+                Nuestras sedes centrales y centros de operaciones distribuidos para brindar servicio continuo a la comunidad global.
+            </p>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <!-- Main Hub Card -->
+            <div class="col-md-6">
+                <div class="p-4 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="section-accent-bar"></span>
+                        <h4 class="text-white fw-bold mb-0">Sede Principal de Operaciones</h4>
+                    </div>
+                    <ul class="list-unstyled text-secondary mb-4" style="line-height: 2;">
+                        <li><strong class="text-white"><i class="bi bi-geo-alt-fill text-danger me-2"></i>Dirección:</strong> Av. Javier Prado Este 4200, Santiago de Surco</li>
+                        <li><strong class="text-white"><i class="bi bi-building text-info me-2"></i>Ciudad / País:</strong> Lima, Perú (Código Postal: 15023)</li>
+                        <li><strong class="text-white"><i class="bi bi-clock-fill text-warning me-2"></i>Horario de Atención:</strong> Lunes a Viernes, 09:00 - 18:00 (UTC-5)</li>
+                        <li><strong class="text-white"><i class="bi bi-envelope-fill text-success me-2"></i>Email Corporativo:</strong> contacto@growup-media.org</li>
+                    </ul>
+                    <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
+                        <small class="text-muted d-block mb-1">Coordinación de Relaciones Institucionales</small>
+                        <span class="text-white fw-semibold">GrowUp Media & Technology S.A.C.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Remote Hubs -->
+            <div class="col-md-6">
+                <div class="p-4 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #6366f1);"></span>
+                        <h4 class="text-white fw-bold mb-0">Nodos Distribuidos & Cloud</h4>
+                    </div>
+                    <p class="text-secondary mb-3" style="line-height: 1.8;">
+                        La infraestructura tecnológica de GrowUp opera sobre servidores redundantes distribuidos estratégicamente para asegurar baja latencia en toda Iberoamérica:
+                    </p>
+                    <div class="d-flex flex-column gap-2">
+                        <div class="p-3 rounded-3 d-flex justify-content-between align-items-center" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
+                            <div>
+                                <strong class="text-white">América del Sur (Hub Lima / São Paulo)</strong>
+                                <small class="text-muted d-block">Base de Datos Prisma Postgres & CDN Edge</small>
+                            </div>
+                            <span class="badge bg-success bg-opacity-25 text-success">Operativo</span>
+                        </div>
+                        <div class="p-3 rounded-3 d-flex justify-content-between align-items-center" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
+                            <div>
+                                <strong class="text-white">América del Norte (Hub US-East / Virginia)</strong>
+                                <small class="text-muted d-block">Cluster de Sincronización Jikan API & Media Cache</small>
+                            </div>
+                            <span class="badge bg-success bg-opacity-25 text-success">Operativo</span>
+                        </div>
+                        <div class="p-3 rounded-3 d-flex justify-content-between align-items-center" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
+                            <div>
+                                <strong class="text-white">Europa (Hub Madrid / Frankfurt)</strong>
+                                <small class="text-muted d-block">Pasarela DNS Global y Copias de Seguridad Cifradas</small>
+                            </div>
+                            <span class="badge bg-success bg-opacity-25 text-success">Operativo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

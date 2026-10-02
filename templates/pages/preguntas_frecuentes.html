@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Preguntas Frecuentes (FAQ) - GrowUp{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-3">
+    <div class="col-lg-10 col-xl-9">
+        <!-- Header -->
+        <div class="mb-5 text-center">
+            <span class="badge px-3 py-1 mb-3" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.35); color: #ffffff;">
+                Respuestas Inmediatas
+            </span>
+            <h1 class="display-5 fw-bold text-white mb-3">Preguntas Frecuentes</h1>
+            <p class="text-muted lead mx-auto" style="max-width: 720px;">
+                Resolvemos las dudas más habituales sobre el funcionamiento del catálogo, los derechos de autor y el sistema de lectura.
+            </p>
+        </div>
+
+        <!-- Accordion FAQ -->
+        <div class="accordion custom-accordion mb-5" id="faqAccordion">
+            <!-- Item 1 -->
+            <div class="accordion-item mb-3 rounded-4 overflow-hidden" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        <i class="bi bi-question-circle-fill text-danger me-2"></i> ¿De dónde proviene la información de los animes, mangas y novelas ligeras?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
+                        Todos los datos del catálogo oficial (títulos, pósteres, sinopsis, episodios, fechas de emisión y puntuaciones globales) se sincronizan en tiempo real mediante la <strong class="text-white">Jikan API v4</strong>, que provee una interfaz RESTful directa con la base de datos de MyAnimeList. Esto garantiza información precisa, actualizada e internacionalmente reconocida.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="accordion-item mb-3 rounded-4 overflow-hidden" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <i class="bi bi-question-circle-fill text-warning me-2"></i> ¿Puedo publicar mis propias novelas ligeras de forma gratuita?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
+                        Sí, completamente gratis. Cualquier usuario registrado con rol de <strong class="text-white">Autor</strong> (o que lo active en su perfil) puede crear novelas ilimitadas, subir portadas personalizadas, añadir múltiples categorías (Isekai, Romance, Acción, etc.) y publicar tantos capítulos como desee en el Taller del Escritor.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="accordion-item mb-3 rounded-4 overflow-hidden" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        <i class="bi bi-question-circle-fill text-info me-2"></i> ¿Qué derechos conservo sobre mis obras literarias publicadas?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
+                        Conservas el <strong class="text-white">100% de tus derechos morales y patrimoniales de propiedad intelectual</strong>. GrowUp solo actúa como plataforma de difusión y lectura digital. Puedes editar, pausar, despublicar o retirar tus obras en cualquier momento desde tu panel de control de autor.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="accordion-item mb-3 rounded-4 overflow-hidden" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        <i class="bi bi-question-circle-fill text-success me-2"></i> ¿Cómo funciona el sistema de doble puntuación en las fichas?
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
+                        Cada obra muestra dos métricas complementarias: la <strong class="text-white">Puntuación Global</strong> (obtenida de MyAnimeList sobre escala de 10) y la <strong class="text-white">Puntuación de la Comunidad GrowUp</strong> (calculada de forma independiente a partir de las calificaciones y opiniones de 1 a 5 estrellas dejadas por los miembros de nuestra plataforma).
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item 5 -->
+            <div class="accordion-item mb-3 rounded-4 overflow-hidden" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                <h2 class="accordion-header" id="headingFive">
+                    <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        <i class="bi bi-question-circle-fill text-danger me-2"></i> ¿Qué tecnología utiliza la plataforma para garantizar velocidad y estabilidad?
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
+                        GrowUp está desarrollada en <strong class="text-white">Django puro</strong> con backend de base de datos en la nube alojada en <strong class="text-white">Prisma Postgres</strong> (con poolers de alta disponibilidad). Además, implementamos el ecosistema <strong class="text-white">Prisma CLI v7</strong> para migraciones e introspección controlada y despliegue continuo validado por GitHub Actions.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Still have questions -->
+        <div class="p-4 rounded-4 text-center" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+            <h5 class="text-white fw-bold mb-1">¿Tienes otra consulta específica?</h5>
+            <p class="text-muted small mb-3">Escríbenos directamente y te responderemos en menos de 24 horas laborables.</p>
+            <a href="{% url 'catalog:contacto' %}" class="btn btn-accent px-4 py-2">
+                <i class="bi bi-chat-left-dots me-1"></i> Formulario de Contacto
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,32 +1,4 @@
-<!-- Role-Aware Dashboard Sidebar Navigation Component -->
-<div class="sidebar-user-header text-center mb-4 pb-3 border-bottom border-secondary border-opacity-25">
-    <div class="app-user-avatar-wrap">
-        {% if user.profile.avatar_url %}
-            <img src="{{ user.profile.avatar_url }}" alt="{{ user.username }}" class="rounded-circle shadow mb-2" style="width: 72px; height: 72px; object-fit: cover; border: 2.5px solid var(--accent-primary);">
-        {% else %}
-            <div class="app-avatar-initials mx-auto mb-2 shadow" style="background: {{ user.profile.avatar_gradient }};">
-                {{ user.initials }}
-            </div>
-        {% endif %}
-        <span class="app-avatar-online-dot" title="En línea"></span>
-    </div>
-    
-    <h5 class="app-user-name mb-1">{{ user.get_full_name|default:user.username }}</h5>
-    <div class="d-flex align-items-center justify-content-center gap-2">
-        {% if user.profile.role == 'author' %}
-            <span class="app-role-badge app-role-badge-author">
-                <i class="bi bi-feather me-1"></i> Escritor / Autor
-            </span>
-        {% else %}
-            <span class="app-role-badge app-role-badge-reader">
-                <i class="bi bi-book-half me-1"></i> Lector
-            </span>
-        {% endif %}
-    </div>
-    <!-- Notice: UID is completely hidden from visual display as requested by user -->
-</div>
-
-<!-- Navigation Menu Items Grouped with Premium Styling -->
+<!-- Cleaned Role-Aware Dashboard Sidebar Navigation Component -->
 <nav class="sidebar-nav-menu d-flex flex-column gap-3">
     <!-- Group: Principal -->
     <div class="app-nav-group">
@@ -37,7 +9,7 @@
         </a>
         <a href="{% url 'accounts:profile' %}" class="app-sidebar-link sidebar-nav-item {% if active_tab == 'profile' %}active{% endif %}">
             <i class="bi bi-person-badge"></i>
-            <span>Mi Perfil (Profile)</span>
+            <span>Mi Perfil</span>
         </a>
     </div>
 
@@ -68,16 +40,4 @@
             </a>
         </div>
     {% endif %}
-
-    <!-- Group: Plataforma & Salir -->
-    <div class="app-nav-group mt-2 pt-2 border-top border-secondary border-opacity-25">
-        <a href="{% url 'catalog:home' %}" class="app-sidebar-link sidebar-nav-item">
-            <i class="bi bi-compass"></i>
-            <span>Explorar Catálogo</span>
-        </a>
-        <a href="{% url 'accounts:logout' %}" class="app-sidebar-link sidebar-nav-item app-link-logout sidebar-nav-logout text-danger">
-            <i class="bi bi-box-arrow-right"></i>
-            <span>Cerrar Sesión</span>
-        </a>
-    </div>
 </nav>

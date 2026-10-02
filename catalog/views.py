@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Avg, Count
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .services import jikan_service
 from .models import ItemReview, ItemDiscussion, Bookmark
 from .forms import ReviewForm, DiscussionForm
@@ -39,6 +40,15 @@ def explore_view(request):
     order_by = request.GET.get('order_by', 'score').strip()
     sort = request.GET.get('sort', 'desc').strip()
 
+    try:
+        page = int(request.GET.get('page', 1))
+        if page < 1:
+            page = 1
+    except (ValueError, TypeError):
+        page = 1
+
+    per_page = 24
+
     if media_type == 'original_novel':
         novels = Novel.objects.exclude(status='draft')
         if q:
@@ -54,8 +64,15 @@ def explore_view(request):
         else:
             novels = novels.order_by('-created_at')
 
+        paginator = Paginator(novels, per_page)
+        try:
+            novels_page = paginator.page(page)
+        except (EmptyPage, PageNotAnInteger):
+            novels_page = paginator.page(1)
+            page = 1
+
         items = []
-        for n in novels:
+        for n in novels_page:
             items.append({
                 'mal_id': n.slug,
                 'is_original': True,
@@ -67,6 +84,20 @@ def explore_view(request):
                 'genres': [{'name': c.name} for c in n.categories.all()],
                 'status': n.get_status_display(),
             })
+
+        pagination = {
+            'current_page': novels_page.number,
+            'total_pages': paginator.num_pages,
+            'total_items': paginator.count,
+            'per_page': per_page,
+            'has_previous_page': novels_page.has_previous(),
+            'has_next_page': novels_page.has_next(),
+            'previous_page_number': novels_page.previous_page_number() if novels_page.has_previous() else None,
+            'next_page_number': novels_page.next_page_number() if novels_page.has_next() else None,
+            'page_range': list(paginator.page_range),
+            'start_index': novels_page.start_index() if paginator.count > 0 else 0,
+            'end_index': novels_page.end_index() if paginator.count > 0 else 0,
+        }
     else:
         results = jikan_service.search_items(
             category=media_type,
@@ -74,12 +105,28 @@ def explore_view(request):
             genre=genre,
             status=status,
             order_by=order_by,
-            sort=sort
+            sort=sort,
+            page=page,
+            per_page=per_page
         )
         items = results.get('items', [])
+        pagination = results.get('pagination', {
+            'current_page': 1,
+            'total_pages': 1,
+            'total_items': len(items),
+            'per_page': per_page,
+            'has_previous_page': False,
+            'has_next_page': False,
+            'previous_page_number': None,
+            'next_page_number': None,
+            'page_range': [1],
+            'start_index': 1 if items else 0,
+            'end_index': len(items),
+        })
 
     context = {
         'items': items,
+        'pagination': pagination,
         'selected_type': media_type,
         'selected_q': q,
         'selected_genre': genre,
@@ -113,6 +160,11 @@ def item_detail_view(request, item_type, item_id):
     if request.user.is_authenticated:
         is_bookmarked = Bookmark.objects.filter(user=request.user, item_type=item_type, item_id=str(item_id)).exists()
 
+    # Platforms (Official and Community / Streaming & Reading)
+    platforms = jikan_service.get_platforms(item_type, item.get('title', ''), item_id)
+    share_url = request.build_absolute_uri()
+    share_title = item.get('title', 'GrowUp')
+
     review_form = ReviewForm()
     discussion_form = DiscussionForm()
 
@@ -120,6 +172,9 @@ def item_detail_view(request, item_type, item_id):
         'item': item,
         'item_type': item_type,
         'item_id': item_id,
+        'platforms': platforms,
+        'share_url': share_url,
+        'share_title': share_title,
         'reviews': reviews,
         'avg_score': stats.get('avg_score'),
         'total_reviews': stats.get('count', 0),

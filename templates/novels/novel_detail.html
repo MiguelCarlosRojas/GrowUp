@@ -69,6 +69,62 @@
     </div>
 </div>
 
+<!-- Social Media Sharing Bar -->
+<div class="share-bar-container">
+    <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-share-fill text-danger fs-5"></i>
+        <div>
+            <strong class="text-white d-block" style="font-size: 0.95rem;">Compartir esta novela de la comunidad</strong>
+            <small class="text-muted">Apoya al autor {{ novel.author.username }} compartiendo su obra en redes sociales</small>
+        </div>
+    </div>
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+        <!-- WhatsApp -->
+        <a href="https://api.whatsapp.com/send?text={{ novel.title|urlencode }}%20por%20{{ novel.author.username|urlencode }}%20-%20L%C3%A9ela%20en%20GrowUp%3A%20{{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-item share-whatsapp" title="Compartir en WhatsApp">
+            <i class="bi bi-whatsapp"></i> WhatsApp
+        </a>
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-item share-facebook" title="Compartir en Facebook">
+            <i class="bi bi-facebook"></i> Facebook
+        </a>
+        <!-- X (Twitter) -->
+        <a href="https://twitter.com/intent/tweet?text=Lee%20{{ novel.title|urlencode }}%20de%20{{ novel.author.username|urlencode }}%20en%20GrowUp&url={{ share_url|urlencode }}" target="_blank" rel="noopener noreferrer" class="share-btn-item share-x" title="Compartir en X">
+            <i class="bi bi-twitter-x"></i> X
+        </a>
+        <!-- Telegram -->
+        <a href="https://t.me/share/url?url={{ share_url|urlencode }}&text=Lee%20{{ novel.title|urlencode }}%20en%20GrowUp" target="_blank" rel="noopener noreferrer" class="share-btn-item share-telegram" title="Compartir en Telegram">
+            <i class="bi bi-telegram"></i> Telegram
+        </a>
+        <!-- Email -->
+        <a href="mailto:?subject={{ novel.title|urlencode }}%20en%20GrowUp&body=Te%20invito%20a%20leer%20esta%20novela%20en%20GrowUp%3A%20{{ share_url|urlencode }}" class="share-btn-item share-email" title="Compartir por Correo">
+            <i class="bi bi-envelope-fill"></i> Email
+        </a>
+        <!-- Copiar Enlace -->
+        <button type="button" class="share-btn-item share-copy" id="copyShareBtnNovel" onclick="copyNovelPageLink()" title="Copiar enlace al portapapeles">
+            <i class="bi bi-link-45deg fs-6" id="copyIconNovel"></i> <span id="copyTextNovel">Copiar Enlace</span>
+        </button>
+    </div>
+</div>
+
+<script>
+function copyNovelPageLink() {
+    navigator.clipboard.writeText(window.location.href).then(function() {
+        var copyIcon = document.getElementById('copyIconNovel');
+        var copyText = document.getElementById('copyTextNovel');
+        if (copyIcon && copyText) {
+            copyIcon.className = 'bi bi-check2-circle text-success fs-6';
+            copyText.textContent = '¡Copiado!';
+            setTimeout(function() {
+                copyIcon.className = 'bi bi-link-45deg fs-6';
+                copyText.textContent = 'Copiar Enlace';
+            }, 2500);
+        }
+    }).catch(function() {
+        alert('No se pudo copiar el enlace.');
+    });
+}
+</script>
+
 <!-- Chapters List (Fluid Full-Width) -->
 <div class="p-4 rounded-4 mb-4" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">

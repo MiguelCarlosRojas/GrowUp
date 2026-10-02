@@ -214,22 +214,32 @@ function copyNovelPageLink() {
 <div class="row g-4">
     <!-- Reviews Column -->
     <div class="col-12 col-lg-6">
-        <div class="p-4 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-            <div class="d-flex align-items-center gap-2 mb-3">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);"></span>
-                <h4 class="text-white fw-bold mb-0">Opiniones y Clasificación</h4>
+        <div class="reviews-section-panel">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);"></span>
+                    <h4 class="text-white fw-bold mb-0">Opiniones y Clasificación</h4>
+                </div>
+                <span class="badge px-2 py-1 text-muted" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.78rem;">
+                    {{ reviews|length }} reseña{{ reviews|length|pluralize:"s" }}
+                </span>
             </div>
 
             {% if user.is_authenticated %}
-                <div class="p-3 rounded-3 mb-4" style="background: rgba(6, 9, 16, 0.8); border: 1px solid var(--border-subtle);">
-                    <h6 class="text-white fw-bold mb-2">Clasificar esta Novela Ligera</h6>
+                <div class="p-3 rounded-4 mb-4" style="background: rgba(8, 12, 20, 0.85); border: 1px solid rgba(255, 255, 255, 0.08);">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge-status-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; width: 28px; height: 28px; border-radius: 8px;">
+                            <i class="bi bi-star-fill" style="font-size: 0.85rem;"></i>
+                        </span>
+                        <h6 class="text-white fw-bold mb-0">Clasificar esta Novela Ligera</h6>
+                    </div>
                     <form action="{% url 'catalog:add_review' item_type='original_novel' item_id=novel.slug %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="item_title" value="{{ novel.title }}">
                         <input type="hidden" name="item_image" value="{{ novel.final_cover }}">
                         
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Calificación</label>
+                            <label class="form-label text-muted small fw-semibold">Calificación (1 a 5 Estrellas)</label>
                             <select name="rating" class="form-select filter-select-pro">
                                 <option value="5">5 de 5 - Obra Maestra</option>
                                 <option value="4">4 de 5 - Muy Bueno</option>
@@ -239,18 +249,21 @@ function copyNovelPageLink() {
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Título de la Opinión</label>
+                            <label class="form-label text-muted small fw-semibold">Título de la Opinión</label>
                             <input type="text" name="headline" class="form-control filter-input-pro" placeholder="Ej: Una historia atrapante desde el capítulo 1" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Tu Reseña Detallada</label>
+                            <label class="form-label text-muted small fw-semibold">Tu Reseña Detallada</label>
                             <textarea name="opinion" rows="3" class="form-control filter-input-pro" placeholder="Comparte tus impresiones de la narrativa y personajes..." required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-accent btn-sm w-100 py-2">Publicar Opinión</button>
+                        <button type="submit" class="btn btn-accent btn-sm w-100 py-2 fw-bold">
+                            <i class="bi bi-send-fill me-1"></i> Publicar Opinión
+                        </button>
                     </form>
                 </div>
             {% else %}
-                <div class="alert text-center small mb-4" style="background: rgba(18, 24, 38, 0.7); border: 1px solid var(--border-subtle); color: #cbd5e1;">
+                <div class="p-3 rounded-4 text-center small mb-4" style="background: rgba(18, 24, 38, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); color: #cbd5e1;">
+                    <i class="bi bi-lock-fill text-warning fs-5 d-block mb-1"></i>
                     <a href="{% url 'accounts:login' %}" class="text-danger fw-bold text-decoration-none">Inicia sesión</a> para opinar y calificar esta novela.
                 </div>
             {% endif %}
@@ -259,20 +272,30 @@ function copyNovelPageLink() {
             <div class="d-flex flex-column gap-3">
                 {% if reviews %}
                     {% for rev in reviews %}
-                    <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
+                    <div class="review-item-card">
                         <div class="d-flex justify-content-between align-items-start mb-2">
-                            <div>
-                                <span class="fw-bold text-white"><i class="bi bi-person-circle me-1"></i> {{ rev.user.username }}</span>
-                                <span class="text-muted small ms-2">{{ rev.created_at|date:"d M Y" }}</span>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="user-avatar-initials-sm" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+                                    {{ rev.user.username|slice:":2"|upper }}
+                                </div>
+                                <div>
+                                    <span class="fw-bold text-white d-block" style="font-size: 0.9rem; line-height: 1.2;">{{ rev.user.username }}</span>
+                                    <span class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-calendar3 me-1"></i>{{ rev.created_at|date:"d M Y" }}</span>
+                                </div>
                             </div>
-                            <span class="badge bg-warning text-dark fw-bold"><i class="bi bi-star-fill me-1"></i>{{ rev.rating }} / 5</span>
+                            <span class="badge d-flex align-items-center gap-1 px-2 py-1" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); color: #f59e0b; font-weight: 700;">
+                                <i class="bi bi-star-fill"></i> {{ rev.rating }}.0
+                            </span>
                         </div>
-                        <h6 class="text-light fw-bold mb-1">{{ rev.headline }}</h6>
-                        <p class="text-muted small mb-0">{{ rev.opinion }}</p>
+                        <h6 class="text-white fw-bold mb-1" style="font-size: 0.95rem;">{{ rev.headline }}</h6>
+                        <p class="text-muted small mb-0" style="line-height: 1.6;">{{ rev.opinion }}</p>
                     </div>
                     {% endfor %}
                 {% else %}
-                    <p class="text-muted text-center py-4">Aún no hay opiniones de lectores. ¡Sé el primero en apoyar al escritor!</p>
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-chat-heart fs-2 text-muted d-block mb-2"></i>
+                        <p class="small mb-0">Aún no hay opiniones de lectores. ¡Sé el primero en apoyar al escritor!</p>
+                    </div>
                 {% endif %}
             </div>
         </div>
@@ -280,20 +303,30 @@ function copyNovelPageLink() {
 
     <!-- Discussions / Q&A Column -->
     <div class="col-12 col-lg-6">
-        <div class="p-4 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-            <div class="d-flex align-items-center gap-2 mb-3">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #6366f1);"></span>
-                <h4 class="text-white fw-bold mb-0">Comunidad & Dudas con el Autor</h4>
+        <div class="forum-section-panel">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #6366f1);"></span>
+                    <h4 class="text-white fw-bold mb-0">Comunidad & Dudas con el Autor</h4>
+                </div>
+                <span class="badge px-2 py-1 text-muted" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.78rem;">
+                    {{ discussions|length }} mensaje{{ discussions|length|pluralize:"s" }}
+                </span>
             </div>
 
             {% if user.is_authenticated %}
-                <div class="p-3 rounded-3 mb-4" style="background: rgba(6, 9, 16, 0.8); border: 1px solid var(--border-subtle);">
-                    <h6 class="text-white fw-bold mb-2"><i class="bi bi-send-fill text-info me-1"></i> Dejar un Comentario o Pregunta</h6>
+                <div class="p-3 rounded-4 mb-4" style="background: rgba(8, 12, 20, 0.85); border: 1px solid rgba(255, 255, 255, 0.08);">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge-status-icon" style="background: rgba(6, 182, 212, 0.15); color: #06b6d4; width: 28px; height: 28px; border-radius: 8px;">
+                            <i class="bi bi-chat-text-fill" style="font-size: 0.85rem;"></i>
+                        </span>
+                        <h6 class="text-white fw-bold mb-0">Dejar un Comentario o Pregunta</h6>
+                    </div>
                     <form action="{% url 'catalog:add_discussion' item_type='original_novel' item_id=novel.slug %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="item_title" value="{{ novel.title }}">
                         <div class="mb-2">
-                            <label class="form-label text-muted small">Tipo de Mensaje</label>
+                            <label class="form-label text-muted small fw-semibold">Tipo de Mensaje</label>
                             <select name="discussion_type" class="form-select filter-select-pro">
                                 <option value="comment">Comentario General</option>
                                 <option value="question">Pregunta o Duda de la Trama</option>
@@ -302,11 +335,14 @@ function copyNovelPageLink() {
                         <div class="mb-3">
                             <textarea name="content" rows="3" class="form-control filter-input-pro" placeholder="Escribe tu mensaje o pregunta para el autor..." required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-outline-glow btn-sm w-100 py-2">Enviar Mensaje</button>
+                        <button type="submit" class="btn btn-outline-glow btn-sm w-100 py-2 fw-bold">
+                            <i class="bi bi-send me-1"></i> Enviar Mensaje
+                        </button>
                     </form>
                 </div>
             {% else %}
-                <div class="alert text-center small mb-4" style="background: rgba(18, 24, 38, 0.7); border: 1px solid var(--border-subtle); color: #cbd5e1;">
+                <div class="p-3 rounded-4 text-center small mb-4" style="background: rgba(18, 24, 38, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); color: #cbd5e1;">
+                    <i class="bi bi-lock-fill text-info fs-5 d-block mb-1"></i>
                     <a href="{% url 'accounts:login' %}" class="text-info fw-bold text-decoration-none">Inicia sesión</a> para enviar preguntas y conversar con el autor.
                 </div>
             {% endif %}
@@ -315,28 +351,38 @@ function copyNovelPageLink() {
             <div class="d-flex flex-column gap-3">
                 {% if discussions %}
                     {% for disc in discussions %}
-                    <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
+                    <div class="forum-thread-card">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div>
-                                <span class="fw-bold text-white"><i class="bi bi-person me-1"></i> {{ disc.user.username }}</span>
-                                <span class="badge {% if disc.discussion_type == 'question' %}bg-primary{% else %}bg-secondary{% endif %} ms-2 small">
-                                    {{ disc.get_discussion_type_display }}
-                                </span>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="user-avatar-initials-sm" style="background: linear-gradient(135deg, #06b6d4, #6366f1);">
+                                    {{ disc.user.username|slice:":2"|upper }}
+                                </div>
+                                <span class="fw-bold text-white" style="font-size: 0.9rem;">{{ disc.user.username }}</span>
+                                {% if disc.discussion_type == 'question' %}
+                                    <span class="badge-thread-question"><i class="bi bi-question-circle me-1"></i>Pregunta</span>
+                                {% else %}
+                                    <span class="badge-thread-comment"><i class="bi bi-chat-dots me-1"></i>Comentario</span>
+                                {% endif %}
                             </div>
-                            <span class="text-muted small">{{ disc.created_at|date:"d M, H:i" }}</span>
+                            <span class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-clock me-1"></i>{{ disc.created_at|date:"d M, H:i" }}</span>
                         </div>
-                        <p class="text-light small mb-2">{{ disc.content }}</p>
+                        <p class="text-white small mb-2" style="line-height: 1.55;">{{ disc.content }}</p>
 
                         <!-- Nested Replies -->
                         {% if disc.replies.all %}
-                            <div class="ms-2 ms-sm-3 ps-2 ps-sm-3 border-start border-secondary border-opacity-50 mt-2 d-flex flex-column gap-2">
+                            <div class="thread-replies-tree">
                                 {% for rep in disc.replies.all %}
-                                <div class="p-2 rounded small" style="background: rgba(18, 24, 38, 0.85);">
-                                    <div class="d-flex justify-content-between">
-                                        <strong class="text-info">{{ rep.user.username }}</strong>
-                                        <span class="text-muted" style="font-size: 0.75rem;">{{ rep.created_at|date:"d M H:i" }}</span>
+                                <div class="reply-item-bubble">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="user-avatar-initials-sm" style="width: 22px; height: 22px; font-size: 0.65rem; background: linear-gradient(135deg, #ff2a54, #ff5e36);">
+                                                {{ rep.user.username|slice:":2"|upper }}
+                                            </div>
+                                            <strong class="text-white" style="font-size: 0.82rem;">{{ rep.user.username }}</strong>
+                                        </div>
+                                        <span class="text-muted" style="font-size: 0.72rem;">{{ rep.created_at|date:"d M H:i" }}</span>
                                     </div>
-                                    <div class="text-light mt-1">{{ rep.content }}</div>
+                                    <div class="text-light small" style="line-height: 1.45;">{{ rep.content }}</div>
                                 </div>
                                 {% endfor %}
                             </div>
@@ -345,7 +391,9 @@ function copyNovelPageLink() {
                         <!-- Reply trigger -->
                         {% if user.is_authenticated %}
                             <details class="mt-2">
-                                <summary class="text-muted small" style="cursor: pointer;">Responder a este mensaje</summary>
+                                <summary class="reply-btn-toggle">
+                                    <i class="bi bi-reply-fill"></i> Responder al autor o lector
+                                </summary>
                                 <form action="{% url 'catalog:add_discussion' item_type='original_novel' item_id=novel.slug %}" method="POST" class="mt-2">
                                     {% csrf_token %}
                                     <input type="hidden" name="item_title" value="{{ novel.title }}">
@@ -353,7 +401,7 @@ function copyNovelPageLink() {
                                     <input type="hidden" name="discussion_type" value="comment">
                                     <div class="input-group">
                                         <input type="text" name="content" class="form-control form-control-sm filter-input-pro" placeholder="Escribe tu respuesta..." required>
-                                        <button type="submit" class="btn btn-sm btn-accent">Responder</button>
+                                        <button type="submit" class="btn btn-sm btn-accent fw-bold px-3">Responder</button>
                                     </div>
                                 </form>
                             </details>
@@ -361,7 +409,10 @@ function copyNovelPageLink() {
                     </div>
                     {% endfor %}
                 {% else %}
-                    <p class="text-muted text-center py-4">No hay preguntas aún. ¡Comunícate con el autor!</p>
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-chat-square-dots fs-2 text-muted d-block mb-2"></i>
+                        <p class="small mb-0">No hay preguntas aún. ¡Comunícate con el autor!</p>
+                    </div>
                 {% endif %}
             </div>
         </div>

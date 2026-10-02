@@ -148,13 +148,13 @@
     </div>
 </div>
 
-<!-- Platforms Section (Official & Alternative Streaming / Reading) -->
+<!-- Platforms Section (Official & Community Streaming / Reading) -->
 {% if platforms %}
-<div class="platforms-section-card mb-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
+<div class="platforms-hero-card mb-5">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
         <div class="d-flex align-items-center gap-3">
-            <div class="platform-header-icon-wrap">
-                <i class="bi bi-play-circle-fill text-danger fs-4"></i>
+            <div class="platform-header-icon-wrap" style="width: 48px; height: 48px; background: linear-gradient(135deg, rgba(255, 42, 84, 0.2), rgba(124, 58, 237, 0.2)); border: 1px solid rgba(255, 42, 84, 0.35);">
+                <i class="bi bi-play-btn-fill text-danger fs-3"></i>
             </div>
             <div>
                 <h4 class="text-white fw-bold mb-0">
@@ -163,42 +163,37 @@
                     {% else %}Dónde Leer esta Novela Ligera
                     {% endif %}
                 </h4>
-                <small class="text-muted">Enlaces verificados a servidores oficiales y bibliotecas comunitarias</small>
+                <small class="text-muted">Servidores oficiales verificados y bibliotecas comunitarias indexadas</small>
             </div>
         </div>
-        <span class="badge bg-dark border border-secondary px-3 py-2 text-secondary d-flex align-items-center gap-2">
-            <span class="status-dot"></span> Disponibilidad en línea
+        <span class="badge px-3 py-2 text-white d-flex align-items-center gap-2" style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.8rem; border-radius: 999px;">
+            <span class="status-dot" style="background: #10b981; box-shadow: 0 0 8px #10b981;"></span> Transmisión & Lectura Activa
         </span>
     </div>
 
     <div class="row g-4">
         <!-- Official Platforms -->
         <div class="col-12 col-lg-6">
-            <div class="platform-column-card">
-                <div class="platform-group-header mb-3">
-                    <span class="badge-status-icon bg-success bg-opacity-10 text-success border border-success border-opacity-25">
-                        <i class="bi bi-patch-check-fill"></i>
-                    </span>
-                    <div>
-                        <h6 class="text-white fw-bold mb-0">Plataformas Oficiales & Simulcast</h6>
-                        <small class="text-muted" style="font-size: 0.76rem;">Licencia oficial y alta calidad garantizada</small>
-                    </div>
+            <div class="platform-col-box">
+                <div class="platform-badge-header platform-badge-header-official">
+                    <i class="bi bi-patch-check-fill fs-6"></i>
+                    <span>Plataformas Oficiales & Simulcast</span>
                 </div>
-                <div class="d-flex flex-column gap-2">
+                <div class="d-flex flex-column gap-2 flex-grow-1">
                     {% for plat in platforms.official %}
-                    <a href="{{ plat.url }}" target="_blank" rel="noopener noreferrer" class="platform-pill-btn">
+                    <a href="{{ plat.url }}" target="_blank" rel="noopener noreferrer" class="platform-card-btn">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="platform-icon-wrap platform-icon-official">
+                            <div class="platform-icon-circle platform-icon-official">
                                 <i class="bi {{ plat.icon }}"></i>
                             </div>
                             <div>
-                                <span class="d-block text-white fw-semibold platform-name">{{ plat.name }}</span>
-                                <small class="text-muted d-block platform-desc">{{ plat.description }}</small>
+                                <span class="d-block text-white fw-bold platform-name">{{ plat.name }}</span>
+                                <small class="text-muted d-block" style="font-size: 0.76rem;">{{ plat.description }}</small>
                             </div>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <span class="{{ plat.badge_class }}">{{ plat.tag }}</span>
-                            <i class="bi bi-box-arrow-up-right platform-external-arrow"></i>
+                            <i class="bi bi-box-arrow-up-right platform-arrow-icon"></i>
                         </div>
                     </a>
                     {% endfor %}
@@ -208,31 +203,26 @@
 
         <!-- Community / Alternative Platforms -->
         <div class="col-12 col-lg-6">
-            <div class="platform-column-card">
-                <div class="platform-group-header mb-3">
-                    <span class="badge-status-icon bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">
-                        <i class="bi bi-globe-americas"></i>
-                    </span>
-                    <div>
-                        <h6 class="text-white fw-bold mb-0">Plataformas Comunitarias & Alternativas</h6>
-                        <small class="text-muted" style="font-size: 0.76rem;">Portales alternativos compartidos por la comunidad</small>
-                    </div>
+            <div class="platform-col-box">
+                <div class="platform-badge-header platform-badge-header-community">
+                    <i class="bi bi-globe-americas fs-6"></i>
+                    <span>Plataformas Comunitarias & Fansubs</span>
                 </div>
-                <div class="d-flex flex-column gap-2">
+                <div class="d-flex flex-column gap-2 flex-grow-1">
                     {% for plat in platforms.community %}
-                    <a href="{{ plat.url }}" target="_blank" rel="noopener noreferrer" class="platform-pill-btn">
+                    <a href="{{ plat.url }}" target="_blank" rel="noopener noreferrer" class="platform-card-btn">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="platform-icon-wrap platform-icon-community">
+                            <div class="platform-icon-circle platform-icon-community">
                                 <i class="bi {{ plat.icon }}"></i>
                             </div>
                             <div>
-                                <span class="d-block text-white fw-semibold platform-name">{{ plat.name }}</span>
-                                <small class="text-muted d-block platform-desc">{{ plat.description }}</small>
+                                <span class="d-block text-white fw-bold platform-name">{{ plat.name }}</span>
+                                <small class="text-muted d-block" style="font-size: 0.76rem;">{{ plat.description }}</small>
                             </div>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <span class="{{ plat.badge_class }}">{{ plat.tag }}</span>
-                            <i class="bi bi-box-arrow-up-right platform-external-arrow"></i>
+                            <i class="bi bi-box-arrow-up-right platform-arrow-icon"></i>
                         </div>
                     </a>
                     {% endfor %}
@@ -273,14 +263,68 @@ function copyPageLink() {
         if (copyIcon && copyBtn) {
             copyIcon.className = 'bi bi-check-lg text-success';
             copyBtn.setAttribute('title', '¡Enlace copiado!');
+            if (window.showToast) {
+                window.showToast('Enlace copiado al portapapeles con éxito', 'success', 3000);
+            }
             setTimeout(function() {
                 copyIcon.className = 'bi bi-link-45deg';
                 copyBtn.setAttribute('title', 'Copiar Enlace');
             }, 2500);
         }
     }).catch(function() {
-        alert('No se pudo copiar el enlace.');
+        if (window.showToast) {
+            window.showToast('No se pudo copiar el enlace', 'error', 3000);
+        }
     });
+}
+
+function setStarRating(val) {
+    var select = document.getElementById('id_rating');
+    var label = document.getElementById('starRatingLabel');
+    if (select) {
+        select.value = val;
+    }
+    var labelsMap = {
+        1: '1 de 5 - Malo',
+        2: '2 de 5 - Regular',
+        3: '3 de 5 - Bueno',
+        4: '4 de 5 - Muy Bueno',
+        5: '5 de 5 - Obra Maestra'
+    };
+    if (label) {
+        label.textContent = labelsMap[val] || (val + ' de 5');
+    }
+    for (var i = 1; i <= 5; i++) {
+        var starBtn = document.getElementById('starPickerBtn' + i);
+        if (starBtn) {
+            var icon = starBtn.querySelector('i');
+            if (i <= val) {
+                starBtn.classList.add('active');
+                if (icon) icon.className = 'bi bi-star-fill text-warning';
+            } else {
+                starBtn.classList.remove('active');
+                if (icon) icon.className = 'bi bi-star text-secondary';
+            }
+        }
+    }
+}
+
+function selectDiscussionType(type) {
+    var select = document.getElementById('id_discussion_type');
+    if (select) {
+        select.value = type;
+    }
+    var btnComment = document.getElementById('typeBtnComment');
+    var btnQuestion = document.getElementById('typeBtnQuestion');
+    if (btnComment && btnQuestion) {
+        if (type === 'question') {
+            btnQuestion.classList.add('active');
+            btnComment.classList.remove('active');
+        } else {
+            btnComment.classList.add('active');
+            btnQuestion.classList.remove('active');
+        }
+    }
 }
 </script>
 
@@ -288,38 +332,90 @@ function copyPageLink() {
 <div class="row g-4">
     <!-- Reviews Column -->
     <div class="col-12 col-lg-6">
-        <div class="p-4 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-            <div class="d-flex align-items-center gap-2 mb-3">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);"></span>
-                <h4 class="text-white fw-bold mb-0">Opiniones y Calificación</h4>
+        <div class="reviews-section-panel">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);"></span>
+                    <h4 class="text-white fw-bold mb-0">Opiniones y Calificación</h4>
+                </div>
+                <span class="badge px-2 py-1 text-muted" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.78rem;">
+                    {{ total_reviews }} reseña{{ total_reviews|pluralize:"s" }}
+                </span>
+            </div>
+
+            <!-- Score Summary Hero Widget -->
+            <div class="rating-summary-hero">
+                <div class="rating-score-circle">
+                    <span class="rating-score-number">{{ avg_score|default:"5.0"|floatformat:1 }}</span>
+                    <span class="rating-score-max">/ 5.0</span>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <div class="rating-stars-gold">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-half"></i>
+                        </div>
+                        <span class="text-white fw-bold small ms-1">Puntuación de la Comunidad</span>
+                    </div>
+                    <p class="text-muted small mb-0" style="font-size: 0.8rem; line-height: 1.4;">
+                        {% if total_reviews > 0 %}
+                            Basado en {{ total_reviews }} evaluación{{ total_reviews|pluralize:"es" }} de usuarios verificados en GrowUp.
+                        {% else %}
+                            Aún no hay reseñas registradas para esta obra. ¡Comparte la tuya!
+                        {% endif %}
+                    </p>
+                </div>
             </div>
 
             <!-- Add Review Form -->
             {% if user.is_authenticated %}
-                <div class="p-3 rounded-3 mb-4" style="background: rgba(6, 9, 16, 0.8); border: 1px solid var(--border-subtle);">
-                    <h6 class="text-white fw-bold mb-2"><i class="bi bi-pencil-fill text-danger me-1"></i> Publicar o Editar mi Opinión</h6>
+                <div class="p-3 rounded-4 mb-4" style="background: rgba(8, 12, 20, 0.85); border: 1px solid rgba(255, 255, 255, 0.08);">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge-status-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; width: 28px; height: 28px; border-radius: 8px;">
+                            <i class="bi bi-star-fill" style="font-size: 0.85rem;"></i>
+                        </span>
+                        <h6 class="text-white fw-bold mb-0">Escribir o Editar mi Calificación</h6>
+                    </div>
                     <form action="{% url 'catalog:add_review' item_type=item_type item_id=item_id %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="item_title" value="{{ item.title }}">
                         <input type="hidden" name="item_image" value="{{ item.images.jpg.large_image_url }}">
                         
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Calificación (1 a 5 Estrellas)</label>
-                            {{ review_form.rating }}
+                            <label class="form-label text-muted small fw-semibold d-block">Selecciona tu Calificación</label>
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 p-2 rounded-3" style="background: rgba(18, 24, 38, 0.8); border: 1px solid rgba(255, 255, 255, 0.08);">
+                                <div class="star-picker-container" id="starPickerGroup">
+                                    <button type="button" class="star-picker-btn active" id="starPickerBtn1" onclick="setStarRating(1)" aria-label="1 Estrella"><i class="bi bi-star-fill text-warning"></i></button>
+                                    <button type="button" class="star-picker-btn active" id="starPickerBtn2" onclick="setStarRating(2)" aria-label="2 Estrellas"><i class="bi bi-star-fill text-warning"></i></button>
+                                    <button type="button" class="star-picker-btn active" id="starPickerBtn3" onclick="setStarRating(3)" aria-label="3 Estrellas"><i class="bi bi-star-fill text-warning"></i></button>
+                                    <button type="button" class="star-picker-btn active" id="starPickerBtn4" onclick="setStarRating(4)" aria-label="4 Estrellas"><i class="bi bi-star-fill text-warning"></i></button>
+                                    <button type="button" class="star-picker-btn active" id="starPickerBtn5" onclick="setStarRating(5)" aria-label="5 Estrellas"><i class="bi bi-star-fill text-warning"></i></button>
+                                </div>
+                                <span class="star-picker-text-label" id="starRatingLabel">5 de 5 - Obra Maestra</span>
+                            </div>
+                            <div class="d-none">
+                                {{ review_form.rating }}
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Título de la Opinión</label>
-                            {{ review_form.headline }}
+                            <label class="form-label text-muted small fw-semibold">Título de tu Opinión</label>
+                            <input type="text" name="headline" class="form-control filter-input-pro" placeholder="Ej: Una historia épica con animación excepcional" required value="{{ review_form.headline.value|default:'' }}">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Tu Reseña Detallada</label>
-                            {{ review_form.opinion }}
+                            <label class="form-label text-muted small fw-semibold">Tu Reseña Detallada</label>
+                            <textarea name="opinion" rows="3" class="form-control filter-input-pro" placeholder="Describe los puntos fuertes del argumento, personajes, ambientación..." required>{{ review_form.opinion.value|default:'' }}</textarea>
                         </div>
-                        <button type="submit" class="btn btn-accent btn-sm w-100 py-2">Guardar Opinión</button>
+                        <button type="submit" class="btn btn-accent btn-sm w-100 py-2 fw-bold">
+                            <i class="bi bi-send-fill me-1"></i> Publicar Clasificación
+                        </button>
                     </form>
                 </div>
             {% else %}
-                <div class="alert text-center small mb-4" style="background: rgba(18, 24, 38, 0.7); border: 1px solid var(--border-subtle); color: #cbd5e1;">
+                <div class="p-3 rounded-4 text-center small mb-4" style="background: rgba(18, 24, 38, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); color: #cbd5e1;">
+                    <i class="bi bi-lock-fill text-warning fs-5 d-block mb-1"></i>
                     <a href="{% url 'accounts:login' %}" class="text-danger fw-bold text-decoration-none">Inicia sesión</a> para dejar tu clasificación y opinión sobre esta obra.
                 </div>
             {% endif %}
@@ -328,22 +424,30 @@ function copyPageLink() {
             <div class="d-flex flex-column gap-3">
                 {% if reviews %}
                     {% for rev in reviews %}
-                    <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
+                    <div class="review-item-card">
                         <div class="d-flex justify-content-between align-items-start mb-2">
-                            <div>
-                                <span class="fw-bold text-white"><i class="bi bi-person-circle me-1"></i> {{ rev.user.username }}</span>
-                                <span class="text-muted small ms-2">{{ rev.created_at|date:"d M Y" }}</span>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="user-avatar-initials-sm" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">
+                                    {{ rev.user.username|slice:":2"|upper }}
+                                </div>
+                                <div>
+                                    <span class="fw-bold text-white d-block" style="font-size: 0.9rem; line-height: 1.2;">{{ rev.user.username }}</span>
+                                    <span class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-calendar3 me-1"></i>{{ rev.created_at|date:"d M Y" }}</span>
+                                </div>
                             </div>
-                            <span class="badge bg-warning text-dark fw-bold">
-                                <i class="bi bi-star-fill me-1"></i>{{ rev.rating }} / 5
+                            <span class="badge d-flex align-items-center gap-1 px-2 py-1" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); color: #f59e0b; font-weight: 700;">
+                                <i class="bi bi-star-fill"></i> {{ rev.rating }}.0
                             </span>
                         </div>
-                        <h6 class="text-light fw-bold mb-1">{{ rev.headline }}</h6>
-                        <p class="text-muted small mb-0">{{ rev.opinion }}</p>
+                        <h6 class="text-white fw-bold mb-1" style="font-size: 0.95rem;">{{ rev.headline }}</h6>
+                        <p class="text-muted small mb-0" style="line-height: 1.6;">{{ rev.opinion }}</p>
                     </div>
                     {% endfor %}
                 {% else %}
-                    <p class="text-muted text-center py-4">Aún no hay opiniones sobre esta obra. ¡Sé el primero en opinar!</p>
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-chat-heart fs-2 text-muted d-block mb-2"></i>
+                        <p class="small mb-0">Aún no hay opiniones sobre esta obra. ¡Sé el primero en compartir tu experiencia!</p>
+                    </div>
                 {% endif %}
             </div>
         </div>
@@ -351,32 +455,56 @@ function copyPageLink() {
 
     <!-- Discussions / Q&A Column -->
     <div class="col-12 col-lg-6">
-        <div class="p-4 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-            <div class="d-flex align-items-center gap-2 mb-3">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #6366f1);"></span>
-                <h4 class="text-white fw-bold mb-0">Preguntas, Respuestas y Debates</h4>
+        <div class="forum-section-panel">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #6366f1);"></span>
+                    <h4 class="text-white fw-bold mb-0">Preguntas, Respuestas y Debates</h4>
+                </div>
+                <span class="badge px-2 py-1 text-muted" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.78rem;">
+                    {{ discussions|length }} debate{{ discussions|length|pluralize:"s" }}
+                </span>
             </div>
 
             <!-- Add Comment Form -->
             {% if user.is_authenticated %}
-                <div class="p-3 rounded-3 mb-4" style="background: rgba(6, 9, 16, 0.8); border: 1px solid var(--border-subtle);">
-                    <h6 class="text-white fw-bold mb-2"><i class="bi bi-send-fill text-info me-1"></i> Participar en el Foro</h6>
+                <div class="p-3 rounded-4 mb-4" style="background: rgba(8, 12, 20, 0.85); border: 1px solid rgba(255, 255, 255, 0.08);">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="badge-status-icon" style="background: rgba(6, 182, 212, 0.15); color: #06b6d4; width: 28px; height: 28px; border-radius: 8px;">
+                            <i class="bi bi-chat-text-fill" style="font-size: 0.85rem;"></i>
+                        </span>
+                        <h6 class="text-white fw-bold mb-0">Publicar un Tema en la Comunidad</h6>
+                    </div>
+                    
                     <form action="{% url 'catalog:add_discussion' item_type=item_type item_id=item_id %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="item_title" value="{{ item.title }}">
-                        <div class="mb-2">
-                            <label class="form-label text-muted small">Tipo de Mensaje</label>
+                        
+                        <!-- Discussion Type Pill Selector -->
+                        <div class="forum-type-selector mt-2">
+                            <div class="forum-type-btn" id="typeBtnComment" onclick="selectDiscussionType('comment')">
+                                <i class="bi bi-chat-dots me-1"></i> Comentario / Debate
+                            </div>
+                            <div class="forum-type-btn active" id="typeBtnQuestion" onclick="selectDiscussionType('question')">
+                                <i class="bi bi-question-circle me-1"></i> Pregunta / Duda
+                            </div>
+                        </div>
+                        <div class="d-none">
                             {{ discussion_form.discussion_type }}
                         </div>
+
                         <div class="mb-3">
-                            {{ discussion_form.content }}
+                            <textarea name="content" rows="3" class="form-control filter-input-pro" placeholder="Escribe tu consulta o abre un hilo de debate respetuoso con la comunidad..." required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-outline-glow btn-sm w-100 py-2">Enviar Mensaje</button>
+                        <button type="submit" class="btn btn-outline-glow btn-sm w-100 py-2 fw-bold">
+                            <i class="bi bi-send me-1"></i> Enviar Mensaje a la Comunidad
+                        </button>
                     </form>
                 </div>
             {% else %}
-                <div class="alert text-center small mb-4" style="background: rgba(18, 24, 38, 0.7); border: 1px solid var(--border-subtle); color: #cbd5e1;">
-                    <a href="{% url 'accounts:login' %}" class="text-info fw-bold text-decoration-none">Inicia sesión</a> para hacer preguntas o responder comentarios.
+                <div class="p-3 rounded-4 text-center small mb-4" style="background: rgba(18, 24, 38, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); color: #cbd5e1;">
+                    <i class="bi bi-lock-fill text-info fs-5 d-block mb-1"></i>
+                    <a href="{% url 'accounts:login' %}" class="text-info fw-bold text-decoration-none">Inicia sesión</a> para hacer preguntas o responder comentarios de la comunidad.
                 </div>
             {% endif %}
 
@@ -384,28 +512,38 @@ function copyPageLink() {
             <div class="d-flex flex-column gap-3">
                 {% if discussions %}
                     {% for disc in discussions %}
-                    <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
+                    <div class="forum-thread-card">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <div>
-                                <span class="fw-bold text-white"><i class="bi bi-person me-1"></i> {{ disc.user.username }}</span>
-                                <span class="badge {% if disc.discussion_type == 'question' %}bg-primary{% else %}bg-secondary{% endif %} ms-2 small">
-                                    {{ disc.get_discussion_type_display }}
-                                </span>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="user-avatar-initials-sm" style="background: linear-gradient(135deg, #06b6d4, #6366f1);">
+                                    {{ disc.user.username|slice:":2"|upper }}
+                                </div>
+                                <span class="fw-bold text-white" style="font-size: 0.9rem;">{{ disc.user.username }}</span>
+                                {% if disc.discussion_type == 'question' %}
+                                    <span class="badge-thread-question"><i class="bi bi-question-circle me-1"></i>Pregunta</span>
+                                {% else %}
+                                    <span class="badge-thread-comment"><i class="bi bi-chat-dots me-1"></i>Debate</span>
+                                {% endif %}
                             </div>
-                            <span class="text-muted small">{{ disc.created_at|date:"d M, H:i" }}</span>
+                            <span class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-clock me-1"></i>{{ disc.created_at|date:"d M, H:i" }}</span>
                         </div>
-                        <p class="text-light small mb-2">{{ disc.content }}</p>
+                        <p class="text-white small mb-2" style="line-height: 1.55;">{{ disc.content }}</p>
 
-                        <!-- Nested Replies -->
+                        <!-- Nested Replies Tree -->
                         {% if disc.replies.all %}
-                            <div class="ms-2 ms-sm-3 ps-2 ps-sm-3 border-start border-secondary border-opacity-50 mt-2 d-flex flex-column gap-2">
+                            <div class="thread-replies-tree">
                                 {% for rep in disc.replies.all %}
-                                <div class="p-2 rounded small" style="background: rgba(18, 24, 38, 0.85);">
-                                    <div class="d-flex justify-content-between">
-                                        <strong class="text-info">{{ rep.user.username }}</strong>
-                                        <span class="text-muted" style="font-size: 0.75rem;">{{ rep.created_at|date:"d M H:i" }}</span>
+                                <div class="reply-item-bubble">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="user-avatar-initials-sm" style="width: 22px; height: 22px; font-size: 0.65rem; background: linear-gradient(135deg, #ff2a54, #ff5e36);">
+                                                {{ rep.user.username|slice:":2"|upper }}
+                                            </div>
+                                            <strong class="text-white" style="font-size: 0.82rem;">{{ rep.user.username }}</strong>
+                                        </div>
+                                        <span class="text-muted" style="font-size: 0.72rem;">{{ rep.created_at|date:"d M H:i" }}</span>
                                     </div>
-                                    <div class="text-light mt-1">{{ rep.content }}</div>
+                                    <div class="text-light small" style="line-height: 1.45;">{{ rep.content }}</div>
                                 </div>
                                 {% endfor %}
                             </div>
@@ -414,15 +552,17 @@ function copyPageLink() {
                         <!-- Reply trigger -->
                         {% if user.is_authenticated %}
                             <details class="mt-2">
-                                <summary class="text-muted small" style="cursor: pointer;">Responder a este mensaje</summary>
+                                <summary class="reply-btn-toggle">
+                                    <i class="bi bi-reply-fill"></i> Responder a este tema
+                                </summary>
                                 <form action="{% url 'catalog:add_discussion' item_type=item_type item_id=item_id %}" method="POST" class="mt-2">
                                     {% csrf_token %}
                                     <input type="hidden" name="item_title" value="{{ item.title }}">
                                     <input type="hidden" name="parent_id" value="{{ disc.id }}">
                                     <input type="hidden" name="discussion_type" value="comment">
                                     <div class="input-group">
-                                        <input type="text" name="content" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Escribe tu respuesta..." required>
-                                        <button type="submit" class="btn btn-sm btn-accent">Responder</button>
+                                        <input type="text" name="content" class="form-control form-control-sm filter-input-pro" placeholder="Escribe tu respuesta a {{ disc.user.username }}..." required>
+                                        <button type="submit" class="btn btn-sm btn-accent fw-bold px-3">Responder</button>
                                     </div>
                                 </form>
                             </details>
@@ -430,7 +570,10 @@ function copyPageLink() {
                     </div>
                     {% endfor %}
                 {% else %}
-                    <p class="text-muted text-center py-4">No hay dudas ni comentarios aún. ¡Escribe tu pregunta!</p>
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-chat-square-dots fs-2 text-muted d-block mb-2"></i>
+                        <p class="small mb-0">No hay dudas ni comentarios aún. ¡Inicia la conversación sobre esta obra!</p>
+                    </div>
                 {% endif %}
             </div>
         </div>

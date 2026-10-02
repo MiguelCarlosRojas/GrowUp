@@ -13,8 +13,14 @@ load_dotenv(BASE_DIR / '.env')
 import sys
 SECRET_KEY = os.getenv('SECRET_KEY')
 if not SECRET_KEY:
-    if 'test' in sys.argv:
-        SECRET_KEY = 'django-insecure-test-environment-key'
+    # Allow fallback key for CI runners, GitHub Actions, and test/build management commands
+    is_ci_or_build = (
+        bool(os.getenv('GITHUB_ACTIONS')) or
+        bool(os.getenv('CI')) or
+        any(cmd in sys.argv for cmd in ['check', 'test', 'makemigrations', 'migrate', 'collectstatic'])
+    )
+    if is_ci_or_build:
+        SECRET_KEY = 'django-insecure-ci-environment-key-for-build-and-checks'
     else:
         raise ValueError("CRITICO: SECRET_KEY no esta configurado en las variables de entorno (.env).")
 

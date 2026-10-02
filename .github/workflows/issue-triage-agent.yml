@@ -22,9 +22,4 @@ jobs:
           echo "Processing issue #${ISSUE_NUMBER}: ${ISSUE_TITLE}"
           
           # Auto-comment from GrowUp Automation Agent
-          gh issue comment "${ISSUE_NUMBER}" --body "Hola @${{ github.actor }}, gracias por registrar esta incidencia o requerimiento.
-
-El **GrowUp Automation Agent** ha recibido y clasificado tu solicitud. El equipo de ingenieria y los flujos automatizados de CI/CD procesaran este ticket dentro del sprint correspondiente.
-
-- Estado: Registrado
-- Triage: Automatizado por GitHub Actions Agent"
+          gh issue comment "${ISSUE_NUMBER}" --repo "${GITHUB_REPOSITORY}" --body $'Hola @${{ github.actor }}, gracias por registrar esta incidencia o requerimiento.\n\nEl **GrowUp Automation Agent** ha recibido y clasificado tu solicitud. El equipo de ingenieria y los flujos automatizados de CI/CD procesaran este ticket dentro del sprint correspondiente.\n\n- Estado: Registrado\n- Triage: Automatizado por GitHub Actions Agent'

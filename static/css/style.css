@@ -2019,6 +2019,327 @@ h1, h2, h3, h4, h5, h6, .brand-font {
     background: rgba(255, 255, 255, 0.08);
 }
 
+/* ==========================================================================
+   User Navigation Dropdown Component (Minimal & High-Tech)
+   ========================================================================== */
+.user-nav-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.35rem 0.85rem 0.35rem 0.45rem;
+    border-radius: 999px;
+    background: rgba(18, 25, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.22s ease;
+}
 
+.user-nav-pill-btn:hover,
+.user-nav-pill-btn[aria-expanded="true"] {
+    background: rgba(28, 38, 62, 0.95);
+    border-color: rgba(255, 42, 84, 0.45);
+    box-shadow: 0 4px 16px rgba(255, 42, 84, 0.2);
+    color: #ffffff;
+}
 
+.user-nav-pill-btn::after {
+    display: none !important;
+}
 
+.user-nav-chevron {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    transition: transform 0.2s ease;
+}
+
+.user-nav-pill-btn[aria-expanded="true"] .user-nav-chevron {
+    transform: rotate(180deg);
+}
+
+.user-nav-dropdown-menu {
+    background: rgba(14, 20, 32, 0.96) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 14px !important;
+    padding: 0.5rem !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    min-width: 200px;
+    margin-top: 8px !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5) !important;
+}
+
+.user-nav-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.6rem 0.85rem;
+    border-radius: 8px;
+    color: #cbd5e1 !important;
+    font-size: 0.86rem;
+    font-weight: 600;
+    transition: all 0.18s ease;
+}
+
+.user-nav-dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+    transform: translateX(3px);
+}
+
+.user-nav-dropdown-item.user-nav-logout:hover {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #ef4444 !important;
+}
+
+/* ==========================================================================
+   Full-Screen Dedicated App Workspace Layout (Separate from Landing Page)
+   ========================================================================== */
+.app-workspace-body {
+    width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    background: #060910;
+    overflow-x: hidden;
+}
+
+.app-topbar {
+    height: 64px;
+    background: rgba(10, 15, 26, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(1rem, 2.5vw, 2.5rem);
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+
+.app-workspace-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    color: #10b981;
+}
+
+.btn-app-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.95rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    font-size: 0.84rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-app-action:hover {
+    background: rgba(255, 42, 84, 0.15);
+    border-color: var(--accent-primary);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.app-shell-layout {
+    display: flex;
+    flex: 1;
+    min-height: calc(100vh - 64px);
+    width: 100vw;
+}
+
+.app-sidebar-v2 {
+    width: 290px;
+    flex-shrink: 0;
+    background: rgba(12, 17, 30, 0.96);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1.25rem;
+    gap: 1.5rem;
+}
+
+.app-user-avatar-wrap {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 0.75rem;
+}
+
+.app-avatar-initials {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1.55rem;
+    font-weight: 800;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    border: 2.5px solid rgba(255, 255, 255, 0.15);
+}
+
+.app-avatar-online-dot {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #10b981;
+    border: 2.5px solid #0c111e;
+    box-shadow: 0 0 8px #10b981;
+}
+
+.app-user-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.35rem;
+    line-height: 1.2;
+}
+
+.app-role-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+}
+
+.app-role-badge-author {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    color: #f59e0b;
+}
+
+.app-role-badge-reader {
+    background: rgba(6, 182, 212, 0.15);
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    color: #06b6d4;
+}
+
+.app-nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.app-nav-group-title {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    padding: 0 0.75rem;
+    margin-bottom: 0.35rem;
+}
+
+.app-sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.7rem 0.95rem;
+    border-radius: 12px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+}
+
+.app-sidebar-link i {
+    font-size: 1.15rem;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.app-sidebar-link:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
+.app-sidebar-link:hover i {
+    transform: scale(1.1);
+}
+
+.app-sidebar-link.active {
+    background: linear-gradient(135deg, rgba(255, 42, 84, 0.18) 0%, rgba(255, 42, 84, 0.06) 100%);
+    border: 1px solid rgba(255, 42, 84, 0.35);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(255, 42, 84, 0.15);
+}
+
+.app-sidebar-link.active i {
+    color: #ff2a54 !important;
+}
+
+.app-sidebar-link.app-link-logout:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.35);
+    color: #ef4444;
+}
+
+.app-main-workspace {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    background: #060910;
+    background-image: 
+        radial-gradient(ellipse 70% 40% at 80% 0%, rgba(255, 42, 84, 0.06), transparent 70%),
+        radial-gradient(ellipse 60% 40% at 20% 100%, rgba(6, 182, 212, 0.05), transparent 70%);
+}
+
+.app-workspace-content {
+    flex: 1;
+    padding: clamp(1.25rem, 2.5vw, 2.5rem);
+    width: 100%;
+}
+
+.app-workspace-footer {
+    padding: 1.1rem clamp(1.25rem, 2.5vw, 2.5rem);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    color: #64748b;
+}
+
+@media (max-width: 991.98px) {
+    .app-shell-layout {
+        flex-direction: column;
+    }
+    .app-sidebar-v2 {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+}

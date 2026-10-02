@@ -3,11 +3,11 @@
 {% block title %}{{ item.title }} - GrowUp{% endblock %}
 
 {% block content %}
-<!-- Item Hero Header -->
-<div class="card bg-dark border-secondary p-4 rounded-4 shadow-lg mb-4">
-    <div class="row g-4">
+<!-- Item Hero Header (Fluid Full-Width Responsive) -->
+<div class="card bg-dark border-secondary p-3 p-md-4 rounded-4 shadow-lg mb-4">
+    <div class="row g-4 align-items-start">
         <!-- Poster Column -->
-        <div class="col-md-4 col-lg-3 text-center">
+        <div class="col-12 col-sm-5 col-md-4 col-lg-3 text-center mx-auto">
             <img src="{{ item.images.jpg.large_image_url }}" alt="{{ item.title }}" class="img-fluid rounded-3 shadow border border-secondary mb-3 w-100" style="max-height: 420px; object-fit: cover;">
             
             <!-- Bookmark Button -->
@@ -34,7 +34,7 @@
         </div>
 
         <!-- Info Column -->
-        <div class="col-md-8 col-lg-9">
+        <div class="col-12 col-sm-7 col-md-8 col-lg-9">
             <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
                 <span class="badge bg-danger text-uppercase">{{ item_type }}</span>
                 <span class="badge bg-dark border border-secondary">{{ item.type }}</span>
@@ -42,22 +42,22 @@
                 {% if item.year %}<span class="badge bg-dark border border-secondary">{{ item.year }}</span>{% endif %}
             </div>
 
-            <h1 class="text-white fw-bold mb-1">{{ item.title }}</h1>
+            <h1 class="text-white fw-bold mb-1" style="word-break: break-word;">{{ item.title }}</h1>
             {% if item.title_japanese %}
-                <p class="text-muted font-monospace mb-3">{{ item.title_japanese }}</p>
+                <p class="text-muted font-monospace mb-3 small">{{ item.title_japanese }}</p>
             {% endif %}
 
             <!-- Ratings Section -->
-            <div class="d-flex align-items-center gap-4 p-3 bg-black rounded-3 mb-3 border border-secondary">
+            <div class="d-flex flex-wrap align-items-center gap-3 gap-md-4 p-3 bg-black rounded-3 mb-3 border border-secondary">
                 <div>
-                    <span class="small text-muted d-block">Puntuación MAL / Jikan</span>
-                    <span class="fs-4 fw-bold text-warning"><i class="bi bi-star-fill"></i> {{ item.score|default:'N/A' }}</span>
+                    <span class="small text-muted d-block">Puntuación Global (MAL / Jikan)</span>
+                    <span class="fs-4 fw-bold text-warning"><i class="bi bi-star-fill me-1"></i>{{ item.score|default:'N/A' }}</span>
                 </div>
-                <div class="vr bg-secondary"></div>
+                <div class="vr bg-secondary d-none d-sm-block"></div>
                 <div>
                     <span class="small text-muted d-block">Comunidad GrowUp</span>
                     <span class="fs-4 fw-bold text-danger">
-                        <i class="bi bi-heart-fill"></i> 
+                        <i class="bi bi-heart-fill me-1"></i>
                         {% if avg_score %}{{ avg_score|floatformat:1 }} / 5.0{% else %}Sin votos{% endif %}
                     </span>
                     <span class="small text-muted">({{ total_reviews }} opiniones)</span>
@@ -67,13 +67,13 @@
             <!-- Genres -->
             <div class="d-flex flex-wrap gap-2 mb-3">
                 {% for g in item.genres %}
-                    <span class="tag-badge fs-6">{{ g.name }}</span>
+                    <span class="tag-badge">{{ g.name }}</span>
                 {% endfor %}
             </div>
 
             <!-- Synopsis -->
             <h5 class="text-white fw-bold mb-2">Sinopsis</h5>
-            <p class="text-light" style="line-height: 1.7; white-space: pre-line;">
+            <p class="text-light" style="line-height: 1.7; font-size: clamp(0.9rem, 1.2vw, 1rem); word-break: break-word;">
                 {{ item.synopsis|default:'Sin sinopsis disponible actualmente.' }}
             </p>
 
@@ -96,11 +96,11 @@
     </div>
 </div>
 
-<!-- Community Reviews & Opinions + Discussions Tabs -->
+<!-- Community Reviews & Opinions + Discussions (Fluid Full-Width) -->
 <div class="row g-4">
     <!-- Reviews Column -->
-    <div class="col-lg-6">
-        <div class="card bg-dark border-secondary p-4 rounded-4 shadow-sm h-100">
+    <div class="col-12 col-lg-6">
+        <div class="card bg-dark border-secondary p-3 p-md-4 rounded-4 shadow-sm h-100">
             <h4 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
                 <i class="bi bi-star-half text-warning"></i> Opiniones y Clasificación
             </h4>
@@ -115,7 +115,7 @@
                         <input type="hidden" name="item_image" value="{{ item.images.jpg.large_image_url }}">
                         
                         <div class="mb-3">
-                            <label class="form-label text-muted small">Calificación (Estrellas)</label>
+                            <label class="form-label text-muted small">Calificación</label>
                             {{ review_form.rating }}
                         </div>
                         <div class="mb-3">
@@ -126,7 +126,7 @@
                             <label class="form-label text-muted small">Tu Reseña Detallada</label>
                             {{ review_form.opinion }}
                         </div>
-                        <button type="submit" class="btn btn-accent btn-sm w-100">Guardar Opinión</button>
+                        <button type="submit" class="btn btn-accent btn-sm w-100 py-2">Guardar Opinión</button>
                     </form>
                 </div>
             {% else %}
@@ -142,11 +142,11 @@
                     <div class="p-3 bg-black rounded-3 border border-secondary">
                         <div class="d-flex justify-content-between align-items-start mb-2">
                             <div>
-                                <span class="fw-bold text-white"><i class="bi bi-person-circle"></i> {{ rev.user.username }}</span>
+                                <span class="fw-bold text-white"><i class="bi bi-person-circle me-1"></i> {{ rev.user.username }}</span>
                                 <span class="text-muted small ms-2">{{ rev.created_at|date:"d M Y" }}</span>
                             </div>
                             <span class="badge bg-warning text-dark fw-bold">
-                                {{ rev.rating }} ★
+                                <i class="bi bi-star-fill me-1"></i>{{ rev.rating }} / 5
                             </span>
                         </div>
                         <h6 class="text-light fw-bold mb-1">{{ rev.headline }}</h6>
@@ -161,8 +161,8 @@
     </div>
 
     <!-- Discussions / Q&A Column -->
-    <div class="col-lg-6">
-        <div class="card bg-dark border-secondary p-4 rounded-4 shadow-sm h-100">
+    <div class="col-12 col-lg-6">
+        <div class="card bg-dark border-secondary p-3 p-md-4 rounded-4 shadow-sm h-100">
             <h4 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
                 <i class="bi bi-chat-dots-fill text-info"></i> Preguntas, Respuestas y Comentarios
             </h4>
@@ -181,7 +181,7 @@
                         <div class="mb-3">
                             {{ discussion_form.content }}
                         </div>
-                        <button type="submit" class="btn btn-outline-info btn-sm w-100">Enviar Mensaje</button>
+                        <button type="submit" class="btn btn-outline-info btn-sm w-100 py-2">Enviar Mensaje</button>
                     </form>
                 </div>
             {% else %}
@@ -197,7 +197,7 @@
                     <div class="p-3 bg-black rounded-3 border border-secondary">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
-                                <span class="fw-bold text-white"><i class="bi bi-person"></i> {{ disc.user.username }}</span>
+                                <span class="fw-bold text-white"><i class="bi bi-person me-1"></i> {{ disc.user.username }}</span>
                                 <span class="badge {% if disc.discussion_type == 'question' %}bg-primary{% else %}bg-secondary{% endif %} ms-2 small">
                                     {{ disc.get_discussion_type_display }}
                                 </span>
@@ -208,7 +208,7 @@
 
                         <!-- Nested Replies -->
                         {% if disc.replies.all %}
-                            <div class="ms-3 ps-3 border-start border-secondary mt-2 d-flex flex-column gap-2">
+                            <div class="ms-2 ms-sm-3 ps-2 ps-sm-3 border-start border-secondary mt-2 d-flex flex-column gap-2">
                                 {% for rep in disc.replies.all %}
                                 <div class="bg-dark p-2 rounded small">
                                     <div class="d-flex justify-content-between">
@@ -224,7 +224,7 @@
                         <!-- Reply trigger -->
                         {% if user.is_authenticated %}
                             <details class="mt-2">
-                                <summary class="text-muted small cursor-pointer" style="cursor: pointer;">Responder a este mensaje</summary>
+                                <summary class="text-muted small" style="cursor: pointer;">Responder a este mensaje</summary>
                                 <form action="{% url 'catalog:add_discussion' item_type=item_type item_id=item_id %}" method="POST" class="mt-2">
                                     {% csrf_token %}
                                     <input type="hidden" name="item_title" value="{{ item.title }}">

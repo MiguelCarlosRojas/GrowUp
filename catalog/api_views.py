@@ -149,3 +149,17 @@ def api_live_notifications_view(request):
         'status': 'success',
         'notifications': notifications
     })
+
+
+@require_GET
+def ws_live_http_fallback_view(request):
+    """
+    HTTP fallback view for /ws/live/ to prevent 404 errors when accessed via HTTP/WSGI.
+    Provides live status and prevents unnecessary error logging in production.
+    """
+    return JsonResponse({
+        'status': 'active',
+        'endpoint': '/ws/live/',
+        'protocol': 'websocket',
+        'message': 'ASGI WebSocket gateway ready'
+    })

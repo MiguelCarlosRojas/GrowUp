@@ -126,4 +126,30 @@ class CatalogTests(TestCase):
         self.assertContains(response, 'toastNotificationContainer')
         self.assertContains(response, 'toast-popup-container')
 
+    def test_ws_live_http_fallback_endpoint(self):
+        response = self.client.get(reverse('catalog:ws_live_fallback'))
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data.get('status'), 'active')
+        self.assertEqual(data.get('endpoint'), '/ws/live/')
+
+    def test_topbar_notifications_component_present(self):
+        self.client.login(username='otaku_master', password='password123')
+        response = self.client.get(reverse('catalog:home'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="notifReviewsDropdown"')
+        self.assertContains(response, 'id="notifDiscussionsDropdown"')
+
+    @patch('catalog.services.jikan_service._safe_request', return_value=None)
+    def test_jikan_service_resilient_to_gateway_504(self, mock_safe):
+        from catalog.services import jikan_service
+        # Clear cache to force fallback evaluation
+        jikan_service._CACHE.clear()
+        animes = jikan_service.get_top_anime(limit=8)
+        self.assertEqual(len(animes), 8)
+        detail = jikan_service.get_item_detail('anime', '52991')
+        self.assertIsNotNone(detail)
+        self.assertIn('Frieren', detail.get('title', ''))
+
+
 

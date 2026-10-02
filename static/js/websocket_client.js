@@ -77,7 +77,20 @@
     }
 
     function displayLiveNotifications(notifications) {
-        if (!Array.isArray(notifications) || !window.showToast) return;
+        if (!Array.isArray(notifications)) return;
+
+        // Update topbar notification dropdowns in real time
+        notifications.forEach(function(item) {
+            if (item.type === 'review') {
+                const el = document.getElementById('topbarReviewText');
+                if (el && item.text) el.textContent = item.text;
+            } else if (item.type === 'discussion') {
+                const el = document.getElementById('topbarDiscussionText');
+                if (el && item.text) el.textContent = item.text;
+            }
+        });
+
+        if (!window.showToast) return;
         notifications.slice(0, 2).forEach(function(item, idx) {
             setTimeout(function() {
                 window.showToast(

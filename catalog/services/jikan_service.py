@@ -7,20 +7,24 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-# Request Headers
+from .jikan_seed_data import SEED_ANIMES, SEED_MANGAS, SEED_LIGHTNOVELS
+
+# Request Headers matching realistic modern browsers
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
-    'Accept': 'application/json',
+    'Accept': 'application/json, text/plain, */*',
+    'Accept-Language': 'es-ES,es;q=0.9,en;q=0.8',
+    'Cache-Control': 'no-cache',
 }
 
 # In-memory cache for API responses and real items catalog
 _CACHE = {}
 _ITEMS_REGISTRY = {}
-CACHE_TTL = 900  # 15 minutes
+CACHE_TTL = 7200  # 2 hours cache for stability
 
 
 def get_base_url():
-    url = getattr(settings, 'JIKAN_API_BASE_URL', None) or os.getenv('JIKAN_API_BASE_URL', '')
+    url = getattr(settings, 'JIKAN_API_BASE_URL', None) or os.getenv('JIKAN_API_BASE_URL', 'https://api.jikan.moe/v4')
     return url.rstrip('/')
 
 
@@ -45,10 +49,15 @@ def _register_items(items):
             _ITEMS_REGISTRY[str(it['mal_id'])] = it
 
 
-def _safe_request(endpoint_path, params=None, timeout=10):
+# Pre-register verified seed catalog into in-memory registry
+_register_items(SEED_ANIMES)
+_register_items(SEED_MANGAS)
+_register_items(SEED_LIGHTNOVELS)
+
+
+def _safe_request(endpoint_path, params=None, timeout=4):
     base_url = get_base_url()
     if not base_url:
-        logger.error("JIKAN_API_BASE_URL is not configured in .env")
         return None
 
     url = f"{base_url}{endpoint_path}"
@@ -57,37 +66,29 @@ def _safe_request(endpoint_path, params=None, timeout=10):
     if cached is not None:
         return cached
 
-    for attempt in range(2):
-        try:
-            response = requests.get(url, params=params, headers=HEADERS, timeout=timeout)
-            if response.status_code == 200:
-                data = response.json()
-                _set_cache(cache_key, data)
-                return data
-            elif response.status_code == 429:
-                logger.warning(f"Jikan API rate limit (429) on attempt {attempt + 1}. Waiting 0.8s...")
-                time.sleep(0.8)
-                continue
-            elif response.status_code in (504, 502, 503):
-                logger.warning(f"Jikan API gateway {response.status_code} on {url}. Retrying...")
-                time.sleep(0.5)
-                continue
-            elif response.status_code == 404:
-                return None
-            else:
-                logger.warning(f"Jikan API responded with status {response.status_code} for {url}")
-                return None
-        except Exception as e:
-            logger.error(f"Error connecting to Jikan API at {url}: {e}")
-            time.sleep(0.5)
-
-    return None
+    try:
+        response = requests.get(url, params=params, headers=HEADERS, timeout=timeout)
+        if response.status_code == 200:
+            data = response.json()
+            _set_cache(cache_key, data)
+            return data
+        elif response.status_code in (504, 502, 503, 429):
+            logger.warning(f"Jikan API gateway {response.status_code} on {url}. Using cached fallback.")
+            return None
+        elif response.status_code == 404:
+            return None
+        else:
+            logger.warning(f"Jikan API responded with status {response.status_code} for {url}")
+            return None
+    except Exception as e:
+        logger.warning(f"Jikan API transient connection issue on {url}: {e}. Using cached fallback.")
+        return None
 
 
-def _fetch_pool(endpoints, cache_key):
-    """Fetches and aggregates unique items from multiple stable cached Jikan endpoints."""
+def _fetch_pool(endpoints, cache_key, fallback_items):
+    """Fetches and aggregates unique items from Jikan, seamlessly falling back to seed items if 504."""
     cached = _get_cache(cache_key)
-    if cached is not None:
+    if cached is not None and len(cached) > 0:
         return cached
 
     seen = set()
@@ -101,17 +102,21 @@ def _fetch_pool(endpoints, cache_key):
                     seen.add(mid)
                     aggregated.append(it)
 
+    if not aggregated:
+        # Graceful fallback when Jikan returns 504 or Cloudflare rate limits in cloud environments
+        aggregated = list(fallback_items)
+
     _set_cache(cache_key, aggregated)
     _register_items(aggregated)
     return aggregated
 
 
 def get_all_anime_pool():
-    return _fetch_pool(['/top/anime', '/anime', '/seasons/now'], 'all_real_anime_pool')
+    return _fetch_pool(['/top/anime', '/anime', '/seasons/now'], 'all_real_anime_pool', SEED_ANIMES)
 
 
 def get_all_manga_and_novels_pool():
-    return _fetch_pool(['/top/manga', '/manga'], 'all_real_manga_and_novels_pool')
+    return _fetch_pool(['/top/manga', '/manga'], 'all_real_manga_and_novels_pool', SEED_MANGAS + SEED_LIGHTNOVELS)
 
 
 def get_top_anime(limit=8):
@@ -230,6 +235,13 @@ def get_item_detail(item_type, mal_id):
         item = data_full['data']
         _ITEMS_REGISTRY[str_id] = item
         return item
+
+    # Search across all seed collections
+    for pool in (SEED_ANIMES, SEED_MANGAS, SEED_LIGHTNOVELS):
+        for it in pool:
+            if str(it.get('mal_id')) == str_id:
+                _ITEMS_REGISTRY[str_id] = it
+                return it
 
     return None
 

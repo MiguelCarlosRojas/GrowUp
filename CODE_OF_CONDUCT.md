@@ -1,31 +1,29 @@
-# Código de Conducta de GrowUp
+# Codigo de Conducta de GrowUp
+
+Despliegue Oficial en Produccion: https://growup-7my7.onrender.com  
 
 ## Nuestro Compromiso
 
-Como colaboradores y miembros de la comunidad de **GrowUp**, nos comprometemos a hacer que la participación en nuestro proyecto y nuestra comunidad sea una experiencia libre de acoso para todos, independientemente de la edad, dimensión corporal, discapacidad visible o invisible, etnicidad, características sexuales, identidad y expresión de género, nivel de experiencia, educación, estatus socioeconómico, nacionalidad, apariencia personal, raza, casta, color, religión o identidad y orientación sexual.
+Como colaboradores, autores, lectores y administradores de la comunidad de **GrowUp**, nos comprometemos a hacer que la participacion en nuestra plataforma sea una experiencia respetuosa, enriquecedora y constructiva para todos, independientemente de la edad, identidad y expresion de genero, nivel de experiencia, origen etnico, nacionalidad o preferencias de lectura.
 
-Nos comprometemos a actuar e interactuar de maneras que contribuyan a una comunidad abierta, acogedora, diversa, inclusiva y saludable.
+Nos comprometemos a actuar e interactuar de maneras que contribuyan a un entorno seguro, diverso, transparente y colaborativo.
 
 ## Nuestras Normas
 
-Ejemplos de comportamientos que contribuyen a un entorno positivo para nuestra comunidad:
+Comportamientos que promueven un ecosistema positivo en GrowUp:
+- Demostrar empatia, cortesia y profesionalismo hacia otros miembros y creadores de contenido.
+- Respetar los diferentes puntos de vista en debates sobre animes, mangas y novelas ligeras.
+- Formular criticas constructivas y fundamentadas en las resenas, orientadas al crecimiento de los autores noveles.
+- Respetar la propiedad intelectual y el esfuerzo literario de los escritores del Taller.
+- Reportar de manera responsable cualquier contenido inapropiado o vulneracion de normas a traves de los canales oficiales.
 
-* Demostrar empatía y amabilidad hacia otras personas.
-* Respetar las diferentes opiniones, puntos de vista y experiencias sobre obras literarias, mangas o animes.
-* Aceptar y proporcionar retroalimentación constructiva de manera adecuada tanto a lectores como a escritores noveles.
-* Asumir responsabilidad y disculparnos ante las personas afectadas por nuestros errores, aprendiendo de la experiencia.
-* Enfocarse en lo que es mejor no solo para nosotros como individuos, sino para la comunidad en general.
+Comportamientos inaceptables:
+- El uso de lenguaje hostil, discriminatorio, ofensivo o acosador en resenas y foros de debate.
+- El acoso directo, agresion o intimidacion hacia cualquier autor o lector por sus calificaciones o gustos particulares.
+- La divulgacion de datos privados o sensibles de terceros (doxxing) sin su consentimiento expreso.
+- El spam recurrente, autopromocion invasiva o publicacion de contenido plagiado en el Taller de Escritores.
+- Cualquier accion deliberada orientada a degradar el rendimiento o la seguridad de la plataforma.
 
-Ejemplos de comportamientos inaceptables:
+## Aplicacion y Responsabilidades
 
-* El uso de lenguaje o imágenes de contenido sexualizado, insinuaciones o insinuaciones sexuales de cualquier tipo en las reseñas o foros de discusión.
-* Comentarios insultantes, despectivos y ataques personales o políticos (trolling).
-* El acoso público o privado contra autores o usuarios por sus gustos o calificaciones.
-* Publicar información privada de otras personas, como direcciones físicas o electrónicas, sin su permiso explícito (doxxing).
-* Otra conducta que razonablemente pueda ser considerada inapropiada en un entorno profesional o comunitario.
-
-## Aplicación y Cumplimiento
-
-Las instancias de comportamiento abusivo, acosador o inaceptable podrán ser reportadas a los administradores del proyecto mediante los canales oficiales de contacto y repositorio. Todos los reportes serán revisados e investigados con prontitud e imparcialidad.
-
-Los administradores del proyecto tienen el derecho y la responsabilidad de eliminar, editar o rechazar comentarios, commits, código, ediciones de wiki, issues y otras contribuciones que no estén alineadas con este Código de Conducta.
+Los administradores de la comunidad tienen la atribucion de moderar, editar o remover resenas, preguntas, debates, capitulos o cuentas que incumplan estas disposiciones, garantizando una revision justa, oportuna e imparcial.

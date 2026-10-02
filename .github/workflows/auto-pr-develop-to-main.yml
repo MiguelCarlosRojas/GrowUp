@@ -41,23 +41,23 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PR_TITLE="[Release]: Merge develop into main"
-          PR_BODY="### 🌟 Release Pull Request Automático hacia Main
+          PR_BODY="### Release Pull Request Automatico hacia Main
           
           **Rama origen:** \`develop\`
           **Rama destino:** \`main\`
           
-          #### ✅ Estado de Integración:
-          - [x] Verificación de integridad en rama develop aprobada.
+          #### Estado de Integracion:
+          - [x] Verificacion de integridad en rama develop aprobada.
           - [x] Todas las pruebas unitarias y de sistema pasaron en verde.
-          - [x] Listo para despliegue y producción.
+          - [x] Listo para despliegue y produccion.
           
-          #### 📋 Resumen del Release:
+          #### Resumen del Release:
           - Plataforma completa GrowUp para Manga, Anime y Novelas Ligeras.
           - Backend en Django puro con Prisma Postgres.
           - Datos en tiempo real de Jikan API.
-          - Sistema de reseñas, clasificación, debates (Q&A) y módulo de escritores.
+          - Sistema de resenas, clasificacion, debates (Q&A) y modulo de escritores.
           
-          *Este Pull Request fue generado automáticamente por GitHub Actions tras la compilación exitosa en develop.*"
+          *Este Pull Request fue generado automaticamente por GitHub Actions tras la compilacion exitosa en develop.*"
           
           EXISTING_PR=$(gh pr list --head "develop" --base "main" --json number -q '.[0].number')
           

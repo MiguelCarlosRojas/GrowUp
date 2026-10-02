@@ -5,13 +5,14 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
     <div>
-        <h2 class="fw-bold text-white mb-1 d-flex align-items-center gap-2">
-            <i class="bi bi-pencil-square text-warning"></i> Mi Taller de Escritor
-        </h2>
+        <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="section-accent-bar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);"></span>
+            <h2 class="fw-bold text-white mb-0">Mi Taller de Escritor</h2>
+        </div>
         <p class="text-muted mb-0">Gestiona tus novelas ligeras originales, publica nuevos capítulos y revisa tus estadísticas.</p>
     </div>
-    <a href="{% url 'novels:novel_create' %}" class="btn btn-accent">
-        <i class="bi bi-plus-lg me-1"></i> Publicar Nueva Novela
+    <a href="{% url 'novels:novel_create' %}" class="btn btn-accent px-4 py-2">
+        <i class="bi bi-feather me-1"></i> Publicar Nueva Novela
     </a>
 </div>
 
@@ -19,33 +20,33 @@
 <div class="row g-4">
     {% for novel in novels %}
     <div class="col-12">
-        <div class="card bg-dark border-secondary p-4 rounded-4 shadow-sm">
+        <div class="p-4 rounded-4" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
             <div class="row g-4 align-items-center">
                 <div class="col-md-3 col-lg-2 text-center">
-                    <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="img-fluid rounded-3 shadow border border-secondary" style="max-height: 180px; object-fit: cover;">
+                    <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="original-cover-thumb" style="width: 100px; height: 145px;">
                 </div>
                 <div class="col-md-6 col-lg-7">
                     <div class="d-flex align-items-center gap-2 mb-2">
-                        <span class="badge bg-secondary-subtle text-secondary-emphasis">{{ novel.get_status_display }}</span>
-                        <span class="badge bg-dark border border-secondary">{{ novel.get_demography_display }}</span>
-                        <span class="badge bg-dark border border-secondary">{{ novel.language }}</span>
+                        <span class="badge bg-dark border border-secondary text-secondary">{{ novel.get_status_display }}</span>
+                        <span class="badge bg-dark border border-secondary text-secondary">{{ novel.get_demography_display }}</span>
+                        <span class="badge bg-dark border border-secondary text-secondary">{{ novel.language }}</span>
                     </div>
                     <h4 class="fw-bold text-white mb-2">{{ novel.title }}</h4>
-                    <p class="text-muted small mb-3 text-truncate-2">{{ novel.synopsis }}</p>
+                    <p class="text-muted small mb-3 text-truncate-2" style="max-height: 40px; overflow: hidden;">{{ novel.synopsis }}</p>
                     <div class="d-flex gap-4 small text-muted">
-                        <span><i class="bi bi-journal-text text-warning"></i> {{ novel.chapters.count }} Capítulos</span>
-                        <span><i class="bi bi-eye text-info"></i> {{ novel.views_count }} Lecturas</span>
-                        <span><i class="bi bi-calendar"></i> Creado: {{ novel.created_at|date:"d/m/Y" }}</span>
+                        <span><i class="bi bi-journal-text text-warning me-1"></i> {{ novel.chapters.count }} Capítulos</span>
+                        <span><i class="bi bi-eye text-info me-1"></i> {{ novel.views_count }} Lecturas</span>
+                        <span><i class="bi bi-calendar me-1"></i> {{ novel.created_at|date:"d/m/Y" }}</span>
                     </div>
                 </div>
                 <div class="col-md-3 col-lg-3 d-flex flex-column gap-2 justify-content-center">
-                    <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="btn btn-outline-light btn-sm">
+                    <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="btn btn-outline-glow btn-sm">
                         <i class="bi bi-eye"></i> Ver en el Sitio
                     </a>
-                    <a href="{% url 'novels:chapter_create' novel_slug=novel.slug %}" class="btn btn-warning btn-sm">
+                    <a href="{% url 'novels:chapter_create' novel_slug=novel.slug %}" class="btn btn-accent btn-sm">
                         <i class="bi bi-plus-circle"></i> Añadir Capítulo
                     </a>
-                    <a href="{% url 'novels:novel_edit' slug=novel.slug %}" class="btn btn-outline-secondary btn-sm">
+                    <a href="{% url 'novels:novel_edit' slug=novel.slug %}" class="btn btn-outline-glow btn-sm">
                         <i class="bi bi-pencil"></i> Editar Información
                     </a>
                 </div>
@@ -55,15 +56,13 @@
     {% endfor %}
 </div>
 {% else %}
-<div class="card bg-dark border-secondary p-5 rounded-4 text-center">
-    <i class="bi bi-feather text-warning mb-3" style="font-size: 3.5rem;"></i>
-    <h3 class="fw-bold text-white">¡Aún no has publicado ninguna novela ligera!</h3>
-    <p class="text-muted mb-4">Comienza a escribir tu primera historia, define sus géneros, sube su portada y comparte tus primeros capítulos con miles de lectores.</p>
-    <div>
-        <a href="{% url 'novels:novel_create' %}" class="btn btn-accent btn-lg px-4">
-            <i class="bi bi-pencil-fill me-1"></i> Publicar Mi Primera Novela
-        </a>
-    </div>
+<div class="p-5 rounded-4 text-center" style="background: rgba(14, 20, 32, 0.85); border: 1px dashed var(--border-subtle);">
+    <i class="bi bi-feather text-warning mb-3 d-block" style="font-size: 3.5rem;"></i>
+    <h3 class="fw-bold text-white mb-2">Aún no has publicado ninguna novela ligera</h3>
+    <p class="text-muted mb-4">Comienza hoy a escribir y comparte tu universo con miles de lectores en GrowUp.</p>
+    <a href="{% url 'novels:novel_create' %}" class="btn btn-accent px-4 py-2">
+        <i class="bi bi-plus-circle me-1"></i> Crear mi primera obra
+    </a>
 </div>
 {% endif %}
 {% endblock %}

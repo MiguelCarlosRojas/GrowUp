@@ -5,39 +5,40 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-8">
-        <div class="card bg-dark border-secondary p-4 p-md-5 rounded-4 shadow">
-            <h3 class="fw-bold text-white mb-2 d-flex align-items-center gap-2">
-                <i class="bi bi-journal-plus text-warning"></i> {{ title }}
-            </h3>
-            <p class="text-muted mb-4">Completa los detalles de tu novela ligera. Puedes asignar múltiples categorías para que los lectores te descubran con facilidad.</p>
+        <div class="p-4 p-md-5 rounded-4 shadow-lg" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="section-accent-bar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);"></span>
+                <h3 class="fw-bold text-white mb-0">{{ title }}</h3>
+            </div>
+            <p class="text-muted mb-4">Completa los detalles de tu novela ligera. Puedes asignar múltiples categorías temáticas para que los lectores te descubran con facilidad.</p>
 
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 
                 <div class="mb-3">
-                    <label class="form-label text-light fw-semibold">Título de la Novela</label>
+                    <label class="form-label text-light fw-semibold small">Título de la Novela</label>
                     {{ form.title }}
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label text-light fw-semibold">Sinopsis / Descripción</label>
+                    <label class="form-label text-light fw-semibold small">Sinopsis / Descripción</label>
                     {{ form.synopsis }}
                 </div>
 
                 <div class="row g-3 mb-3">
                     <div class="col-md-6">
-                        <label class="form-label text-light fw-semibold">Subir Portada (Archivo)</label>
+                        <label class="form-label text-light fw-semibold small">Subir Portada (Archivo)</label>
                         {{ form.cover_image }}
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label text-light fw-semibold">O URL directa de Portada</label>
+                        <label class="form-label text-light fw-semibold small">O URL Directa de Portada</label>
                         {{ form.cover_url }}
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label text-light fw-semibold d-block">Categorías / Géneros</label>
-                    <div class="p-3 bg-black rounded-3 border border-secondary" style="max-height: 180px; overflow-y: auto;">
+                    <label class="form-label text-light fw-semibold small d-block">Categorías / Géneros</label>
+                    <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.8); border: 1px solid var(--border-subtle); max-height: 180px; overflow-y: auto;">
                         <div class="row row-cols-2 row-cols-md-3 g-2">
                             {% for choice in form.categories %}
                                 <div class="col">
@@ -55,21 +56,21 @@
 
                 <div class="row g-3 mb-4">
                     <div class="col-md-4">
-                        <label class="form-label text-light fw-semibold">Estado</label>
+                        <label class="form-label text-light fw-semibold small">Estado</label>
                         {{ form.status }}
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label text-light fw-semibold">Demografía</label>
+                        <label class="form-label text-light fw-semibold small">Demografía</label>
                         {{ form.demography }}
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label text-light fw-semibold">Idioma</label>
+                        <label class="form-label text-light fw-semibold small">Idioma</label>
                         {{ form.language }}
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-end gap-2 pt-3 border-top border-secondary">
-                    <a href="{% url 'novels:author_dashboard' %}" class="btn btn-outline-secondary">Cancelar</a>
+                <div class="d-flex justify-content-end gap-2 pt-3 border-top border-secondary border-opacity-25">
+                    <a href="{% url 'novels:author_dashboard' %}" class="btn btn-outline-glow px-4">Cancelar</a>
                     <button type="submit" class="btn btn-accent px-4">Guardar Novela</button>
                 </div>
             </form>

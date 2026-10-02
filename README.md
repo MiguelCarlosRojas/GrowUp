@@ -1,5 +1,6 @@
 # GrowUp - Plataforma de Manga, Anime y Novelas Ligeras
 
+[![Render Deployment](https://img.shields.io/badge/deployment-Render%20Live-22c55e.svg)](https://growup-7my7.onrender.com)
 [![CI Compilation & Test Suite](https://github.com/MiguelCarlosRojas/GrowUp/actions/workflows/ci.yml/badge.svg)](https://github.com/MiguelCarlosRojas/GrowUp/actions/workflows/ci.yml)
 [![Python Version](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/django-5.1%2B%20%7C%206.1-green.svg)](https://www.djangoproject.com/)
@@ -12,130 +13,113 @@
 ### Metadatos del Repositorio de GitHub
 
 > **Description:**  
-> Plataforma interactiva de Manga, Anime y Novelas Ligeras desarrollada en Django puro con Prisma Postgres, Jikan API v4, Taller de Escritores, sistema de reseñas y CI/CD automatizado con GitHub Actions.
+> Plataforma interactiva de Manga, Anime y Novelas Ligeras desarrollada en Django puro con Prisma Postgres, Jikan API v4, Taller de Escritores y CI/CD automatizado.
 >
 > **Website:**  
-> `https://growup-anime.vercel.app`
+> `https://growup-7my7.onrender.com`
 >
 > **Topics:**  
-> `django`, `python`, `anime`, `manga`, `light-novels`, `jikan-api`, `prisma-postgres`, `github-actions`, `cicd`, `web-development`, `postgresql`
+> `anime`, `cicd`, `django`, `github-actions`, `jikan-api`, `light-novels`, `manga`, `prisma-postgres`, `python`, `render`
 
 ---
 
-## Caracteristicas Principales
+## Despliegue en la Nube 100% Autonomo (Render Web Service)
 
-1. **Diseño Visual Ultra-Profesional:**
-   - Estética inspirada en plataformas como Crunchyroll y AniList con **Glassmorphism**, iluminación ambiental (*ambient glow*) y modo oscuro de alto contraste.
-   - **Logotipo SVG Oficial** e icono de pestaña (*favicon*) vectoriales de alta definición.
-   - **Custom Scrollbar** con degradado continuo y bordes redondeados.
-   - **Disposición de Ancho Completo (*Full-Width Fluid*):** Diseñada para aprovechar pantallas panorámicas y monitores ultrawide sin márgenes estrechos.
-   - **Responsividad Total:** Tipografía fluida `clamp()`, tarjetas con relación de aspecto adaptable (2:3 y 3:4) y paneles táctiles en smartphones.
-   - **Lector de Capítulos Inmersivo:** Modos de lectura seleccionables (*Dark*, *Sepia Clásico*, *Negro OLED*), tamaño de letra ajustable y navegación secuencial.
+La aplicacion se ejecuta de forma completamente autonoma en **Render** sin requerir ninguna sesion ni ejecucion local en la computadora del desarrollador:
 
-2. **Base de Datos con Prisma Postgres:**
-   - Conexión configurada hacia **Prisma Postgres** (`pooled.db.prisma.io:5432`) mediante variables de entorno seguras (`DATABASE_URL`).
-   - Soporte para **Prisma CLI** (`npx prisma db pull`, `npx prisma generate`, `npx prisma studio`).
-   - Modo de resiliencia con fallback a SQLite local para testing y CI sin dependencias de red externas.
-
-3. **Catálogo & Landing Page Dinámica (Jikan API v4):**
-   - Sincronización en tiempo real con MyAnimeList.
-   - Obras maestras y estrenos de anime, manga y novelas ligeras oficiales.
-   - Filtros avanzados: por medio (*Anime, Manga, Novela Ligera, Obras de la Comunidad*), término de búsqueda, géneros múltiples, estado de emisión y ordenamiento.
-
-4. **Sistema de Clasificación, Opiniones y Discusiones (Q&A):**
-   - Calificación interactiva de 1 a 5 con cálculo automático de promedios de la comunidad.
-   - Reseñas con título y opinión detallada.
-   - Foro de discusión por obra: comentarios y preguntas con respuestas anidadas en hilos.
-
-5. **Taller de Escritores (Novelas Ligeras Originales):**
-   - Módulo completo para autores: título, sinopsis, imagen de portada, demografía, idioma y categorías/géneros (*Isekai, Fantasía, Acción, Romance, etc.*).
-   - Gestión de capítulos: numeración, título, contenido completo, conteo de palabras y notas del autor.
+- **Instancia en Produccion:** [https://growup-7my7.onrender.com](https://growup-7my7.onrender.com)
+- **Base de Datos Cloud:** Prisma Postgres alojada en la nube (`pooled.db.prisma.io:5432`) con pooling de conexiones y SSL requerido.
+- **Entrega de Archivos Estaticos:** Integracion con **WhiteNoise** (`CompressedStaticFilesStorage`) para compresion Brotli/Gzip y cache instantaneo de 137 assets.
+- **Servidor WSGI/ASGI Concurrente:** Soporte dual para **Gunicorn** y **Uvicorn** gestionando peticiones HTTP y WebSockets en tiempo real.
+- **Resiliencia ante Caidas de Jikan (HTTP 504):** Mecanismo de contingencia con catalogo semilla pre-registrado en memoria para asegurar que animes, mangas y novelas siempre se muestren incluso ante demoras o limites de tasa de servidores externos.
 
 ---
 
-## Herramientas de Prisma Postgres
+## Caracteristicas Principales del Sistema
 
-El proyecto cuenta con soporte para el ecosistema de Prisma:
+1. **Catalogo Multimedial y Landing Page Dinamica (Jikan API v4):**
+   - Sincronizacion directa con el catalogo oficial de MyAnimeList.
+   - Exploracion filtrable de Animes, Mangas, Novelas Ligeras y Obras de la Comunidad con paginacion de 24 registros por pagina.
+   - Seccion detallada de cada obra con enlaces a plataformas oficiales (Crunchyroll, Netflix, MANGA Plus, BookWalker) y comunitarias (AnimeFLV, MangaDex, TuNovelaLigera).
+   - Botones para compartir enlaces directamente en WhatsApp, Facebook, X, Telegram, Email y copiado al portapapeles.
 
-```bash
-# Inspeccionar o sincronizar las tablas de la base de datos
-npx prisma db pull
+2. **Sistema de Notificaciones en Tiempo Real via WebSockets:**
+   - Conexion asincrona a `/ws/live/` sin sobrecarga de consultas recurrentes a la base de datos.
+   - Notificaciones emergentes (*pop-ups*) flotantes independientes del contenido, con temporizador de 5 segundos y barra de progreso.
+   - Botones e indicadores en la barra superior (*topbar*) junto a las opciones de navegacion del usuario:
+     - **Calificaciones y Resenas:** Icono de estrella dorada (`bi-star-fill text-warning`), informando calificaciones recibidas en novelas (autores) o repercusion de opiniones (lectores).
+     - **Preguntas, Respuestas y Debates:** Icono de chat interactivo (`bi-chat-left-dots-fill text-info`), informando respuestas y nuevos comentarios en foros seguidos.
 
-# Generar el cliente de Prisma
-npx prisma generate
+3. **Workspace y Panel de Usuario Diferenciado por Roles:**
+   - **Rol Lector:** Dashboard personal con metricas de obras guardadas, historial de opiniones formuladas y debates activos.
+   - **Rol Escritor / Autor:** Dashboard con desglose de novelas publicadas, calificaciones promedio recibidas de los lectores y gestion de capitulos.
+   - **Filtros por URL (`?filtro=`):** Filtrado rapido por cantidad de estrellas (1 a 5) o por tipo de medio con badges visuales interactivos.
+   - **Edicion de Perfil en Ventana Modal:** Formulario dinamico alojado en `#editProfileModal` que preserva visible la ficha de identidad del usuario.
 
-# Abrir Prisma Studio para explorar la base de datos en el navegador
-npx prisma studio
-```
+4. **Taller de Escritores de Novelas Ligeras:**
+   - Creacion de novelas con titulo, sinopsis, portada personalizada y generos.
+   - Gestion de capitulos con control de estado (Borrador / Publicado).
+   - Registro de fechas: creacion, publicacion y ultima actualizacion, con visibilidad publica selectiva para lectores y completa para el autor.
+
+5. **Diseno Visual Profesional:**
+   - Paleta Obsidian Cyberpunk con glassmorphism y modo oscuro nativo.
+   - Layout fluido de ancho completo (*full-width fluid*) sin margenes restringidos.
+   - Ausencia total de emojis en interfaz, plantillas y documentacion, utilizando exclusivamente tipografia e iconos tecnicos SVG / Bootstrap Icons.
 
 ---
 
-## Flujo de Ramas & Automatizacion CI/CD con GitHub Actions
+## Arquitectura Tecnica
 
 ```mermaid
-flowchart LR
-    A["feature/sp*"] -->|Push / Compilacion OK| B["Auto PR a develop"]
-    B -->|Merge a develop / Compilacion OK| C["Auto PR a main"]
-    C -->|Merge| D["Produccion / main"]
+flowchart TD
+    Client["Navegador Web / Cliente"] -->|HTTPS / WSS| Render["Render Web Service (growup-7my7)"]
+    Render --> Static["WhiteNoise (Static Assets)"]
+    Render --> WSGI["Django 6.1 WSGI / ASGI Router"]
+    WSGI --> CloudDB[("Prisma Postgres Cloud DB")]
+    WSGI --> JikanService["Jikan Service (Cache + Seed Fallback)"]
+    JikanService --> JikanAPI["Jikan API v4 (api.jikan.moe)"]
 ```
 
 ---
 
-## Instalacion y Ejecucion Local
+## Variables de Entorno Requeridas (.env)
 
-### Prerrequisitos
-- Python 3.12 o superior.
-- Node.js v20+ y npm.
-- Git.
-
-### 1. Clonar el repositorio y acceder
-```bash
-git clone https://github.com/MiguelCarlosRojas/GrowUp.git
-cd GrowUp
+```env
+DEBUG=False
+SECRET_KEY=tu-clave-secreta-de-django
+ALLOWED_HOSTS=*
+DATABASE_URL=postgres://usuario:password@pooled.db.prisma.io:5432/postgres?sslmode=require
+JIKAN_API_BASE_URL=https://api.jikan.moe/v4
+JWT_ACCESS_MINUTES=60
+JWT_REFRESH_DAYS=7
+PYTHON_VERSION=3.12.10
 ```
 
-### 2. Crear y activar entorno virtual
-```bash
-# Windows
-python -m venv .venv
-.\.venv\Scripts\activate
+---
 
-# Linux / macOS
-python3 -m venv .venv
-source .venv/bin/activate
-```
+## Comandos de Compilacion y Ejecucion en Render
 
-### 3. Instalar dependencias de Python y Node.js
-```bash
-pip install -r requirements.txt
-npm install
-```
+- **Build Command:**
+  ```bash
+  pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate
+  ```
+- **Start Command (Uvicorn ASGI con WebSockets):**
+  ```bash
+  uvicorn growup.asgi:application --host 0.0.0.0 --port $PORT
+  ```
+  *O alternativamente con Gunicorn:*
+  ```bash
+  gunicorn growup.wsgi:application
+  ```
 
-### 4. Configurar Variables de Entorno
-Copia la plantilla `.env.example` a `.env`:
-```bash
-cp .env.example .env
-```
-Edita `.env` con tus credenciales de Prisma Postgres o PostgreSQL.
+---
 
-### 5. Aplicar migraciones y datos iniciales
-```bash
-python manage.py migrate
-python manage.py seed_categories
-```
+## Suite de Pruebas Automatizadas
 
-### 6. Ejecutar pruebas unitarias
+El proyecto incluye 35 pruebas unitarias exhaustivas que cubren modelos, vistas, resiliencia ante errores 504 de Jikan, endpoints de WebSockets y permisos de roles:
+
 ```bash
 python manage.py test
 ```
 
-### 7. Iniciar el servidor de desarrollo
-```bash
-python manage.py runserver
-```
-Accede en tu navegador a: `http://127.0.0.1:8000/`
-
----
-
-## Licencia y Conducta
-Consulta [COPYRIGHT.md](COPYRIGHT.md) y [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) para más detalles.
+Todas las pruebas se ejecutan de forma aislada en GitHub Actions en cada Pull Request.

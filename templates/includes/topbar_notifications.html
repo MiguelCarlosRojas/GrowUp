@@ -1,0 +1,78 @@
+{% if user.is_authenticated %}
+<div class="d-flex align-items-center gap-2">
+    <!-- Notification 1: Calificaciones y Reseñas (Estrella Dorada) -->
+    <div class="dropdown">
+        <button class="app-topbar-notif-btn" type="button" id="notifReviewsDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Calificaciones y Reseñas">
+            <i class="bi bi-star-fill text-warning"></i>
+            <span class="app-notif-dot bg-warning" id="badgeReviewsDot"></span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-end app-notif-dropdown shadow-lg p-0" aria-labelledby="notifReviewsDropdown">
+            <div class="app-notif-dropdown-header d-flex justify-content-between align-items-center p-3 border-bottom border-secondary border-opacity-25">
+                <span class="fw-bold text-white small d-flex align-items-center gap-2">
+                    <i class="bi bi-star-fill text-warning"></i> Calificaciones y Reseñas
+                </span>
+                <span class="badge bg-warning bg-opacity-25 text-warning fw-bold" style="font-size: 0.72rem;">
+                    {% if user.profile.role == 'author' %}Autor{% else %}Lector{% endif %}
+                </span>
+            </div>
+            <div class="p-3">
+                {% if user.profile.role == 'author' %}
+                    <p class="text-light small mb-1 fw-semibold">Calificaciones de tus Obras</p>
+                    <p class="text-muted small mb-2" style="font-size: 0.8rem;">Monitorea las opiniones y notas que los lectores otorgan a tus novelas.</p>
+                {% else %}
+                    <p class="text-light small mb-1 fw-semibold">Mis Opiniones y Valoraciones</p>
+                    <p class="text-muted small mb-2" style="font-size: 0.8rem;">Revisa las calificaciones y opiniones que has compartido con la comunidad.</p>
+                {% endif %}
+                <div class="p-2 rounded-3 mb-3" style="background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-subtle); font-size: 0.78rem;">
+                    <div class="d-flex align-items-center gap-2 text-warning fw-semibold mb-1">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                        <span>En vivo vía WebSocket</span>
+                    </div>
+                    <div class="text-light" id="topbarReviewText">
+                        {% if user.profile.role == 'author' %}
+                            Tus novelas están visibles para que los lectores las califiquen.
+                        {% else %}
+                            Califica animes, mangas y novelas para destacar tus favoritas.
+                        {% endif %}
+                    </div>
+                </div>
+                <a href="{% url 'accounts:dashboard_reviews' %}" class="btn btn-sm btn-outline-warning w-100 fw-bold d-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-box-arrow-up-right"></i> Ver Todas las Reseñas
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification 2: Preguntas, Respuestas y Debates (Mensaje Celeste) -->
+    <div class="dropdown">
+        <button class="app-topbar-notif-btn" type="button" id="notifDiscussionsDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Preguntas, Respuestas y Debates">
+            <i class="bi bi-chat-left-dots-fill text-info"></i>
+            <span class="app-notif-dot bg-info" id="badgeDiscussionsDot"></span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-end app-notif-dropdown shadow-lg p-0" aria-labelledby="notifDiscussionsDropdown">
+            <div class="app-notif-dropdown-header d-flex justify-content-between align-items-center p-3 border-bottom border-secondary border-opacity-25">
+                <span class="fw-bold text-white small d-flex align-items-center gap-2">
+                    <i class="bi bi-chat-left-dots-fill text-info"></i> Preguntas y Debates
+                </span>
+                <span class="badge bg-info bg-opacity-25 text-info fw-bold" style="font-size: 0.72rem;">Comunidad</span>
+            </div>
+            <div class="p-3">
+                <p class="text-light small mb-1 fw-semibold">Respuestas e Interacciones</p>
+                <p class="text-muted small mb-2" style="font-size: 0.8rem;">Comentarios, dudas y respuestas en las obras donde participas activamente.</p>
+                <div class="p-2 rounded-3 mb-3" style="background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-subtle); font-size: 0.78rem;">
+                    <div class="d-flex align-items-center gap-2 text-info fw-semibold mb-1">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                        <span>En vivo vía WebSocket</span>
+                    </div>
+                    <div class="text-light" id="topbarDiscussionText">
+                        Participa en los foros de debate y recibe respuestas en tiempo real.
+                    </div>
+                </div>
+                <a href="{% url 'accounts:dashboard_discussions' %}" class="btn btn-sm btn-outline-info w-100 fw-bold d-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-box-arrow-up-right"></i> Ver Preguntas y Debates
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

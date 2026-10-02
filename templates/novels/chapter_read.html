@@ -13,7 +13,16 @@
                         <i class="bi bi-arrow-left me-1"></i> Volver a la novela
                     </a>
                     <h5 class="fw-bold text-white mb-0 mt-1 text-truncate" title="{{ novel.title }}">{{ novel.title }}</h5>
-                    <span class="text-warning small fw-semibold">Capítulo {{ chapter.chapter_number }}: {{ chapter.title }}</span>
+                    <div class="d-flex align-items-center gap-2 flex-wrap mt-1">
+                        <span class="text-warning small fw-semibold">Capítulo {{ chapter.chapter_number }}: {{ chapter.title }}</span>
+                        <span class="text-muted small opacity-50">&bull;</span>
+                        <span class="text-muted small"><i class="bi bi-calendar-check me-1"></i>Publicado: {{ chapter.published_at|date:"d M Y" }}</span>
+                        <span class="text-muted small opacity-50">&bull;</span>
+                        <span class="text-muted small"><i class="bi bi-clock-history me-1"></i>Actualizado: {{ chapter.updated_at|date:"d M Y" }}</span>
+                        {% if user.is_authenticated and user.id == novel.author_id %}
+                            <span class="text-warning small"><span class="text-muted opacity-50">&bull;</span> <i class="bi bi-calendar-plus me-1"></i>Creado: {{ chapter.created_at|default:chapter.published_at|date:"d M Y, H:i" }}</span>
+                        {% endif %}
+                    </div>
                 </div>
                 <!-- Reading Mode & Size Controls -->
                 <div class="d-flex align-items-center gap-2 flex-wrap">

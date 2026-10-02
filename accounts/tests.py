@@ -134,7 +134,7 @@ class AccountsTests(TestCase):
         self.assertContains(response, 'Dashboard')
         self.assertContains(response, 'Opiniones y Calificación')
         self.assertContains(response, 'Preguntas, Respuestas y Debates')
-        self.assertContains(response, 'Profile')
+        self.assertContains(response, 'Mi Perfil')
         self.assertContains(response, 'Cerrar Sesión')
         # Should NOT contain author workshop
         self.assertNotContains(response, 'Mi Taller de Escritor')
@@ -152,7 +152,7 @@ class AccountsTests(TestCase):
         self.assertContains(response, 'Opiniones y Calificación')
         self.assertContains(response, 'Preguntas, Respuestas y Debates')
         self.assertContains(response, 'Mi Taller de Escritor')
-        self.assertContains(response, 'Profile')
+        self.assertContains(response, 'Mi Perfil')
         self.assertContains(response, 'Cerrar Sesión')
 
     def test_dashboard_reviews_and_discussions_views(self):

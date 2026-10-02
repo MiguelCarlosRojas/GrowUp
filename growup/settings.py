@@ -129,3 +129,7 @@ LOGOUT_REDIRECT_URL = 'catalog:home'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Jikan REST API Configuration (Loaded strictly from .env)
+JIKAN_API_BASE_URL = os.getenv('JIKAN_API_BASE_URL', 'https://api.jikan.moe/v4').rstrip('/')
+

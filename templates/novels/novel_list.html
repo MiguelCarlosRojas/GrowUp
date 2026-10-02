@@ -5,26 +5,27 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
     <div>
-        <h2 class="fw-bold text-white mb-1 d-flex align-items-center gap-2">
-            <i class="bi bi-feather text-warning"></i> Novelas Ligeras de la Comunidad
-        </h2>
-        <p class="text-muted mb-0">Historias originales creadas y publicadas por los escritores de GrowUp.</p>
+        <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="section-accent-bar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);"></span>
+            <h2 class="fw-bold text-white mb-0">Novelas Ligeras de la Comunidad</h2>
+        </div>
+        <p class="text-muted mb-0">Historias y mundos originales creados por la comunidad de autores de GrowUp.</p>
     </div>
     <a href="{% url 'novels:novel_create' %}" class="btn btn-accent px-4 py-2">
-        <i class="bi bi-plus-lg me-1"></i> Publicar Mi Novela
+        <i class="bi bi-feather me-1"></i> Publicar Mi Novela
     </a>
 </div>
 
-<!-- Filters -->
-<div class="card bg-dark border-secondary p-3 p-md-4 rounded-4 shadow-sm mb-4">
+<!-- Filters Bar -->
+<div class="filter-bar-pro mb-4">
     <form action="{% url 'novels:novel_list' %}" method="GET" class="row g-2 g-md-3 align-items-end">
         <div class="col-12 col-md-4">
-            <label class="form-label small text-muted">Buscar por Título / Sinopsis / Autor</label>
-            <input type="text" name="q" value="{{ selected_q }}" class="form-control bg-black text-white border-secondary" placeholder="Ej: Héroe, Isekai, autor...">
+            <label class="form-label small text-muted fw-semibold">Buscar por Título / Sinopsis / Autor</label>
+            <input type="text" name="q" value="{{ selected_q }}" class="form-control filter-input-pro" placeholder="Ej: Héroe, Isekai, autor...">
         </div>
         <div class="col-6 col-md-3">
-            <label class="form-label small text-muted">Categoría / Género</label>
-            <select name="category" class="form-select bg-black text-white border-secondary">
+            <label class="form-label small text-muted fw-semibold">Categoría / Género</label>
+            <select name="category" class="form-select filter-select-pro">
                 <option value="">Todas las Categorías</option>
                 {% for c in categories %}
                     <option value="{{ c.slug }}" {% if selected_category == c.slug %}selected{% endif %}>{{ c.name }}</option>
@@ -32,8 +33,8 @@
             </select>
         </div>
         <div class="col-6 col-md-3">
-            <label class="form-label small text-muted">Estado</label>
-            <select name="status" class="form-select bg-black text-white border-secondary">
+            <label class="form-label small text-muted fw-semibold">Estado</label>
+            <select name="status" class="form-select filter-select-pro">
                 <option value="">Todos los Estados</option>
                 <option value="ongoing" {% if selected_status == 'ongoing' %}selected{% endif %}>En Emisión</option>
                 <option value="completed" {% if selected_status == 'completed' %}selected{% endif %}>Finalizada</option>
@@ -51,26 +52,26 @@
 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3 g-md-4">
     {% for novel in novels %}
     <div class="col">
-        <div class="anime-card h-100 p-3">
+        <div class="p-3 rounded-4 h-100 d-flex flex-column" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle); transition: transform 0.2s ease;">
             <div class="d-flex gap-3">
-                <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="rounded shadow border border-secondary" style="width: 100px; height: 145px; object-fit: cover; flex-shrink: 0;">
+                <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="original-cover-thumb">
                 <div class="d-flex flex-column flex-grow-1 overflow-hidden">
-                    <span class="badge bg-secondary-subtle text-secondary-emphasis align-self-start mb-1" style="font-size: 0.72rem;">{{ novel.get_status_display }}</span>
+                    <span class="badge bg-dark border border-secondary text-secondary align-self-start mb-1" style="font-size: 0.72rem;">{{ novel.get_status_display }}</span>
                     <h5 class="fw-bold text-white mb-1 text-truncate" title="{{ novel.title }}">
                         <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="text-white text-decoration-none">{{ novel.title }}</a>
                     </h5>
                     <span class="small text-muted mb-2 text-truncate"><i class="bi bi-person me-1"></i> {{ novel.author.username }}</span>
                     <div class="d-flex flex-wrap gap-1 mb-2">
                         {% for cat in novel.categories.all|slice:":2" %}
-                            <span class="tag-badge" style="font-size: 0.68rem;">{{ cat.name }}</span>
+                            <span class="genre-tag-pill" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;">{{ cat.name }}</span>
                         {% endfor %}
                     </div>
                 </div>
             </div>
-            <p class="text-muted small mt-3 mb-3 flex-grow-1 text-truncate-3" style="max-height: 55px; overflow: hidden; font-size: 0.8rem;">
+            <p class="text-muted small mt-3 mb-3 flex-grow-1 text-truncate-3" style="max-height: 55px; overflow: hidden; font-size: 0.82rem; line-height: 1.5;">
                 {{ novel.synopsis }}
             </p>
-            <div class="d-flex justify-content-between align-items-center pt-2 border-top border-secondary mt-auto small text-muted">
+            <div class="d-flex justify-content-between align-items-center pt-2 border-top border-secondary border-opacity-25 mt-auto small text-muted">
                 <span><i class="bi bi-journal-text me-1"></i> {{ novel.chapters.count }} Caps</span>
                 <span><i class="bi bi-eye me-1"></i> {{ novel.views_count }}</span>
                 <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="btn btn-sm btn-outline-warning">Leer</a>
@@ -80,13 +81,13 @@
     {% endfor %}
 </div>
 {% else %}
-<div class="text-center py-5 card bg-dark border-secondary rounded-4">
-    <i class="bi bi-journal-x text-muted mb-3" style="font-size: 3rem;"></i>
-    <h4 class="text-white fw-bold">No se encontraron novelas</h4>
-    <p class="text-muted">Aún no hay novelas con este criterio. ¡Sé el primer escritor en publicar!</p>
-    <div>
-        <a href="{% url 'novels:novel_create' %}" class="btn btn-accent">Crear Novela Ahora</a>
-    </div>
+<div class="text-center py-5 my-5 p-4 rounded-4" style="background: rgba(18, 24, 38, 0.6); border: 1px dashed var(--border-subtle);">
+    <i class="bi bi-journal-x fs-1 text-muted mb-3 d-block"></i>
+    <h4 class="text-white fw-bold mb-2">No se encontraron novelas en esta categoría</h4>
+    <p class="text-muted mb-4">Sé el primer escritor en publicar una novela original en GrowUp.</p>
+    <a href="{% url 'novels:novel_create' %}" class="btn btn-accent px-4 py-2">
+        <i class="bi bi-plus-circle me-1"></i> Publicar Novela Ahora
+    </a>
 </div>
 {% endif %}
 {% endblock %}

@@ -3,19 +3,21 @@
 {% block title %}{{ novel.title }} - Novela Ligera en GrowUp{% endblock %}
 
 {% block content %}
-<!-- Novel Header (Fluid Full-Width) -->
-<div class="card bg-dark border-secondary p-3 p-md-4 rounded-4 shadow-lg mb-4">
+<!-- Novel Header (Obsidian Glassmorphic & Fluid) -->
+<div class="detail-hero-card mb-4">
     <div class="row g-4 align-items-start">
         <!-- Cover and author controls -->
         <div class="col-12 col-sm-5 col-md-4 col-lg-3 text-center mx-auto">
-            <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="img-fluid rounded-3 shadow border border-secondary mb-3 w-100" style="max-height: 400px; object-fit: cover;">
+            <div class="media-poster-box shadow-lg mb-3">
+                <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="media-poster-img">
+            </div>
             
             {% if user == novel.author or user.is_staff %}
                 <div class="d-flex flex-column gap-2 mb-3">
-                    <a href="{% url 'novels:chapter_create' novel_slug=novel.slug %}" class="btn btn-warning btn-sm">
+                    <a href="{% url 'novels:chapter_create' novel_slug=novel.slug %}" class="btn btn-accent btn-sm">
                         <i class="bi bi-plus-circle me-1"></i> Publicar Nuevo Capítulo
                     </a>
-                    <a href="{% url 'novels:novel_edit' slug=novel.slug %}" class="btn btn-outline-light btn-sm">
+                    <a href="{% url 'novels:novel_edit' slug=novel.slug %}" class="btn btn-outline-glow btn-sm">
                         <i class="bi bi-pencil-square me-1"></i> Editar Novela
                     </a>
                 </div>
@@ -27,7 +29,7 @@
                     {% csrf_token %}
                     <input type="hidden" name="item_title" value="{{ novel.title }}">
                     <input type="hidden" name="item_image" value="{{ novel.final_cover }}">
-                    <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                    <button type="submit" class="btn btn-outline-glow btn-sm w-100 py-2">
                         <i class="bi bi-bookmark-heart me-1"></i> Añadir a Favoritos
                     </button>
                 </form>
@@ -37,29 +39,29 @@
         <!-- Info Column -->
         <div class="col-12 col-sm-7 col-md-8 col-lg-9">
             <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                <span class="badge bg-warning text-dark text-uppercase">Novela de la Comunidad</span>
-                <span class="badge bg-secondary-subtle text-secondary-emphasis">{{ novel.get_status_display }}</span>
-                <span class="badge bg-dark border border-secondary">{{ novel.get_demography_display }}</span>
-                <span class="badge bg-dark border border-secondary">{{ novel.language }}</span>
+                <span class="badge px-3 py-1 fw-bold text-uppercase" style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: #000;">Novela de la Comunidad</span>
+                <span class="badge bg-dark border border-secondary text-secondary">{{ novel.get_status_display }}</span>
+                <span class="badge bg-dark border border-secondary text-secondary">{{ novel.get_demography_display }}</span>
+                <span class="badge bg-dark border border-secondary text-secondary">{{ novel.language }}</span>
             </div>
 
-            <h1 class="text-white fw-bold mb-1" style="word-break: break-word;">{{ novel.title }}</h1>
+            <h1 class="text-white fw-bold mb-1" style="word-break: break-word; font-size: clamp(1.8rem, 3vw, 2.8rem);">{{ novel.title }}</h1>
             <p class="text-muted mb-3"><i class="bi bi-person-fill text-danger me-1"></i> Escrito por <strong>{{ novel.author.username }}</strong> &bull; {{ novel.created_at|date:"d M Y" }}</p>
 
             <!-- Categories -->
             <div class="d-flex flex-wrap gap-2 mb-3">
                 {% for cat in novel.categories.all %}
-                    <span class="tag-badge">{{ cat.name }}</span>
+                    <span class="genre-tag-pill">{{ cat.name }}</span>
                 {% endfor %}
             </div>
 
             <!-- Synopsis -->
             <h5 class="text-white fw-bold mb-2">Sinopsis</h5>
-            <p class="text-light" style="line-height: 1.7; font-size: clamp(0.9rem, 1.2vw, 1rem); word-break: break-word;">
+            <p class="text-light" style="line-height: 1.7; font-size: clamp(0.92rem, 1.2vw, 1rem); word-break: break-word; color: #cbd5e1 !important;">
                 {{ novel.synopsis }}
             </p>
 
-            <div class="d-flex gap-4 pt-3 border-top border-secondary text-muted small">
+            <div class="d-flex gap-4 pt-3 border-top border-secondary border-opacity-25 text-muted small">
                 <span><i class="bi bi-journal-check me-1"></i> {{ chapters|length }} Capítulos</span>
                 <span><i class="bi bi-eye me-1"></i> {{ novel.views_count }} Lecturas</span>
             </div>
@@ -68,27 +70,28 @@
 </div>
 
 <!-- Chapters List (Fluid Full-Width) -->
-<div class="card bg-dark border-secondary p-3 p-md-4 rounded-4 shadow-sm mb-4">
+<div class="p-4 rounded-4 mb-4" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-        <h4 class="text-white fw-bold mb-0 d-flex align-items-center gap-2">
-            <i class="bi bi-list-ol text-warning"></i> Índice de Capítulos
-        </h4>
+        <div class="d-flex align-items-center gap-2">
+            <span class="section-accent-bar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);"></span>
+            <h4 class="text-white fw-bold mb-0">Índice de Capítulos</h4>
+        </div>
         {% if user == novel.author %}
-            <a href="{% url 'novels:chapter_create' novel_slug=novel.slug %}" class="btn btn-sm btn-outline-warning">
+            <a href="{% url 'novels:chapter_create' novel_slug=novel.slug %}" class="btn btn-sm btn-accent">
                 <i class="bi bi-plus-lg me-1"></i> Agregar Capítulo
             </a>
         {% endif %}
     </div>
 
     {% if chapters %}
-    <div class="list-group list-group-flush bg-transparent">
+    <div class="list-group list-group-flush bg-transparent gap-2">
         {% for ch in chapters %}
-        <div class="list-group-item bg-black border-secondary d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center py-3 px-3 mb-2 rounded-3 gap-2">
+        <div class="list-group-item d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center py-3 px-3 rounded-3 gap-2" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
             <div class="d-flex align-items-center gap-3">
-                <span class="badge bg-secondary text-white py-2 px-3 fw-bold">Cap. {{ ch.chapter_number }}</span>
+                <span class="badge py-2 px-3 fw-bold" style="background: rgba(255, 42, 84, 0.18); border: 1px solid rgba(255, 42, 84, 0.35); color: #ffffff;">Cap. {{ ch.chapter_number }}</span>
                 <div>
                     <h6 class="mb-0 text-white fw-semibold">
-                        <a href="{% url 'novels:chapter_read' novel_slug=novel.slug chapter_number=ch.chapter_number %}" class="text-white text-decoration-none hover-light">
+                        <a href="{% url 'novels:chapter_read' novel_slug=novel.slug chapter_number=ch.chapter_number %}" class="text-white text-decoration-none">
                             {{ ch.title }}
                         </a>
                     </h6>
@@ -97,7 +100,7 @@
             </div>
             <div class="d-flex align-items-center gap-2 align-self-end align-self-sm-center">
                 {% if user == novel.author %}
-                    <a href="{% url 'novels:chapter_edit' novel_slug=novel.slug chapter_number=ch.chapter_number %}" class="btn btn-sm btn-outline-secondary" title="Editar Capítulo">
+                    <a href="{% url 'novels:chapter_edit' novel_slug=novel.slug chapter_number=ch.chapter_number %}" class="btn btn-sm btn-outline-glow" title="Editar Capítulo">
                         <i class="bi bi-pencil"></i>
                     </a>
                 {% endif %}
@@ -110,7 +113,7 @@
     </div>
     {% else %}
     <div class="text-center py-4 text-muted">
-        <i class="bi bi-journal-text mb-2" style="font-size: 2rem;"></i>
+        <i class="bi bi-journal-text mb-2 fs-1 text-muted d-block"></i>
         <p class="mb-0">El autor aún no ha subido ningún capítulo público para esta novela.</p>
     </div>
     {% endif %}
@@ -120,13 +123,14 @@
 <div class="row g-4">
     <!-- Reviews Column -->
     <div class="col-12 col-lg-6">
-        <div class="card bg-dark border-secondary p-3 p-md-4 rounded-4 shadow-sm h-100">
-            <h4 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                <i class="bi bi-star-half text-warning"></i> Opiniones y Clasificación
-            </h4>
+        <div class="p-4 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <span class="section-accent-bar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);"></span>
+                <h4 class="text-white fw-bold mb-0">Opiniones y Clasificación</h4>
+            </div>
 
             {% if user.is_authenticated %}
-                <div class="bg-black p-3 rounded-3 border border-secondary mb-4">
+                <div class="p-3 rounded-3 mb-4" style="background: rgba(6, 9, 16, 0.8); border: 1px solid var(--border-subtle);">
                     <h6 class="text-white fw-bold mb-2">Clasificar esta Novela Ligera</h6>
                     <form action="{% url 'catalog:add_review' item_type='original_novel' item_id=novel.slug %}" method="POST">
                         {% csrf_token %}
@@ -135,7 +139,7 @@
                         
                         <div class="mb-3">
                             <label class="form-label text-muted small">Calificación</label>
-                            <select name="rating" class="form-select bg-dark text-white border-secondary">
+                            <select name="rating" class="form-select filter-select-pro">
                                 <option value="5">5 de 5 - Obra Maestra</option>
                                 <option value="4">4 de 5 - Muy Bueno</option>
                                 <option value="3">3 de 5 - Bueno</option>
@@ -145,18 +149,18 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label text-muted small">Título de la Opinión</label>
-                            <input type="text" name="headline" class="form-control bg-dark text-white border-secondary" placeholder="Ej: Una historia atrapante desde el capítulo 1" required>
+                            <input type="text" name="headline" class="form-control filter-input-pro" placeholder="Ej: Una historia atrapante desde el capítulo 1" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label text-muted small">Tu Reseña Detallada</label>
-                            <textarea name="opinion" rows="3" class="form-control bg-dark text-white border-secondary" placeholder="Comparte tus impresiones de la narrativa y personajes..." required></textarea>
+                            <textarea name="opinion" rows="3" class="form-control filter-input-pro" placeholder="Comparte tus impresiones de la narrativa y personajes..." required></textarea>
                         </div>
                         <button type="submit" class="btn btn-accent btn-sm w-100 py-2">Publicar Opinión</button>
                     </form>
                 </div>
             {% else %}
-                <div class="alert alert-secondary text-center small mb-4">
-                    <a href="{% url 'accounts:login' %}" class="alert-link">Inicia sesión</a> para opinar y calificar esta novela.
+                <div class="alert text-center small mb-4" style="background: rgba(18, 24, 38, 0.7); border: 1px solid var(--border-subtle); color: #cbd5e1;">
+                    <a href="{% url 'accounts:login' %}" class="text-danger fw-bold text-decoration-none">Inicia sesión</a> para opinar y calificar esta novela.
                 </div>
             {% endif %}
 
@@ -164,7 +168,7 @@
             <div class="d-flex flex-column gap-3">
                 {% if reviews %}
                     {% for rev in reviews %}
-                    <div class="p-3 bg-black rounded-3 border border-secondary">
+                    <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
                         <div class="d-flex justify-content-between align-items-start mb-2">
                             <div>
                                 <span class="fw-bold text-white"><i class="bi bi-person-circle me-1"></i> {{ rev.user.username }}</span>
@@ -185,40 +189,42 @@
 
     <!-- Discussions / Q&A Column -->
     <div class="col-12 col-lg-6">
-        <div class="card bg-dark border-secondary p-3 p-md-4 rounded-4 shadow-sm h-100">
-            <h4 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                <i class="bi bi-chat-dots-fill text-info"></i> Preguntas al Autor & Discusión
-            </h4>
+        <div class="p-4 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #6366f1);"></span>
+                <h4 class="text-white fw-bold mb-0">Comunidad & Dudas con el Autor</h4>
+            </div>
 
             {% if user.is_authenticated %}
-                <div class="bg-black p-3 rounded-3 border border-secondary mb-4">
-                    <h6 class="text-white fw-bold mb-2">Preguntar o Comentar</h6>
+                <div class="p-3 rounded-3 mb-4" style="background: rgba(6, 9, 16, 0.8); border: 1px solid var(--border-subtle);">
+                    <h6 class="text-white fw-bold mb-2"><i class="bi bi-send-fill text-info me-1"></i> Dejar un Comentario o Pregunta</h6>
                     <form action="{% url 'catalog:add_discussion' item_type='original_novel' item_id=novel.slug %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="item_title" value="{{ novel.title }}">
                         <div class="mb-2">
-                            <select name="discussion_type" class="form-select bg-dark text-white border-secondary">
-                                <option value="comment">Comentario para el autor</option>
-                                <option value="question">Pregunta sobre la trama</option>
+                            <label class="form-label text-muted small">Tipo de Mensaje</label>
+                            <select name="discussion_type" class="form-select filter-select-pro">
+                                <option value="comment">Comentario General</option>
+                                <option value="question">Pregunta o Duda de la Trama</option>
                             </select>
                         </div>
                         <div class="mb-3">
-                            <textarea name="content" rows="3" class="form-control bg-dark text-white border-secondary" placeholder="Escribe tu mensaje respetuoso para el escritor..." required></textarea>
+                            <textarea name="content" rows="3" class="form-control filter-input-pro" placeholder="Escribe tu mensaje o pregunta para el autor..." required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-outline-info btn-sm w-100 py-2">Enviar Mensaje</button>
+                        <button type="submit" class="btn btn-outline-glow btn-sm w-100 py-2">Enviar Mensaje</button>
                     </form>
                 </div>
             {% else %}
-                <div class="alert alert-secondary text-center small mb-4">
-                    <a href="{% url 'accounts:login' %}" class="alert-link">Inicia sesión</a> para hacer preguntas al escritor.
+                <div class="alert text-center small mb-4" style="background: rgba(18, 24, 38, 0.7); border: 1px solid var(--border-subtle); color: #cbd5e1;">
+                    <a href="{% url 'accounts:login' %}" class="text-info fw-bold text-decoration-none">Inicia sesión</a> para enviar preguntas y conversar con el autor.
                 </div>
             {% endif %}
 
-            <!-- List of Discussions -->
+            <!-- List of Discussions / Replies -->
             <div class="d-flex flex-column gap-3">
                 {% if discussions %}
                     {% for disc in discussions %}
-                    <div class="p-3 bg-black rounded-3 border border-secondary">
+                    <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <div>
                                 <span class="fw-bold text-white"><i class="bi bi-person me-1"></i> {{ disc.user.username }}</span>
@@ -226,17 +232,17 @@
                                     {{ disc.get_discussion_type_display }}
                                 </span>
                             </div>
-                            <span class="text-muted small">{{ disc.created_at|date:"d M H:i" }}</span>
+                            <span class="text-muted small">{{ disc.created_at|date:"d M, H:i" }}</span>
                         </div>
                         <p class="text-light small mb-2">{{ disc.content }}</p>
 
-                        <!-- Replies -->
+                        <!-- Nested Replies -->
                         {% if disc.replies.all %}
-                            <div class="ms-2 ms-sm-3 ps-2 ps-sm-3 border-start border-secondary mt-2 d-flex flex-column gap-2">
+                            <div class="ms-2 ms-sm-3 ps-2 ps-sm-3 border-start border-secondary border-opacity-50 mt-2 d-flex flex-column gap-2">
                                 {% for rep in disc.replies.all %}
-                                <div class="bg-dark p-2 rounded small">
+                                <div class="p-2 rounded small" style="background: rgba(18, 24, 38, 0.85);">
                                     <div class="d-flex justify-content-between">
-                                        <strong class="text-info">{{ rep.user.username }} {% if rep.user == novel.author %}<span class="badge bg-warning text-dark">Autor</span>{% endif %}</strong>
+                                        <strong class="text-info">{{ rep.user.username }}</strong>
                                         <span class="text-muted" style="font-size: 0.75rem;">{{ rep.created_at|date:"d M H:i" }}</span>
                                     </div>
                                     <div class="text-light mt-1">{{ rep.content }}</div>
@@ -245,17 +251,18 @@
                             </div>
                         {% endif %}
 
+                        <!-- Reply trigger -->
                         {% if user.is_authenticated %}
                             <details class="mt-2">
-                                <summary class="text-muted small" style="cursor: pointer;">Responder</summary>
+                                <summary class="text-muted small" style="cursor: pointer;">Responder a este mensaje</summary>
                                 <form action="{% url 'catalog:add_discussion' item_type='original_novel' item_id=novel.slug %}" method="POST" class="mt-2">
                                     {% csrf_token %}
                                     <input type="hidden" name="item_title" value="{{ novel.title }}">
                                     <input type="hidden" name="parent_id" value="{{ disc.id }}">
                                     <input type="hidden" name="discussion_type" value="comment">
                                     <div class="input-group">
-                                        <input type="text" name="content" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Escribe una respuesta..." required>
-                                        <button type="submit" class="btn btn-sm btn-info">Responder</button>
+                                        <input type="text" name="content" class="form-control form-control-sm filter-input-pro" placeholder="Escribe tu respuesta..." required>
+                                        <button type="submit" class="btn btn-sm btn-accent">Responder</button>
                                     </div>
                                 </form>
                             </details>
@@ -263,7 +270,7 @@
                     </div>
                     {% endfor %}
                 {% else %}
-                    <p class="text-muted text-center py-4">No hay preguntas ni comentarios. ¡Deja el tuyo!</p>
+                    <p class="text-muted text-center py-4">No hay preguntas aún. ¡Comunícate con el autor!</p>
                 {% endif %}
             </div>
         </div>

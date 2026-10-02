@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Contacte con Nosotros - GrowUp{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-3">
+    <div class="col-lg-10 col-xl-9">
+        <!-- Header -->
+        <div class="mb-5 text-center">
+            <span class="badge px-3 py-1 mb-3" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.35); color: #ffffff;">
+                Canales de Atención
+            </span>
+            <h1 class="display-5 fw-bold text-white mb-3">Contacte con Nosotros</h1>
+            <p class="text-muted lead mx-auto" style="max-width: 720px;">
+                ¿Tienes sugerencias, consultas sobre autoría o necesitas asistencia con tu cuenta? Envíanos tu mensaje o utiliza nuestros canales directos.
+            </p>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <!-- Contact Form -->
+            <div class="col-lg-7">
+                <div class="p-4 p-md-5 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle);">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="section-accent-bar"></span>
+                        <h4 class="text-white fw-bold mb-0">Formulario Directo de Soporte</h4>
+                    </div>
+                    <p class="text-muted small mb-4">Completa los campos a continuación y un agente te responderá a la brevedad.</p>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-light fw-semibold small">Tu Nombre Completo</label>
+                                <input type="text" name="nombre" class="form-control filter-input-pro" placeholder="Ej: Carlos Rojas" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-light fw-semibold small">Correo Electrónico</label>
+                                <input type="email" name="email" class="form-control filter-input-pro" placeholder="tunombre@correo.com" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light fw-semibold small">Motivo de la Consulta</label>
+                            <select name="asunto" class="form-select filter-select-pro">
+                                <option value="soporte">Soporte Técnico / Problemas con Cuenta</option>
+                                <option value="autores">Consultas sobre Publicación y Taller de Autores</option>
+                                <option value="copyright">Reportes de Propiedad Intelectual / DMCA</option>
+                                <option value="alianzas">Alianzas Comerciales & Prensa</option>
+                                <option value="otro">Otras consultas generales</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label text-light fw-semibold small">Mensaje Detallado</label>
+                            <textarea name="mensaje" rows="5" class="form-control filter-input-pro" placeholder="Describe tu consulta o requerimiento con el mayor detalle posible..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-accent w-100 py-3">
+                            <i class="bi bi-send-fill me-1"></i> Enviar Mensaje al Equipo de GrowUp
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Direct Channels & Schedule -->
+            <div class="col-lg-5">
+                <div class="p-4 p-md-5 rounded-4 h-100 d-flex flex-column" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #6366f1);"></span>
+                        <h4 class="text-white fw-bold mb-0">Canales Oficiales</h4>
+                    </div>
+                    <p class="text-muted small mb-4">Líneas de comunicación directa con nuestras áreas especializadas:</p>
+
+                    <div class="d-flex flex-column gap-3 mb-4">
+                        <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
+                            <span class="text-danger small fw-bold text-uppercase d-block mb-1">Soporte al Usuario</span>
+                            <span class="text-white fw-semibold">soporte@growup-media.org</span>
+                        </div>
+                        <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
+                            <span class="text-warning small fw-bold text-uppercase d-block mb-1">Comunidad de Escritores</span>
+                            <span class="text-white fw-semibold">autores@growup-media.org</span>
+                        </div>
+                        <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
+                            <span class="text-info small fw-bold text-uppercase d-block mb-1">Asuntos Legales y DMCA</span>
+                            <span class="text-white fw-semibold">legal@growup-media.org</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto p-3 rounded-3 text-secondary small" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
+                        <strong class="text-white d-block mb-1"><i class="bi bi-clock me-1"></i>Tiempo Promedio de Respuesta:</strong>
+                        Respondemos dentro de un plazo máximo de 24 horas hábiles (Lunes a Viernes de 09:00 a 18:00 UTC-5).
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

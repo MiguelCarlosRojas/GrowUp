@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Quiénes Somos - GrowUp{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-3">
+    <div class="col-lg-10 col-xl-9">
+        <!-- Header Banner -->
+        <div class="mb-5 text-center">
+            <span class="badge px-3 py-1 mb-3" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.35); color: #ffffff;">
+                Sobre GrowUp
+            </span>
+            <h1 class="display-5 fw-bold text-white mb-3">Quiénes Somos</h1>
+            <p class="text-muted lead mx-auto" style="max-width: 720px;">
+                Somos una plataforma digital independiente dedicada a democratizar el acceso a la cultura del manga, anime y las novelas ligeras en el mundo hispanohablante.
+            </p>
+        </div>
+
+        <!-- Mission & Vision Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-6">
+                <div class="p-4 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="section-accent-bar"></span>
+                        <h4 class="text-white fw-bold mb-0">Nuestra Misión</h4>
+                    </div>
+                    <p class="text-secondary" style="line-height: 1.8;">
+                        Construir el ecosistema más completo, transparente y colaborativo para lectores, aficionados y autores emergentes. Facilitamos la catalogación en tiempo real de miles de obras a través de la integración oficial con Jikan API v4 y brindamos herramientas a escritores independientes para publicar y monetizar sus novelas ligeras.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-4 rounded-4 h-100" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #6366f1);"></span>
+                        <h4 class="text-white fw-bold mb-0">Nuestra Visión</h4>
+                    </div>
+                    <p class="text-secondary" style="line-height: 1.8;">
+                        Convertirnos en el referente digital de literatura y entretenimiento otaku de América Latina y España, siendo el puente directo entre la audiencia apasionada y la creación literaria original sin barreras editoriales tradicionales.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pillars -->
+        <div class="p-4 p-md-5 rounded-4 mb-5" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+            <h3 class="fw-bold text-white mb-4 text-center">Nuestros Valores Fundamentales</h3>
+            <div class="row g-4 text-center">
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="bi bi-shield-check fs-1 text-danger mb-3 d-block"></i>
+                        <h5 class="text-white fw-bold">Transparencia y Respeto</h5>
+                        <p class="text-muted small">Valoramos las críticas genuinas y respetuosas de la comunidad, garantizando revisiones no manipuladas y métricas auditables.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="bi bi-feather fs-1 text-warning mb-3 d-block"></i>
+                        <h5 class="text-white fw-bold">Impulso a Creadores</h5>
+                        <p class="text-muted small">Protegemos la autoría de cada escritor. Cada novela original publicada pertenece exclusivamente a su creador intelectual.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3">
+                        <i class="bi bi-cpu fs-1 text-info mb-3 d-block"></i>
+                        <h5 class="text-white fw-bold">Tecnología de Vanguardia</h5>
+                        <p class="text-muted small">Arquitectura construida sobre Django moderno, Prisma Postgres con pools de alta concurrencia y despliegue continuo con GitHub Actions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

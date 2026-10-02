@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}GrowUp - Biblioteca de Manga, Anime y Novelas Ligeras{% endblock %}</title>
     
-    <!-- High-Definition PNG Favicon & App Icons (Large 256x256) -->
+    <!-- High-Definition Multi-Resolution Favicon & App Icons -->
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
     <link rel="icon" type="image/png" sizes="256x256" href="{% static 'images/favicon.png' %}">
     <link rel="apple-touch-icon" sizes="256x256" href="{% static 'images/logo-icon.png' %}">
     
@@ -122,10 +126,10 @@
                 <div class="col-6 col-sm-4 col-lg-2">
                     <h6 class="text-white fw-bold mb-3">Sobre nosotros</h6>
                     <ul class="list-unstyled mb-0">
-                        <li><a href="#" class="footer-link">Quiénes somos</a></li>
-                        <li><a href="#" class="footer-link">Nuestra Historia</a></li>
-                        <li><a href="#" class="footer-link">Dónde estamos</a></li>
-                        <li><a href="#" class="footer-link">Blog</a></li>
+                        <li><a href="{% url 'catalog:quienes_somos' %}" class="footer-link">Quiénes somos</a></li>
+                        <li><a href="{% url 'catalog:nuestra_historia' %}" class="footer-link">Nuestra Historia</a></li>
+                        <li><a href="{% url 'catalog:donde_estamos' %}" class="footer-link">Dónde estamos</a></li>
+                        <li><a href="{% url 'catalog:blog' %}" class="footer-link">Blog</a></li>
                     </ul>
                 </div>
 
@@ -133,11 +137,11 @@
                 <div class="col-6 col-sm-4 col-lg-2">
                     <h6 class="text-white fw-bold mb-3">Ayuda & Contacto</h6>
                     <ul class="list-unstyled mb-0">
-                        <li><a href="#" class="footer-link">Ayuda</a></li>
-                        <li><a href="#" class="footer-link">Preguntas frecuentes</a></li>
-                        <li><a href="#" class="footer-link">Contacte con nosotros</a></li>
-                        <li><a href="#" class="footer-link">Aviso Legal</a></li>
-                        <li><a href="#" class="footer-link">Política de cookies</a></li>
+                        <li><a href="{% url 'catalog:ayuda' %}" class="footer-link">Ayuda</a></li>
+                        <li><a href="{% url 'catalog:preguntas_frecuentes' %}" class="footer-link">Preguntas frecuentes</a></li>
+                        <li><a href="{% url 'catalog:contacto' %}" class="footer-link">Contacte con nosotros</a></li>
+                        <li><a href="{% url 'catalog:aviso_legal' %}" class="footer-link">Aviso Legal</a></li>
+                        <li><a href="{% url 'catalog:politica_cookies' %}" class="footer-link">Política de cookies</a></li>
                     </ul>
                 </div>
 
@@ -165,9 +169,9 @@
             <div class="pt-3 border-top border-secondary border-opacity-25 d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 text-muted small">
                 <span>&copy; {% now "Y" %} GrowUp Platform. Todos los derechos reservados.</span>
                 <div class="d-flex gap-3 flex-wrap">
-                    <a href="#" class="text-muted text-decoration-none">Condiciones de uso</a>
-                    <a href="#" class="text-muted text-decoration-none">Política de privacidad</a>
-                    <a href="#" class="text-muted text-decoration-none">Declaración de accesibilidad</a>
+                    <a href="{% url 'catalog:condiciones_uso' %}" class="text-muted text-decoration-none">Condiciones de uso</a>
+                    <a href="{% url 'catalog:politica_privacidad' %}" class="text-muted text-decoration-none">Política de privacidad</a>
+                    <a href="{% url 'catalog:declaracion_accesibilidad' %}" class="text-muted text-decoration-none">Declaración de accesibilidad</a>
                 </div>
             </div>
         </div>

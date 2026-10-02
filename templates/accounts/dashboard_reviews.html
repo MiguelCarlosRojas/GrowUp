@@ -1,77 +1,295 @@
 {% extends 'dashboard_base.html' %}
 
-{% block title %}Mis Opiniones y Calificaciones - GrowUp Workspace{% endblock %}
+{% block title %}Opiniones y Calificación - GrowUp Workspace{% endblock %}
 
 {% block content %}
-<div>
-    <div class="p-4 rounded-4 mb-4" style="background: linear-gradient(135deg, rgba(18, 25, 40, 0.95) 0%, rgba(10, 15, 26, 0.98) 100%); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+<div class="d-flex flex-column gap-4">
+    <!-- Role-Aware Header Banner -->
+    <div class="p-4 p-md-5 rounded-4 shadow-lg" style="background: linear-gradient(135deg, rgba(18, 25, 40, 0.95) 0%, rgba(10, 15, 26, 0.98) 100%); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
-                <div class="d-flex align-items-center gap-2 mb-1">
+                <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
                     <span class="section-accent-bar" style="background: linear-gradient(135deg, #f59e0b, #eab308);"></span>
                     <h2 class="text-white fw-bold mb-0">Opiniones y Calificación</h2>
+                    {% if is_author %}
+                        <span class="app-role-badge app-role-badge-author ms-2">
+                            <i class="bi bi-feather me-1"></i> Panel de Escritor
+                        </span>
+                    {% else %}
+                        <span class="app-role-badge app-role-badge-reader ms-2">
+                            <i class="bi bi-book-half me-1"></i> Perfil Lector
+                        </span>
+                    {% endif %}
                 </div>
-                <p class="text-muted mb-0 small">Historial completo de tus valoraciones, críticas y estrellas otorgadas en GrowUp.</p>
+                <p class="text-muted mb-0 small">
+                    {% if is_author %}
+                        Gestiona las valoraciones y críticas recibidas por tus lectores en tus novelas ligeras, y consulta tus propias opiniones emitidas a la comunidad.
+                    {% else %}
+                        Historial completo de tus valoraciones, críticas y estrellas otorgadas en Animes, Mangas y Novelas de la comunidad.
+                    {% endif %}
+                </p>
             </div>
-            <div class="d-flex gap-3 align-items-center">
-                <div class="text-end">
-                    <span class="d-block text-muted small">Promedio Otorgado</span>
-                    <strong class="fs-4 text-warning"><i class="bi bi-star-fill me-1"></i>{{ avg_rating }} / 5.0</strong>
-                </div>
-                <div class="vr bg-secondary opacity-50" style="height: 40px;"></div>
-                <div class="text-end">
-                    <span class="d-block text-muted small">Total Reseñas</span>
-                    <strong class="fs-4 text-white">{{ total_reviews }}</strong>
-                </div>
+
+            <!-- Role Metrics Counter -->
+            <div class="d-flex gap-3 align-items-center flex-wrap">
+                {% if is_author %}
+                    <div class="text-center text-sm-end">
+                        <span class="d-block text-muted small">Calificación de Autor</span>
+                        <strong class="fs-4 text-warning">
+                            <i class="bi bi-star-fill me-1"></i>{{ author_received_avg|default:"0.0" }} / 5.0
+                        </strong>
+                    </div>
+                    <div class="vr bg-secondary opacity-50 d-none d-sm-block" style="height: 40px;"></div>
+                    <div class="text-center text-sm-end">
+                        <span class="d-block text-muted small">Reseñas Recibidas</span>
+                        <strong class="fs-4 text-white">{{ author_received_count }}</strong>
+                    </div>
+                    <div class="vr bg-secondary opacity-50 d-none d-sm-block" style="height: 40px;"></div>
+                    <div class="text-center text-sm-end">
+                        <span class="d-block text-muted small">Mis Reseñas Emitidas</span>
+                        <strong class="fs-4 text-info">{{ my_total_reviews }}</strong>
+                    </div>
+                {% else %}
+                    <div class="text-center text-sm-end">
+                        <span class="d-block text-muted small">Promedio Otorgado</span>
+                        <strong class="fs-4 text-warning">
+                            <i class="bi bi-star-fill me-1"></i>{{ my_avg_rating }} / 5.0
+                        </strong>
+                    </div>
+                    <div class="vr bg-secondary opacity-50 d-none d-sm-block" style="height: 40px;"></div>
+                    <div class="text-center text-sm-end">
+                        <span class="d-block text-muted small">Total Reseñas</span>
+                        <strong class="fs-4 text-white">{{ my_total_reviews }}</strong>
+                    </div>
+                    <div class="vr bg-secondary opacity-50 d-none d-sm-block" style="height: 40px;"></div>
+                    <div class="text-center text-sm-end">
+                        <span class="d-block text-muted small">Obras 5 Estrellas</span>
+                        <strong class="fs-4 text-success">{{ rating_distribution.5|default:"0" }}</strong>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
 
-    {% if reviews %}
-        <div class="d-flex flex-column gap-3">
-            {% for rev in reviews %}
-                <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle);">
-                    <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
-                        <div class="d-flex align-items-center gap-3">
-                            {% if rev.item_image %}
-                                <img src="{{ rev.item_image }}" alt="{{ rev.item_title }}" class="rounded shadow-sm" style="width: 48px; height: 68px; object-fit: cover;">
-                            {% endif %}
-                            <div>
-                                <h5 class="text-white fw-bold mb-1">
-                                    {% if rev.item_type == 'original_novel' %}
-                                        <a href="{% url 'novels:novel_detail' slug=rev.item_id %}" class="text-white text-decoration-none hover-primary">
-                                            {{ rev.item_title }}
-                                        </a>
-                                    {% else %}
-                                        <a href="{% url 'catalog:item_detail' item_type=rev.item_type item_id=rev.item_id %}" class="text-white text-decoration-none hover-primary">
-                                            {{ rev.item_title }}
-                                        </a>
-                                    {% endif %}
-                                </h5>
-                                <span class="badge bg-dark border border-secondary text-secondary small text-uppercase">{{ rev.get_item_type_display }}</span>
-                                <span class="text-muted small ms-2"><i class="bi bi-calendar3 me-1"></i>{{ rev.created_at|date:"d M Y, H:i" }}</span>
+    {% if is_author %}
+        <!-- AUTHOR VIEW: Separated Tabs / Sessions -->
+        <ul class="nav nav-pills custom-nav-pills gap-2 p-2 rounded-4" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);" id="authorReviewsTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active px-4 py-2 fw-semibold" id="received-tab" data-bs-toggle="pill" data-bs-target="#received-session" type="button" role="tab" aria-selected="true">
+                    <i class="bi bi-inbox-fill me-1 text-warning"></i> Reseñas Recibidas en mis Novelas ({{ author_received_count }})
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link px-4 py-2 fw-semibold" id="given-tab" data-bs-toggle="pill" data-bs-target="#given-session" type="button" role="tab" aria-selected="false">
+                    <i class="bi bi-pencil-square me-1 text-info"></i> Mis Opiniones a otras Obras ({{ my_total_reviews }})
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="authorReviewsContent">
+            <!-- Session 1: Received Reviews on Author's Works -->
+            <div class="tab-pane fade show active" id="received-session" role="tabpanel" aria-labelledby="received-tab">
+                <!-- Novela Breakdown Cards -->
+                {% if author_novels %}
+                    <div class="row g-3 mb-4">
+                        {% for n in author_novels %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="p-3 rounded-4 h-100 d-flex align-items-center gap-3" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                                <img src="{{ n.final_cover }}" alt="{{ n.title }}" class="rounded shadow-sm" style="width: 44px; height: 60px; object-fit: cover;">
+                                <div class="overflow-hidden flex-grow-1">
+                                    <h6 class="text-white fw-bold mb-1 text-truncate" title="{{ n.title }}">{{ n.title }}</h6>
+                                    <div class="d-flex align-items-center gap-2 small text-muted">
+                                        <span class="text-warning fw-semibold"><i class="bi bi-star-fill me-1"></i>{{ n.avg_rating|default:"0.0" }}</span>
+                                        <span>&bull;</span>
+                                        <span>{{ n.reviews_count }} opinión{{ n.reviews_count|pluralize:"es" }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <span class="badge bg-warning text-dark fw-bold fs-6 px-3 py-2">
-                            <i class="bi bi-star-fill me-1"></i>{{ rev.rating }} / 5
-                        </span>
+                        {% endfor %}
                     </div>
-                    <div class="p-3 rounded-3 mt-2" style="background: rgba(6, 9, 16, 0.6); border: 1px solid rgba(255, 255, 255, 0.05);">
-                        <h6 class="text-light fw-bold mb-1">{{ rev.headline }}</h6>
-                        <p class="text-muted small mb-0">{{ rev.opinion }}</p>
+                {% endif %}
+
+                {% if received_reviews %}
+                    <div class="d-flex flex-column gap-3">
+                        {% for rev in received_reviews %}
+                            <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle);">
+                                <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+                                    <div class="d-flex align-items-center gap-3">
+                                        {% if rev.user.profile.avatar_url %}
+                                            <img src="{{ rev.user.profile.avatar_url }}" alt="{{ rev.user.username }}" class="rounded-circle shadow-sm" style="width: 44px; height: 44px; object-fit: cover; border: 2px solid var(--border-subtle);">
+                                        {% else %}
+                                            <div class="app-avatar-initials shadow-sm" style="width: 44px; height: 44px; font-size: 1rem; background: {{ rev.user.profile.avatar_gradient }};">
+                                                {{ rev.user.initials }}
+                                            </div>
+                                        {% endif %}
+                                        <div>
+                                            <h6 class="text-white fw-bold mb-0">{{ rev.user.get_full_name|default:rev.user.username }}</h6>
+                                            <div class="d-flex align-items-center gap-2 small text-muted mt-1">
+                                                <span class="badge bg-secondary bg-opacity-25 text-light border border-secondary border-opacity-50" style="font-size: 0.72rem;">{{ rev.user.profile.get_role_display }}</span>
+                                                <span>&bull;</span>
+                                                <span>En obra: <strong class="text-light">{{ rev.item_title }}</strong></span>
+                                                <span>&bull;</span>
+                                                <span><i class="bi bi-clock me-1"></i>{{ rev.created_at|date:"d M Y, H:i" }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-warning text-dark fw-bold fs-6 px-3 py-2">
+                                        <i class="bi bi-star-fill me-1"></i>{{ rev.rating }} / 5
+                                    </span>
+                                </div>
+                                <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.6); border: 1px solid rgba(255, 255, 255, 0.05);">
+                                    <h6 class="text-light fw-bold mb-1">{{ rev.headline }}</h6>
+                                    <p class="text-muted small mb-0">{{ rev.opinion }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                </div>
-            {% endfor %}
+                {% else %}
+                    <div class="p-5 rounded-4 text-center" style="background: rgba(14, 20, 32, 0.9); border: 1px dashed var(--border-subtle);">
+                        <i class="bi bi-chat-heart text-warning mb-3 d-block" style="font-size: 3rem;"></i>
+                        <h4 class="text-white fw-bold">Aún no has recibido reseñas en tus novelas</h4>
+                        <p class="text-muted small mb-4">Asegúrate de que tus novelas estén públicas en el catálogo para que la comunidad empiece a valorarlas.</p>
+                        <a href="{% url 'novels:author_dashboard' %}" class="btn btn-accent px-4 py-2">
+                            <i class="bi bi-feather me-1"></i> Ir a Mi Taller de Escritor
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Session 2: Given Reviews by the Author -->
+            <div class="tab-pane fade" id="given-session" role="tabpanel" aria-labelledby="given-tab">
+                {% if my_reviews %}
+                    <div class="d-flex flex-column gap-3">
+                        {% for rev in my_reviews %}
+                            <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle);">
+                                <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                                    <div class="d-flex align-items-center gap-3">
+                                        {% if rev.item_image %}
+                                            <img src="{{ rev.item_image }}" alt="{{ rev.item_title }}" class="rounded shadow-sm" style="width: 48px; height: 68px; object-fit: cover;">
+                                        {% endif %}
+                                        <div>
+                                            <h5 class="text-white fw-bold mb-1">
+                                                {% if rev.item_type == 'original_novel' %}
+                                                    <a href="{% url 'novels:novel_detail' slug=rev.item_id %}" class="text-white text-decoration-none hover-primary">
+                                                        {{ rev.item_title }}
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{% url 'catalog:item_detail' item_type=rev.item_type item_id=rev.item_id %}" class="text-white text-decoration-none hover-primary">
+                                                        {{ rev.item_title }}
+                                                    </a>
+                                                {% endif %}
+                                            </h5>
+                                            <span class="badge bg-dark border border-secondary text-secondary small text-uppercase">{{ rev.get_item_type_display }}</span>
+                                            <span class="text-muted small ms-2"><i class="bi bi-calendar3 me-1"></i>{{ rev.created_at|date:"d M Y, H:i" }}</span>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-warning text-dark fw-bold fs-6 px-3 py-2">
+                                        <i class="bi bi-star-fill me-1"></i>{{ rev.rating }} / 5
+                                    </span>
+                                </div>
+                                <div class="p-3 rounded-3 mt-2" style="background: rgba(6, 9, 16, 0.6); border: 1px solid rgba(255, 255, 255, 0.05);">
+                                    <h6 class="text-light fw-bold mb-1">{{ rev.headline }}</h6>
+                                    <p class="text-muted small mb-0">{{ rev.opinion }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="p-5 rounded-4 text-center" style="background: rgba(14, 20, 32, 0.9); border: 1px dashed var(--border-subtle);">
+                        <i class="bi bi-star text-warning mb-3 d-block" style="font-size: 3rem;"></i>
+                        <h4 class="text-white fw-bold">Aún no has valorado otras obras</h4>
+                        <p class="text-muted small mb-4">Descubre otros títulos de la comunidad y comparte tu opinión.</p>
+                        <a href="{% url 'catalog:home' %}" class="btn btn-outline-glow px-4 py-2">
+                            <i class="bi bi-compass me-1"></i> Explorar Catálogo
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
+
     {% else %}
-        <div class="p-5 rounded-4 text-center" style="background: rgba(14, 20, 32, 0.9); border: 1px dashed var(--border-subtle);">
-            <i class="bi bi-star text-warning mb-3 d-block" style="font-size: 3rem;"></i>
-            <h4 class="text-white fw-bold">Aún no has dejado ninguna reseña</h4>
-            <p class="text-muted small mb-4">Explora el catálogo de Anime, Manga o Novelas Ligeras y comparte tu opinión con la comunidad.</p>
-            <a href="{% url 'catalog:home' %}" class="btn btn-accent px-4 py-2">
-                <i class="bi bi-compass me-1"></i> Explorar Catálogo
-            </a>
+        <!-- READER VIEW: Clean Ratings Breakdown and Reviews List -->
+        <!-- Rating Distribution Pills -->
+        <div class="row g-2 mb-2">
+            <div class="col">
+                <div class="p-3 rounded-3 text-center" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <span class="text-warning small d-block mb-1"><i class="bi bi-star-fill"></i> 5 Estrellas</span>
+                    <strong class="text-white fs-5">{{ rating_distribution.5|default:"0" }}</strong>
+                </div>
+            </div>
+            <div class="col">
+                <div class="p-3 rounded-3 text-center" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <span class="text-warning small d-block mb-1"><i class="bi bi-star-fill"></i> 4 Estrellas</span>
+                    <strong class="text-white fs-5">{{ rating_distribution.4|default:"0" }}</strong>
+                </div>
+            </div>
+            <div class="col">
+                <div class="p-3 rounded-3 text-center" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <span class="text-warning small d-block mb-1"><i class="bi bi-star-fill"></i> 3 Estrellas</span>
+                    <strong class="text-white fs-5">{{ rating_distribution.3|default:"0" }}</strong>
+                </div>
+            </div>
+            <div class="col">
+                <div class="p-3 rounded-3 text-center" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <span class="text-warning small d-block mb-1"><i class="bi bi-star-fill"></i> 2 Estrellas</span>
+                    <strong class="text-white fs-5">{{ rating_distribution.2|default:"0" }}</strong>
+                </div>
+            </div>
+            <div class="col">
+                <div class="p-3 rounded-3 text-center" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <span class="text-warning small d-block mb-1"><i class="bi bi-star-fill"></i> 1 Estrella</span>
+                    <strong class="text-white fs-5">{{ rating_distribution.1|default:"0" }}</strong>
+                </div>
+            </div>
         </div>
+
+        {% if my_reviews %}
+            <div class="d-flex flex-column gap-3">
+                {% for rev in my_reviews %}
+                    <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle);">
+                        <div class="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-3">
+                                {% if rev.item_image %}
+                                    <img src="{{ rev.item_image }}" alt="{{ rev.item_title }}" class="rounded shadow-sm" style="width: 48px; height: 68px; object-fit: cover;">
+                                {% endif %}
+                                <div>
+                                    <h5 class="text-white fw-bold mb-1">
+                                        {% if rev.item_type == 'original_novel' %}
+                                            <a href="{% url 'novels:novel_detail' slug=rev.item_id %}" class="text-white text-decoration-none hover-primary">
+                                                {{ rev.item_title }}
+                                            </a>
+                                        {% else %}
+                                            <a href="{% url 'catalog:item_detail' item_type=rev.item_type item_id=rev.item_id %}" class="text-white text-decoration-none hover-primary">
+                                                {{ rev.item_title }}
+                                            </a>
+                                        {% endif %}
+                                    </h5>
+                                    <span class="badge bg-dark border border-secondary text-secondary small text-uppercase">{{ rev.get_item_type_display }}</span>
+                                    <span class="text-muted small ms-2"><i class="bi bi-calendar3 me-1"></i>{{ rev.created_at|date:"d M Y, H:i" }}</span>
+                                </div>
+                            </div>
+                            <span class="badge bg-warning text-dark fw-bold fs-6 px-3 py-2">
+                                <i class="bi bi-star-fill me-1"></i>{{ rev.rating }} / 5
+                            </span>
+                        </div>
+                        <div class="p-3 rounded-3 mt-2" style="background: rgba(6, 9, 16, 0.6); border: 1px solid rgba(255, 255, 255, 0.05);">
+                            <h6 class="text-light fw-bold mb-1">{{ rev.headline }}</h6>
+                            <p class="text-muted small mb-0">{{ rev.opinion }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="p-5 rounded-4 text-center" style="background: rgba(14, 20, 32, 0.9); border: 1px dashed var(--border-subtle);">
+                <i class="bi bi-star text-warning mb-3 d-block" style="font-size: 3rem;"></i>
+                <h4 class="text-white fw-bold">Aún no has dejado ninguna reseña</h4>
+                <p class="text-muted small mb-4">Explora el catálogo de Anime, Manga o Novelas Ligeras y comparte tu opinión con la comunidad.</p>
+                <a href="{% url 'catalog:home' %}" class="btn btn-accent px-4 py-2">
+                    <i class="bi bi-compass me-1"></i> Explorar Catálogo
+                </a>
+            </div>
+        {% endif %}
     {% endif %}
 </div>
 {% endblock %}

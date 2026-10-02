@@ -186,42 +186,149 @@ def dashboard_view(request):
 @login_required
 def dashboard_reviews_view(request):
     from django.db.models import Avg
+    from novels.models import Novel
+    from catalog.models import ItemReview
+
     profile = request.user.profile
-    reviews = request.user.reviews.only(
+    is_author = profile.is_author
+
+    # Reviews written by the user across the community
+    my_reviews = request.user.reviews.only(
         'id', 'user_id', 'item_type', 'item_id', 'item_title', 'item_image', 'rating', 'headline', 'opinion', 'created_at'
     ).order_by('-created_at')
 
-    total_reviews = reviews.count()
-    avg_rating = reviews.aggregate(avg=Avg('rating'))['avg'] or 0
+    my_total_reviews = my_reviews.count()
+    my_avg_rating = my_reviews.aggregate(avg=Avg('rating'))['avg'] or 0.0
+
+    # Rating distribution given by the user
+    rating_distribution = {
+        5: my_reviews.filter(rating=5).count(),
+        4: my_reviews.filter(rating=4).count(),
+        3: my_reviews.filter(rating=3).count(),
+        2: my_reviews.filter(rating=2).count(),
+        1: my_reviews.filter(rating=1).count(),
+    }
+
+    # Author specific metrics: reviews and ratings received on their own novels
+    author_novels = []
+    received_reviews = []
+    author_received_count = 0
+    author_received_avg = 0.0
+
+    if is_author:
+        author_novels = list(Novel.objects.filter(author=request.user).only('id', 'slug', 'title', 'cover_image', 'cover_url'))
+        author_novel_slugs = [n.slug for n in author_novels]
+        if author_novel_slugs:
+            received_reviews = list(ItemReview.objects.filter(
+                item_type='original_novel',
+                item_id__in=author_novel_slugs
+            ).select_related('user', 'user__profile').only(
+                'id', 'user_id', 'item_type', 'item_id', 'item_title', 'rating', 'headline', 'opinion', 'created_at',
+                'user__username', 'user__first_name', 'user__last_name', 'user__profile__role', 'user__profile__avatar_url'
+            ).order_by('-created_at'))
+
+            author_received_count = len(received_reviews)
+            if author_received_count > 0:
+                author_received_avg = sum(r.rating for r in received_reviews) / author_received_count
+
+            # Attach per-novel metrics
+            for n in author_novels:
+                nov_revs = [r for r in received_reviews if r.item_id == n.slug]
+                n.reviews_count = len(nov_revs)
+                n.avg_rating = round(sum(r.rating for r in nov_revs) / len(nov_revs), 1) if nov_revs else 0.0
 
     context = {
         'profile': profile,
         'active_tab': 'reviews',
-        'reviews': reviews,
-        'total_reviews': total_reviews,
-        'avg_rating': round(avg_rating, 1),
+        'is_author': is_author,
+        # Backward compatibility for existing tests
+        'reviews': my_reviews,
+        'total_reviews': my_total_reviews,
+        'avg_rating': round(my_avg_rating, 1),
+        # Enhanced role-based datasets
+        'my_reviews': my_reviews,
+        'my_total_reviews': my_total_reviews,
+        'my_avg_rating': round(my_avg_rating, 1),
+        'rating_distribution': rating_distribution,
+        'author_novels': author_novels,
+        'received_reviews': received_reviews,
+        'author_received_count': author_received_count,
+        'author_received_avg': round(author_received_avg, 1),
     }
     return render(request, 'accounts/dashboard_reviews.html', context)
 
 
 @login_required
 def dashboard_discussions_view(request):
-    profile = request.user.profile
-    discussions = request.user.discussions.select_related('parent').only(
-        'id', 'user_id', 'item_type', 'item_id', 'item_title', 'discussion_type', 'content', 'created_at', 'parent_id'
-    ).order_by('-created_at')
+    from novels.models import Novel
+    from catalog.models import ItemDiscussion
 
-    total_discussions = discussions.count()
-    questions_count = discussions.filter(discussion_type='question').count()
-    comments_count = discussions.filter(discussion_type='comment').count()
+    profile = request.user.profile
+    is_author = profile.is_author
+
+    # Discussions started or replied by the user
+    my_discussions = list(request.user.discussions.select_related('parent').prefetch_related('replies').only(
+        'id', 'user_id', 'item_type', 'item_id', 'item_title', 'discussion_type', 'content', 'created_at', 'parent_id'
+    ).order_by('-created_at'))
+
+    my_questions = [d for d in my_discussions if d.discussion_type == 'question' and d.parent_id is None]
+    my_comments = [d for d in my_discussions if d.discussion_type == 'comment' or d.parent_id is not None]
+
+    my_total_discussions = len(my_discussions)
+    my_questions_count = len(my_questions)
+    my_comments_count = len(my_comments)
+
+    # Breakdown by medium for readers and authors
+    breakdown_by_type = {
+        'anime': sum(1 for d in my_discussions if d.item_type == 'anime'),
+        'manga': sum(1 for d in my_discussions if d.item_type == 'manga'),
+        'lightnovel': sum(1 for d in my_discussions if d.item_type == 'lightnovel'),
+        'original_novel': sum(1 for d in my_discussions if d.item_type == 'original_novel'),
+    }
+
+    # Author specific: questions and debates raised by readers on author's works
+    author_novels = []
+    received_discussions = []
+    received_questions_count = 0
+    received_comments_count = 0
+
+    if is_author:
+        author_novels = list(Novel.objects.filter(author=request.user).only('id', 'slug', 'title'))
+        author_novel_slugs = [n.slug for n in author_novels]
+        if author_novel_slugs:
+            received_discussions = list(ItemDiscussion.objects.filter(
+                item_type='original_novel',
+                item_id__in=author_novel_slugs
+            ).exclude(user=request.user).select_related('user', 'user__profile', 'parent').prefetch_related('replies').only(
+                'id', 'user_id', 'item_type', 'item_id', 'item_title', 'discussion_type', 'content', 'created_at', 'parent_id',
+                'user__username', 'user__first_name', 'user__last_name', 'user__profile__role', 'user__profile__avatar_url'
+            ).order_by('-created_at'))
+
+            received_questions_count = sum(1 for d in received_discussions if d.discussion_type == 'question')
+            received_comments_count = sum(1 for d in received_discussions if d.discussion_type == 'comment')
 
     context = {
         'profile': profile,
         'active_tab': 'discussions',
-        'discussions': discussions,
-        'total_discussions': total_discussions,
-        'questions_count': questions_count,
-        'comments_count': comments_count,
+        'is_author': is_author,
+        # Backward compatibility
+        'discussions': my_discussions,
+        'total_discussions': my_total_discussions,
+        'questions_count': my_questions_count,
+        'comments_count': my_comments_count,
+        # Enhanced role-based datasets
+        'my_discussions': my_discussions,
+        'my_questions': my_questions,
+        'my_comments': my_comments,
+        'my_total_discussions': my_total_discussions,
+        'my_questions_count': my_questions_count,
+        'my_comments_count': my_comments_count,
+        'breakdown_by_type': breakdown_by_type,
+        'author_novels': author_novels,
+        'received_discussions': received_discussions,
+        'received_total_discussions': len(received_discussions),
+        'received_questions_count': received_questions_count,
+        'received_comments_count': received_comments_count,
     }
     return render(request, 'accounts/dashboard_discussions.html', context)
 

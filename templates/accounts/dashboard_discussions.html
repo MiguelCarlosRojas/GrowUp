@@ -1,78 +1,341 @@
 {% extends 'dashboard_base.html' %}
 
-{% block title %}Mis Preguntas y Debates - GrowUp Workspace{% endblock %}
+{% block title %}Preguntas, Respuestas y Debates - GrowUp Workspace{% endblock %}
 
 {% block content %}
-<div>
-    <div class="p-4 rounded-4 mb-4" style="background: linear-gradient(135deg, rgba(18, 25, 40, 0.95) 0%, rgba(10, 15, 26, 0.98) 100%); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+<div class="d-flex flex-column gap-4">
+    <!-- Role-Aware Header Banner -->
+    <div class="p-4 p-md-5 rounded-4 shadow-lg" style="background: linear-gradient(135deg, rgba(18, 25, 40, 0.95) 0%, rgba(10, 15, 26, 0.98) 100%); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <div>
-                <div class="d-flex align-items-center gap-2 mb-1">
+                <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
                     <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #3b82f6);"></span>
                     <h2 class="text-white fw-bold mb-0">Preguntas, Respuestas y Debates</h2>
+                    {% if is_author %}
+                        <span class="app-role-badge app-role-badge-author ms-2">
+                            <i class="bi bi-feather me-1"></i> Panel de Escritor
+                        </span>
+                    {% else %}
+                        <span class="app-role-badge app-role-badge-reader ms-2">
+                            <i class="bi bi-book-half me-1"></i> Perfil Lector
+                        </span>
+                    {% endif %}
                 </div>
-                <p class="text-muted mb-0 small">Historial de tus preguntas, comentarios e intervenciones en los debates de la comunidad.</p>
+                <p class="text-muted mb-0 small">
+                    {% if is_author %}
+                        Revisa las inquietudes y debates que tus lectores publican en tus novelas y consulta tus intervenciones en la comunidad.
+                    {% else %}
+                        Historial organizado de tus preguntas formuladas, dudas resueltas y aportes a debates en Animes, Mangas y Novelas.
+                    {% endif %}
+                </p>
             </div>
-            <div class="d-flex gap-3 align-items-center">
-                <div class="text-end">
-                    <span class="d-block text-muted small">Preguntas Formuladas</span>
-                    <strong class="fs-4 text-info"><i class="bi bi-question-circle me-1"></i>{{ questions_count }}</strong>
-                </div>
-                <div class="vr bg-secondary opacity-50" style="height: 40px;"></div>
-                <div class="text-end">
-                    <span class="d-block text-muted small">Total Intervenciones</span>
-                    <strong class="fs-4 text-white">{{ total_discussions }}</strong>
-                </div>
+
+            <!-- Role Metrics Counter -->
+            <div class="d-flex gap-3 align-items-center flex-wrap">
+                {% if is_author %}
+                    <div class="text-center text-sm-end">
+                        <span class="d-block text-muted small">Preguntas Recibidas</span>
+                        <strong class="fs-4 text-info">
+                            <i class="bi bi-question-circle me-1"></i>{{ received_questions_count }}
+                        </strong>
+                    </div>
+                    <div class="vr bg-secondary opacity-50 d-none d-sm-block" style="height: 40px;"></div>
+                    <div class="text-center text-sm-end">
+                        <span class="d-block text-muted small">Debates en mis Obras</span>
+                        <strong class="fs-4 text-warning">{{ received_comments_count }}</strong>
+                    </div>
+                    <div class="vr bg-secondary opacity-50 d-none d-sm-block" style="height: 40px;"></div>
+                    <div class="text-center text-sm-end">
+                        <span class="d-block text-muted small">Mis Intervenciones</span>
+                        <strong class="fs-4 text-white">{{ my_total_discussions }}</strong>
+                    </div>
+                {% else %}
+                    <div class="text-center text-sm-end">
+                        <span class="d-block text-muted small">Preguntas Formuladas</span>
+                        <strong class="fs-4 text-info">
+                            <i class="bi bi-question-circle me-1"></i>{{ my_questions_count }}
+                        </strong>
+                    </div>
+                    <div class="vr bg-secondary opacity-50 d-none d-sm-block" style="height: 40px;"></div>
+                    <div class="text-center text-sm-end">
+                        <span class="d-block text-muted small">Respuestas y Debates</span>
+                        <strong class="fs-4 text-primary">{{ my_comments_count }}</strong>
+                    </div>
+                    <div class="vr bg-secondary opacity-50 d-none d-sm-block" style="height: 40px;"></div>
+                    <div class="text-center text-sm-end">
+                        <span class="d-block text-muted small">Total Intervenciones</span>
+                        <strong class="fs-4 text-white">{{ my_total_discussions }}</strong>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
 
-    {% if discussions %}
-        <div class="d-flex flex-column gap-3">
-            {% for disc in discussions %}
-                <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle);">
-                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
-                        <div>
-                            <span class="badge {% if disc.discussion_type == 'question' %}bg-info text-dark{% else %}bg-secondary text-white{% endif %} me-2" style="font-size: 0.72rem;">
-                                {{ disc.get_discussion_type_display }}
-                            </span>
-                            <h5 class="text-white fw-bold d-inline align-middle mb-0">
-                                {{ disc.item_title|default:'Debate en Obra' }}
-                            </h5>
-                        </div>
-                        <span class="badge bg-dark border border-secondary text-secondary small">
-                            {{ disc.get_item_type_display }}
-                        </span>
+    {% if is_author %}
+        <!-- AUTHOR VIEW: Separated Tabs / Sessions -->
+        <ul class="nav nav-pills custom-nav-pills gap-2 p-2 rounded-4" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);" id="authorDiscussionsTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active px-4 py-2 fw-semibold" id="received-disc-tab" data-bs-toggle="pill" data-bs-target="#received-disc-session" type="button" role="tab" aria-selected="true">
+                    <i class="bi bi-chat-quote-fill me-1 text-warning"></i> Preguntas y Debates de Lectores en mis Obras ({{ received_total_discussions }})
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link px-4 py-2 fw-semibold" id="my-disc-tab" data-bs-toggle="pill" data-bs-target="#my-disc-session" type="button" role="tab" aria-selected="false">
+                    <i class="bi bi-person-lines-fill me-1 text-info"></i> Mis Participaciones en la Comunidad ({{ my_total_discussions }})
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="authorDiscussionsContent">
+            <!-- Session 1: Received Questions & Comments on Author's Novels -->
+            <div class="tab-pane fade show active" id="received-disc-session" role="tabpanel" aria-labelledby="received-disc-tab">
+                {% if received_discussions %}
+                    <div class="d-flex flex-column gap-3">
+                        {% for disc in received_discussions %}
+                            <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle);">
+                                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        {% if disc.user.profile.avatar_url %}
+                                            <img src="{{ disc.user.profile.avatar_url }}" alt="{{ disc.user.username }}" class="rounded-circle shadow-sm" style="width: 44px; height: 44px; object-fit: cover; border: 2px solid var(--border-subtle);">
+                                        {% else %}
+                                            <div class="app-avatar-initials shadow-sm" style="width: 44px; height: 44px; font-size: 1rem; background: {{ disc.user.profile.avatar_gradient }};">
+                                                {{ disc.user.initials }}
+                                            </div>
+                                        {% endif %}
+                                        <div>
+                                            <h6 class="text-white fw-bold mb-0">{{ disc.user.get_full_name|default:disc.user.username }}</h6>
+                                            <div class="d-flex align-items-center gap-2 small text-muted mt-1">
+                                                <span class="badge {% if disc.discussion_type == 'question' %}bg-info text-dark{% else %}bg-secondary text-white{% endif %}" style="font-size: 0.72rem;">
+                                                    {{ disc.get_discussion_type_display }}
+                                                </span>
+                                                <span>&bull;</span>
+                                                <span>En tu novela: <strong class="text-light">{{ disc.item_title }}</strong></span>
+                                                <span>&bull;</span>
+                                                <span><i class="bi bi-clock me-1"></i>{{ disc.created_at|date:"d M Y, H:i" }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="{% url 'novels:novel_detail' slug=disc.item_id %}" class="btn btn-sm btn-accent py-1 px-3">
+                                        <i class="bi bi-reply-fill me-1"></i> Responder en Obra
+                                    </a>
+                                </div>
+                                <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.6); border: 1px solid rgba(255, 255, 255, 0.05);">
+                                    <p class="text-light small mb-0" style="line-height: 1.7; font-size: 0.95rem;">{{ disc.content }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                    <p class="text-light small mb-3" style="line-height: 1.7; font-size: 0.95rem;">{{ disc.content }}</p>
-                    <div class="d-flex justify-content-between align-items-center pt-2 border-top border-secondary border-opacity-25 small text-muted">
-                        <span>
-                            <i class="bi bi-clock me-1"></i> {{ disc.created_at|date:"d M Y, H:i" }}
-                            {% if disc.parent %}
-                                &bull; <span class="text-info"><i class="bi bi-reply-fill"></i> Respuesta a comentario</span>
-                            {% endif %}
-                        </span>
-                        {% if disc.item_type == 'original_novel' %}
-                            <a href="{% url 'novels:novel_detail' slug=disc.item_id %}" class="btn btn-sm btn-outline-glow py-1 px-3">
-                                <i class="bi bi-chat-dots me-1"></i> Ir al Debate
-                            </a>
-                        {% else %}
-                            <a href="{% url 'catalog:item_detail' item_type=disc.item_type item_id=disc.item_id %}" class="btn btn-sm btn-outline-glow py-1 px-3">
-                                <i class="bi bi-chat-dots me-1"></i> Ir al Debate
-                            </a>
-                        {% endif %}
+                {% else %}
+                    <div class="p-5 rounded-4 text-center" style="background: rgba(14, 20, 32, 0.9); border: 1px dashed var(--border-subtle);">
+                        <i class="bi bi-chat-heart text-info mb-3 d-block" style="font-size: 3rem;"></i>
+                        <h4 class="text-white fw-bold">Aún no hay preguntas ni debates en tus obras</h4>
+                        <p class="text-muted small mb-4">Los lectores podrán hacerte preguntas directas y abrir debates desde la ficha de tus novelas publicadas.</p>
+                        <a href="{% url 'novels:author_dashboard' %}" class="btn btn-accent px-4 py-2">
+                            <i class="bi bi-feather me-1"></i> Ver mi Taller de Escritor
+                        </a>
                     </div>
-                </div>
-            {% endfor %}
+                {% endif %}
+            </div>
+
+            <!-- Session 2: Given Discussions by the Author -->
+            <div class="tab-pane fade" id="my-disc-session" role="tabpanel" aria-labelledby="my-disc-tab">
+                {% if my_discussions %}
+                    <div class="d-flex flex-column gap-3">
+                        {% for disc in my_discussions %}
+                            <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle);">
+                                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+                                    <div>
+                                        <span class="badge {% if disc.discussion_type == 'question' %}bg-info text-dark{% else %}bg-secondary text-white{% endif %} me-2" style="font-size: 0.72rem;">
+                                            {{ disc.get_discussion_type_display }}
+                                        </span>
+                                        <h5 class="text-white fw-bold d-inline align-middle mb-0">
+                                            {{ disc.item_title|default:'Debate en Obra' }}
+                                        </h5>
+                                    </div>
+                                    <span class="badge bg-dark border border-secondary text-secondary small">
+                                        {{ disc.get_item_type_display }}
+                                    </span>
+                                </div>
+                                <p class="text-light small mb-3" style="line-height: 1.7; font-size: 0.95rem;">{{ disc.content }}</p>
+                                <div class="d-flex justify-content-between align-items-center pt-2 border-top border-secondary border-opacity-25 small text-muted">
+                                    <span>
+                                        <i class="bi bi-clock me-1"></i> {{ disc.created_at|date:"d M Y, H:i" }}
+                                        {% if disc.parent %}
+                                            &bull; <span class="text-info"><i class="bi bi-reply-fill"></i> Respuesta en debate</span>
+                                        {% endif %}
+                                    </span>
+                                    {% if disc.item_type == 'original_novel' %}
+                                        <a href="{% url 'novels:novel_detail' slug=disc.item_id %}" class="btn btn-sm btn-outline-glow py-1 px-3">
+                                            <i class="bi bi-chat-dots me-1"></i> Ir al Debate
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'catalog:item_detail' item_type=disc.item_type item_id=disc.item_id %}" class="btn btn-sm btn-outline-glow py-1 px-3">
+                                            <i class="bi bi-chat-dots me-1"></i> Ir al Debate
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="p-5 rounded-4 text-center" style="background: rgba(14, 20, 32, 0.9); border: 1px dashed var(--border-subtle);">
+                        <i class="bi bi-chat-left-dots text-info mb-3 d-block" style="font-size: 3rem;"></i>
+                        <h4 class="text-white fw-bold">Aún no has participado en debates de la comunidad</h4>
+                        <p class="text-muted small mb-4">Participa en debates sobre animes, mangas y obras de otros autores.</p>
+                        <a href="{% url 'catalog:home' %}" class="btn btn-outline-glow px-4 py-2">
+                            <i class="bi bi-compass me-1"></i> Explorar Catálogo
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
+
     {% else %}
-        <div class="p-5 rounded-4 text-center" style="background: rgba(14, 20, 32, 0.9); border: 1px dashed var(--border-subtle);">
-            <i class="bi bi-chat-left-dots text-info mb-3 d-block" style="font-size: 3rem;"></i>
-            <h4 class="text-white fw-bold">Aún no has participado en debates o preguntas</h4>
-            <p class="text-muted small mb-4">Únete a las discusiones en las páginas de tus animes, mangas y novelas favoritas.</p>
-            <a href="{% url 'catalog:home' %}" class="btn btn-accent px-4 py-2">
-                <i class="bi bi-compass me-1"></i> Explorar Catálogo
-            </a>
+        <!-- READER VIEW: Clean Segregation Between Questions and Community Debates -->
+        <!-- Breakdown by medium -->
+        <div class="row g-2 mb-3">
+            <div class="col-6 col-md-3">
+                <div class="p-3 rounded-3 text-center" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <span class="text-info small d-block mb-1"><i class="bi bi-tv me-1"></i> En Animes</span>
+                    <strong class="text-white fs-5">{{ breakdown_by_type.anime|default:"0" }}</strong>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="p-3 rounded-3 text-center" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <span class="text-warning small d-block mb-1"><i class="bi bi-book me-1"></i> En Mangas</span>
+                    <strong class="text-white fs-5">{{ breakdown_by_type.manga|default:"0" }}</strong>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="p-3 rounded-3 text-center" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <span class="text-primary small d-block mb-1"><i class="bi bi-journal-text me-1"></i> Novelas MAL</span>
+                    <strong class="text-white fs-5">{{ breakdown_by_type.lightnovel|default:"0" }}</strong>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="p-3 rounded-3 text-center" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <span class="text-success small d-block mb-1"><i class="bi bi-feather me-1"></i> Novelas Originales</span>
+                    <strong class="text-white fs-5">{{ breakdown_by_type.original_novel|default:"0" }}</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reader Navigation Tabs -->
+        <ul class="nav nav-pills custom-nav-pills gap-2 p-2 rounded-4" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);" id="readerDiscussionsTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active px-4 py-2 fw-semibold" id="reader-questions-tab" data-bs-toggle="pill" data-bs-target="#reader-questions-session" type="button" role="tab" aria-selected="true">
+                    <i class="bi bi-question-circle-fill me-1 text-info"></i> Mis Preguntas Formuladas ({{ my_questions_count }})
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link px-4 py-2 fw-semibold" id="reader-comments-tab" data-bs-toggle="pill" data-bs-target="#reader-comments-session" type="button" role="tab" aria-selected="false">
+                    <i class="bi bi-chat-dots-fill me-1 text-primary"></i> Mis Respuestas y Debates ({{ my_comments_count }})
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="readerDiscussionsContent">
+            <!-- Reader Questions Session -->
+            <div class="tab-pane fade show active" id="reader-questions-session" role="tabpanel" aria-labelledby="reader-questions-tab">
+                {% if my_questions %}
+                    <div class="d-flex flex-column gap-3">
+                        {% for disc in my_questions %}
+                            <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle);">
+                                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+                                    <div>
+                                        <span class="badge bg-info text-dark me-2" style="font-size: 0.72rem;">Pregunta</span>
+                                        <h5 class="text-white fw-bold d-inline align-middle mb-0">
+                                            {{ disc.item_title|default:'Pregunta en Obra' }}
+                                        </h5>
+                                    </div>
+                                    <span class="badge bg-dark border border-secondary text-secondary small">
+                                        {{ disc.get_item_type_display }}
+                                    </span>
+                                </div>
+                                <p class="text-light small mb-3" style="line-height: 1.7; font-size: 0.95rem;">{{ disc.content }}</p>
+                                <div class="d-flex justify-content-between align-items-center pt-2 border-top border-secondary border-opacity-25 small text-muted flex-wrap gap-2">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span><i class="bi bi-clock me-1"></i> {{ disc.created_at|date:"d M Y, H:i" }}</span>
+                                        <span class="badge bg-primary bg-opacity-25 text-info border border-primary border-opacity-50">
+                                            <i class="bi bi-chat-left-dots me-1"></i> {{ disc.replies.count }} respuesta{{ disc.replies.count|pluralize:"s" }} de la comunidad
+                                        </span>
+                                    </div>
+                                    {% if disc.item_type == 'original_novel' %}
+                                        <a href="{% url 'novels:novel_detail' slug=disc.item_id %}" class="btn btn-sm btn-outline-glow py-1 px-3">
+                                            <i class="bi bi-eye me-1"></i> Ver Respuestas
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'catalog:item_detail' item_type=disc.item_type item_id=disc.item_id %}" class="btn btn-sm btn-outline-glow py-1 px-3">
+                                            <i class="bi bi-eye me-1"></i> Ver Respuestas
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="p-5 rounded-4 text-center" style="background: rgba(14, 20, 32, 0.9); border: 1px dashed var(--border-subtle);">
+                        <i class="bi bi-question-circle text-info mb-3 d-block" style="font-size: 3rem;"></i>
+                        <h4 class="text-white fw-bold">No has formulado ninguna pregunta todavía</h4>
+                        <p class="text-muted small mb-4">¿Tienes dudas sobre la trama de un anime, manga o novela? Haz preguntas en sus páginas oficiales.</p>
+                        <a href="{% url 'catalog:home' %}" class="btn btn-accent px-4 py-2">
+                            <i class="bi bi-compass me-1"></i> Explorar Catálogo
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Reader Comments & Replies Session -->
+            <div class="tab-pane fade" id="reader-comments-session" role="tabpanel" aria-labelledby="reader-comments-tab">
+                {% if my_comments %}
+                    <div class="d-flex flex-column gap-3">
+                        {% for disc in my_comments %}
+                            <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle);">
+                                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+                                    <div>
+                                        <span class="badge bg-secondary text-white me-2" style="font-size: 0.72rem;">
+                                            {% if disc.parent %}Respuesta a Debate{% else %}Comentario{% endif %}
+                                        </span>
+                                        <h5 class="text-white fw-bold d-inline align-middle mb-0">
+                                            {{ disc.item_title|default:'Debate en Obra' }}
+                                        </h5>
+                                    </div>
+                                    <span class="badge bg-dark border border-secondary text-secondary small">
+                                        {{ disc.get_item_type_display }}
+                                    </span>
+                                </div>
+                                <p class="text-light small mb-3" style="line-height: 1.7; font-size: 0.95rem;">{{ disc.content }}</p>
+                                <div class="d-flex justify-content-between align-items-center pt-2 border-top border-secondary border-opacity-25 small text-muted">
+                                    <span>
+                                        <i class="bi bi-clock me-1"></i> {{ disc.created_at|date:"d M Y, H:i" }}
+                                        {% if disc.parent %}
+                                            &bull; <span class="text-info"><i class="bi bi-reply-fill"></i> Réplica a usuario</span>
+                                        {% endif %}
+                                    </span>
+                                    {% if disc.item_type == 'original_novel' %}
+                                        <a href="{% url 'novels:novel_detail' slug=disc.item_id %}" class="btn btn-sm btn-outline-glow py-1 px-3">
+                                            <i class="bi bi-chat-dots me-1"></i> Ir al Debate
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'catalog:item_detail' item_type=disc.item_type item_id=disc.item_id %}" class="btn btn-sm btn-outline-glow py-1 px-3">
+                                            <i class="bi bi-chat-dots me-1"></i> Ir al Debate
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="p-5 rounded-4 text-center" style="background: rgba(14, 20, 32, 0.9); border: 1px dashed var(--border-subtle);">
+                        <i class="bi bi-chat-left-text text-primary mb-3 d-block" style="font-size: 3rem;"></i>
+                        <h4 class="text-white fw-bold">Aún no has participado en debates</h4>
+                        <p class="text-muted small mb-4">Comenta tus teorías, responde a otros lectores y comparte tu entusiasmo.</p>
+                        <a href="{% url 'catalog:home' %}" class="btn btn-accent px-4 py-2">
+                            <i class="bi bi-compass me-1"></i> Explorar Catálogo
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     {% endif %}
 </div>

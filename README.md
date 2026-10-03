@@ -66,6 +66,15 @@ La aplicacion se ejecuta de forma completamente autonoma en **Render** sin reque
    - Layout fluido de ancho completo (*full-width fluid*) sin margenes restringidos.
    - Ausencia total de emojis en interfaz, plantillas y documentacion, utilizando exclusivamente tipografia e iconos tecnicos SVG / Bootstrap Icons.
 
+6. **Explorador Interactivo de 94 Endpoints GET de Tenrai API v1:**
+   - Panel interactivo integrado en el detalle de obras (`item_detail.html`) para consultar y verificar en vivo los 94 endpoints GET oficiales de Tenrai API v1.
+   - Categorias filtrables: Anime, Manga, Personajes, Personas, Temporadas, Top, Noticias/Articulos, Productores y Varios.
+   - Visualizacion dual: modo visual adaptado (tarjetas para episodios, personajes, imagenes, staff, estadisticas) y modo Raw JSON con inspector y copiado al portapapeles.
+
+7. **Sistema Editorial y Blog Comunitario:**
+   - Publicacion, modificacion y eliminacion de articulos de blog restringida exclusivamente a administradores y superusuarios autorizados (`Anmigz`).
+   - Zona de comentarios comunitarios activa para que los usuarios autenticados participen y debatan en los articulos publicados.
+
 ---
 
 ## Arquitectura Tecnica

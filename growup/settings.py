@@ -145,7 +145,7 @@ LOGOUT_REDIRECT_URL = 'catalog:home'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Tenrai REST API Configuration (Loaded strictly from .env)
-TENRAI_API_BASE_URL = os.getenv('TENRAI_API_BASE_URL', 'https://api.tenrai.org/v1').rstrip('/')
+TENRAI_API_BASE_URL = (os.getenv('TENRAI_API_BASE_URL') or '').rstrip('/')
 TENRAI_SERVER_KEY = os.getenv('TENRAI_SERVER_KEY', '')
 
 

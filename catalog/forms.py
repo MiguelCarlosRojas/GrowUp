@@ -1,5 +1,5 @@
 from django import forms
-from .models import ItemReview, ItemDiscussion, ContactMessage, BlogPost
+from .models import ItemReview, ItemDiscussion, ContactMessage, BlogPost, BlogComment
 
 class ReviewForm(forms.ModelForm):
     RATING_CHOICES = [
@@ -106,6 +106,20 @@ class BlogPostForm(forms.ModelForm):
             }),
             'is_published': forms.CheckboxInput(attrs={
                 'class': 'form-check-input',
+            }),
+        }
+
+
+class BlogCommentForm(forms.ModelForm):
+    class Meta:
+        model = BlogComment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'class': 'form-control form-control-pro',
+                'rows': 3,
+                'placeholder': 'Escribe tu comentario u opinión sobre este artículo...',
+                'required': True,
             }),
         }
 

@@ -233,7 +233,700 @@
 </div>
 {% endif %}
 
+<!-- ==========================================================================
+     TENRAI REST API v1.0.19 (94 GET ENDPOINTS EXPLORER & METADATA VIEWER)
+     ========================================================================== -->
+<div class="tenrai-explorer-card mb-5" id="tenraiExplorer">
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 pb-3 border-bottom border-secondary border-opacity-25">
+        <div class="d-flex align-items-center gap-3">
+            <div class="pro-icon-box pro-icon-primary">
+                <i class="bi bi-cpu-fill"></i>
+            </div>
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <h4 class="text-white fw-bold mb-0">Explorador Tenrai API v1 (94 Endpoints GET)</h4>
+                    <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 px-2 py-1 small">v1.0.19 OpenAPI</span>
+                </div>
+                <small class="text-muted">Consulta, filtra e inspecciona en vivo los 94 endpoints de Tenrai REST API sincronizados con MyAnimeList.</small>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-dark border border-secondary text-secondary d-none d-md-inline-flex align-items-center gap-1">
+                <i class="bi bi-broadcast text-info"></i> Base: {{ item_type|upper }} #{{ item_id }}
+            </span>
+            <button type="button" class="btn btn-sm btn-outline-glow" onclick="runActiveTenraiEndpoint()" title="Volver a consultar endpoint actual">
+                <i class="bi bi-arrow-clockwise me-1"></i> Actualizar
+            </button>
+        </div>
+    </div>
+
+    <!-- Search & Category Filters -->
+    <div class="row g-3 mb-3 align-items-center">
+        <div class="col-md-5 col-lg-4">
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-dark border-secondary border-opacity-50 text-muted">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" id="tenraiSearchInput" class="form-control form-control-pro form-control-sm" placeholder="Filtrar por ruta o nombre (ej: characters, episodes, top)..." oninput="filterTenraiEndpoints()">
+            </div>
+        </div>
+        <div class="col-md-7 col-lg-8">
+            <div class="tenrai-filter-pills" id="tenraiCategoryPills">
+                <span class="tenrai-filter-pill active" onclick="setTenraiCategory('all', this)">Todos (94)</span>
+                <span class="tenrai-filter-pill" onclick="setTenraiCategory('anime', this)">Anime (26)</span>
+                <span class="tenrai-filter-pill" onclick="setTenraiCategory('manga', this)">Manga (16)</span>
+                <span class="tenrai-filter-pill" onclick="setTenraiCategory('characters', this)">Personajes (9)</span>
+                <span class="tenrai-filter-pill" onclick="setTenraiCategory('people', this)">Personas / Seiyuus (9)</span>
+                <span class="tenrai-filter-pill" onclick="setTenraiCategory('seasons', this)">Temporadas (4)</span>
+                <span class="tenrai-filter-pill" onclick="setTenraiCategory('top', this)">Top Lists (5)</span>
+                <span class="tenrai-filter-pill" onclick="setTenraiCategory('news_articles', this)">Noticias & Artículos (6)</span>
+                <span class="tenrai-filter-pill" onclick="setTenraiCategory('producers', this)">Productores (5)</span>
+                <span class="tenrai-filter-pill" onclick="setTenraiCategory('other', this)">Otros / Random (14)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2-Column Explorer Interface -->
+    <div class="row g-3">
+        <!-- Left Column: Endpoints Directory -->
+        <div class="col-lg-5">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="text-muted small fw-semibold text-uppercase tracking-wider">
+                    Endpoints Disponibles (<span id="tenraiCountLabel">94</span>)
+                </span>
+                <span class="text-secondary small" style="font-size: 0.72rem;">Clic para consultar en vivo</span>
+            </div>
+            <div class="tenrai-endpoint-list-box" id="tenraiEndpointsList">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </div>
+
+        <!-- Right Column: Live Data Inspector -->
+        <div class="col-lg-7">
+            <div class="tenrai-viewer-box">
+                <!-- Viewer Header -->
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 pb-3 mb-3 border-bottom border-secondary border-opacity-25">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="tenrai-method-badge" id="activeMethodBadge">GET</span>
+                            <strong class="text-white font-monospace small text-break" id="activePathText">/anime/{{ item_id }}/characters</strong>
+                        </div>
+                        <div class="text-muted small" id="activeEndpointDesc">Obtiene los personajes y actores de voz vinculados a la obra.</div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-dark border border-secondary text-secondary" id="activeStatusBadge">200 OK</span>
+                        <span class="badge bg-dark border border-secondary text-info" id="activeLatencyBadge">-- ms</span>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-secondary active" id="btnViewAdapted" onclick="setTenraiViewMode('adapted')">
+                                <i class="bi bi-grid-fill me-1"></i> Visual
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="btnViewJson" onclick="setTenraiViewMode('json')">
+                                <i class="bi bi-code-slash me-1"></i> JSON
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="copyTenraiJson(this)" title="Copiar JSON">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Viewer Body: Adapted Mode -->
+                <div id="tenraiAdaptedView" class="flex-grow-1 overflow-y-auto" style="max-height: 420px;">
+                    <div id="tenraiAdaptedContent" class="d-flex flex-column gap-2">
+                        <div class="text-center py-5 text-muted">
+                            <div class="spinner-border spinner-border-sm text-danger mb-2" role="status"></div>
+                            <p class="small mb-0">Cargando metadatos desde Tenrai API...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Viewer Body: Raw JSON Mode -->
+                <div id="tenraiJsonView" class="d-none flex-grow-1">
+                    <pre class="tenrai-code-output mb-0" id="tenraiJsonCode">Cargando datos...</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+// ==============================================================================
+// TENRAI REST API v1.0.19 (94 GET ENDPOINTS DIRECTORY & RUNNER)
+// ==============================================================================
+const CURRENT_ITEM_ID = "{{ item_id }}";
+const CURRENT_MEDIA_TYPE = "{{ item_type }}";
+
+const TENRAI_ENDPOINTS = [
+    // 1. Anime Endpoints (26)
+    { id: 1, category: 'anime', method: 'GET', path: '/anime', name: 'Catálogo General Anime', desc: 'Búsqueda global y listado paginado de animes.' },
+    { id: 2, category: 'anime', method: 'GET', path: '/anime/{id}', name: 'Ficha Principal Anime', desc: 'Metadatos estándar de la obra.' },
+    { id: 3, category: 'anime', method: 'GET', path: '/anime/{id}/full', name: 'Detalle Completo Anime', desc: 'Ficha exhaustiva con relaciones, trailers y productores.' },
+    { id: 4, category: 'anime', method: 'GET', path: '/anime/{id}/characters', name: 'Personajes & Seiyuus', desc: 'Personajes vinculados con sus actores de voz oficiales.' },
+    { id: 5, category: 'anime', method: 'GET', path: '/anime/{id}/staff', name: 'Equipo de Producción (Staff)', desc: 'Directores, diseñadores, guionistas y animadores.' },
+    { id: 6, category: 'anime', method: 'GET', path: '/anime/{id}/episodes', name: 'Lista de Episodios', desc: 'Guía de episodios emitidos con títulos y fechas.' },
+    { id: 7, category: 'anime', method: 'GET', path: '/anime/{id}/episodes/1', name: 'Detalle de Episodio (Ep. 1)', desc: 'Sinopsis y metadatos del primer episodio.' },
+    { id: 8, category: 'anime', method: 'GET', path: '/anime/{id}/news', name: 'Noticias Relacionadas', desc: 'Artículos de prensa y comunicados de prensa.' },
+    { id: 9, category: 'anime', method: 'GET', path: '/anime/{id}/forum', name: 'Hilos del Foro', desc: 'Temas de debate de la comunidad internacional.' },
+    { id: 10, category: 'anime', method: 'GET', path: '/anime/{id}/videos', name: 'Videos & Trailers Oficiales', desc: 'Teasers promocionales y avances en alta definición.' },
+    { id: 11, category: 'anime', method: 'GET', path: '/anime/{id}/videos/episodes', name: 'Videos de Episodios', desc: 'Avances y clips individuales de episodios.' },
+    { id: 12, category: 'anime', method: 'GET', path: '/anime/{id}/pictures', name: 'Galería de Imágenes', desc: 'Pósters promocionales, key visuals y carátulas.' },
+    { id: 13, category: 'anime', method: 'GET', path: '/anime/{id}/statistics', name: 'Estadísticas de Audiencia', desc: 'Puntuaciones, estados de visualización y totales.' },
+    { id: 14, category: 'anime', method: 'GET', path: '/anime/{id}/moreinfo', name: 'Información Adicional', desc: 'Notas de producción y trasfondo histórico.' },
+    { id: 15, category: 'anime', method: 'GET', path: '/anime/{id}/recommendations', name: 'Recomendaciones Similares', desc: 'Obras afines recomendadas por lectores y crítica.' },
+    { id: 16, category: 'anime', method: 'GET', path: '/anime/{id}/userupdates', name: 'Actualizaciones de Usuarios', desc: 'Registros recientes de visualización en la comunidad.' },
+    { id: 17, category: 'anime', method: 'GET', path: '/anime/{id}/reviews', name: 'Reseñas Críticas Tenrai', desc: 'Reseñas detalladas elaboradas por miembros.' },
+    { id: 18, category: 'anime', method: 'GET', path: '/anime/{id}/relations', name: 'Relaciones de Franquicia', desc: 'Precuelas, secuelas, adaptaciones y spin-offs.' },
+    { id: 19, category: 'anime', method: 'GET', path: '/anime/{id}/themes', name: 'Temas Musicales (OST)', desc: 'Listado oficial de Openings y Endings.' },
+    { id: 20, category: 'anime', method: 'GET', path: '/anime/{id}/external', name: 'Enlaces Externos', desc: 'Sitio oficial, Wikipedia y bases referenciales.' },
+    { id: 21, category: 'anime', method: 'GET', path: '/anime/{id}/streaming', name: 'Servicios de Streaming', desc: 'Plataformas legales con licencia de emisión.' },
+    { id: 22, category: 'anime', method: 'GET', path: '/anime/{id}/character-staff-clashes', name: 'Cruce Personaje / Staff', desc: 'Coincidencias de créditos entre elenco y staff.' },
+    { id: 23, category: 'anime', method: 'GET', path: '/anime/{id}/episodes-count', name: 'Conteo Total de Episodios', desc: 'Total numérico de episodios registrados.' },
+    { id: 24, category: 'anime', method: 'GET', path: '/anime/{id}/franchise-list', name: 'Árbol de Franquicia', desc: 'Esquema completo de la franquicia multimedia.' },
+    { id: 25, category: 'anime', method: 'GET', path: '/anime/{id}/ranking-history', name: 'Histórico de Posición', desc: 'Evolución cronológica en el ranking de popularidad.' },
+    { id: 26, category: 'anime', method: 'GET', path: '/anime/{id}/rating-history', name: 'Histórico de Calificaciones', desc: 'Variación de la puntuación media a través del tiempo.' },
+
+    // 2. Manga Endpoints (16)
+    { id: 27, category: 'manga', method: 'GET', path: '/manga', name: 'Catálogo General Manga', desc: 'Búsqueda global y listado paginado de mangas.' },
+    { id: 28, category: 'manga', method: 'GET', path: '/manga/{id}', name: 'Ficha Principal Manga', desc: 'Metadatos estándar de la obra literaria/cómic.' },
+    { id: 29, category: 'manga', method: 'GET', path: '/manga/{id}/full', name: 'Detalle Completo Manga', desc: 'Ficha exhaustiva con serializaciones y autores.' },
+    { id: 30, category: 'manga', method: 'GET', path: '/manga/{id}/characters', name: 'Personajes del Manga', desc: 'Personajes principales y secundarios de la obra.' },
+    { id: 31, category: 'manga', method: 'GET', path: '/manga/{id}/news', name: 'Noticias del Manga', desc: 'Lanzamientos editoriales y anuncios oficiales.' },
+    { id: 32, category: 'manga', method: 'GET', path: '/manga/{id}/forum', name: 'Foros de Debate Manga', desc: 'Temas comunitarios en torno a los capítulos.' },
+    { id: 33, category: 'manga', method: 'GET', path: '/manga/{id}/pictures', name: 'Galería de Portadas', desc: 'Portadas de volúmenes e ilustraciones a color.' },
+    { id: 34, category: 'manga', method: 'GET', path: '/manga/{id}/statistics', name: 'Estadísticas de Lectura', desc: 'Métricas de lectura y distribución de notas.' },
+    { id: 35, category: 'manga', method: 'GET', path: '/manga/{id}/moreinfo', name: 'Información Extendida Manga', desc: 'Detalles editoriales y notas de autor.' },
+    { id: 36, category: 'manga', method: 'GET', path: '/manga/{id}/recommendations', name: 'Mangas Recomendados', desc: 'Mangas similares sugeridos por lectores.' },
+    { id: 37, category: 'manga', method: 'GET', path: '/manga/{id}/userupdates', name: 'Lecturas Recientes', desc: 'Progreso de lectura reportado por la comunidad.' },
+    { id: 38, category: 'manga', method: 'GET', path: '/manga/{id}/reviews', name: 'Reseñas de Manga', desc: 'Críticas literarias completas de la comunidad.' },
+    { id: 39, category: 'manga', method: 'GET', path: '/manga/{id}/relations', name: 'Relaciones de Manga', desc: 'Adaptaciones al anime, novelas derivadas y precuelas.' },
+    { id: 40, category: 'manga', method: 'GET', path: '/manga/{id}/external', name: 'Sitios Oficiales Manga', desc: 'Enlaces a editoriales y portales oficiales.' },
+    { id: 41, category: 'manga', method: 'GET', path: '/manga/{id}/ranking-history', name: 'Histórico de Ranking Manga', desc: 'Evolución en la tabla de clasificación.' },
+    { id: 42, category: 'manga', method: 'GET', path: '/manga/{id}/rating-history', name: 'Histórico de Notas Manga', desc: 'Historial de calificaciones a lo largo del tiempo.' },
+
+    // 3. Characters Endpoints (9)
+    { id: 43, category: 'characters', method: 'GET', path: '/characters', name: 'Buscador de Personajes', desc: 'Explorador y búsqueda de personajes.' },
+    { id: 44, category: 'characters', method: 'GET', path: '/characters/1', name: 'Ficha de Personaje (ID 1)', desc: 'Datos biográficos del personaje.' },
+    { id: 45, category: 'characters', method: 'GET', path: '/characters/1/full', name: 'Personaje Completo', desc: 'Ficha integral con animes, mangas y voces.' },
+    { id: 46, category: 'characters', method: 'GET', path: '/characters/1/anime', name: 'Animes del Personaje', desc: 'Lista de adaptaciones animadas donde aparece.' },
+    { id: 47, category: 'characters', method: 'GET', path: '/characters/1/manga', name: 'Mangas del Personaje', desc: 'Publicaciones donde interviene el personaje.' },
+    { id: 48, category: 'characters', method: 'GET', path: '/characters/1/voices', name: 'Actores de Voz (Seiyuus)', desc: 'Doblaje en japonés e idiomas internacionales.' },
+    { id: 49, category: 'characters', method: 'GET', path: '/characters/1/pictures', name: 'Retratos del Personaje', desc: 'Galería de ilustraciones y capturas oficiales.' },
+    { id: 50, category: 'characters', method: 'GET', path: '/characters/1/article-mentions', name: 'Menciones en Artículos', desc: 'Artículos editoriales donde se analiza el personaje.' },
+    { id: 51, category: 'characters', method: 'GET', path: '/characters/1/club-mentions', name: 'Clubes de Fans', desc: 'Clubes temáticos dedicados al personaje.' },
+
+    // 4. People Endpoints (9)
+    { id: 52, category: 'people', method: 'GET', path: '/people', name: 'Directorio de Personas', desc: 'Directorio de mangakas, seiyuus y directores.' },
+    { id: 53, category: 'people', method: 'GET', path: '/people/1', name: 'Ficha de Creador / Actor', desc: 'Datos biográficos de la personalidad.' },
+    { id: 54, category: 'people', method: 'GET', path: '/people/1/full', name: 'Perfil Completo de Creador', desc: 'Trayectoria profesional integral.' },
+    { id: 55, category: 'people', method: 'GET', path: '/people/1/anime', name: 'Animes Producidos', desc: 'Obras de anime dirigidas o producidas.' },
+    { id: 56, category: 'people', method: 'GET', path: '/people/1/voices', name: 'Roles de Doblaje', desc: 'Personajes interpretados en la animación.' },
+    { id: 57, category: 'people', method: 'GET', path: '/people/1/manga', name: 'Mangas Creados', desc: 'Mangas escritos o ilustrados por el autor.' },
+    { id: 58, category: 'people', method: 'GET', path: '/people/1/pictures', name: 'Fotografías del Creador', desc: 'Galería fotográfica oficial.' },
+    { id: 59, category: 'people', method: 'GET', path: '/people/1/article-mentions', name: 'Menciones Editoriales', desc: 'Columnas y coberturas sobre el autor.' },
+    { id: 60, category: 'people', method: 'GET', path: '/people/1/club-mentions', name: 'Clubes de Admiradores', desc: 'Comunidades dedicadas a la personalidad.' },
+
+    // 5. Seasons Endpoints (4)
+    { id: 61, category: 'seasons', method: 'GET', path: '/seasons', name: 'Archivo de Temporadas', desc: 'Índice de años y temporadas desde 1970.' },
+    { id: 62, category: 'seasons', method: 'GET', path: '/seasons/now', name: 'Temporada Actual en Emisión', desc: 'Estrenos y continuaciones en emisión activa.' },
+    { id: 63, category: 'seasons', method: 'GET', path: '/seasons/upcoming', name: 'Próximos Estrenos', desc: 'Animes anunciados para las próximas temporadas.' },
+    { id: 64, category: 'seasons', method: 'GET', path: '/seasons/2026/winter', name: 'Temporada Invierno 2026', desc: 'Catálogo de animes de una temporada específica.' },
+
+    // 6. Top Lists (5)
+    { id: 65, category: 'top', method: 'GET', path: '/top/anime', name: 'Top Animes de la Historia', desc: 'Ranking de animes mejor valorados de todos los tiempos.' },
+    { id: 66, category: 'top', method: 'GET', path: '/top/manga', name: 'Top Mangas de la Historia', desc: 'Ranking de mangas mejor valorados.' },
+    { id: 67, category: 'top', method: 'GET', path: '/top/people', name: 'Top Creadores & Seiyuus', desc: 'Personalidades más seguidas de la industria.' },
+    { id: 68, category: 'top', method: 'GET', path: '/top/characters', name: 'Top Personajes Populares', desc: 'Personajes con mayor número de favoritos.' },
+    { id: 69, category: 'top', method: 'GET', path: '/top/reviews', name: 'Top Reseñas Comunitarias', desc: 'Reseñas con mayores votos útiles.' },
+
+    // 7. Schedules (1)
+    { id: 70, category: 'other', method: 'GET', path: '/schedules', name: 'Calendario Semanal de Emisión', desc: 'Programación de episodios día por día.' },
+
+    // 8. Reviews Comunitarias (2)
+    { id: 71, category: 'other', method: 'GET', path: '/reviews/anime', name: 'Reseñas Recientes Anime', desc: 'Feed global de opiniones sobre animes.' },
+    { id: 72, category: 'other', method: 'GET', path: '/reviews/manga', name: 'Reseñas Recientes Manga', desc: 'Feed global de opiniones sobre mangas.' },
+
+    // 9. Recomendaciones (2)
+    { id: 73, category: 'other', method: 'GET', path: '/recommendations/anime', name: 'Recomendaciones Globales Anime', desc: 'Pares de animes recomendados mutuamente.' },
+    { id: 74, category: 'other', method: 'GET', path: '/recommendations/manga', name: 'Recomendaciones Globales Manga', desc: 'Pares de mangas recomendados mutuamente.' },
+
+    // 10. News (3)
+    { id: 75, category: 'news_articles', method: 'GET', path: '/news', name: 'Feed Global de Noticias', desc: 'Noticias oficiales de lanzamientos de la industria.' },
+    { id: 76, category: 'news_articles', method: 'GET', path: '/news/1', name: 'Lectura de Noticia (ID 1)', desc: 'Contenido completo de la noticia seleccionada.' },
+    { id: 77, category: 'news_articles', method: 'GET', path: '/news/1/related-entries', name: 'Obras de la Noticia', desc: 'Animes y mangas citados en la noticia.' },
+
+    // 11. Articles (3)
+    { id: 78, category: 'news_articles', method: 'GET', path: '/articles', name: 'Columnas & Artículos Editoriales', desc: 'Reportajes y análisis literarios a fondo.' },
+    { id: 79, category: 'news_articles', method: 'GET', path: '/articles/1', name: 'Lectura de Artículo (ID 1)', desc: 'Texto editorial íntegro.' },
+    { id: 80, category: 'news_articles', method: 'GET', path: '/articles/1/related-entries', name: 'Obras del Artículo', desc: 'Títulos evaluados en el artículo editorial.' },
+
+    // 12. Producers (5)
+    { id: 81, category: 'producers', method: 'GET', path: '/producers', name: 'Directorio de Productoras / Estudios', desc: 'Estudios de animación y empresas productoras.' },
+    { id: 82, category: 'producers', method: 'GET', path: '/producers/1', name: 'Ficha del Estudio (ID 1)', desc: 'Historia y obras del estudio de animación.' },
+    { id: 83, category: 'producers', method: 'GET', path: '/producers/1/full', name: 'Estudio Completo', desc: 'Catálogo histórico de producciones.' },
+    { id: 84, category: 'producers', method: 'GET', path: '/producers/1/external', name: 'Enlaces del Estudio', desc: 'Sitio web y redes de la compañía productora.' },
+    { id: 85, category: 'producers', method: 'GET', path: '/producers/1/article-mentions', name: 'Menciones de Productora', desc: 'Artículos donde se cita al estudio.' },
+
+    // 13. Magazines (1)
+    { id: 86, category: 'other', method: 'GET', path: '/magazines', name: 'Directorio de Revistas', desc: 'Publicaciones editoriales (Shonen Jump, etc.).' },
+
+    // 14. Genres (2)
+    { id: 87, category: 'other', method: 'GET', path: '/genres/anime', name: 'Taxonomía Géneros Anime', desc: 'Lista completa de géneros y demografías de anime.' },
+    { id: 88, category: 'other', method: 'GET', path: '/genres/manga', name: 'Taxonomía Géneros Manga', desc: 'Lista completa de géneros y demografías de manga.' },
+
+    // 15. Stacks (2)
+    { id: 89, category: 'other', method: 'GET', path: '/stacks', name: 'Interest Stacks Comunitarios', desc: 'Colecciones curadas por la comunidad de usuarios.' },
+    { id: 90, category: 'other', method: 'GET', path: '/stacks/1', name: 'Contenido de Stack (ID 1)', desc: 'Obras agrupadas dentro de una colección.' },
+
+    // 16. Random (4)
+    { id: 91, category: 'other', method: 'GET', path: '/random/anime', name: 'Anime Aleatorio Sorpresa', desc: 'Descubrimiento aleatorio de un anime del catálogo.' },
+    { id: 92, category: 'other', method: 'GET', path: '/random/manga', name: 'Manga Aleatorio Sorpresa', desc: 'Descubrimiento aleatorio de un manga del catálogo.' },
+    { id: 93, category: 'other', method: 'GET', path: '/random/characters', name: 'Personaje Aleatorio', desc: 'Descubrimiento al azar de un personaje de anime/manga.' },
+    { id: 94, category: 'other', method: 'GET', path: '/random/people', name: 'Persona / Creador Aleatorio', desc: 'Descubrimiento al azar de un autor o seiyuu.' }
+];
+
+let activeTenraiEndpointIndex = 3; // Default to characters (index 3)
+let activeTenraiCategory = 'all';
+let activeTenraiData = null;
+let currentViewMode = 'adapted';
+
+function resolveEndpointPath(pathTemplate) {
+    let resolved = pathTemplate;
+    if (resolved.includes('{id}')) {
+        resolved = resolved.replace('{id}', CURRENT_ITEM_ID);
+    }
+    return resolved;
+}
+
+function renderTenraiEndpointsList() {
+    const listContainer = document.getElementById('tenraiEndpointsList');
+    const searchVal = (document.getElementById('tenraiSearchInput')?.value || '').toLowerCase().trim();
+    if (!listContainer) return;
+
+    let count = 0;
+    let html = '';
+
+    TENRAI_ENDPOINTS.forEach((ep, idx) => {
+        const matchesCategory = (activeTenraiCategory === 'all') || (ep.category === activeTenraiCategory);
+        const resolved = resolveEndpointPath(ep.path);
+        const matchesSearch = !searchVal || 
+                              ep.name.toLowerCase().includes(searchVal) || 
+                              ep.path.toLowerCase().includes(searchVal) || 
+                              resolved.toLowerCase().includes(searchVal) ||
+                              ep.desc.toLowerCase().includes(searchVal);
+
+        if (matchesCategory && matchesSearch) {
+            count++;
+            const isSelected = (idx === activeTenraiEndpointIndex);
+            html += `
+                <div class="tenrai-endpoint-row ${isSelected ? 'selected' : ''}" onclick="selectTenraiEndpoint(${idx})">
+                    <div class="d-flex align-items-center gap-2 overflow-hidden">
+                        <span class="tenrai-method-badge">${ep.method}</span>
+                        <div class="text-truncate">
+                            <strong class="text-white small d-block text-truncate">${ep.name}</strong>
+                            <span class="text-muted font-monospace" style="font-size: 0.72rem;">${resolved}</span>
+                        </div>
+                    </div>
+                    <span class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25" style="font-size: 0.65rem;">
+                        #${ep.id}
+                    </span>
+                </div>
+            `;
+        }
+    });
+
+    const countLabel = document.getElementById('tenraiCountLabel');
+    if (countLabel) countLabel.textContent = count;
+
+    if (count === 0) {
+        html = '<div class="p-4 text-center text-muted small">No se encontraron endpoints coincidentes.</div>';
+    }
+
+    listContainer.innerHTML = html;
+}
+
+function setTenraiCategory(category, pillEl) {
+    activeTenraiCategory = category;
+    document.querySelectorAll('#tenraiCategoryPills .tenrai-filter-pill').forEach(p => p.classList.remove('active'));
+    if (pillEl) pillEl.classList.add('active');
+    renderTenraiEndpointsList();
+}
+
+function filterTenraiEndpoints() {
+    renderTenraiEndpointsList();
+}
+
+function setTenraiViewMode(mode) {
+    currentViewMode = mode;
+    const btnAdapted = document.getElementById('btnViewAdapted');
+    const btnJson = document.getElementById('btnViewJson');
+    const viewAdapted = document.getElementById('tenraiAdaptedView');
+    const viewJson = document.getElementById('tenraiJsonView');
+
+    if (mode === 'adapted') {
+        btnAdapted?.classList.add('active');
+        btnJson?.classList.remove('active');
+        viewAdapted?.classList.remove('d-none');
+        viewJson?.classList.add('d-none');
+    } else {
+        btnJson?.classList.add('active');
+        btnAdapted?.classList.remove('active');
+        viewJson?.classList.remove('d-none');
+        viewAdapted?.classList.add('d-none');
+    }
+}
+
+function selectTenraiEndpoint(index) {
+    activeTenraiEndpointIndex = index;
+    renderTenraiEndpointsList();
+    runActiveTenraiEndpoint();
+}
+
+async function runActiveTenraiEndpoint() {
+    const ep = TENRAI_ENDPOINTS[activeTenraiEndpointIndex];
+    if (!ep) return;
+
+    const resolved = resolveEndpointPath(ep.path);
+    const pathText = document.getElementById('activePathText');
+    const pathDesc = document.getElementById('activeEndpointDesc');
+    const statusBadge = document.getElementById('activeStatusBadge');
+    const latencyBadge = document.getElementById('activeLatencyBadge');
+    const adaptedContent = document.getElementById('tenraiAdaptedContent');
+    const jsonCode = document.getElementById('tenraiJsonCode');
+
+    if (pathText) pathText.textContent = resolved;
+    if (pathDesc) pathDesc.textContent = ep.desc;
+    if (statusBadge) {
+        statusBadge.className = 'badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25';
+        statusBadge.textContent = 'Consultando...';
+    }
+    if (adaptedContent) {
+        adaptedContent.innerHTML = `
+            <div class="text-center py-5 text-muted">
+                <div class="spinner-border spinner-border-sm text-danger mb-2" role="status"></div>
+                <p class="small mb-0">Consultando ${escapeHtml(resolved)} en Tenrai API...</p>
+            </div>
+        `;
+    }
+
+    const startTime = performance.now();
+    try {
+        const proxyUrl = `/api/tenrai${resolved.startsWith('/') ? resolved : '/' + resolved}`;
+        const response = await fetch(proxyUrl);
+        const endTime = performance.now();
+        const latency = Math.round(endTime - startTime);
+
+        if (latencyBadge) latencyBadge.textContent = `${latency} ms`;
+
+        if (response.ok) {
+            const data = await response.json();
+            activeTenraiData = data;
+
+            if (statusBadge) {
+                statusBadge.className = 'badge bg-success bg-opacity-25 text-success border border-success border-opacity-25';
+                statusBadge.textContent = '200 OK';
+            }
+
+            if (jsonCode) jsonCode.textContent = JSON.stringify(data, null, 2);
+            renderAdaptedView(ep, data);
+        } else {
+            if (statusBadge) {
+                statusBadge.className = 'badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25';
+                statusBadge.textContent = `${response.status} Error`;
+            }
+            if (jsonCode) jsonCode.textContent = `Error ${response.status}: No se pudo cargar el recurso desde Tenrai API.`;
+            if (adaptedContent) {
+                adaptedContent.innerHTML = `
+                    <div class="p-4 rounded-3 text-center" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25);">
+                        <i class="bi bi-exclamation-triangle-fill text-danger fs-3 mb-2 d-block"></i>
+                        <h6 class="text-white fw-bold">Recurso No Disponible (${response.status})</h6>
+                        <p class="text-secondary small mb-0">El endpoint '${escapeHtml(resolved)}' no devolvió datos para este ID o parámetro.</p>
+                    </div>
+                `;
+            }
+        }
+    } catch (err) {
+        if (statusBadge) {
+            statusBadge.className = 'badge bg-danger bg-opacity-25 text-danger';
+            statusBadge.textContent = 'Error Red';
+        }
+        if (jsonCode) jsonCode.textContent = `Error de conexión: ${err.message}`;
+        if (adaptedContent) {
+            adaptedContent.innerHTML = `
+                <div class="p-4 rounded-3 text-center text-danger small">
+                    Error al conectar con la pasarela de Tenrai API: ${escapeHtml(err.message)}
+                </div>
+            `;
+        }
+    }
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function renderAdaptedView(ep, data) {
+    const container = document.getElementById('tenraiAdaptedContent');
+    if (!container) return;
+
+    if (!data) {
+        container.innerHTML = '<div class="text-center py-4 text-muted small">Sin datos disponibles.</div>';
+        return;
+    }
+
+    const payload = data.data || data;
+
+    // 1. Array of Characters
+    if (ep.path.includes('/characters') && Array.isArray(payload)) {
+        if (payload.length === 0) {
+            container.innerHTML = '<div class="p-4 text-center text-muted small">No se registraron personajes para esta obra.</div>';
+            return;
+        }
+        let itemsHtml = '<div class="row row-cols-1 row-cols-md-2 g-2">';
+        payload.slice(0, 16).forEach(c => {
+            const charObj = c.character || c;
+            const img = charObj.images?.jpg?.image_url || 'https://via.placeholder.com/80x100?text=No+Img';
+            const name = charObj.name || 'Personaje';
+            const role = c.role || 'Rol';
+            const seiyuu = (c.voice_actors && c.voice_actors[0]) ? c.voice_actors[0].person?.name : null;
+
+            itemsHtml += `
+                <div class="col">
+                    <div class="tenrai-adapted-item-card d-flex align-items-center gap-3">
+                        <img src="${escapeHtml(img)}" alt="${escapeHtml(name)}" class="rounded-3" style="width: 50px; height: 65px; object-fit: cover; flex-shrink: 0;">
+                        <div class="overflow-hidden">
+                            <strong class="text-white small d-block text-truncate">${escapeHtml(name)}</strong>
+                            <span class="badge bg-danger bg-opacity-25 text-danger" style="font-size: 0.68rem;">${escapeHtml(role)}</span>
+                            ${seiyuu ? `<small class="text-muted d-block text-truncate" style="font-size: 0.72rem;"><i class="bi bi-mic me-1"></i>${escapeHtml(seiyuu)}</small>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        itemsHtml += '</div>';
+        container.innerHTML = itemsHtml;
+        return;
+    }
+
+    // 2. Episodes List
+    if (ep.path.includes('/episodes') && Array.isArray(payload)) {
+        if (payload.length === 0) {
+            container.innerHTML = '<div class="p-4 text-center text-muted small">No hay lista de episodios disponible.</div>';
+            return;
+        }
+        let epsHtml = '<div class="d-flex flex-column gap-2">';
+        payload.slice(0, 20).forEach(epItem => {
+            const num = epItem.mal_id || epItem.episode || '#';
+            const title = epItem.title || `Episodio ${num}`;
+            const aired = epItem.aired ? new Date(epItem.aired).toLocaleDateString() : '';
+            const score = epItem.score ? `<span class="badge bg-warning bg-opacity-25 text-warning"><i class="bi bi-star-fill me-1"></i>${epItem.score}</span>` : '';
+
+            epsHtml += `
+                <div class="tenrai-adapted-item-card d-flex align-items-center justify-content-between gap-3">
+                    <div class="d-flex align-items-center gap-3 overflow-hidden">
+                        <span class="badge bg-dark border border-secondary text-info fw-bold" style="min-width: 44px;">#${num}</span>
+                        <div class="text-truncate">
+                            <strong class="text-white small d-block text-truncate">${escapeHtml(title)}</strong>
+                            ${aired ? `<small class="text-muted" style="font-size: 0.72rem;">Emisión: ${escapeHtml(aired)}</small>` : ''}
+                        </div>
+                    </div>
+                    ${score}
+                </div>
+            `;
+        });
+        epsHtml += '</div>';
+        container.innerHTML = epsHtml;
+        return;
+    }
+
+    // 3. Pictures Gallery
+    if (ep.path.includes('/pictures') && Array.isArray(payload)) {
+        if (payload.length === 0) {
+            container.innerHTML = '<div class="p-4 text-center text-muted small">No hay imágenes en la galería.</div>';
+            return;
+        }
+        let picsHtml = '<div class="row row-cols-3 row-cols-md-4 g-2">';
+        payload.slice(0, 12).forEach(p => {
+            const imgUrl = p.jpg?.large_image_url || p.jpg?.image_url;
+            if (imgUrl) {
+                picsHtml += `
+                    <div class="col">
+                        <a href="${escapeHtml(imgUrl)}" target="_blank" rel="noopener noreferrer" class="d-block rounded-3 overflow-hidden border border-secondary border-opacity-25 shadow-sm" style="height: 110px;">
+                            <img src="${escapeHtml(imgUrl)}" alt="Póster" class="w-100 h-100" style="object-fit: cover;">
+                        </a>
+                    </div>
+                `;
+            }
+        });
+        picsHtml += '</div>';
+        container.innerHTML = picsHtml;
+        return;
+    }
+
+    // 4. Staff List
+    if (ep.path.includes('/staff') && Array.isArray(payload)) {
+        let staffHtml = '<div class="row row-cols-1 row-cols-md-2 g-2">';
+        payload.slice(0, 14).forEach(s => {
+            const p = s.person || {};
+            const img = p.images?.jpg?.image_url || 'https://via.placeholder.com/60?text=Staff';
+            const name = p.name || 'Miembro';
+            const positions = (s.positions || []).join(', ') || 'Staff';
+
+            staffHtml += `
+                <div class="col">
+                    <div class="tenrai-adapted-item-card d-flex align-items-center gap-3">
+                        <img src="${escapeHtml(img)}" alt="${escapeHtml(name)}" class="rounded-circle" style="width: 44px; height: 44px; object-fit: cover; flex-shrink: 0;">
+                        <div class="overflow-hidden">
+                            <strong class="text-white small d-block text-truncate">${escapeHtml(name)}</strong>
+                            <small class="text-secondary text-truncate d-block" style="font-size: 0.72rem;">${escapeHtml(positions)}</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        staffHtml += '</div>';
+        container.innerHTML = staffHtml;
+        return;
+    }
+
+    // 5. Videos / Trailers
+    if (ep.path.includes('/videos')) {
+        const promoList = payload.promo || [];
+        if (promoList.length > 0) {
+            let vidHtml = '<div class="row row-cols-1 row-cols-md-2 g-3">';
+            promoList.slice(0, 4).forEach(v => {
+                const title = v.title || 'Trailer Oficial';
+                const youtubeUrl = v.trailer?.url || v.trailer?.embed_url;
+                const thumb = v.trailer?.images?.maximum_image_url || v.trailer?.images?.medium_image_url || 'https://via.placeholder.com/320x180';
+
+                vidHtml += `
+                    <div class="col">
+                        <div class="tenrai-adapted-item-card overflow-hidden">
+                            <div class="position-relative mb-2 rounded-2 overflow-hidden" style="height: 120px;">
+                                <img src="${escapeHtml(thumb)}" alt="${escapeHtml(title)}" class="w-100 h-100" style="object-fit: cover;">
+                                ${youtubeUrl ? `<a href="${escapeHtml(youtubeUrl)}" target="_blank" rel="noopener noreferrer" class="position-absolute top-50 start-50 translate-middle btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;"><i class="bi bi-play-fill fs-5"></i></a>` : ''}
+                            </div>
+                            <strong class="text-white small d-block text-truncate">${escapeHtml(title)}</strong>
+                        </div>
+                    </div>
+                `;
+            });
+            vidHtml += '</div>';
+            container.innerHTML = vidHtml;
+            return;
+        }
+    }
+
+    // 6. Statistics
+    if (ep.path.includes('/statistics') && typeof payload === 'object') {
+        let statsHtml = '<div class="row g-2">';
+        const statKeys = ['watching', 'reading', 'completed', 'on_hold', 'dropped', 'plan_to_watch', 'plan_to_read', 'total'];
+        statKeys.forEach(k => {
+            if (payload[k] !== undefined) {
+                statsHtml += `
+                    <div class="col-6 col-sm-4">
+                        <div class="p-3 rounded-3 text-center" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                            <span class="text-muted text-uppercase d-block" style="font-size: 0.68rem;">${escapeHtml(k.replace('_', ' '))}</span>
+                            <strong class="text-white fs-5">${Number(payload[k]).toLocaleString()}</strong>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+        statsHtml += '</div>';
+        container.innerHTML = statsHtml;
+        return;
+    }
+
+    // 7. General Entity Array (Top lists, Seasons, Recommendations, News, Stacks, etc.)
+    if (Array.isArray(payload)) {
+        if (payload.length === 0) {
+            container.innerHTML = '<div class="p-4 text-center text-muted small">No se encontraron registros en este endpoint.</div>';
+            return;
+        }
+        let listHtml = '<div class="row row-cols-1 row-cols-md-2 g-2">';
+        payload.slice(0, 12).forEach(it => {
+            const itemEntity = it.entry || it;
+            const title = itemEntity.title || itemEntity.name || itemEntity.username || 'Elemento';
+            const img = itemEntity.images?.jpg?.image_url || itemEntity.images?.jpg?.large_image_url || 'https://via.placeholder.com/50x65';
+            const score = itemEntity.score ? `<span class="badge bg-warning bg-opacity-25 text-warning"><i class="bi bi-star-fill me-1"></i>${itemEntity.score}</span>` : '';
+            const type = itemEntity.type || it.role || '';
+
+            listHtml += `
+                <div class="col">
+                    <div class="tenrai-adapted-item-card d-flex align-items-center gap-3">
+                        <img src="${escapeHtml(img)}" alt="${escapeHtml(title)}" class="rounded-3" style="width: 44px; height: 58px; object-fit: cover; flex-shrink: 0;">
+                        <div class="overflow-hidden flex-grow-1">
+                            <strong class="text-white small d-block text-truncate">${escapeHtml(title)}</strong>
+                            <div class="d-flex align-items-center gap-2 mt-1">
+                                ${type ? `<span class="badge bg-dark border border-secondary text-secondary" style="font-size: 0.65rem;">${escapeHtml(type)}</span>` : ''}
+                                ${score}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        listHtml += '</div>';
+        container.innerHTML = listHtml;
+        return;
+    }
+
+    // 8. General Object Fallback
+    if (typeof payload === 'object' && payload !== null) {
+        let objHtml = '<div class="d-flex flex-column gap-2">';
+        const keys = Object.keys(payload).slice(0, 12);
+        keys.forEach(k => {
+            const val = payload[k];
+            if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
+                objHtml += `
+                    <div class="tenrai-adapted-item-card d-flex align-items-center justify-content-between">
+                        <span class="text-muted small font-monospace">${escapeHtml(k)}:</span>
+                        <strong class="text-white small text-truncate" style="max-width: 60%;">${escapeHtml(String(val))}</strong>
+                    </div>
+                `;
+            }
+        });
+        objHtml += '</div>';
+        container.innerHTML = objHtml;
+        return;
+    }
+
+    container.innerHTML = `<div class="p-3 text-white small">${escapeHtml(String(payload))}</div>`;
+}
+
+function copyTenraiJson(btn) {
+    if (!activeTenraiData) return;
+    navigator.clipboard.writeText(JSON.stringify(activeTenraiData, null, 2)).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-check-lg text-success"></i>';
+        setTimeout(() => btn.innerHTML = orig, 2000);
+        if (window.showToast) window.showToast('JSON de Tenrai API copiado al portapapeles', 'success', 2500);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    renderTenraiEndpointsList();
+    // Default endpoint: if manga, pick characters (idx 29); if anime, pick characters (idx 3)
+    if (CURRENT_MEDIA_TYPE === 'manga') {
+        activeTenraiEndpointIndex = 29;
+    } else {
+        activeTenraiEndpointIndex = 3;
+    }
+    renderTenraiEndpointsList();
+    runActiveTenraiEndpoint();
+});
+
+// ==============================================================================
+// Existing Detail Functions (Synopsis, Sharing, Rating, Discussions)
+// ==============================================================================
 function toggleSynopsis() {
     var container = document.getElementById('synopsisContainer');
     var btnText = document.getElementById('btnSynopsisText');

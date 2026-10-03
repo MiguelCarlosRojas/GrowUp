@@ -202,7 +202,7 @@ class CatalogTests(TestCase):
         self.assertEqual(user_msg.subject, 'Soporte de Cuenta')
 
     def test_blog_views_and_permission_boundaries(self):
-        from catalog.models import BlogPost
+        from catalog.models import BlogPost, BlogComment
         # Create a blog post
         post = BlogPost.objects.create(
             title='Prueba de Articulo Tecnologico',
@@ -221,11 +221,30 @@ class CatalogTests(TestCase):
         detail_resp = self.client.get(reverse('catalog:blog_detail', kwargs={'slug': post.slug}))
         self.assertEqual(detail_resp.status_code, 200)
         self.assertContains(detail_resp, 'Contenido completo de prueba')
+        # Regular user should NOT see edit or delete actions
+        self.assertNotContains(detail_resp, 'Editar Artículo')
+        self.assertNotContains(detail_resp, 'Eliminar')
 
         # Regular user cannot access blog_create (redirected with error)
         self.client.login(username='otaku_master', password='password123')
         create_resp = self.client.get(reverse('catalog:blog_create'))
         self.assertEqual(create_resp.status_code, 302)
+
+        # Regular user can post a comment
+        comment_resp = self.client.post(
+            reverse('catalog:blog_add_comment', kwargs={'slug': post.slug}),
+            {'content': 'Excelente publicacion de arquitectura en GrowUp.'},
+            follow=True
+        )
+        self.assertEqual(comment_resp.status_code, 200)
+        self.assertTrue(BlogComment.objects.filter(post=post, user=self.user).exists())
+        self.assertContains(comment_resp, 'Excelente publicacion de arquitectura')
+
+        # Superuser can access blog_create
+        self.user.is_superuser = True
+        self.user.save()
+        create_resp_admin = self.client.get(reverse('catalog:blog_create'))
+        self.assertEqual(create_resp_admin.status_code, 200)
 
     def test_institutional_pages_render_fullwidth(self):
         endpoints = [
@@ -244,6 +263,7 @@ class CatalogTests(TestCase):
             resp = self.client.get(reverse(ep))
             self.assertEqual(resp.status_code, 200)
             self.assertContains(resp, 'pro-page-wrapper')
+
 
 
 

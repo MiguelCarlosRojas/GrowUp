@@ -37,6 +37,7 @@ urlpatterns = [
     path('blog/', pages_views.blog_view, name='blog'),
     path('blog/crear/', pages_views.blog_create_view, name='blog_create'),
     path('blog/<slug:slug>/', pages_views.blog_detail_view, name='blog_detail'),
+    path('blog/<slug:slug>/comentar/', pages_views.blog_add_comment_view, name='blog_add_comment'),
     path('blog/<slug:slug>/editar/', pages_views.blog_edit_view, name='blog_edit'),
     path('blog/<slug:slug>/eliminar/', pages_views.blog_delete_view, name='blog_delete'),
 

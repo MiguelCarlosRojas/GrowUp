@@ -9,8 +9,8 @@ Copyright (c) 2026 Miguel Carlos Rojas & Colaboradores de GrowUp. Todos los dere
 ### 1. Codigo Fuente y Software
 El codigo fuente de la plataforma **GrowUp** desarrollado en Django Framework, asi como su arquitectura de microservicios y WebSockets, logica de negocio, endpoints optimizados, workflows de CI/CD en GitHub Actions y hojas de estilo Obsidian Cyberpunk, son propiedad del proyecto GrowUp y sus desarrolladores.
 
-### 2. Obras de Terceros e Integracion con Jikan API v4
-- Los metadatos, sinopsis, titulos, imagenes de portada y calificaciones de mangas, animes y novelas comerciales mostrados en esta plataforma son obtenidos a traves de la API publica **Jikan API (v4)** y pertenecen a sus respectivos autores, ilustradores, casas editoriales y a **MyAnimeList, LLC**.
+### 2. Obras de Terceros e Integracion con Tenrai API v1
+- Los metadatos, sinopsis, titulos, imagenes de portada y calificaciones de mangas, animes y novelas comerciales mostrados en esta plataforma son obtenidos a traves de la API publica **Tenrai API (v1)** y pertenecen a sus respectivos autores, ilustradores, casas editoriales y a **MyAnimeList, LLC**.
 - El uso de estos recursos se realiza bajo propositos estrictamente informativos, educativos y de resena comunitaria (Fair Use / Uso Legitimo).
 - GrowUp no reclama propiedad sobre ninguna propiedad intelectual de anime, manga o novela ligera comercial aqui referenciada.
 

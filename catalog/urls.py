@@ -20,6 +20,16 @@ urlpatterns = [
     path('api/live/notifications/', api_views.api_live_notifications_view, name='api_live_notifications'),
     path('ws/live/', api_views.ws_live_http_fallback_view, name='ws_live_fallback'),
 
+    # Tenrai API Gateway (Exposing 94 GET Endpoints)
+    path('api/tenrai/random/<str:media_type>/', api_views.api_tenrai_random_view, name='api_tenrai_random'),
+    path('api/tenrai/seasons/', api_views.api_tenrai_seasons_view, name='api_tenrai_seasons'),
+    path('api/tenrai/schedules/', api_views.api_tenrai_schedules_view, name='api_tenrai_schedules'),
+    path('api/tenrai/news/', api_views.api_tenrai_news_view, name='api_tenrai_news'),
+    path('api/tenrai/articles/', api_views.api_tenrai_articles_view, name='api_tenrai_articles'),
+    path('api/tenrai/stacks/', api_views.api_tenrai_stacks_view, name='api_tenrai_stacks'),
+    path('api/tenrai/item/<str:media_type>/<str:item_id>/<str:extra>/', api_views.api_tenrai_item_extra_view, name='api_tenrai_item_extra'),
+    path('api/tenrai/<path:path>', api_views.api_tenrai_proxy_view, name='api_tenrai_proxy'),
+
     # Sobre nosotros & Blog Oficial
     path('sobre-nosotros/quienes-somos/', pages_views.quienes_somos_view, name='quienes_somos'),
     path('sobre-nosotros/nuestra-historia/', pages_views.nuestra_historia_view, name='nuestra_historia'),

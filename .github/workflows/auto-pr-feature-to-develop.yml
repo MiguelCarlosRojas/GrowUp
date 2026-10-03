@@ -16,7 +16,7 @@ jobs:
     env:
       SECRET_KEY: django-insecure-github-actions-ci-build-key-growup
       DATABASE_URL: ''
-      JIKAN_API_BASE_URL: https://api.jikan.moe/v4
+      TENRAI_API_BASE_URL: https://api.tenrai.org/v1
 
     steps:
       - name: Checkout Code
@@ -64,7 +64,7 @@ jobs:
           
           #### Cambios Incluidos:
           - Biblioteca de Manga, Anime y Novelas Ligeras en Django puro.
-          - Integracion en tiempo real con Jikan API v4 (MyAnimeList).
+          - Integracion en tiempo real con Tenrai API v1 (MyAnimeList).
           - Soporte para base de datos Prisma Postgres y SQLite local.
           - Sistema de clasificacion (estrellas 1-5), opiniones y resenas detalladas.
           - Seccion de preguntas, respuestas (Q&A) y comentarios anidados.

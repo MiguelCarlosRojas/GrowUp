@@ -3,17 +3,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Avg, Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .services import jikan_service
+from .services import tenrai_service
 from .models import ItemReview, ItemDiscussion, Bookmark
 from .forms import ReviewForm, DiscussionForm
 from novels.models import Novel, Category
 
 
 def home_view(request):
-    # Fetch real data from Jikan API
-    top_animes = jikan_service.get_top_anime(limit=8)
-    top_mangas = jikan_service.get_top_manga(limit=8)
-    top_lightnovels = jikan_service.get_top_lightnovels(limit=8)
+    # Fetch real data from Tenrai API
+    top_animes = tenrai_service.get_top_anime(limit=8)
+    top_mangas = tenrai_service.get_top_manga(limit=8)
+    top_lightnovels = tenrai_service.get_top_lightnovels(limit=8)
 
     # Community original light novels from local database - single query with only needed fields
     original_novels = Novel.objects.exclude(status='draft').select_related(
@@ -32,7 +32,7 @@ def home_view(request):
         'top_mangas': top_mangas,
         'top_lightnovels': top_lightnovels,
         'original_novels': original_novels,
-        'genres': jikan_service.get_common_genres(),
+        'genres': tenrai_service.get_common_genres(),
     }
     return render(request, 'catalog/home.html', context)
 
@@ -109,7 +109,7 @@ def explore_view(request):
             'end_index': novels_page.end_index() if paginator.count > 0 else 0,
         }
     else:
-        results = jikan_service.search_items(
+        results = tenrai_service.search_items(
             category=media_type,
             query=q,
             genre=genre,
@@ -143,15 +143,15 @@ def explore_view(request):
         'selected_status': status,
         'selected_order_by': order_by,
         'selected_sort': sort,
-        'genres': jikan_service.get_common_genres(),
+        'genres': tenrai_service.get_common_genres(),
         'novel_categories': Category.objects.all(),
     }
     return render(request, 'catalog/explore.html', context)
 
 
 def item_detail_view(request, item_type, item_id):
-    # Fetch real item details from Jikan API
-    item = jikan_service.get_item_detail(item_type, item_id)
+    # Fetch real item details from Tenrai API
+    item = tenrai_service.get_item_detail(item_type, item_id)
     if not item:
         messages.error(request, "No se pudo obtener la información de esta obra.")
         return redirect('catalog:explore')
@@ -175,7 +175,7 @@ def item_detail_view(request, item_type, item_id):
         is_bookmarked = Bookmark.objects.filter(user=request.user, item_type=item_type, item_id=str(item_id)).exists()
 
     # Platforms (Official and Community / Streaming & Reading)
-    platforms = jikan_service.get_platforms(item_type, item.get('title', ''), item_id)
+    platforms = tenrai_service.get_platforms(item_type, item.get('title', ''), item_id)
     share_url = request.build_absolute_uri()
     share_title = item.get('title', 'GrowUp')
 

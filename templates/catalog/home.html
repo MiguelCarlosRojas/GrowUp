@@ -74,7 +74,7 @@
         </span>
         <h1 class="hero-title mb-3">Biblioteca Global de Manga, Anime y Novelas Ligeras</h1>
         <p class="hero-synopsis mx-auto mb-4" style="max-width: 720px;">
-            Explora miles de obras sincronizadas en tiempo real con Jikan API v4, descubre novelas originales publicadas por autores de nuestra comunidad y comparte tus opiniones, debates y reseñas.
+            Explora miles de obras sincronizadas en tiempo real con Tenrai API v1, descubre novelas originales publicadas por autores de nuestra comunidad y comparte tus opiniones, debates y reseñas.
         </p>
         <div class="d-flex justify-content-center gap-3 flex-wrap">
             <a href="{% url 'catalog:explore' %}?type=anime" class="btn btn-accent px-4 py-3">
@@ -108,9 +108,9 @@
         <div class="col-12 col-sm-6 col-lg-3">
             <label class="form-label text-muted small fw-semibold">Tipo de Catálogo</label>
             <select name="type" class="form-select filter-select-pro">
-                <option value="anime">Anime (Jikan API)</option>
-                <option value="manga">Manga (Jikan API)</option>
-                <option value="lightnovel">Novela Ligera (MAL / Jikan)</option>
+                <option value="anime">Anime (Tenrai API)</option>
+                <option value="manga">Manga (Tenrai API)</option>
+                <option value="lightnovel">Novela Ligera (Tenrai API)</option>
                 <option value="original_novel">Novela Original (Escritores GrowUp)</option>
             </select>
         </div>
@@ -153,7 +153,7 @@
                 <span class="section-accent-bar"></span>
                 <i class="bi bi-tv text-danger"></i> Animes en Tendencia & Aclamados
             </h3>
-            <span class="text-muted small">Información en tiempo real sincronizada con Jikan API v4</span>
+            <span class="text-muted small">Información en tiempo real sincronizada con Tenrai API v1</span>
         </div>
         <a href="{% url 'catalog:explore' %}?type=anime" class="btn btn-sm btn-outline-glow">
             Ver catálogo completo <i class="bi bi-arrow-right ms-1"></i>
@@ -199,7 +199,7 @@
         {% empty %}
         <div class="col-12 py-5 text-center text-muted">
             <i class="bi bi-broadcast fs-2 d-block mb-2 text-danger"></i>
-            <p class="mb-0">Sincronizando información en tiempo real con Jikan API v4...</p>
+            <p class="mb-0">Sincronizando información en tiempo real con Tenrai API v1...</p>
         </div>
         {% endfor %}
     </div>
@@ -259,7 +259,7 @@
         {% empty %}
         <div class="col-12 py-5 text-center text-muted">
             <i class="bi bi-book fs-2 d-block mb-2 text-warning"></i>
-            <p class="mb-0">Sincronizando información en tiempo real con Jikan API v4...</p>
+            <p class="mb-0">Sincronizando información en tiempo real con Tenrai API v1...</p>
         </div>
         {% endfor %}
     </div>
@@ -273,7 +273,7 @@
                 <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #6366f1);"></span>
                 <i class="bi bi-journal-bookmark text-info"></i> Novelas Ligeras (Light Novels)
             </h3>
-            <span class="text-muted small">Historias y adaptaciones oficiales sincronizadas con Jikan API</span>
+            <span class="text-muted small">Historias y adaptaciones oficiales sincronizadas con Tenrai API v1</span>
         </div>
         <a href="{% url 'catalog:explore' %}?type=lightnovel" class="btn btn-sm btn-outline-glow">
             Ver catálogo completo <i class="bi bi-arrow-right ms-1"></i>
@@ -319,7 +319,7 @@
         {% empty %}
         <div class="col-12 py-5 text-center text-muted">
             <i class="bi bi-journal-bookmark fs-2 d-block mb-2 text-info"></i>
-            <p class="mb-0">Sincronizando información en tiempo real con Jikan API v4...</p>
+            <p class="mb-0">Sincronizando información en tiempo real con Tenrai API v1...</p>
         </div>
         {% endfor %}
     </div>

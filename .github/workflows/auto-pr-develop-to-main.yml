@@ -16,7 +16,7 @@ jobs:
     env:
       SECRET_KEY: django-insecure-github-actions-ci-build-key-growup
       DATABASE_URL: ''
-      JIKAN_API_BASE_URL: https://api.jikan.moe/v4
+      TENRAI_API_BASE_URL: https://api.tenrai.org/v1
 
     steps:
       - name: Checkout Code
@@ -58,7 +58,7 @@ jobs:
           #### Resumen del Release:
           - Plataforma completa GrowUp para Manga, Anime y Novelas Ligeras.
           - Backend en Django puro con Prisma Postgres.
-          - Datos en tiempo real de Jikan API.
+          - Datos en tiempo real de Tenrai API v1.
           - Sistema de resenas, clasificacion, debates (Q&A) y modulo de escritores.
           
           *Este Pull Request fue generado automaticamente por GitHub Actions tras la compilacion exitosa en develop.*"

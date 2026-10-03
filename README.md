@@ -6,20 +6,20 @@
 [![Django](https://img.shields.io/badge/django-5.1%2B%20%7C%206.1-green.svg)](https://www.djangoproject.com/)
 [![Database](https://img.shields.io/badge/database-Prisma%20Postgres-3963F7.svg)](https://www.prisma.io/postgres)
 [![Prisma CLI](https://img.shields.io/badge/prisma-7.10%2B-5A67D8.svg)](https://www.prisma.io/)
-[![API](https://img.shields.io/badge/api-Jikan%20API%20v4-2e51a2.svg)](https://jikan.moe/)
+[![API](https://img.shields.io/badge/api-Tenrai%20API%20v1-10b981.svg)](https://api.tenrai.org/documentation)
 
 ---
 
 ### Metadatos del Repositorio de GitHub
 
 > **Description:**  
-> Plataforma interactiva de Manga, Anime y Novelas Ligeras desarrollada en Django puro con Prisma Postgres, Jikan API v4, Taller de Escritores y CI/CD automatizado.
+> Plataforma interactiva de Manga, Anime y Novelas Ligeras desarrollada en Django puro con Prisma Postgres, Tenrai API v1, Taller de Escritores y CI/CD automatizado.
 >
 > **Website:**  
 > `https://growup-7my7.onrender.com`
 >
 > **Topics:**  
-> `anime`, `cicd`, `django`, `github-actions`, `jikan-api`, `light-novels`, `manga`, `prisma-postgres`, `python`, `render`
+> `anime`, `cicd`, `django`, `github-actions`, `light-novels`, `manga`, `prisma-postgres`, `python`, `render`, `tenrai-api`
 
 ---
 
@@ -31,13 +31,13 @@ La aplicacion se ejecuta de forma completamente autonoma en **Render** sin reque
 - **Base de Datos Cloud:** Prisma Postgres alojada en la nube (`pooled.db.prisma.io:5432`) con pooling de conexiones y SSL requerido.
 - **Entrega de Archivos Estaticos:** Integracion con **WhiteNoise** (`CompressedStaticFilesStorage`) para compresion Brotli/Gzip y cache instantaneo de 137 assets.
 - **Servidor WSGI/ASGI Concurrente:** Soporte dual para **Gunicorn** y **Uvicorn** gestionando peticiones HTTP y WebSockets en tiempo real.
-- **Resiliencia ante Caidas de Jikan (HTTP 504):** Mecanismo de contingencia con catalogo semilla pre-registrado en memoria para asegurar que animes, mangas y novelas siempre se muestren incluso ante demoras o limites de tasa de servidores externos.
+- **Resiliencia ante Caidas de API Externa (Tenrai API v1):** Mecanismo de contingencia con catalogo semilla pre-registrado en memoria para asegurar que animes, mangas y novelas siempre se muestren incluso ante demoras o limites de tasa de servidores externos.
 
 ---
 
 ## Caracteristicas Principales del Sistema
 
-1. **Catalogo Multimedial y Landing Page Dinamica (Jikan API v4):**
+1. **Catalogo Multimedial y Landing Page Dinamica (Tenrai API v1):**
    - Sincronizacion directa con el catalogo oficial de MyAnimeList.
    - Exploracion filtrable de Animes, Mangas, Novelas Ligeras y Obras de la Comunidad con paginacion de 24 registros por pagina.
    - Seccion detallada de cada obra con enlaces a plataformas oficiales (Crunchyroll, Netflix, MANGA Plus, BookWalker) y comunitarias (AnimeFLV, MangaDex, TuNovelaLigera).
@@ -76,8 +76,8 @@ flowchart TD
     Render --> Static["WhiteNoise (Static Assets)"]
     Render --> WSGI["Django 6.1 WSGI / ASGI Router"]
     WSGI --> CloudDB[("Prisma Postgres Cloud DB")]
-    WSGI --> JikanService["Jikan Service (Cache + Seed Fallback)"]
-    JikanService --> JikanAPI["Jikan API v4 (api.jikan.moe)"]
+    WSGI --> TenraiService["Tenrai Service (Cache + 94 Endpoints)"]
+    TenraiService --> TenraiAPI["Tenrai API v1 (api.tenrai.org/v1)"]
 ```
 
 ---
@@ -89,7 +89,8 @@ DEBUG=False
 SECRET_KEY=tu-clave-secreta-de-django
 ALLOWED_HOSTS=*
 DATABASE_URL=postgres://usuario:password@pooled.db.prisma.io:5432/postgres?sslmode=require
-JIKAN_API_BASE_URL=https://api.jikan.moe/v4
+TENRAI_API_BASE_URL=https://api.tenrai.org/v1
+TENRAI_SERVER_KEY=
 JWT_ACCESS_MINUTES=60
 JWT_REFRESH_DAYS=7
 PYTHON_VERSION=3.12.10
@@ -116,7 +117,7 @@ PYTHON_VERSION=3.12.10
 
 ## Suite de Pruebas Automatizadas
 
-El proyecto incluye 35 pruebas unitarias exhaustivas que cubren modelos, vistas, resiliencia ante errores 504 de Jikan, endpoints de WebSockets y permisos de roles:
+El proyecto incluye pruebas unitarias exhaustivas que cubren modelos, vistas, catalogo Tenrai API v1, endpoints de WebSockets y permisos de roles:
 
 ```bash
 python manage.py test

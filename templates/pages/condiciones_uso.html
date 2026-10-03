@@ -3,55 +3,108 @@
 {% block title %}Condiciones de Uso - GrowUp{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center py-3">
-    <div class="col-lg-10 col-xl-9">
-        <!-- Header -->
-        <div class="mb-5 text-center">
-            <span class="badge px-3 py-1 mb-3" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.35); color: #ffffff;">
-                Términos del Servicio
-            </span>
-            <h1 class="display-5 fw-bold text-white mb-3">Condiciones de Uso</h1>
-            <p class="text-muted lead mx-auto" style="max-width: 720px;">
-                Reglas de convivencia, derechos de publicación y responsabilidades de los usuarios en la plataforma comunitaria GrowUp.
-            </p>
+<div class="w-100 py-2">
+    <!-- Hero Header Full Width -->
+    <div class="p-4 p-md-5 rounded-4 shadow-lg mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(14, 20, 32, 0.95), rgba(8, 12, 20, 0.98)); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+        <div class="row align-items-center position-relative" style="z-index: 1;">
+            <div class="col-lg-8">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.35);">
+                    <span class="badge bg-danger rounded-circle p-1"></span>
+                    <span class="text-white small fw-bold text-uppercase tracking-wider">Términos de Servicio & Convivencia</span>
+                </div>
+                <h1 class="display-5 fw-bold text-white mb-3">Condiciones de Uso</h1>
+                <p class="text-secondary lead mb-0" style="line-height: 1.8; max-width: 820px;">
+                    Normas de la comunidad, pautas para autores en el taller de novelas, responsabilidades de moderación y directrices de respeto mutuo en GrowUp.
+                </p>
+            </div>
+            <div class="col-lg-4 mt-4 mt-lg-0 text-lg-end">
+                <div class="p-3 rounded-4 d-inline-block text-start" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                    <div class="text-muted small mb-1">Versión del Contrato</div>
+                    <div class="text-white fw-bold mb-1">v2.4 - Octubre 2026</div>
+                    <span class="badge bg-info bg-opacity-25 text-info small">Comunidad Abierta</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2 Column Full Width Layout -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-8">
+            <div class="p-4 p-md-5 rounded-4 shadow-sm text-secondary" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle); line-height: 1.9; font-size: 1.02rem;">
+                <section id="sec-1" class="mb-5">
+                    <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-danger bg-opacity-25 text-danger fs-6">1</span> Aceptación de los Términos
+                    </h3>
+                    <p>
+                        El registro de una cuenta en GrowUp, así como el uso de sus herramientas de catálogo, talleres creativos y sistemas de opinión, implica la aceptación plena y voluntaria de las presentes Condiciones de Uso. Si el usuario no estuviera conforme, deberá abstenerse de utilizar el servicio.
+                    </p>
+                </section>
+
+                <section id="sec-2" class="mb-5">
+                    <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-danger bg-opacity-25 text-danger fs-6">2</span> Normas de Conducta y Comunidad
+                    </h3>
+                    <p>
+                        GrowUp promueve un ambiente constructivo e inclusivo. Queda expresamente prohibido:
+                    </p>
+                    <ul class="text-secondary ps-3 mb-3">
+                        <li>Publicar agresiones, insultos, difamaciones, incitación al odio o discriminación de cualquier índole.</li>
+                        <li>Publicar spam, enlaces maliciosos o promociones comerciales no autorizadas en debates y opiniones.</li>
+                        <li>Difundir spoilers deliberados de tramas de anime o manga sin marcarlos adecuadamente.</li>
+                        <li>Intentar vulnerar los mecanismos de seguridad, rate-limiting de la API o alterar artificialmente las calificaciones.</li>
+                    </ul>
+                </section>
+
+                <section id="sec-3" class="mb-5">
+                    <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-danger bg-opacity-25 text-danger fs-6">3</span> Pautas del Taller de Autores y Publicación
+                    </h3>
+                    <p>
+                        Todo usuario con rol de autor que publique novelas ligeras garantiza ser el autor legítimo de su obra. El autor mantiene el 100% de la titularidad de su obra intelectual. GrowUp ofrece el motor de lectura y catalogación de forma gratuita y no asume titularidad sobre los textos.
+                    </p>
+                </section>
+
+                <section id="sec-4" class="mb-5">
+                    <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-danger bg-opacity-25 text-danger fs-6">4</span> Moderación y Rescisión
+                    </h3>
+                    <p class="mb-0">
+                        El equipo de administración de GrowUp se reserva la facultad de moderar contenido infractor, suspender cuentas que vulneren sistemáticamente las pautas o responder a requerimientos legítimos de propiedad intelectual (DMCA) con diligencia.
+                    </p>
+                </section>
+            </div>
         </div>
 
-        <div class="p-4 p-md-5 rounded-4 mb-5 text-secondary" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle); line-height: 1.8;">
-            <h4 class="text-white fw-bold mb-3">1. Aceptación de los Términos</h4>
-            <p>
-                Al registrar una cuenta o hacer uso de los servicios interactivos de GrowUp, el usuario manifiesta haber leído, comprendido y aceptado en su totalidad estas Condiciones de Uso, comprometiéndose a hacer un uso diligente, lícito y respetuoso de la plataforma.
-            </p>
+        <div class="col-lg-4">
+            <div class="d-flex flex-column gap-4 sticky-top" style="top: 100px;">
+                <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-list-nested text-danger"></i> Secciones
+                    </h5>
+                    <div class="d-flex flex-column gap-2 small">
+                        <a href="#sec-1" class="text-secondary text-decoration-none hover-accent">1. Aceptación</a>
+                        <a href="#sec-2" class="text-secondary text-decoration-none hover-accent">2. Normas de Conducta</a>
+                        <a href="#sec-3" class="text-secondary text-decoration-none hover-accent">3. Taller de Autores</a>
+                        <a href="#sec-4" class="text-secondary text-decoration-none hover-accent">4. Moderación y Rescisión</a>
+                    </div>
+                </div>
 
-            <h4 class="text-white fw-bold mb-3">2. Normas de Conducta y Comunidad</h4>
-            <p>
-                Para preservar un entorno constructivo y seguro para todos los aficionados a la literatura y animación, queda expresamente prohibido:
-            </p>
-            <ul>
-                <li>Publicar comentarios que constituyan acoso, insultos, difamación, incitación al odio o discriminación por motivos de género, raza, orientación o religión.</li>
-                <li>Hacer spam publicitario o comercial no autorizado en los foros de debate y reseñas.</li>
-                <li>Revelar spoilers graves de obras sin previo aviso o de forma maliciosa.</li>
-                <li>Suplantar la identidad de otros autores, moderadores o miembros del equipo de GrowUp.</li>
-            </ul>
-
-            <h4 class="text-white fw-bold mb-3">3. Condiciones del Taller de Autores</h4>
-            <p>
-                Los usuarios que publiquen novelas ligeras en la sección de autores garantizan que:
-            </p>
-            <ul>
-                <li>Son los creadores originales o cuentan con la autorización legal correspondiente sobre el texto publicado.</li>
-                <li>El contenido no infringe derechos de terceros ni contiene material ilícito.</li>
-                <li>Reconocen que conservan en todo momento la titularidad total de sus derechos de autor sobre sus textos.</li>
-            </ul>
-
-            <h4 class="text-white fw-bold mb-3">4. Moderación y Suspensión de Cuentas</h4>
-            <p>
-                GrowUp se reserva el derecho de eliminar reseñas fraudulentas, retirar obras que infrinjan derechos de autor tras recibir una notificación válida (DMCA) o suspender temporal o permanentemente las cuentas de usuarios que vulneren reiteradamente estas normas.
-            </p>
-
-            <h4 class="text-white fw-bold mb-3">5. Modificaciones</h4>
-            <p class="mb-0">
-                Estas condiciones podrán ser actualizadas periódicamente para reflejar mejoras en la plataforma o cambios legislativos. El uso continuado del servicio tras la publicación de los cambios constituye la aceptación tácita de los mismos.
-            </p>
+                <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-shield-check text-info"></i> Legal
+                    </h5>
+                    <div class="d-flex flex-column gap-2 small">
+                        <a href="{% url 'catalog:aviso_legal' %}" class="text-secondary text-decoration-none hover-accent d-flex justify-content-between">
+                            <span>Aviso Legal</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                        <a href="{% url 'catalog:politica_privacidad' %}" class="text-secondary text-decoration-none hover-accent d-flex justify-content-between">
+                            <span>Política de Privacidad</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

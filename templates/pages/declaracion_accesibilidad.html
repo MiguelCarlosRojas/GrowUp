@@ -3,44 +3,106 @@
 {% block title %}Declaración de Accesibilidad - GrowUp{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center py-3">
-    <div class="col-lg-10 col-xl-9">
-        <!-- Header -->
-        <div class="mb-5 text-center">
-            <span class="badge px-3 py-1 mb-3" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.35); color: #ffffff;">
-                Inclusión & Accesibilidad Web
-            </span>
-            <h1 class="display-5 fw-bold text-white mb-3">Declaración de Accesibilidad</h1>
-            <p class="text-muted lead mx-auto" style="max-width: 720px;">
-                Nuestro compromiso formal con la accesibilidad digital para garantizar que todos los usuarios, independientemente de sus capacidades técnicas o físicas, puedan disfrutar de la lectura y exploración del catálogo.
-            </p>
+<div class="w-100 py-2">
+    <!-- Hero Header Full Width -->
+    <div class="p-4 p-md-5 rounded-4 shadow-lg mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(14, 20, 32, 0.95), rgba(8, 12, 20, 0.98)); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+        <div class="row align-items-center position-relative" style="z-index: 1;">
+            <div class="col-lg-8">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.35);">
+                    <span class="badge bg-info rounded-circle p-1"></span>
+                    <span class="text-white small fw-bold text-uppercase tracking-wider">Inclusión Web & Estándares WCAG 2.1</span>
+                </div>
+                <h1 class="display-5 fw-bold text-white mb-3">Declaración de Accesibilidad</h1>
+                <p class="text-secondary lead mb-0" style="line-height: 1.8; max-width: 820px;">
+                    Compromiso formal con la accesibilidad digital para garantizar que toda la comunidad pueda leer, catalogar e interactuar sin barreras físicas o técnicas.
+                </p>
+            </div>
+            <div class="col-lg-4 mt-4 mt-lg-0 text-lg-end">
+                <div class="p-3 rounded-4 d-inline-block text-start" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                    <div class="text-muted small mb-1">Nivel de Conformidad</div>
+                    <div class="text-info fw-bold fs-5 mb-1">WCAG 2.1 - Nivel AA</div>
+                    <span class="badge bg-success bg-opacity-25 text-success small">Navegación Asistida</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2 Column Full Width Layout -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-8">
+            <div class="p-4 p-md-5 rounded-4 shadow-sm text-secondary" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle); line-height: 1.9; font-size: 1.02rem;">
+                <section id="sec-1" class="mb-5">
+                    <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-info bg-opacity-25 text-info fs-6">1</span> Compromiso con los Estándares WCAG 2.1
+                    </h3>
+                    <p>
+                        GrowUp se compromete a proveer una interfaz accesible y usable para todos los lectores y escritores de acuerdo con las directrices de accesibilidad <strong class="text-white">WCAG 2.1 nivel AA</strong>, asegurando compatibilidad con lectores de pantalla y ayudas técnicas.
+                    </p>
+                </section>
+
+                <section id="sec-2" class="mb-5">
+                    <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-info bg-opacity-25 text-info fs-6">2</span> Medidas Técnicas Implementadas
+                    </h3>
+                    <div class="d-flex flex-column gap-3 mb-3">
+                        <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                            <strong class="text-white d-block mb-1"><i class="bi bi-circle-half text-info me-2"></i>Contraste Cromático Elevado</strong>
+                            <span class="small">La paleta obsidian y las tipografías superan el ratio 4.5:1 exigido para legibilidad óptima en lectura prolongada.</span>
+                        </div>
+                        <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                            <strong class="text-white d-block mb-1"><i class="bi bi-keyboard text-warning me-2"></i>Operabilidad Íntegra por Teclado</strong>
+                            <span class="small">Acceso mediante tabulador a todos los botones, tarjetas interactivas, controles del lector y formularios con indicadores de foco activos.</span>
+                        </div>
+                        <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                            <strong class="text-white d-block mb-1"><i class="bi bi-type text-danger me-2"></i>Adaptabilidad Visual en Capítulos</strong>
+                            <span class="small">El lector de novelas permite alternar entre temas Oscuro, Sepia y OLED, además de ajustar el tamaño de fuente sin recargar la página.</span>
+                        </div>
+                        <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                            <strong class="text-white d-block mb-1"><i class="bi bi-code-slash text-success me-2"></i>Semántica HTML5 y ARIA</strong>
+                            <span class="small">Estructuras jerárquicas estrictas con etiquetas semánticas, roles accesibles y textos alternativos descriptivos en pósteres y avatares.</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="sec-3" class="mb-5">
+                    <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-info bg-opacity-25 text-info fs-6">3</span> Canal de Sugerencias de Accesibilidad
+                    </h3>
+                    <p>
+                        Si encuentras algún impedimento técnico o deseas proponer mejoras para optimizar la experiencia inclusiva en GrowUp, puedes escribir a:
+                    </p>
+                    <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.6); border: 1px solid var(--border-subtle);">
+                        <strong class="text-white d-block mb-1"><i class="bi bi-universal-access text-info me-2"></i>Oficina de Inclusión Digital</strong>
+                        <span class="text-muted small">Correo: <code class="text-white">accesibilidad@growup-media.org</code></span>
+                    </div>
+                </section>
+            </div>
         </div>
 
-        <div class="p-4 p-md-5 rounded-4 mb-5 text-secondary" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle); line-height: 1.8;">
-            <h4 class="text-white fw-bold mb-3">1. Compromiso con los Estándares WCAG 2.1</h4>
-            <p>
-                GrowUp Media & Technology S.A.C. se compromete a hacer accesible su sitio web de conformidad con las Pautas de Accesibilidad para el Contenido Web (<strong class="text-white">WCAG 2.1</strong>) en su <strong class="text-white">Nivel AA</strong>.
-            </p>
+        <div class="col-lg-4">
+            <div class="d-flex flex-column gap-4 sticky-top" style="top: 100px;">
+                <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-list-nested text-info"></i> Secciones
+                    </h5>
+                    <div class="d-flex flex-column gap-2 small">
+                        <a href="#sec-1" class="text-secondary text-decoration-none hover-accent">1. Compromiso WCAG</a>
+                        <a href="#sec-2" class="text-secondary text-decoration-none hover-accent">2. Medidas Técnicas</a>
+                        <a href="#sec-3" class="text-secondary text-decoration-none hover-accent">3. Canal de Sugerencias</a>
+                    </div>
+                </div>
 
-            <h4 class="text-white fw-bold mb-3">2. Medidas de Accesibilidad Implementadas</h4>
-            <p>
-                En el diseño y desarrollo de la plataforma se han integrado las siguientes características técnicas:
-            </p>
-            <ul>
-                <li><strong class="text-white">Contraste de Color Óptimo:</strong> Paleta Obsidian de alto contraste que supera la relación de 4.5:1 para texto normal y 3:1 para elementos de interfaz gráfica.</li>
-                <li><strong class="text-white">Navegación Total por Teclado:</strong> Todos los elementos interactivos (botones, selectores, campos de búsqueda y menús desplegables) son completamente operables mediante el tabulador del teclado, con anillos de foco visibles y destacados.</li>
-                <li><strong class="text-white">Herramientas en el Lector de Capítulos:</strong> Opciones para cambiar entre tres temas de lectura (Modo Oscuro, Sepia de bajo deslumbramiento y OLED de contraste absoluto), además de controles interactivos para aumentar o disminuir dinámicamente el tamaño de fuente.</li>
-                <li><strong class="text-white">Diseño Totalmente Responsivo:</strong> Interfaz fluida basada en unidades dinámicas (clamp, rem, vw) que permite un zoom de hasta el 200% sin pérdida de contenido ni desplazamiento horizontal involuntario.</li>
-                <li><strong class="text-white">Etiquetado Semántico y Atributos ARIA:</strong> Estructura HTML5 correcta con encabezados jerárquicos (H1 a H6), etiquetas de formulario explícitas y textos alternativos descriptivos en todas las portadas e imágenes.</li>
-            </ul>
-
-            <h4 class="text-white fw-bold mb-3">3. Observaciones y Sugerencias de Accesibilidad</h4>
-            <p>
-                Si experimentas cualquier dificultad de acceso, detectas algún incumplimiento o deseas hacernos una consulta para mejorar la accesibilidad de la plataforma, puedes contactarnos directamente en:
-            </p>
-            <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
-                <span class="text-white fw-semibold d-block mb-1"><i class="bi bi-universal-access-circle text-info me-2"></i>Oficina de Accesibilidad Digital</span>
-                <span class="text-muted">Correo directo: <code class="text-white">accesibilidad@growup-media.org</code></span>
+                <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
+                    <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-chat-heart text-danger"></i> Contacto de Soporte
+                    </h5>
+                    <p class="text-muted small mb-3">
+                        ¿Requieres asistencia personalizada? Abre un ticket directo con nuestro equipo.
+                    </p>
+                    <a href="{% url 'catalog:contacto' %}" class="btn btn-accent btn-sm w-100 fw-bold">
+                        Contactar Soporte
+                    </a>
+                </div>
             </div>
         </div>
     </div>

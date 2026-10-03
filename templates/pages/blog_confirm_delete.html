@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Artículo - Blog GrowUp{% endblock %}
+
+{% block content %}
+<div class="w-100 py-4 d-flex justify-content-center">
+    <div class="p-4 p-md-5 rounded-4 shadow-lg text-center" style="max-width: 600px; background: rgba(14, 20, 32, 0.95); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+        <div class="p-3 rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style="background: rgba(239, 68, 68, 0.15); width: 64px; height: 64px;">
+            <i class="bi bi-exclamation-triangle text-danger fs-2"></i>
+        </div>
+        <h3 class="text-white fw-bold mb-3">¿Eliminar este artículo?</h3>
+        <p class="text-secondary mb-4">
+            Estás a punto de eliminar permanentemente el artículo <strong class="text-white">"{{ post.title }}"</strong>. Esta acción no se puede deshacer.
+        </p>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{% url 'catalog:blog_detail' slug=post.slug %}" class="btn btn-secondary px-4">Cancelar</a>
+                <button type="submit" class="btn btn-danger px-4 fw-bold">
+                    <i class="bi bi-trash me-2"></i> Confirmar Eliminación
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

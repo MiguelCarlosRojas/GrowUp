@@ -3,9 +3,9 @@
 {% block title %}Preguntas Frecuentes (FAQ) - GrowUp{% endblock %}
 
 {% block content %}
-<div class="w-100 py-2">
+<div class="pro-page-wrapper">
     <!-- Hero Header Full Width -->
-    <div class="p-4 p-md-5 rounded-4 shadow-lg mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(14, 20, 32, 0.95), rgba(8, 12, 20, 0.98)); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+    <div class="pro-page-header">
         <div class="position-absolute top-0 end-0 p-5 opacity-10 d-none d-lg-block pointer-events-none">
             <i class="bi bi-patch-question text-warning" style="font-size: 16rem;"></i>
         </div>
@@ -47,74 +47,76 @@
     <!-- Accordion FAQ Full Width -->
     <div class="row g-4 mb-5">
         <div class="col-lg-8">
-            <div class="p-4 p-md-5 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-                <div class="accordion custom-accordion d-flex flex-column gap-3" id="faqAccordion">
-                    <!-- Item 1 -->
-                    <div class="accordion-item rounded-4 overflow-hidden" id="faq-jikan" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                <i class="bi bi-database-check text-danger me-3 fs-5"></i> ¿De dónde proviene la información de los animes, mangas y novelas?
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
-                                Toda la información del catálogo global se sincroniza directamente en tiempo real con <strong class="text-white">Jikan API v4</strong>, la interfaz REST oficial y abierta para MyAnimeList. No empleamos datos falsos ni bases estáticas inventadas; cada póster, sinopsis, puntuación y estudio de animación es verídico y auditado internacionalmente.
+            <div class="pro-card shadow-sm">
+                <div class="pro-card-body">
+                    <div class="accordion custom-accordion d-flex flex-column gap-3" id="faqAccordion">
+                        <!-- Item 1 -->
+                        <div class="accordion-item rounded-4 overflow-hidden" id="faq-jikan" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    <i class="bi bi-database-check text-danger me-3 fs-5"></i> ¿De dónde proviene la información de los animes, mangas y novelas?
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
+                                    Toda la información del catálogo global se sincroniza directamente en tiempo real con <strong class="text-white">Jikan API v4</strong>, la interfaz REST oficial y abierta para MyAnimeList. No empleamos datos falsos ni bases estáticas inventadas; cada póster, sinopsis, puntuación y estudio de animación es verídico y auditado internacionalmente.
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Item 2 -->
-                    <div class="accordion-item rounded-4 overflow-hidden" id="faq-autor" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                <i class="bi bi-feather text-warning me-3 fs-5"></i> ¿Puedo publicar mis propias novelas ligeras de forma gratuita?
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
-                                Sí, completamente gratis y sin comisiones ocultas. Al contar con el rol de <strong class="text-white">Autor</strong> en tu perfil, tienes acceso al <strong class="text-white">Taller de Escritores</strong>, donde puedes crear novelas, subir portadas personalizadas, redactar sinopsis magnéticas, organizar capítulos numerados y alternar entre modo borrador y publicación pública.
+                        <!-- Item 2 -->
+                        <div class="accordion-item rounded-4 overflow-hidden" id="faq-autor" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <i class="bi bi-feather text-warning me-3 fs-5"></i> ¿Puedo publicar mis propias novelas ligeras de forma gratuita?
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
+                                    Sí, completamente gratis y sin comisiones ocultas. Al contar con el rol de <strong class="text-white">Autor</strong> en tu perfil, tienes acceso al <strong class="text-white">Taller de Escritores</strong>, donde puedes crear novelas, subir portadas personalizadas, redactar sinopsis magnéticas, organizar capítulos numerados y alternar entre modo borrador y publicación pública.
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Item 3 -->
-                    <div class="accordion-item rounded-4 overflow-hidden" id="faq-derechos" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                        <h2 class="accordion-header" id="headingThree">
-                            <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                <i class="bi bi-shield-check text-info me-3 fs-5"></i> ¿Qué derechos conservo sobre mis obras literarias publicadas?
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
-                                Conservas el <strong class="text-white">100% de los derechos de autor y propiedad intelectual</strong> de tus novelas y capítulos. GrowUp es una plataforma de difusión y encuentro comunitario; en ningún momento reclamamos cesión de derechos patrimoniales o exclusividad editorial. Puedes retirar tus textos cuando lo desees.
+                        <!-- Item 3 -->
+                        <div class="accordion-item rounded-4 overflow-hidden" id="faq-derechos" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    <i class="bi bi-shield-check text-info me-3 fs-5"></i> ¿Qué derechos conservo sobre mis obras literarias publicadas?
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
+                                    Conservas el <strong class="text-white">100% de los derechos de autor y propiedad intelectual</strong> de tus novelas y capítulos. GrowUp es una plataforma de difusión y encuentro comunitario; en ningún momento reclamamos cesión de derechos patrimoniales o exclusividad editorial. Puedes retirar tus textos cuando lo desees.
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Item 4 -->
-                    <div class="accordion-item rounded-4 overflow-hidden" id="faq-fechas" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                        <h2 class="accordion-header" id="headingFour">
-                            <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                <i class="bi bi-calendar-event text-success me-3 fs-5"></i> ¿Cómo funcionan las fechas de publicación y actualización de capítulos?
-                            </button>
-                        </h2>
-                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
-                                Para brindar total transparencia a los lectores, cada capítulo muestra públicamente su fecha de publicación inicial y su última fecha de actualización (edición de contenido). Las fechas de creación interna en modo borrador permanecen reservadas únicamente para el autor en su taller privado.
+                        <!-- Item 4 -->
+                        <div class="accordion-item rounded-4 overflow-hidden" id="faq-fechas" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                            <h2 class="accordion-header" id="headingFour">
+                                <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    <i class="bi bi-calendar-event text-success me-3 fs-5"></i> ¿Cómo funcionan las fechas de publicación y actualización de capítulos?
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
+                                    Para brindar total transparencia a los lectores, cada capítulo muestra públicamente su fecha de publicación inicial y su última fecha de actualización (edición de contenido). Las fechas de creación interna en modo borrador permanecen reservadas únicamente para el autor en su taller privado.
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Item 5 -->
-                    <div class="accordion-item rounded-4 overflow-hidden" id="faq-ratings" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                        <h2 class="accordion-header" id="headingFive">
-                            <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                <i class="bi bi-star-half text-warning me-3 fs-5"></i> ¿Cómo se calculan las calificaciones y opiniones de las obras?
-                            </button>
-                        </h2>
-                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
-                                Los usuarios registrados pueden emitir una valoración de 1 a 5 estrellas junto con un titular y reseña argumentada. El promedio de estrellas se calcula automáticamente sin ponderaciones artificiales, permitiendo a la comunidad conocer el veredicto real de otros lectores.
+                        <!-- Item 5 -->
+                        <div class="accordion-item rounded-4 overflow-hidden" id="faq-ratings" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                            <h2 class="accordion-header" id="headingFive">
+                                <button class="accordion-button collapsed bg-transparent text-white fw-bold py-3 px-4 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                    <i class="bi bi-star-half text-warning me-3 fs-5"></i> ¿Cómo se calculan las calificaciones y opiniones de las obras?
+                                </button>
+                            </h2>
+                            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-secondary px-4 pb-4" style="line-height: 1.8;">
+                                    Los usuarios registrados pueden emitir una valoración de 1 a 5 estrellas junto con un titular y reseña argumentada. El promedio de estrellas se calcula automáticamente sin ponderaciones artificiales, permitiendo a la comunidad conocer el veredicto real de otros lectores.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -124,24 +126,28 @@
 
         <!-- Columna Lateral Derecha -->
         <div class="col-lg-4">
-            <div class="d-flex flex-column gap-4">
-                <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-                    <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                        <i class="bi bi-chat-left-dots text-danger"></i> ¿No encontraste tu duda?
-                    </h5>
-                    <p class="text-secondary small mb-3">
-                        Puedes comunicarte directamente con nuestro equipo técnico a través de nuestro formulario de contacto o participar en los debates comunitarios.
-                    </p>
-                    <a href="{% url 'catalog:contacto' %}" class="btn btn-accent w-100 py-2 fw-bold">
-                        Formular una Pregunta
-                    </a>
+            <div class="d-flex flex-column gap-4 pro-sidebar-sticky">
+                <div class="pro-card shadow-sm">
+                    <div class="pro-card-body">
+                        <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="bi bi-chat-left-dots text-danger"></i> ¿No encontraste tu duda?
+                        </h5>
+                        <p class="text-secondary small mb-3">
+                            Puedes comunicarte directamente con nuestro equipo técnico a través de nuestro formulario de contacto o participar en los debates comunitarios.
+                        </p>
+                        <a href="{% url 'catalog:contacto' %}" class="btn btn-accent w-100 py-2 fw-bold">
+                            Formular una Pregunta
+                        </a>
+                    </div>
                 </div>
 
-                <div class="p-4 rounded-4 text-center" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(255, 42, 84, 0.08)); border: 1px solid var(--border-subtle);">
-                    <i class="bi bi-book text-info fs-1 mb-2 d-block"></i>
-                    <h5 class="text-white fw-bold mb-2">Comunidad de Lectura</h5>
-                    <p class="text-muted small mb-3">Descubre novelas originales escritas por miembros de nuestra comunidad.</p>
-                    <a href="{% url 'novels:novel_list' %}" class="btn btn-outline-glow btn-sm px-4">Explorar Novelas</a>
+                <div class="pro-card text-center">
+                    <div class="pro-card-body" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(255, 42, 84, 0.08));">
+                        <i class="bi bi-book text-info fs-1 mb-2 d-block"></i>
+                        <h5 class="text-white fw-bold mb-2">Comunidad de Lectura</h5>
+                        <p class="text-muted small mb-3">Descubre novelas originales escritas por miembros de nuestra comunidad.</p>
+                        <a href="{% url 'novels:novel_list' %}" class="btn btn-outline-glow btn-sm px-4">Explorar Novelas</a>
+                    </div>
                 </div>
             </div>
         </div>

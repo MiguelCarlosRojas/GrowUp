@@ -3,9 +3,9 @@
 {% block title %}Política de Cookies - GrowUp{% endblock %}
 
 {% block content %}
-<div class="w-100 py-2">
+<div class="pro-page-wrapper">
     <!-- Hero Header Full Width -->
-    <div class="p-4 p-md-5 rounded-4 shadow-lg mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(14, 20, 32, 0.95), rgba(8, 12, 20, 0.98)); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+    <div class="pro-page-header">
         <div class="row align-items-center position-relative" style="z-index: 1;">
             <div class="col-lg-8">
                 <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(6, 182, 212, 0.15); border: 1px solid rgba(6, 182, 212, 0.35);">
@@ -31,99 +31,105 @@
     <div class="row g-4 mb-5">
         <!-- Main Text (8 cols) -->
         <div class="col-lg-8">
-            <div class="p-4 p-md-5 rounded-4 shadow-sm text-secondary" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle); line-height: 1.9; font-size: 1.02rem;">
-                <section id="sec-1" class="mb-5">
-                    <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                        <span class="badge bg-info bg-opacity-25 text-info fs-6">1</span> ¿Qué son las Cookies y Almacenamiento Local?
-                    </h3>
-                    <p>
-                        Una cookie es un pequeño archivo de texto que se descarga en tu navegador web al acceder a plataformas digitales. Su cometido fundamental es posibilitar la navegación fluida, recordar credenciales de autenticación seguras y retener tus preferencias visuales personalizadas (como el tamaño de fuente o tema del lector).
-                    </p>
-                </section>
+            <div class="pro-card shadow-sm text-secondary" style="line-height: 1.9; font-size: 1.02rem;">
+                <div class="pro-card-body">
+                    <section id="sec-1" class="mb-5">
+                        <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                            <span class="badge bg-info bg-opacity-25 text-info fs-6">1</span> ¿Qué son las Cookies y Almacenamiento Local?
+                        </h3>
+                        <p>
+                            Una cookie es un pequeño archivo de texto que se descarga en tu navegador web al acceder a plataformas digitales. Su cometido fundamental es posibilitar la navegación fluida, recordar credenciales de autenticación seguras y retener tus preferencias visuales personalizadas (como el tamaño de fuente o tema del lector).
+                        </p>
+                    </section>
 
-                <section id="sec-2" class="mb-5">
-                    <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                        <span class="badge bg-info bg-opacity-25 text-info fs-6">2</span> Inventario de Cookies y Claves Locales en GrowUp
-                    </h3>
-                    <p>
-                        En GrowUp operamos bajo el principio ético de estricta minimización de datos. <strong class="text-white">No utilizamos cookies publicitarias de terceros para vender tus datos</strong>. Todas nuestras cookies son estrictamente técnicas o de personalización:
-                    </p>
+                    <section id="sec-2" class="mb-5">
+                        <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                            <span class="badge bg-info bg-opacity-25 text-info fs-6">2</span> Inventario de Cookies y Claves Locales en GrowUp
+                        </h3>
+                        <p>
+                            En GrowUp operamos bajo el principio ético de estricta minimización de datos. <strong class="text-white">No utilizamos cookies publicitarias de terceros para vender tus datos</strong>. Todas nuestras cookies son estrictamente técnicas o de personalización:
+                        </p>
 
-                    <div class="table-responsive my-4">
-                        <table class="table table-dark table-bordered border-secondary border-opacity-50 small align-middle mb-0">
-                            <thead class="table-dark">
-                                <tr class="text-white">
-                                    <th>Identificador</th>
-                                    <th>Categoría / Propósito</th>
-                                    <th>Vencimiento</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><code class="text-info">sessionid</code></td>
-                                    <td>Técnica (Esencial): Mantiene tu sesión de usuario activa de manera cifrada en Django.</td>
-                                    <td>2 semanas / Logout</td>
-                                </tr>
-                                <tr>
-                                    <td><code class="text-info">csrftoken</code></td>
-                                    <td>Seguridad (Esencial): Impide ataques de falsificación de petición en sitios cruzados (CSRF).</td>
-                                    <td>1 año</td>
-                                </tr>
-                                <tr>
-                                    <td><code class="text-info">messages</code></td>
-                                    <td>Técnica (Funcional): Almacena notificaciones temporales del sistema al enviar formularios.</td>
-                                    <td>Inmediato (Sesión)</td>
-                                </tr>
-                                <tr>
-                                    <td><code class="text-info">reader_theme</code></td>
-                                    <td>Preferencia (LocalStorage): Recuerda tu modo de lectura elegido (Oscuro, Sepia u OLED).</td>
-                                    <td>Persistente en navegador</td>
-                                </tr>
-                                <tr>
-                                    <td><code class="text-info">reader_font_size</code></td>
-                                    <td>Preferencia (LocalStorage): Recuerda el tamaño de tipografía configurado en los capítulos.</td>
-                                    <td>Persistente en navegador</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
+                        <div class="table-responsive my-4">
+                            <table class="table table-dark table-bordered border-secondary border-opacity-50 small align-middle mb-0">
+                                <thead class="table-dark">
+                                    <tr class="text-white">
+                                        <th>Identificador</th>
+                                        <th>Categoría / Propósito</th>
+                                        <th>Vencimiento</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code class="text-info">sessionid</code></td>
+                                        <td>Técnica (Esencial): Mantiene tu sesión de usuario activa de manera cifrada en Django.</td>
+                                        <td>2 semanas / Logout</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="text-info">csrftoken</code></td>
+                                        <td>Seguridad (Esencial): Impide ataques de falsificación de petición en sitios cruzados (CSRF).</td>
+                                        <td>1 año</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="text-info">messages</code></td>
+                                        <td>Técnica (Funcional): Almacena notificaciones temporales del sistema al enviar formularios.</td>
+                                        <td>Inmediato (Sesión)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="text-info">reader_theme</code></td>
+                                        <td>Preferencia (LocalStorage): Recuerda tu modo de lectura elegido (Oscuro, Sepia u OLED).</td>
+                                        <td>Persistente en navegador</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code class="text-info">reader_font_size</code></td>
+                                        <td>Preferencia (LocalStorage): Recuerda el tamaño de tipografía configurado en los capítulos.</td>
+                                        <td>Persistente en navegador</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
 
-                <section id="sec-3" class="mb-5">
-                    <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                        <span class="badge bg-info bg-opacity-25 text-info fs-6">3</span> Cómo Desactivar o Gestionar las Cookies
-                    </h3>
-                    <p>
-                        Puedes restringir, bloquear o borrar las cookies de GrowUp o cualquier otro sitio web a través de la configuración de tu navegador (Chrome, Firefox, Safari, Edge). Ten en cuenta que si deshabilitas las cookies esenciales (<code>sessionid</code> y <code>csrftoken</code>), no podrás iniciar sesión ni enviar opiniones o novelas.
-                    </p>
-                </section>
+                    <section id="sec-3" class="mb-5">
+                        <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                            <span class="badge bg-info bg-opacity-25 text-info fs-6">3</span> Cómo Desactivar o Gestionar las Cookies
+                        </h3>
+                        <p class="mb-0">
+                            Puedes restringir, bloquear o borrar las cookies de GrowUp o cualquier otro sitio web a través de la configuración de tu navegador (Chrome, Firefox, Safari, Edge). Ten en cuenta que si deshabilitas las cookies esenciales (<code>sessionid</code> y <code>csrftoken</code>), no podrás iniciar sesión ni enviar opiniones o novelas.
+                        </p>
+                    </section>
+                </div>
             </div>
         </div>
 
         <!-- Sticky Navigation Sidebar (4 cols) -->
         <div class="col-lg-4">
-            <div class="d-flex flex-column gap-4 sticky-top" style="top: 100px;">
-                <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-                    <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                        <i class="bi bi-list-nested text-info"></i> Índice
-                    </h5>
-                    <div class="d-flex flex-column gap-2 small">
-                        <a href="#sec-1" class="text-secondary text-decoration-none hover-accent">1. Concepto de Cookies</a>
-                        <a href="#sec-2" class="text-secondary text-decoration-none hover-accent">2. Inventario Utilizado</a>
-                        <a href="#sec-3" class="text-secondary text-decoration-none hover-accent">3. Gestión y Configuración</a>
+            <div class="d-flex flex-column gap-4 pro-sidebar-sticky">
+                <div class="pro-card shadow-sm">
+                    <div class="pro-card-body">
+                        <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="bi bi-list-nested text-info"></i> Índice
+                        </h5>
+                        <div class="d-flex flex-column gap-2 small">
+                            <a href="#sec-1" class="text-secondary text-decoration-none hover-accent">1. Concepto de Cookies</a>
+                            <a href="#sec-2" class="text-secondary text-decoration-none hover-accent">2. Inventario Utilizado</a>
+                            <a href="#sec-3" class="text-secondary text-decoration-none hover-accent">3. Gestión y Configuración</a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-                    <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                        <i class="bi bi-shield-lock text-success"></i> Privacidad de Datos
-                    </h5>
-                    <p class="text-muted small mb-3">
-                        Revisa cómo protegemos tu información y credenciales bajo las normativas internacionales de protección de datos.
-                    </p>
-                    <a href="{% url 'catalog:politica_privacidad' %}" class="btn btn-outline-glow btn-sm w-100 fw-bold">
-                        Ver Política de Privacidad
-                    </a>
+                <div class="pro-card shadow-sm">
+                    <div class="pro-card-body">
+                        <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="bi bi-shield-lock text-success"></i> Privacidad de Datos
+                        </h5>
+                        <p class="text-muted small mb-3">
+                            Revisa cómo protegemos tu información y credenciales bajo las normativas internacionales de protección de datos.
+                        </p>
+                        <a href="{% url 'catalog:politica_privacidad' %}" class="btn btn-outline-glow btn-sm w-100 fw-bold">
+                            Ver Política de Privacidad
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

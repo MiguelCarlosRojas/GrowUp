@@ -23,9 +23,6 @@ _CACHE = {}
 _ITEMS_REGISTRY = {}
 CACHE_TTL = 3600  # 1 hour cache for ultra-fluid page loads
 
-DISK_CACHE_FILE = os.path.join(os.path.dirname(__file__), 'jikan_disk_cache.json')
-
-
 def get_base_url():
     url = getattr(settings, 'JIKAN_API_BASE_URL', None) or os.getenv('JIKAN_API_BASE_URL', '')
     if not url:
@@ -54,42 +51,6 @@ def _register_items(items):
     for it in items:
         if isinstance(it, dict) and it.get('mal_id'):
             _ITEMS_REGISTRY[str(it['mal_id'])] = it
-
-
-def _load_disk_cache():
-    import json
-    if os.path.exists(DISK_CACHE_FILE):
-        try:
-            with open(DISK_CACHE_FILE, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                if isinstance(data, dict):
-                    for k, v in data.items():
-                        if isinstance(v, list):
-                            _set_cache(k, v)
-                            _register_items(v)
-        except Exception as e:
-            logger.warning(f"Could not load jikan_disk_cache.json: {e}")
-
-
-def _save_disk_cache(key, items):
-    import json
-    try:
-        current = {}
-        if os.path.exists(DISK_CACHE_FILE):
-            try:
-                with open(DISK_CACHE_FILE, 'r', encoding='utf-8') as f:
-                    current = json.load(f)
-            except Exception:
-                current = {}
-        current[key] = items
-        with open(DISK_CACHE_FILE, 'w', encoding='utf-8') as f:
-            json.dump(current, f, ensure_ascii=False, indent=2)
-    except Exception as e:
-        logger.warning(f"Could not save jikan_disk_cache.json: {e}")
-
-
-# Initialize disk cache on startup
-_load_disk_cache()
 
 
 def _safe_request(endpoint_path, params=None, timeout=8, retries=1):
@@ -146,7 +107,6 @@ def get_top_anime(limit=8):
         items = data['data']
         _register_items(items)
         _set_cache('real_top_anime_list', items)
-        _save_disk_cache('real_top_anime_list', items)
         return items[:limit]
 
     # If API call returned None, return any previously registered anime
@@ -165,7 +125,6 @@ def get_top_manga(limit=8):
         items = data['data']
         _register_items(items)
         _set_cache('real_top_manga_list', items)
-        _save_disk_cache('real_top_manga_list', items)
         return items[:limit]
 
     registered = [it for it in _ITEMS_REGISTRY.values() if it.get('type') in ('Manga', 'Manhwa', 'Manhua', 'One-shot')]
@@ -183,7 +142,6 @@ def get_top_lightnovels(limit=8):
         items = data['data']
         _register_items(items)
         _set_cache('real_top_ln_list', items)
-        _save_disk_cache('real_top_ln_list', items)
         return items[:limit]
 
     registered = [it for it in _ITEMS_REGISTRY.values() if it.get('type') in ('Novel', 'Lightnovel', 'Light Novel')]

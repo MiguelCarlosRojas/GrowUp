@@ -3,9 +3,9 @@
 {% block title %}Nuestra Historia - GrowUp{% endblock %}
 
 {% block content %}
-<div class="w-100 py-2">
+<div class="pro-page-wrapper">
     <!-- Hero Header Full Width -->
-    <div class="p-4 p-md-5 rounded-4 shadow-lg mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(14, 20, 32, 0.95), rgba(8, 12, 20, 0.98)); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+    <div class="pro-page-header">
         <div class="position-absolute top-0 end-0 p-5 opacity-10 d-none d-lg-block pointer-events-none">
             <i class="bi bi-hourglass-split text-warning" style="font-size: 16rem;"></i>
         </div>
@@ -53,87 +53,89 @@
     </div>
 
     <!-- Timeline Completa a Ancho Completo -->
-    <div class="p-4 p-md-5 rounded-4 mb-4 shadow-sm" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-        <div class="d-flex align-items-center justify-content-between mb-5 flex-wrap gap-2">
-            <div>
-                <h3 class="text-white fw-bold mb-1">Evolución Cronológica</h3>
-                <p class="text-muted small mb-0">Cada fase de crecimiento del ecosistema GrowUp</p>
-            </div>
-            <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-25 px-3 py-2">
-                2024 - 2026
-            </span>
-        </div>
-
-        <div class="row g-4">
-            <!-- Etapa 1 -->
-            <div class="col-lg-6">
-                <div class="p-4 rounded-4 h-100 position-relative" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="p-3 rounded-circle text-white fw-bold d-flex align-items-center justify-content-center" style="background: var(--grad-primary); width: 48px; height: 48px;">
-                            <i class="bi bi-lightbulb"></i>
-                        </div>
-                        <div>
-                            <span class="text-danger fw-bold small text-uppercase">Semestre I - 2024</span>
-                            <h4 class="text-white fw-bold mb-0">El Nacimiento de GrowUp</h4>
-                        </div>
-                    </div>
-                    <p class="text-secondary mb-0" style="line-height: 1.8;">
-                        GrowUp comenzó como una iniciativa para resolver la dispersión y desactualización de catálogos de anime y manga en español. La meta fue concebir una interfaz veloz, limpia y sin publicidad invasiva, sincronizada directamente con la mayor base de datos global a través de Jikan API v4.
-                    </p>
+    <div class="pro-card mb-4 shadow-sm">
+        <div class="pro-card-body">
+            <div class="d-flex align-items-center justify-content-between mb-5 flex-wrap gap-2">
+                <div>
+                    <h3 class="text-white fw-bold mb-1">Evolución Cronológica</h3>
+                    <p class="text-muted small mb-0">Cada fase de crecimiento del ecosistema GrowUp</p>
                 </div>
+                <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-25 px-3 py-2">
+                    2024 - 2026
+                </span>
             </div>
 
-            <!-- Etapa 2 -->
-            <div class="col-lg-6">
-                <div class="p-4 rounded-4 h-100 position-relative" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="p-3 rounded-circle text-white fw-bold d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #f59e0b, #ef4444); width: 48px; height: 48px;">
-                            <i class="bi bi-feather"></i>
+            <div class="row g-4">
+                <!-- Etapa 1 -->
+                <div class="col-lg-6">
+                    <div class="p-4 rounded-4 h-100 position-relative" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="p-3 rounded-circle text-white fw-bold d-flex align-items-center justify-content-center" style="background: var(--grad-primary); width: 48px; height: 48px;">
+                                <i class="bi bi-lightbulb"></i>
+                            </div>
+                            <div>
+                                <span class="text-danger fw-bold small text-uppercase">Semestre I - 2024</span>
+                                <h4 class="text-white fw-bold mb-0">El Nacimiento de GrowUp</h4>
+                            </div>
                         </div>
-                        <div>
-                            <span class="text-warning fw-bold small text-uppercase">Semestre II - 2024</span>
-                            <h4 class="text-white fw-bold mb-0">Taller de Escritores Independientes</h4>
-                        </div>
+                        <p class="text-secondary mb-0" style="line-height: 1.8;">
+                            GrowUp comenzó como una iniciativa para resolver la dispersión y desactualización de catálogos de anime y manga en español. La meta fue concebir una interfaz veloz, limpia y sin publicidad invasiva, sincronizada directamente con la mayor base de datos global a través de Jikan API v4.
+                        </p>
                     </div>
-                    <p class="text-secondary mb-0" style="line-height: 1.8;">
-                        Identificamos la falta de espacios dedicados para autores de novelas ligeras en el mundo hispanohablante. Construimos el Taller de Escritor, permitiendo publicar historias originales por capítulos, con control de fechas de publicación y actualización visibles para los lectores.
-                    </p>
                 </div>
-            </div>
 
-            <!-- Etapa 3 -->
-            <div class="col-lg-6">
-                <div class="p-4 rounded-4 h-100 position-relative" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="p-3 rounded-circle text-white fw-bold d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #06b6d4, #6366f1); width: 48px; height: 48px;">
-                            <i class="bi bi-database-fill-check"></i>
+                <!-- Etapa 2 -->
+                <div class="col-lg-6">
+                    <div class="p-4 rounded-4 h-100 position-relative" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="p-3 rounded-circle text-white fw-bold d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #f59e0b, #ef4444); width: 48px; height: 48px;">
+                                <i class="bi bi-feather"></i>
+                            </div>
+                            <div>
+                                <span class="text-warning fw-bold small text-uppercase">Semestre II - 2024</span>
+                                <h4 class="text-white fw-bold mb-0">Taller de Escritores Independientes</h4>
+                            </div>
                         </div>
-                        <div>
-                            <span class="text-info fw-bold small text-uppercase">Año 2025</span>
-                            <h4 class="text-white fw-bold mb-0">Migración a Prisma Postgres & Cloud CI/CD</h4>
-                        </div>
+                        <p class="text-secondary mb-0" style="line-height: 1.8;">
+                            Identificamos la falta de espacios dedicados para autores de novelas ligeras en el mundo hispanohablante. Construimos el Taller de Escritor, permitiendo publicar historias originales por capítulos, con control de fechas de publicación y actualización visibles para los lectores.
+                        </p>
                     </div>
-                    <p class="text-secondary mb-0" style="line-height: 1.8;">
-                        Para garantizar una alta concurrencia y latencias subsegundo, migramos la infraestructura a Prisma Postgres en la nube, con pipelines automatizados de GitHub Actions y despliegues automáticos a producción en Render.
-                    </p>
                 </div>
-            </div>
 
-            <!-- Etapa 4 -->
-            <div class="col-lg-6">
-                <div class="p-4 rounded-4 h-100 position-relative" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="p-3 rounded-circle text-white fw-bold d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #10b981, #059669); width: 48px; height: 48px;">
-                            <i class="bi bi-rocket-takeoff"></i>
+                <!-- Etapa 3 -->
+                <div class="col-lg-6">
+                    <div class="p-4 rounded-4 h-100 position-relative" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="p-3 rounded-circle text-white fw-bold d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #06b6d4, #6366f1); width: 48px; height: 48px;">
+                                <i class="bi bi-database-fill-check"></i>
+                            </div>
+                            <div>
+                                <span class="text-info fw-bold small text-uppercase">Año 2025</span>
+                                <h4 class="text-white fw-bold mb-0">Migración a Prisma Postgres & Cloud CI/CD</h4>
+                            </div>
                         </div>
-                        <div>
-                            <span class="text-success fw-bold small text-uppercase">Año 2026 - Presente</span>
-                            <h4 class="text-white fw-bold mb-0">Ecosistema Completo y Cero Datos Simulados</h4>
-                        </div>
+                        <p class="text-secondary mb-0" style="line-height: 1.8;">
+                            Para garantizar una alta concurrencia y latencias subsegundo, migramos la infraestructura a Prisma Postgres en la nube, con pipelines automatizados de GitHub Actions y despliegues automáticos a producción en Render.
+                        </p>
                     </div>
-                    <p class="text-secondary mb-0" style="line-height: 1.8;">
-                        Consolidación definitiva de la plataforma: eliminación integral de datos simulados o mock, persistencia de tickets de soporte, nuevo módulo de Blog oficial y una interfaz fluida optimizada para máxima velocidad y adaptabilidad en cualquier pantalla.
-                    </p>
+                </div>
+
+                <!-- Etapa 4 -->
+                <div class="col-lg-6">
+                    <div class="p-4 rounded-4 h-100 position-relative" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="p-3 rounded-circle text-white fw-bold d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #10b981, #059669); width: 48px; height: 48px;">
+                                <i class="bi bi-rocket-takeoff"></i>
+                            </div>
+                            <div>
+                                <span class="text-success fw-bold small text-uppercase">Año 2026 - Presente</span>
+                                <h4 class="text-white fw-bold mb-0">Ecosistema Completo y Cero Datos Simulados</h4>
+                            </div>
+                        </div>
+                        <p class="text-secondary mb-0" style="line-height: 1.8;">
+                            Consolidación definitiva de la plataforma: eliminación integral de datos simulados o mock, persistencia de tickets de soporte, nuevo módulo de Blog oficial y una interfaz fluida optimizada para máxima velocidad y adaptabilidad en cualquier pantalla.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

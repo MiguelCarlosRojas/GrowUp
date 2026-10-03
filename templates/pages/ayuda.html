@@ -3,9 +3,9 @@
 {% block title %}Centro de Ayuda - GrowUp{% endblock %}
 
 {% block content %}
-<div class="w-100 py-2">
+<div class="pro-page-wrapper">
     <!-- Hero Header Full Width -->
-    <div class="p-4 p-md-5 rounded-4 shadow-lg mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(14, 20, 32, 0.95), rgba(8, 12, 20, 0.98)); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+    <div class="pro-page-header">
         <div class="position-absolute top-0 end-0 p-5 opacity-10 d-none d-lg-block pointer-events-none">
             <i class="bi bi-life-preserver text-danger" style="font-size: 16rem;"></i>
         </div>
@@ -53,86 +53,96 @@
     <div class="row g-4 mb-4">
         <!-- Card 1 -->
         <div class="col-md-6 col-lg-3">
-            <div class="p-4 rounded-4 h-100 shadow-sm d-flex flex-column" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-                <div class="p-3 rounded-3 d-inline-block mb-3" style="background: rgba(255, 42, 84, 0.15);">
-                    <i class="bi bi-person-gear text-danger fs-3"></i>
-                </div>
-                <h4 class="text-white fw-bold mb-2">Cuenta & Perfil</h4>
-                <p class="text-secondary small flex-grow-1" style="line-height: 1.7;">
-                    Aprende a modificar tu información, rol de usuario (Lector o Autor), iniciales dinámicas con fondo degradado y géneros predilectos.
-                </p>
-                <div class="pt-3 border-top border-secondary border-opacity-25 mt-3">
-                    <a href="{% url 'accounts:profile' %}" class="text-danger small fw-bold text-decoration-none d-flex align-items-center gap-1">
-                        Ir a Mi Perfil <i class="bi bi-arrow-right"></i>
-                    </a>
+            <div class="pro-card h-100 shadow-sm">
+                <div class="pro-card-body d-flex flex-column h-100">
+                    <div class="p-3 rounded-3 d-inline-block mb-3" style="background: rgba(255, 42, 84, 0.15);">
+                        <i class="bi bi-person-gear text-danger fs-3"></i>
+                    </div>
+                    <h4 class="text-white fw-bold mb-2">Cuenta & Perfil</h4>
+                    <p class="text-secondary small flex-grow-1" style="line-height: 1.7;">
+                        Aprende a modificar tu información, rol de usuario (Lector o Autor), iniciales dinámicas con fondo degradado y géneros predilectos.
+                    </p>
+                    <div class="pt-3 border-top border-secondary border-opacity-25 mt-3">
+                        <a href="{% url 'accounts:profile' %}" class="text-danger small fw-bold text-decoration-none d-flex align-items-center gap-1">
+                            Ir a Mi Perfil <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Card 2 -->
         <div class="col-md-6 col-lg-3">
-            <div class="p-4 rounded-4 h-100 shadow-sm d-flex flex-column" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-                <div class="p-3 rounded-3 d-inline-block mb-3" style="background: rgba(245, 158, 11, 0.15);">
-                    <i class="bi bi-feather text-warning fs-3"></i>
-                </div>
-                <h4 class="text-white fw-bold mb-2">Taller de Escritores</h4>
-                <p class="text-secondary small flex-grow-1" style="line-height: 1.7;">
-                    Guía de publicación de novelas ligeras originales, gestión de sinopsis, creación de capítulos, fechas de publicación y actualización.
-                </p>
-                <div class="pt-3 border-top border-secondary border-opacity-25 mt-3">
-                    <a href="{% url 'novels:novel_create' %}" class="text-warning small fw-bold text-decoration-none d-flex align-items-center gap-1">
-                        Publicar Novela <i class="bi bi-arrow-right"></i>
-                    </a>
+            <div class="pro-card h-100 shadow-sm">
+                <div class="pro-card-body d-flex flex-column h-100">
+                    <div class="p-3 rounded-3 d-inline-block mb-3" style="background: rgba(245, 158, 11, 0.15);">
+                        <i class="bi bi-feather text-warning fs-3"></i>
+                    </div>
+                    <h4 class="text-white fw-bold mb-2">Taller de Escritores</h4>
+                    <p class="text-secondary small flex-grow-1" style="line-height: 1.7;">
+                        Guía de publicación de novelas ligeras originales, gestión de sinopsis, creación de capítulos, fechas de publicación y actualización.
+                    </p>
+                    <div class="pt-3 border-top border-secondary border-opacity-25 mt-3">
+                        <a href="{% url 'novels:novel_create' %}" class="text-warning small fw-bold text-decoration-none d-flex align-items-center gap-1">
+                            Publicar Novela <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Card 3 -->
         <div class="col-md-6 col-lg-3">
-            <div class="p-4 rounded-4 h-100 shadow-sm d-flex flex-column" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-                <div class="p-3 rounded-3 d-inline-block mb-3" style="background: rgba(6, 182, 212, 0.15);">
-                    <i class="bi bi-compass text-info fs-3"></i>
-                </div>
-                <h4 class="text-white fw-bold mb-2">Catálogo & Filtros</h4>
-                <p class="text-secondary small flex-grow-1" style="line-height: 1.7;">
-                    Cómo buscar por título, filtrar por géneros oficiales de Jikan API v4, ordenar por puntuación o popularidad y guardar marcadores.
-                </p>
-                <div class="pt-3 border-top border-secondary border-opacity-25 mt-3">
-                    <a href="{% url 'catalog:explore' %}?type=anime" class="text-info small fw-bold text-decoration-none d-flex align-items-center gap-1">
-                        Ver Catálogo <i class="bi bi-arrow-right"></i>
-                    </a>
+            <div class="pro-card h-100 shadow-sm">
+                <div class="pro-card-body d-flex flex-column h-100">
+                    <div class="p-3 rounded-3 d-inline-block mb-3" style="background: rgba(6, 182, 212, 0.15);">
+                        <i class="bi bi-compass text-info fs-3"></i>
+                    </div>
+                    <h4 class="text-white fw-bold mb-2">Catálogo & Filtros</h4>
+                    <p class="text-secondary small flex-grow-1" style="line-height: 1.7;">
+                        Cómo buscar por título, filtrar por géneros oficiales de Jikan API v4, ordenar por puntuación o popularidad y guardar marcadores.
+                    </p>
+                    <div class="pt-3 border-top border-secondary border-opacity-25 mt-3">
+                        <a href="{% url 'catalog:explore' %}?type=anime" class="text-info small fw-bold text-decoration-none d-flex align-items-center gap-1">
+                            Ver Catálogo <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Card 4 -->
         <div class="col-md-6 col-lg-3">
-            <div class="p-4 rounded-4 h-100 shadow-sm d-flex flex-column" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-                <div class="p-3 rounded-3 d-inline-block mb-3" style="background: rgba(16, 185, 129, 0.15);">
-                    <i class="bi bi-chat-heart text-success fs-3"></i>
-                </div>
-                <h4 class="text-white fw-bold mb-2">Comunidad & Debates</h4>
-                <p class="text-secondary small flex-grow-1" style="line-height: 1.7;">
-                    Reglas de convivencia, cómo formular preguntas de la trama, valorar con 1 a 5 estrellas y responder a otros lectores respetuosamente.
-                </p>
-                <div class="pt-3 border-top border-secondary border-opacity-25 mt-3">
-                    <a href="{% url 'accounts:dashboard_discussions' %}" class="text-success small fw-bold text-decoration-none d-flex align-items-center gap-1">
-                        Ver Debates <i class="bi bi-arrow-right"></i>
-                    </a>
+            <div class="pro-card h-100 shadow-sm">
+                <div class="pro-card-body d-flex flex-column h-100">
+                    <div class="p-3 rounded-3 d-inline-block mb-3" style="background: rgba(16, 185, 129, 0.15);">
+                        <i class="bi bi-chat-heart text-success fs-3"></i>
+                    </div>
+                    <h4 class="text-white fw-bold mb-2">Comunidad & Debates</h4>
+                    <p class="text-secondary small flex-grow-1" style="line-height: 1.7;">
+                        Reglas de convivencia, cómo formular preguntas de la trama, valorar con 1 a 5 estrellas y responder a otros lectores respetuosamente.
+                    </p>
+                    <div class="pt-3 border-top border-secondary border-opacity-25 mt-3">
+                        <a href="{% url 'accounts:dashboard_discussions' %}" class="text-success small fw-bold text-decoration-none d-flex align-items-center gap-1">
+                            Ver Debates <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Banner de Soporte Directo Full Width -->
-    <div class="p-4 p-md-5 rounded-4 shadow-sm text-center position-relative overflow-hidden mb-4" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-        <h3 class="text-white fw-bold mb-2">¿No encontraste lo que buscabas?</h3>
-        <p class="text-secondary mb-4 mx-auto" style="max-width: 620px;">
-            Nuestro equipo de ingenieros y moderadores está a tu disposición para asistirte con cualquier inconveniente técnico o duda sobre autoría.
-        </p>
-        <a href="{% url 'catalog:contacto' %}" class="btn btn-accent px-5 py-2 fw-bold">
-            <i class="bi bi-envelope-fill me-2"></i> Abrir Ticket de Soporte
-        </a>
+    <div class="pro-card text-center mb-4">
+        <div class="pro-card-body">
+            <h3 class="text-white fw-bold mb-2">¿No encontraste lo que buscabas?</h3>
+            <p class="text-secondary mb-4 mx-auto" style="max-width: 620px;">
+                Nuestro equipo de ingenieros y moderadores está a tu disposición para asistirte con cualquier inconveniente técnico o duda sobre autoría.
+            </p>
+            <a href="{% url 'catalog:contacto' %}" class="btn btn-accent px-5 py-2 fw-bold">
+                <i class="bi bi-envelope-fill me-2"></i> Abrir Ticket de Soporte
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}

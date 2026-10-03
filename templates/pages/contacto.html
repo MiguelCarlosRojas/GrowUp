@@ -3,9 +3,9 @@
 {% block title %}Contacte con Nosotros - GrowUp{% endblock %}
 
 {% block content %}
-<div class="w-100 py-2">
+<div class="pro-page-wrapper">
     <!-- Hero Header Full Width -->
-    <div class="p-4 p-md-5 rounded-4 shadow-lg mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(14, 20, 32, 0.95), rgba(8, 12, 20, 0.98)); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+    <div class="pro-page-header">
         <div class="position-absolute top-0 end-0 p-5 opacity-10 d-none d-lg-block pointer-events-none">
             <i class="bi bi-chat-square-text text-danger" style="font-size: 16rem;"></i>
         </div>
@@ -56,149 +56,155 @@
     <div class="row g-4 mb-5">
         <!-- Formulario (Izquierda) -->
         <div class="col-lg-7">
-            <div class="p-4 p-md-5 rounded-4 h-100 shadow-sm" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-                <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
-                    <div>
-                        <h3 class="text-white fw-bold mb-1">Envíanos un Mensaje</h3>
-                        <span class="text-muted small">Registrado directamente en nuestra base de datos</span>
+            <div class="pro-card h-100 shadow-sm">
+                <div class="pro-card-body d-flex flex-column h-100">
+                    <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+                        <div>
+                            <h3 class="text-white fw-bold mb-1">Envíanos un Mensaje</h3>
+                            <span class="text-muted small">Registrado directamente en nuestra base de datos</span>
+                        </div>
+
+                        {% if user.is_authenticated %}
+                            <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 px-3 py-2 d-inline-flex align-items-center gap-2">
+                                <i class="bi bi-person-check-fill"></i> Sesión: @{{ user.username }}
+                            </span>
+                        {% else %}
+                            <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-25 px-3 py-2 d-inline-flex align-items-center gap-2">
+                                <i class="bi bi-person"></i> Consulta Anónima / Invitado
+                            </span>
+                        {% endif %}
                     </div>
 
                     {% if user.is_authenticated %}
-                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 px-3 py-2 d-inline-flex align-items-center gap-2">
-                            <i class="bi bi-person-check-fill"></i> Sesión: @{{ user.username }}
-                        </span>
-                    {% else %}
-                        <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-25 px-3 py-2 d-inline-flex align-items-center gap-2">
-                            <i class="bi bi-person"></i> Consulta Anónima / Invitado
-                        </span>
+                        <div class="p-3 rounded-3 mb-4 d-flex align-items-center gap-3" style="background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.2);">
+                            <i class="bi bi-info-circle text-info fs-4 flex-shrink-0"></i>
+                            <span class="text-secondary small">
+                                Tu mensaje se vinculará automáticamente a tu perfil de usuario. Si ya enviaste una solicitud pendiente, el formulario actualizará tu consulta actual.
+                            </span>
+                        </div>
                     {% endif %}
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-white fw-semibold small">Tu Nombre o Seudónimo *</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                    <div class="text-danger small mt-1">{{ form.name.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label text-white fw-semibold small">Correo Electrónico de Contacto *</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger small mt-1">{{ form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-white fw-semibold small">Motivo de la Consulta *</label>
+                            {{ form.subject }}
+                            {% if form.subject.errors %}
+                                <div class="text-danger small mt-1">{{ form.subject.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label text-white fw-semibold small">Mensaje Detallado *</label>
+                            {{ form.message }}
+                            {% if form.message.errors %}
+                                <div class="text-danger small mt-1">{{ form.message.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="btn btn-accent w-100 py-3 fw-bold fs-6 d-flex align-items-center justify-content-center gap-2">
+                            <i class="bi bi-send-fill"></i> Enviar Mensaje a Soporte
+                        </button>
+                    </form>
                 </div>
-
-                {% if user.is_authenticated %}
-                    <div class="p-3 rounded-3 mb-4 d-flex align-items-center gap-3" style="background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.2);">
-                        <i class="bi bi-info-circle text-info fs-4 flex-shrink-0"></i>
-                        <span class="text-secondary small">
-                            Tu mensaje se vinculará automáticamente a tu perfil de usuario. Si ya enviaste una solicitud pendiente, el formulario actualizará tu consulta actual.
-                        </span>
-                    </div>
-                {% endif %}
-
-                <form method="POST">
-                    {% csrf_token %}
-
-                    <div class="row g-3 mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label text-white fw-semibold small">Tu Nombre o Seudónimo *</label>
-                            {{ form.name }}
-                            {% if form.name.errors %}
-                                <div class="text-danger small mt-1">{{ form.name.errors }}</div>
-                            {% endif %}
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label text-white fw-semibold small">Correo Electrónico de Contacto *</label>
-                            {{ form.email }}
-                            {% if form.email.errors %}
-                                <div class="text-danger small mt-1">{{ form.email.errors }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label text-white fw-semibold small">Motivo de la Consulta *</label>
-                        {{ form.subject }}
-                        {% if form.subject.errors %}
-                            <div class="text-danger small mt-1">{{ form.subject.errors }}</div>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label text-white fw-semibold small">Mensaje Detallado *</label>
-                        {{ form.message }}
-                        {% if form.message.errors %}
-                            <div class="text-danger small mt-1">{{ form.message.errors }}</div>
-                        {% endif %}
-                    </div>
-
-                    <button type="submit" class="btn btn-accent w-100 py-3 fw-bold fs-6 d-flex align-items-center justify-content-center gap-2">
-                        <i class="bi bi-send-fill"></i> Enviar Mensaje a Soporte
-                    </button>
-                </form>
             </div>
         </div>
 
         <!-- Canales Directos e Historial de Tickets (Derecha) -->
         <div class="col-lg-5">
-            <div class="d-flex flex-column gap-4">
+            <div class="d-flex flex-column gap-4 pro-sidebar-sticky">
                 <!-- Canales Directos -->
-                <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-                    <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                        <i class="bi bi-headset text-danger"></i> Canales de Atención Directa
-                    </h5>
+                <div class="pro-card shadow-sm">
+                    <div class="pro-card-body">
+                        <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="bi bi-headset text-danger"></i> Canales de Atención Directa
+                        </h5>
 
-                    <div class="d-flex flex-column gap-3 mb-3">
-                        <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                            <div class="p-2 rounded-2" style="background: rgba(255, 42, 84, 0.15);">
-                                <i class="bi bi-envelope text-danger fs-5"></i>
+                        <div class="d-flex flex-column gap-3 mb-3">
+                            <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                                <div class="p-2 rounded-2" style="background: rgba(255, 42, 84, 0.15);">
+                                    <i class="bi bi-envelope text-danger fs-5"></i>
+                                </div>
+                                <div>
+                                    <span class="text-muted small d-block">Correo General</span>
+                                    <strong class="text-white">contacto@growup-media.org</strong>
+                                </div>
                             </div>
-                            <div>
-                                <span class="text-muted small d-block">Correo General</span>
-                                <strong class="text-white">contacto@growup-media.org</strong>
+
+                            <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                                <div class="p-2 rounded-2" style="background: rgba(245, 158, 11, 0.15);">
+                                    <i class="bi bi-feather text-warning fs-5"></i>
+                                </div>
+                                <div>
+                                    <span class="text-muted small d-block">Coordinación de Autores</span>
+                                    <strong class="text-white">autores@growup-media.org</strong>
+                                </div>
+                            </div>
+
+                            <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                                <div class="p-2 rounded-2" style="background: rgba(6, 182, 212, 0.15);">
+                                    <i class="bi bi-shield-check text-info fs-5"></i>
+                                </div>
+                                <div>
+                                    <span class="text-muted small d-block">Reportes DMCA / Derechos de Autor</span>
+                                    <strong class="text-white">legal@growup-media.org</strong>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                            <div class="p-2 rounded-2" style="background: rgba(245, 158, 11, 0.15);">
-                                <i class="bi bi-feather text-warning fs-5"></i>
-                            </div>
-                            <div>
-                                <span class="text-muted small d-block">Coordinación de Autores</span>
-                                <strong class="text-white">autores@growup-media.org</strong>
-                            </div>
+                        <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.6); border: 1px solid var(--border-subtle);">
+                            <small class="text-muted d-block mb-1">Horario de Respuestas</small>
+                            <span class="text-white small">Lunes a Viernes, de 09:00 a 18:00 (Hora Perú / UTC-5)</span>
                         </div>
-
-                        <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                            <div class="p-2 rounded-2" style="background: rgba(6, 182, 212, 0.15);">
-                                <i class="bi bi-shield-check text-info fs-5"></i>
-                            </div>
-                            <div>
-                                <span class="text-muted small d-block">Reportes DMCA / Derechos de Autor</span>
-                                <strong class="text-white">legal@growup-media.org</strong>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.6); border: 1px solid var(--border-subtle);">
-                        <small class="text-muted d-block mb-1">Horario de Respuestas</small>
-                        <span class="text-white small">Lunes a Viernes, de 09:00 a 18:00 (Hora Perú / UTC-5)</span>
                     </div>
                 </div>
 
                 <!-- Historial de Tickets si está logueado -->
                 {% if user.is_authenticated and user_tickets %}
-                    <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-                        <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                            <i class="bi bi-clock-history text-info"></i> Tus Solicitudes Recientes
-                        </h5>
-                        <div class="d-flex flex-column gap-2">
-                            {% for ticket in user_tickets %}
-                                <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <strong class="text-white small">{{ ticket.subject|truncatechars:35 }}</strong>
-                                        {% if ticket.status == 'pending' %}
-                                            <span class="badge bg-warning bg-opacity-25 text-warning small">Pendiente</span>
-                                        {% elif ticket.status == 'in_review' %}
-                                            <span class="badge bg-info bg-opacity-25 text-info small">En Revisión</span>
-                                        {% else %}
-                                            <span class="badge bg-success bg-opacity-25 text-success small">Resuelto</span>
-                                        {% endif %}
+                    <div class="pro-card shadow-sm">
+                        <div class="pro-card-body">
+                            <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                                <i class="bi bi-clock-history text-info"></i> Tus Solicitudes Recientes
+                            </h5>
+                            <div class="d-flex flex-column gap-2">
+                                {% for ticket in user_tickets %}
+                                    <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <strong class="text-white small">{{ ticket.subject|truncatechars:35 }}</strong>
+                                            {% if ticket.status == 'pending' %}
+                                                <span class="badge bg-warning bg-opacity-25 text-warning small">Pendiente</span>
+                                            {% elif ticket.status == 'in_review' %}
+                                                <span class="badge bg-info bg-opacity-25 text-info small">En Revisión</span>
+                                            {% else %}
+                                                <span class="badge bg-success bg-opacity-25 text-success small">Resuelto</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="d-flex justify-content-between text-muted" style="font-size: 0.75rem;">
+                                            <span>{{ ticket.created_at|date:"d M Y, H:i" }}</span>
+                                            <span>Ticket #{{ ticket.id }}</span>
+                                        </div>
                                     </div>
-                                    <div class="d-flex justify-content-between text-muted" style="font-size: 0.75rem;">
-                                        <span>{{ ticket.created_at|date:"d M Y, H:i" }}</span>
-                                        <span>Ticket #{{ ticket.id }}</span>
-                                    </div>
-                                </div>
-                            {% endfor %}
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 {% endif %}

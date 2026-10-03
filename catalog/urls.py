@@ -20,11 +20,15 @@ urlpatterns = [
     path('api/live/notifications/', api_views.api_live_notifications_view, name='api_live_notifications'),
     path('ws/live/', api_views.ws_live_http_fallback_view, name='ws_live_fallback'),
 
-    # Sobre nosotros
+    # Sobre nosotros & Blog Oficial
     path('sobre-nosotros/quienes-somos/', pages_views.quienes_somos_view, name='quienes_somos'),
     path('sobre-nosotros/nuestra-historia/', pages_views.nuestra_historia_view, name='nuestra_historia'),
     path('sobre-nosotros/donde-estamos/', pages_views.donde_estamos_view, name='donde_estamos'),
     path('blog/', pages_views.blog_view, name='blog'),
+    path('blog/crear/', pages_views.blog_create_view, name='blog_create'),
+    path('blog/<slug:slug>/', pages_views.blog_detail_view, name='blog_detail'),
+    path('blog/<slug:slug>/editar/', pages_views.blog_edit_view, name='blog_edit'),
+    path('blog/<slug:slug>/eliminar/', pages_views.blog_delete_view, name='blog_delete'),
 
     # Ayuda & Contacto
     path('ayuda/', pages_views.ayuda_view, name='ayuda'),

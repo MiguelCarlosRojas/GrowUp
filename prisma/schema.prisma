@@ -9,19 +9,17 @@ datasource db {
 /// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
 model accounts_userprofile {
   id                BigInt    @id @default(autoincrement())
-  uid               String    @unique @default(uuid()) @db.Uuid
   role              String    @db.VarChar(20)
   bio               String
   avatar_url        String    @db.VarChar(200)
   favorite_genres   String    @db.VarChar(255)
-  oauth_provider    String?   @db.VarChar(50)
-  oauth_uid         String?   @db.VarChar(150)
-  jwt_token_version Int       @default(1)
   created_at        DateTime  @db.Timestamptz(6)
   user_id           Int       @unique
+  uid               String    @unique(map: "accounts_userprofile_uid_231b76f5_uniq") @default(uuid()) @db.Uuid
+  oauth_provider    String?   @db.VarChar(50)
+  oauth_uid         String?   @db.VarChar(150)
+  jwt_token_version Int
   auth_user         auth_user @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "accounts_userprofile_user_id_92240672_fk_auth_user_id")
-
-  @@index([uid], map: "accounts_userprofile_uid_idx")
 }
 
 model auth_group {
@@ -75,7 +73,9 @@ model auth_user {
   accounts_userprofile       accounts_userprofile?
   auth_user_groups           auth_user_groups[]
   auth_user_user_permissions auth_user_user_permissions[]
+  catalog_blogpost           catalog_blogpost[]
   catalog_bookmark           catalog_bookmark[]
+  catalog_contactmessage     catalog_contactmessage[]
   catalog_itemdiscussion     catalog_itemdiscussion[]
   catalog_itemreview         catalog_itemreview[]
   django_admin_log           django_admin_log[]
@@ -239,6 +239,7 @@ model novels_chapter {
   published_at   DateTime     @db.Timestamptz(6)
   updated_at     DateTime     @db.Timestamptz(6)
   novel_id       BigInt
+  created_at     DateTime?    @db.Timestamptz(6)
   novels_novel   novels_novel @relation(fields: [novel_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "novels_chapter_novel_id_b27446a0_fk_novels_novel_id")
 
   @@unique([novel_id, chapter_number], map: "novels_chapter_novel_id_chapter_number_1b45f896_uniq")
@@ -280,4 +281,41 @@ model novels_novel_categories {
   @@unique([novel_id, category_id], map: "novels_novel_categories_novel_id_category_id_25b4825a_uniq")
   @@index([category_id], map: "novels_novel_categories_category_id_4b1b3c71")
   @@index([novel_id], map: "novels_novel_categories_novel_id_c24d3068")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model catalog_blogpost {
+  id              BigInt    @id @default(autoincrement())
+  title           String    @db.VarChar(255)
+  slug            String    @unique @db.VarChar(255)
+  category        String    @db.VarChar(100)
+  cover_image_url String    @db.VarChar(500)
+  summary         String
+  content         String
+  views_count     Int
+  is_published    Boolean
+  created_at      DateTime  @db.Timestamptz(6)
+  updated_at      DateTime  @db.Timestamptz(6)
+  author_id       Int
+  auth_user       auth_user @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "catalog_blogpost_author_id_d1c3eb2e_fk_auth_user_id")
+
+  @@index([author_id], map: "catalog_blogpost_author_id_d1c3eb2e")
+  @@index([slug], map: "catalog_blogpost_slug_4a30d393_like")
+}
+
+/// This model has constraints using non-default deferring rules and requires additional setup for migrations. Visit https://pris.ly/d/constraint-deferring for more info.
+model catalog_contactmessage {
+  id         BigInt     @id @default(autoincrement())
+  name       String     @db.VarChar(150)
+  email      String     @db.VarChar(254)
+  subject    String     @db.VarChar(200)
+  message    String
+  status     String     @db.VarChar(20)
+  created_at DateTime   @db.Timestamptz(6)
+  updated_at DateTime   @db.Timestamptz(6)
+  user_id    Int?
+  auth_user  auth_user? @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "catalog_contactmessage_user_id_b9abd5da_fk_auth_user_id")
+
+  @@index([user_id], map: "catalog_contactmessage_user_id_b9abd5da")
 }

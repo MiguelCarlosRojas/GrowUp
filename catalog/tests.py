@@ -156,5 +156,77 @@ class CatalogTests(TestCase):
         animes_cached = jikan_service.get_top_anime(limit=2)
         self.assertEqual(len(animes_cached), 2)
 
+    def test_contact_form_persistence_guest_and_user(self):
+        from catalog.models import ContactMessage
+        # 1. Guest submission
+        response = self.client.post(reverse('catalog:contacto'), {
+            'name': 'Visitante Curioso',
+            'email': 'visitante@test.com',
+            'subject': 'Consulta sobre Manga',
+            'message': 'Hola equipo de GrowUp, me gustaria saber mas del catalogo.'
+        })
+        self.assertEqual(response.status_code, 302)
+        guest_msg = ContactMessage.objects.filter(email='visitante@test.com').first()
+        self.assertIsNotNone(guest_msg)
+        self.assertEqual(guest_msg.name, 'Visitante Curioso')
+        self.assertIsNone(guest_msg.user)
+
+        # 2. Authenticated user submission
+        self.client.login(username='otaku_master', password='password123')
+        response_auth = self.client.post(reverse('catalog:contacto'), {
+            'name': 'Otaku Master',
+            'email': 'otaku@test.com',
+            'subject': 'Soporte de Cuenta',
+            'message': 'Necesito soporte con mi perfil de autor.'
+        })
+        self.assertEqual(response_auth.status_code, 302)
+        user_msg = ContactMessage.objects.filter(user=self.user).first()
+        self.assertIsNotNone(user_msg)
+        self.assertEqual(user_msg.subject, 'Soporte de Cuenta')
+
+    def test_blog_views_and_permission_boundaries(self):
+        from catalog.models import BlogPost
+        # Create a blog post
+        post = BlogPost.objects.create(
+            title='Prueba de Articulo Tecnologico',
+            summary='Resumen de prueba para testing unitario',
+            content='Contenido completo de prueba para el blog oficial.',
+            author=self.user,
+            category='Tecnología',
+            is_published=True
+        )
+
+        # Anonymous or regular user can access blog list and detail
+        list_resp = self.client.get(reverse('catalog:blog'))
+        self.assertEqual(list_resp.status_code, 200)
+        self.assertContains(list_resp, 'Prueba de Articulo Tecnologico')
+
+        detail_resp = self.client.get(reverse('catalog:blog_detail', kwargs={'slug': post.slug}))
+        self.assertEqual(detail_resp.status_code, 200)
+        self.assertContains(detail_resp, 'Contenido completo de prueba')
+
+        # Regular user cannot access blog_create (redirected with error)
+        self.client.login(username='otaku_master', password='password123')
+        create_resp = self.client.get(reverse('catalog:blog_create'))
+        self.assertEqual(create_resp.status_code, 302)
+
+    def test_institutional_pages_render_fullwidth(self):
+        endpoints = [
+            'catalog:quienes_somos',
+            'catalog:nuestra_historia',
+            'catalog:donde_estamos',
+            'catalog:ayuda',
+            'catalog:preguntas_frecuentes',
+            'catalog:aviso_legal',
+            'catalog:politica_cookies',
+            'catalog:condiciones_uso',
+            'catalog:politica_privacidad',
+            'catalog:declaracion_accesibilidad',
+        ]
+        for ep in endpoints:
+            resp = self.client.get(reverse(ep))
+            self.assertEqual(resp.status_code, 200)
+            self.assertContains(resp, 'w-100')
+
 
 

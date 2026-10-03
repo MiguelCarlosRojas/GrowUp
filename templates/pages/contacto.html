@@ -136,13 +136,16 @@
                 <div class="pro-card shadow-sm">
                     <div class="pro-card-body">
                         <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                            <i class="bi bi-headset text-danger"></i> Canales de Atención Directa
+                            <span class="pro-icon-box pro-icon-box-sm pro-icon-danger">
+                                <i class="bi bi-headset"></i>
+                            </span>
+                            Canales de Atención Directa
                         </h5>
 
                         <div class="d-flex flex-column gap-3 mb-3">
                             <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                                <div class="p-2 rounded-2" style="background: rgba(255, 42, 84, 0.15);">
-                                    <i class="bi bi-envelope text-danger fs-5"></i>
+                                <div class="pro-icon-box pro-icon-box-sm pro-icon-danger">
+                                    <i class="bi bi-envelope"></i>
                                 </div>
                                 <div>
                                     <span class="text-muted small d-block">Correo General</span>
@@ -151,8 +154,8 @@
                             </div>
 
                             <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                                <div class="p-2 rounded-2" style="background: rgba(245, 158, 11, 0.15);">
-                                    <i class="bi bi-feather text-warning fs-5"></i>
+                                <div class="pro-icon-box pro-icon-box-sm pro-icon-warning">
+                                    <i class="bi bi-feather"></i>
                                 </div>
                                 <div>
                                     <span class="text-muted small d-block">Coordinación de Autores</span>
@@ -161,8 +164,8 @@
                             </div>
 
                             <div class="p-3 rounded-3 d-flex align-items-center gap-3" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                                <div class="p-2 rounded-2" style="background: rgba(6, 182, 212, 0.15);">
-                                    <i class="bi bi-shield-check text-info fs-5"></i>
+                                <div class="pro-icon-box pro-icon-box-sm pro-icon-info">
+                                    <i class="bi bi-shield-check"></i>
                                 </div>
                                 <div>
                                     <span class="text-muted small d-block">Reportes DMCA / Derechos de Autor</span>
@@ -183,7 +186,10 @@
                     <div class="pro-card shadow-sm">
                         <div class="pro-card-body">
                             <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                                <i class="bi bi-clock-history text-info"></i> Tus Solicitudes Recientes
+                                <span class="pro-icon-box pro-icon-box-sm pro-icon-info">
+                                    <i class="bi bi-clock-history"></i>
+                                </span>
+                                Tus Solicitudes Recientes
                             </h5>
                             <div class="d-flex flex-column gap-2">
                                 {% for ticket in user_tickets %}

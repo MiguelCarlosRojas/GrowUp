@@ -182,11 +182,11 @@ def _seed_initial_blog_posts(current_user=None):
             'title': 'Lanzamiento Oficial de GrowUp: La Nueva Era del Manga y las Novelas Ligeras',
             'category': 'Novedades',
             'cover_image_url': 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1200&auto=format&fit=crop&q=80',
-            'summary': 'Descubre las funcionalidades innovadoras de GrowUp: sincronización oficial con Jikan API v4, taller creativo para autores emergentes y base de datos de alta velocidad Prisma Postgres.',
+            'summary': 'Descubre las funcionalidades innovadoras de GrowUp: sincronización oficial con Tenrai API v1, taller creativo para autores emergentes y base de datos de alta velocidad Prisma Postgres.',
             'content': """GrowUp nace como una respuesta a la necesidad de la comunidad otaku e hispanohablante de contar con una plataforma profesional, unificada y sin barreras.
 
 A lo largo de los últimos meses, nuestro equipo de desarrollo ha diseñado una infraestructura resiliente que integra:
-- Catálogo global con más de 25,000 fichas actualizadas en tiempo real directamente desde MyAnimeList a través de Jikan API v4.
+- Catálogo global con más de 25,000 fichas actualizadas en tiempo real directamente desde MyAnimeList a través de Tenrai API v1.
 - Taller de Escritores con gestión integral de capítulos, control de visibilidad pública/privada y conteo dinámico de palabras y lecturas.
 - Sistema de opiniones con valoraciones de 1 a 5 estrellas, debates temáticos y notificaciones instantáneas.
 - Infraestructura moderna respaldada por Prisma Postgres en la nube, garantizando tiempos de respuesta ultrarrápidos y alta disponibilidad.

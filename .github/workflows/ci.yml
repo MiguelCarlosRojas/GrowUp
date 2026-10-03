@@ -18,7 +18,7 @@ jobs:
     env:
       SECRET_KEY: django-insecure-github-actions-ci-build-key-growup
       DATABASE_URL: ''
-      JIKAN_API_BASE_URL: https://api.jikan.moe/v4
+      TENRAI_API_BASE_URL: https://api.tenrai.org/v1
 
     steps:
       - name: Checkout Code

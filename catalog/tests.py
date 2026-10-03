@@ -75,7 +75,7 @@ class CatalogTests(TestCase):
             response = self.client.get(reverse(name))
             self.assertEqual(response.status_code, 200, f"Page {name} returned status {response.status_code}")
 
-    @patch('catalog.services.jikan_service.get_item_detail')
+    @patch('catalog.services.tenrai_service.get_item_detail')
     def test_platforms_and_social_sharing_in_item_detail(self, mock_get_item):
         mock_get_item.return_value = {
             'mal_id': 52991,
@@ -140,21 +140,38 @@ class CatalogTests(TestCase):
         self.assertContains(response, 'id="notifReviewsDropdown"')
         self.assertContains(response, 'id="notifDiscussionsDropdown"')
 
-    @patch('catalog.services.jikan_service._safe_request')
-    def test_jikan_service_real_data_and_caching(self, mock_safe):
-        from catalog.services import jikan_service
+    @patch('catalog.services.tenrai_service._safe_request')
+    def test_tenrai_service_real_data_and_caching(self, mock_safe):
+        from catalog.services import tenrai_service
         mock_safe.return_value = {
             'data': [
                 {'mal_id': 52991, 'title': 'Sousou no Frieren', 'type': 'TV', 'score': 9.38},
                 {'mal_id': 5114, 'title': 'Fullmetal Alchemist: Brotherhood', 'type': 'TV', 'score': 9.10}
             ]
         }
-        jikan_service._CACHE.clear()
-        animes = jikan_service.get_top_anime(limit=2)
+        tenrai_service._CACHE.clear()
+        animes = tenrai_service.get_top_anime(limit=2)
         self.assertEqual(len(animes), 2)
         self.assertEqual(animes[0]['title'], 'Sousou no Frieren')
-        animes_cached = jikan_service.get_top_anime(limit=2)
+        animes_cached = tenrai_service.get_top_anime(limit=2)
         self.assertEqual(len(animes_cached), 2)
+
+    @patch('catalog.services.tenrai_service.request_endpoint')
+    def test_tenrai_api_seasons_gateway(self, mock_req):
+        mock_req.return_value = {'data': [{'mal_id': 1, 'title': 'Current Season Anime'}]}
+        response = self.client.get(reverse('catalog:api_tenrai_seasons'))
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn('data', data)
+        self.assertEqual(data['data'][0]['title'], 'Current Season Anime')
+
+    @patch('catalog.services.tenrai_service.request_endpoint')
+    def test_tenrai_api_proxy_gateway(self, mock_req):
+        mock_req.return_value = {'data': {'mal_id': 999, 'title': 'Test Item'}}
+        response = self.client.get(reverse('catalog:api_tenrai_proxy', kwargs={'path': 'anime/999'}))
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data.get('data')['mal_id'], 999)
 
     def test_contact_form_persistence_guest_and_user(self):
         from catalog.models import ContactMessage

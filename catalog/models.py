@@ -13,7 +13,7 @@ class ItemReview(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
     item_type = models.CharField(max_length=20, choices=ITEM_TYPES)
-    item_id = models.CharField(max_length=100, db_index=True, help_text="ID de Jikan MAL o slug de novela")
+    item_id = models.CharField(max_length=100, db_index=True, help_text="ID de Tenrai MAL o slug de novela")
     item_title = models.CharField(max_length=255)
     item_image = models.URLField(blank=True, max_length=500)
     rating = models.PositiveSmallIntegerField(

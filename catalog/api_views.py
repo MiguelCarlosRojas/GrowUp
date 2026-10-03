@@ -147,3 +147,100 @@ def ws_live_http_fallback_view(request):
         'protocol': 'websocket',
         'message': 'ASGI WebSocket gateway ready'
     })
+
+
+# ==============================================================================
+# TENRAI API GATEWAY & ENDPOINT CONSUMPTION
+# ==============================================================================
+
+@require_GET
+def api_tenrai_proxy_view(request, path):
+    """
+    Direct proxy gateway to Tenrai API allowing frontend and clients to query
+    any of the 94 GET endpoints documented in OpenAPI 3.0 specification.
+    Example: /api/tenrai/anime/1/videos, /api/tenrai/top/anime, /api/tenrai/seasons/now
+    """
+    from catalog.services import tenrai_service
+    params = request.GET.dict()
+    data = tenrai_service.request_endpoint(path, params=params)
+    if data is not None:
+        return JsonResponse(data, safe=False)
+    return JsonResponse({'status': 'error', 'message': f'Recurso no encontrado o no disponible en Tenrai API: /{path}'}, status=404)
+
+
+@require_GET
+def api_tenrai_item_extra_view(request, media_type, item_id, extra):
+    """
+    Fetches rich sub-resource metadata for anime or manga (episodes, videos, characters, staff, reviews, etc.).
+    """
+    from catalog.services import tenrai_service
+    endpoint_path = f"/{media_type}/{item_id}/{extra}"
+    params = request.GET.dict()
+    data = tenrai_service.request_endpoint(endpoint_path, params=params)
+    if data is not None:
+        return JsonResponse(data, safe=False)
+    return JsonResponse({'status': 'error', 'message': f'Metadato no encontrado en Tenrai API: {endpoint_path}'}, status=404)
+
+
+@require_GET
+def api_tenrai_random_view(request, media_type='anime'):
+    """Returns random anime, manga, character, or person from Tenrai API."""
+    from catalog.services import tenrai_service
+    endpoint = f"/random/{media_type}"
+    data = tenrai_service.request_endpoint(endpoint)
+    if data is not None:
+        return JsonResponse(data, safe=False)
+    return JsonResponse({'status': 'error', 'message': f'No se pudo obtener recurso aleatorio de {media_type}'}, status=502)
+
+
+@require_GET
+def api_tenrai_seasons_view(request):
+    """Returns current or upcoming seasonal anime from Tenrai API."""
+    from catalog.services import tenrai_service
+    sub = request.GET.get('sub', 'now')  # now, upcoming, or empty for all seasons
+    endpoint = f"/seasons/{sub}" if sub in ('now', 'upcoming') else '/seasons'
+    data = tenrai_service.request_endpoint(endpoint, params=request.GET.dict())
+    if data is not None:
+        return JsonResponse(data, safe=False)
+    return JsonResponse({'status': 'error', 'message': 'No se pudo obtener la temporada actual'}, status=502)
+
+
+@require_GET
+def api_tenrai_schedules_view(request):
+    """Returns anime airing schedules from Tenrai API."""
+    from catalog.services import tenrai_service
+    data = tenrai_service.request_endpoint('/schedules', params=request.GET.dict())
+    if data is not None:
+        return JsonResponse(data, safe=False)
+    return JsonResponse({'status': 'error', 'message': 'No se pudo obtener la programación semanal'}, status=502)
+
+
+@require_GET
+def api_tenrai_news_view(request):
+    """Returns news from Tenrai API."""
+    from catalog.services import tenrai_service
+    data = tenrai_service.request_endpoint('/news', params=request.GET.dict())
+    if data is not None:
+        return JsonResponse(data, safe=False)
+    return JsonResponse({'status': 'error', 'message': 'No se pudo obtener noticias'}, status=502)
+
+
+@require_GET
+def api_tenrai_articles_view(request):
+    """Returns featured articles from Tenrai API."""
+    from catalog.services import tenrai_service
+    data = tenrai_service.request_endpoint('/articles', params=request.GET.dict())
+    if data is not None:
+        return JsonResponse(data, safe=False)
+    return JsonResponse({'status': 'error', 'message': 'No se pudo obtener artículos'}, status=502)
+
+
+@require_GET
+def api_tenrai_stacks_view(request):
+    """Returns interest stacks from Tenrai API."""
+    from catalog.services import tenrai_service
+    data = tenrai_service.request_endpoint('/stacks', params=request.GET.dict())
+    if data is not None:
+        return JsonResponse(data, safe=False)
+    return JsonResponse({'status': 'error', 'message': 'No se pudo obtener interest stacks'}, status=502)
+

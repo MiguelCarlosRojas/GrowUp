@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('item_type', models.CharField(choices=[('anime', 'Anime'), ('manga', 'Manga'), ('lightnovel', 'Novela Ligera (MAL)'), ('original_novel', 'Novela Original')], max_length=20)),
-                ('item_id', models.CharField(db_index=True, help_text='ID de Jikan MAL o slug de novela', max_length=100)),
+                ('item_id', models.CharField(db_index=True, help_text='ID de Tenrai MAL o slug de novela', max_length=100)),
                 ('item_title', models.CharField(max_length=255)),
                 ('item_image', models.URLField(blank=True, max_length=500)),
                 ('rating', models.PositiveSmallIntegerField(help_text='Clasificación de 1 a 5 estrellas', validators=[django.core.validators.MinValueValidator(1), django.core.validators.MaxValueValidator(5)])),

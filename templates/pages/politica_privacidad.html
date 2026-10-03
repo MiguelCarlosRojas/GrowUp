@@ -3,9 +3,9 @@
 {% block title %}Política de Privacidad - GrowUp{% endblock %}
 
 {% block content %}
-<div class="w-100 py-2">
+<div class="pro-page-wrapper">
     <!-- Hero Header Full Width -->
-    <div class="p-4 p-md-5 rounded-4 shadow-lg mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(14, 20, 32, 0.95), rgba(8, 12, 20, 0.98)); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+    <div class="pro-page-header">
         <div class="row align-items-center position-relative" style="z-index: 1;">
             <div class="col-lg-8">
                 <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35);">
@@ -30,78 +30,84 @@
     <!-- 2 Column Full Width Layout -->
     <div class="row g-4 mb-5">
         <div class="col-lg-8">
-            <div class="p-4 p-md-5 rounded-4 shadow-sm text-secondary" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle); line-height: 1.9; font-size: 1.02rem;">
-                <section id="sec-1" class="mb-5">
-                    <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                        <span class="badge bg-success bg-opacity-25 text-success fs-6">1</span> Responsable del Tratamiento
-                    </h3>
-                    <p>
-                        El responsable del tratamiento de los datos es <strong class="text-white">GrowUp Media & Technology</strong>, con domicilio en Av. Javier Prado Este 4200, Santiago de Surco, Lima, Perú. Correo de nuestro delegado de protección de datos: <code class="text-white">privacidad@growup-media.org</code>.
-                    </p>
-                </section>
+            <div class="pro-card shadow-sm text-secondary" style="line-height: 1.9; font-size: 1.02rem;">
+                <div class="pro-card-body">
+                    <section id="sec-1" class="mb-5">
+                        <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                            <span class="badge bg-success bg-opacity-25 text-success fs-6">1</span> Responsable del Tratamiento
+                        </h3>
+                        <p>
+                            El responsable del tratamiento de los datos es <strong class="text-white">GrowUp Media & Technology</strong>, con domicilio en Av. Javier Prado Este 4200, Santiago de Surco, Lima, Perú. Correo de nuestro delegado de protección de datos: <code class="text-white">privacidad@growup-media.org</code>.
+                        </p>
+                    </section>
 
-                <section id="sec-2" class="mb-5">
-                    <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                        <span class="badge bg-success bg-opacity-25 text-success fs-6">2</span> Datos que Recopilamos y Finalidad
-                    </h3>
-                    <p>
-                        Recopilamos estrictamente los datos esenciales para prestar nuestros servicios de catálogo, taller de autor y comunidad:
-                    </p>
-                    <ul class="text-secondary ps-3 mb-3">
-                        <li><strong class="text-white">Datos de Autenticación:</strong> Nombre de usuario, email cifrado y credenciales hash con PBKDF2/SHA256 para gestión segura de sesión.</li>
-                        <li><strong class="text-white">Perfil Comunitario:</strong> Biografía personal, rol seleccionado (Lector o Autor) y géneros literarios favoritos.</li>
-                        <li><strong class="text-white">Contenido Publicado:</strong> Novelas ligeras originales, capítulos, opiniones, estrellas de 1 a 5 y mensajes en debates.</li>
-                    </ul>
-                </section>
+                    <section id="sec-2" class="mb-5">
+                        <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                            <span class="badge bg-success bg-opacity-25 text-success fs-6">2</span> Datos que Recopilamos y Finalidad
+                        </h3>
+                        <p>
+                            Recopilamos estrictamente los datos esenciales para prestar nuestros servicios de catálogo, taller de autor y comunidad:
+                        </p>
+                        <ul class="text-secondary ps-3 mb-3">
+                            <li><strong class="text-white">Datos de Autenticación:</strong> Nombre de usuario, email cifrado y credenciales hash con PBKDF2/SHA256 para gestión segura de sesión.</li>
+                            <li><strong class="text-white">Perfil Comunitario:</strong> Biografía personal, rol seleccionado (Lector o Autor) y géneros literarios favoritos.</li>
+                            <li><strong class="text-white">Contenido Publicado:</strong> Novelas ligeras originales, capítulos, opiniones, estrellas de 1 a 5 y mensajes en debates.</li>
+                        </ul>
+                    </section>
 
-                <section id="sec-3" class="mb-5">
-                    <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                        <span class="badge bg-success bg-opacity-25 text-success fs-6">3</span> No Comercialización de Datos
-                    </h3>
-                    <div class="p-3 rounded-3 my-3" style="background: rgba(16, 185, 129, 0.08); border-left: 3px solid var(--accent-success, #10b981);">
-                        <strong class="text-white d-block mb-1">Compromiso Ético Absoluto:</strong>
-                        GrowUp no comercializa, alquila ni vende tus datos a terceros ni a empresas de publicidad. Toda la persistencia opera en instancias cifradas de Prisma Postgres con poolers de conexión protegidos.
-                    </div>
-                </section>
+                    <section id="sec-3" class="mb-5">
+                        <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                            <span class="badge bg-success bg-opacity-25 text-success fs-6">3</span> No Comercialización de Datos
+                        </h3>
+                        <div class="p-3 rounded-3 my-3" style="background: rgba(16, 185, 129, 0.08); border-left: 3px solid var(--accent-success, #10b981);">
+                            <strong class="text-white d-block mb-1">Compromiso Ético Absoluto:</strong>
+                            GrowUp no comercializa, alquila ni vende tus datos a terceros ni a empresas de publicidad. Toda la persistencia opera en instancias cifradas de Prisma Postgres con poolers de conexión protegidos.
+                        </div>
+                    </section>
 
-                <section id="sec-4" class="mb-5">
-                    <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                        <span class="badge bg-success bg-opacity-25 text-success fs-6">4</span> Ejercicio de Derechos ARCO
-                    </h3>
-                    <p class="mb-0">
-                        Puedes ejercer en cualquier momento tus derechos de Acceso, Rectificación, Cancelación, Oposición y Portabilidad de datos escribiendo a <code class="text-white">privacidad@growup-media.org</code> o actualizando directamente tu cuenta desde la sección de Mi Perfil.
-                    </p>
-                </section>
+                    <section id="sec-4" class="mb-5">
+                        <h3 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                            <span class="badge bg-success bg-opacity-25 text-success fs-6">4</span> Ejercicio de Derechos ARCO
+                        </h3>
+                        <p class="mb-0">
+                            Puedes ejercer en cualquier momento tus derechos de Acceso, Rectificación, Cancelación, Oposición y Portabilidad de datos escribiendo a <code class="text-white">privacidad@growup-media.org</code> o actualizando directamente tu cuenta desde la sección de Mi Perfil.
+                        </p>
+                    </section>
+                </div>
             </div>
         </div>
 
         <div class="col-lg-4">
-            <div class="d-flex flex-column gap-4 sticky-top" style="top: 100px;">
-                <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-                    <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                        <i class="bi bi-list-nested text-success"></i> Secciones
-                    </h5>
-                    <div class="d-flex flex-column gap-2 small">
-                        <a href="#sec-1" class="text-secondary text-decoration-none hover-accent">1. Responsable del Tratamiento</a>
-                        <a href="#sec-2" class="text-secondary text-decoration-none hover-accent">2. Datos y Finalidad</a>
-                        <a href="#sec-3" class="text-secondary text-decoration-none hover-accent">3. No Comercialización</a>
-                        <a href="#sec-4" class="text-secondary text-decoration-none hover-accent">4. Derechos ARCO</a>
+            <div class="d-flex flex-column gap-4 pro-sidebar-sticky">
+                <div class="pro-card shadow-sm">
+                    <div class="pro-card-body">
+                        <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="bi bi-list-nested text-success"></i> Secciones
+                        </h5>
+                        <div class="d-flex flex-column gap-2 small">
+                            <a href="#sec-1" class="text-secondary text-decoration-none hover-accent">1. Responsable del Tratamiento</a>
+                            <a href="#sec-2" class="text-secondary text-decoration-none hover-accent">2. Datos y Finalidad</a>
+                            <a href="#sec-3" class="text-secondary text-decoration-none hover-accent">3. No Comercialización</a>
+                            <a href="#sec-4" class="text-secondary text-decoration-none hover-accent">4. Derechos ARCO</a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="p-4 rounded-4 shadow-sm" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle);">
-                    <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
-                        <i class="bi bi-shield-check text-info"></i> Legal Relacionado
-                    </h5>
-                    <div class="d-flex flex-column gap-2 small">
-                        <a href="{% url 'catalog:politica_cookies' %}" class="text-secondary text-decoration-none hover-accent d-flex justify-content-between">
-                            <span>Política de Cookies</span>
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
-                        <a href="{% url 'catalog:condiciones_uso' %}" class="text-secondary text-decoration-none hover-accent d-flex justify-content-between">
-                            <span>Condiciones de Uso</span>
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
+                <div class="pro-card shadow-sm">
+                    <div class="pro-card-body">
+                        <h5 class="text-white fw-bold mb-3 d-flex align-items-center gap-2">
+                            <i class="bi bi-shield-check text-info"></i> Legal Relacionado
+                        </h5>
+                        <div class="d-flex flex-column gap-2 small">
+                            <a href="{% url 'catalog:politica_cookies' %}" class="text-secondary text-decoration-none hover-accent d-flex justify-content-between">
+                                <span>Política de Cookies</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+                            <a href="{% url 'catalog:condiciones_uso' %}" class="text-secondary text-decoration-none hover-accent d-flex justify-content-between">
+                                <span>Condiciones de Uso</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

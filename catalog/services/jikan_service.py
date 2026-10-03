@@ -7,9 +7,9 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-# Request Headers matching realistic modern browsers
+# Request Headers matching realistic anime community client
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+    'User-Agent': 'GrowUp-App/1.0 (+https://growup-7my7.onrender.com; contact: growup.anime@gmail.com)',
     'Accept': 'application/json, text/plain, */*',
     'Accept-Language': 'es-ES,es;q=0.9,en;q=0.8',
 }
@@ -23,9 +23,13 @@ _CACHE = {}
 _ITEMS_REGISTRY = {}
 CACHE_TTL = 3600  # 1 hour cache for ultra-fluid page loads
 
+DISK_CACHE_FILE = os.path.join(os.path.dirname(__file__), 'jikan_disk_cache.json')
+
 
 def get_base_url():
-    url = getattr(settings, 'JIKAN_API_BASE_URL', None) or os.getenv('JIKAN_API_BASE_URL', 'https://api.jikan.moe/v4')
+    url = getattr(settings, 'JIKAN_API_BASE_URL', None) or os.getenv('JIKAN_API_BASE_URL', '')
+    if not url:
+        url = 'https://api.jikan.moe/v4'
     return url.rstrip('/')
 
 
@@ -52,7 +56,43 @@ def _register_items(items):
             _ITEMS_REGISTRY[str(it['mal_id'])] = it
 
 
-def _safe_request(endpoint_path, params=None, timeout=5):
+def _load_disk_cache():
+    import json
+    if os.path.exists(DISK_CACHE_FILE):
+        try:
+            with open(DISK_CACHE_FILE, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    for k, v in data.items():
+                        if isinstance(v, list):
+                            _set_cache(k, v)
+                            _register_items(v)
+        except Exception as e:
+            logger.warning(f"Could not load jikan_disk_cache.json: {e}")
+
+
+def _save_disk_cache(key, items):
+    import json
+    try:
+        current = {}
+        if os.path.exists(DISK_CACHE_FILE):
+            try:
+                with open(DISK_CACHE_FILE, 'r', encoding='utf-8') as f:
+                    current = json.load(f)
+            except Exception:
+                current = {}
+        current[key] = items
+        with open(DISK_CACHE_FILE, 'w', encoding='utf-8') as f:
+            json.dump(current, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        logger.warning(f"Could not save jikan_disk_cache.json: {e}")
+
+
+# Initialize disk cache on startup
+_load_disk_cache()
+
+
+def _safe_request(endpoint_path, params=None, timeout=8, retries=1):
     base_url = get_base_url()
     if not base_url:
         return None
@@ -63,26 +103,36 @@ def _safe_request(endpoint_path, params=None, timeout=5):
     if cached is not None:
         return cached
 
-    try:
-        response = _SESSION.get(url, params=params, timeout=timeout)
-        if response.status_code == 200:
-            data = response.json()
-            _set_cache(cache_key, data)
-            return data
-        elif response.status_code == 429:
-            logger.warning(f"Jikan API rate limit (429) on {url}")
+    for attempt in range(retries + 1):
+        try:
+            response = _SESSION.get(url, params=params, timeout=timeout)
+            if response.status_code == 200:
+                data = response.json()
+                _set_cache(cache_key, data)
+                return data
+            elif response.status_code in (429, 504, 502, 503) and attempt < retries:
+                logger.warning(f"Jikan API status {response.status_code} on {url}, retrying in 1s (attempt {attempt + 1}/{retries})...")
+                time.sleep(1.0)
+                continue
+            elif response.status_code == 429:
+                logger.warning(f"Jikan API rate limit (429) on {url}")
+                return None
+            elif response.status_code in (504, 502, 503):
+                logger.warning(f"Jikan API gateway status {response.status_code} on {url}")
+                return None
+            elif response.status_code == 404:
+                return None
+            else:
+                logger.warning(f"Jikan API responded with status {response.status_code} for {url}")
+                return None
+        except Exception as e:
+            if attempt < retries:
+                logger.warning(f"Jikan API issue on {url}: {e}, retrying...")
+                time.sleep(1.0)
+                continue
+            logger.warning(f"Jikan API connection issue on {url}: {e}")
             return None
-        elif response.status_code in (504, 502, 503):
-            logger.warning(f"Jikan API gateway status {response.status_code} on {url}")
-            return None
-        elif response.status_code == 404:
-            return None
-        else:
-            logger.warning(f"Jikan API responded with status {response.status_code} for {url}")
-            return None
-    except Exception as e:
-        logger.warning(f"Jikan API connection issue on {url}: {e}")
-        return None
+    return None
 
 
 def get_top_anime(limit=8):
@@ -96,6 +146,7 @@ def get_top_anime(limit=8):
         items = data['data']
         _register_items(items)
         _set_cache('real_top_anime_list', items)
+        _save_disk_cache('real_top_anime_list', items)
         return items[:limit]
 
     # If API call returned None, return any previously registered anime
@@ -114,6 +165,7 @@ def get_top_manga(limit=8):
         items = data['data']
         _register_items(items)
         _set_cache('real_top_manga_list', items)
+        _save_disk_cache('real_top_manga_list', items)
         return items[:limit]
 
     registered = [it for it in _ITEMS_REGISTRY.values() if it.get('type') in ('Manga', 'Manhwa', 'Manhua', 'One-shot')]
@@ -131,6 +183,7 @@ def get_top_lightnovels(limit=8):
         items = data['data']
         _register_items(items)
         _set_cache('real_top_ln_list', items)
+        _save_disk_cache('real_top_ln_list', items)
         return items[:limit]
 
     registered = [it for it in _ITEMS_REGISTRY.values() if it.get('type') in ('Novel', 'Lightnovel', 'Light Novel')]

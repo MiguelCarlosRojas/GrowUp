@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action_title }} - Blog GrowUp{% endblock %}
+
+{% block content %}
+<div class="w-100 py-2">
+    <!-- Header -->
+    <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+            <a href="{% url 'catalog:blog' %}" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-arrow-left"></i> Volver al Blog
+            </a>
+            <h1 class="display-6 fw-bold text-white mb-0">{{ action_title }}</h1>
+        </div>
+        <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25 px-3 py-2">
+            Panel de Redacción Oficial
+        </span>
+    </div>
+
+    <!-- Form Full Width Card -->
+    <div class="p-4 p-md-5 rounded-4 shadow-lg" style="background: rgba(14, 20, 32, 0.9); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="row g-4">
+                <!-- Título -->
+                <div class="col-lg-8">
+                    <label class="form-label text-white fw-semibold small">Título del Artículo</label>
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                        <div class="text-danger small mt-1">{{ form.title.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Categoría -->
+                <div class="col-lg-4">
+                    <label class="form-label text-white fw-semibold small">Categoría Editorial</label>
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                        <div class="text-danger small mt-1">{{ form.category.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- URL Portada -->
+                <div class="col-12">
+                    <label class="form-label text-white fw-semibold small">URL de Imagen de Portada (Opcional)</label>
+                    {{ form.cover_image_url }}
+                    <small class="text-muted">Introduce una URL pública de imagen (ej. Unsplash, Imgur o CDN).</small>
+                    {% if form.cover_image_url.errors %}
+                        <div class="text-danger small mt-1">{{ form.cover_image_url.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Resumen / Sinopsis -->
+                <div class="col-12">
+                    <label class="form-label text-white fw-semibold small">Resumen Introductorio (Snippet para la tarjeta)</label>
+                    {{ form.summary }}
+                    {% if form.summary.errors %}
+                        <div class="text-danger small mt-1">{{ form.summary.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Contenido -->
+                <div class="col-12">
+                    <label class="form-label text-white fw-semibold small">Contenido Completo del Artículo</label>
+                    {{ form.content }}
+                    <small class="text-muted">Escribe tu artículo con párrafos separados por saltos de línea y listas si lo requieres.</small>
+                    {% if form.content.errors %}
+                        <div class="text-danger small mt-1">{{ form.content.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Estado Publicado -->
+                <div class="col-12">
+                    <div class="form-check form-switch">
+                        {{ form.is_published }}
+                        <label class="form-check-label text-white ms-2" for="{{ form.is_published.id_for_label }}">
+                            Publicar inmediatamente en el blog público
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="col-12 pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-end gap-3">
+                    <a href="{% url 'catalog:blog' %}" class="btn btn-secondary px-4">Cancelar</a>
+                    <button type="submit" class="btn btn-accent px-5 fw-bold">
+                        <i class="bi bi-cloud-arrow-up me-2"></i> {{ button_text }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

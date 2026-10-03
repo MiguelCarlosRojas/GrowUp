@@ -329,12 +329,30 @@ class AccountsTests(TestCase):
         self.assertEqual(resp_disc.context.get('active_filtro'), 'questions')
 
     def test_api_live_notifications_endpoint(self):
+        from catalog.models import ItemReview
+        # 1. Clean state without mock notifications: returns 0 notifications
         resp = self.client.get(reverse('catalog:api_live_notifications'))
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data.get('status'), 'success')
-        self.assertIn('notifications', data)
-        self.assertTrue(len(data['notifications']) >= 1)
+        self.assertEqual(len(data['notifications']), 0)
+
+        # 2. When a real review exists, it emits genuine notification
+        user = User.objects.create_user(username='notif_reviewer', password='password123')
+        ItemReview.objects.create(
+            user=user,
+            item_type='anime',
+            item_id='52991',
+            item_title='Sousou no Frieren',
+            rating=5,
+            headline='Excelente narrativa',
+            opinion='Una obra de arte absoluta.'
+        )
+        resp_after = self.client.get(reverse('catalog:api_live_notifications'))
+        data_after = resp_after.json()
+        self.assertEqual(len(data_after['notifications']), 1)
+        self.assertEqual(data_after['notifications'][0]['type'], 'review')
+
 
 
 

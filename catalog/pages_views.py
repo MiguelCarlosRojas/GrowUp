@@ -3,18 +3,18 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
-from .models import ContactMessage, BlogPost
-from .forms import ContactForm, BlogPostForm
+from .models import ContactMessage, BlogPost, BlogComment
+from .forms import ContactForm, BlogPostForm, BlogCommentForm
 
 
 def user_can_manage_blog(user):
     """
-    Ensures only authorized platform administrator / author can publish, edit or delete blog articles.
-    All other users and guests can view, read in detail, and share.
+    Ensures only authorized platform administrator / superuser can publish, edit or delete blog articles.
+    Regular logged-in users have permission to read, share, and post comments on blog articles.
     """
-    if not user.is_authenticated:
+    if not user or not user.is_authenticated:
         return False
-    return user.is_superuser or user.is_staff or user.username in ['Anmigz', 'AnCx', 'admin']
+    return user.is_superuser or user.username in ['Anmigz', 'admin']
 
 
 # ==============================================================================
@@ -52,11 +52,6 @@ def blog_view(request):
 
     posts_qs = posts_qs.order_by('-created_at')
 
-    # Seed initial posts if blog is empty
-    if not posts_qs.exists() and not query and not category:
-        _seed_initial_blog_posts(request.user if request.user.is_authenticated else None)
-        posts_qs = BlogPost.objects.filter(is_published=True).select_related('author', 'author__profile').order_by('-created_at')
-
     paginator = Paginator(posts_qs, 6)
     page = request.GET.get('page', 1)
     try:
@@ -88,6 +83,9 @@ def blog_detail_view(request, slug):
     BlogPost.objects.filter(pk=post.pk).update(views_count=post.views_count + 1)
     post.views_count += 1
 
+    comments = post.comments.select_related('user', 'user__profile').order_by('created_at')
+    comment_form = BlogCommentForm()
+
     related_posts = BlogPost.objects.filter(
         is_published=True, category=post.category
     ).exclude(pk=post.pk).order_by('-created_at')[:3]
@@ -96,10 +94,28 @@ def blog_detail_view(request, slug):
 
     return render(request, 'pages/blog_detail.html', {
         'post': post,
+        'comments': comments,
+        'comment_form': comment_form,
         'related_posts': related_posts,
         'can_manage': can_manage,
         'current_url': current_url,
     })
+
+
+@login_required
+def blog_add_comment_view(request, slug):
+    post = get_object_or_404(BlogPost, slug=slug, is_published=True)
+    if request.method == 'POST':
+        form = BlogCommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = request.user
+            comment.save()
+            messages.success(request, "Tu comentario ha sido publicado en el artículo.")
+        else:
+            messages.error(request, "El comentario no puede estar vacío.")
+    return redirect('catalog:blog_detail', slug=slug)
 
 
 @login_required
@@ -166,79 +182,6 @@ def blog_delete_view(request, slug):
         return redirect('catalog:blog')
 
     return render(request, 'pages/blog_confirm_delete.html', {'post': post})
-
-
-def _seed_initial_blog_posts(current_user=None):
-    from django.contrib.auth.models import User
-    author = current_user
-    if not author or not author.is_authenticated:
-        author = User.objects.filter(is_superuser=True).first() or User.objects.first()
-
-    if not author:
-        return
-
-    sample_articles = [
-        {
-            'title': 'Lanzamiento Oficial de GrowUp: La Nueva Era del Manga y las Novelas Ligeras',
-            'category': 'Novedades',
-            'cover_image_url': 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1200&auto=format&fit=crop&q=80',
-            'summary': 'Descubre las funcionalidades innovadoras de GrowUp: sincronización oficial con Tenrai API v1, taller creativo para autores emergentes y base de datos de alta velocidad Prisma Postgres.',
-            'content': """GrowUp nace como una respuesta a la necesidad de la comunidad otaku e hispanohablante de contar con una plataforma profesional, unificada y sin barreras.
-
-A lo largo de los últimos meses, nuestro equipo de desarrollo ha diseñado una infraestructura resiliente que integra:
-- Catálogo global con más de 25,000 fichas actualizadas en tiempo real directamente desde MyAnimeList a través de Tenrai API v1.
-- Taller de Escritores con gestión integral de capítulos, control de visibilidad pública/privada y conteo dinámico de palabras y lecturas.
-- Sistema de opiniones con valoraciones de 1 a 5 estrellas, debates temáticos y notificaciones instantáneas.
-- Infraestructura moderna respaldada por Prisma Postgres en la nube, garantizando tiempos de respuesta ultrarrápidos y alta disponibilidad.
-
-Te invitamos a explorar el catálogo, compartir tus impresiones en los debates y comenzar a publicar tus historias originales."""
-        },
-        {
-            'title': 'Guía para Autores: Cómo Publicar y Destacar tu Novela Ligera en GrowUp',
-            'category': 'Autores',
-            'cover_image_url': 'https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=1200&auto=format&fit=crop&q=80',
-            'summary': 'Aprende paso a paso a utilizar nuestro editor, estructurar capítulos atractivos, elegir portadas optimizadas y fidelizar a tu audiencia de lectores.',
-            'content': """El camino del escritor independiente requiere dedicación, constancia y las herramientas adecuadas para conectar con el público.
-
-1. Diseña una sinopsis magnética
-La sinopsis es la puerta de entrada a tu mundo ficticio. Presenta el conflicto central en las dos primeras líneas, introduce la motivación de tu protagonista y plantea un gancho intrigante.
-
-2. Elige las categorías y demografía correctas
-Clasificar adecuadamente tu obra entre Shonen, Seinen, Isekai o Fantasía permite que el algoritmo de recomendaciones de GrowUp muestre tu novela a los lectores que verdaderamente disfrutan de ese estilo.
-
-3. Ritmo de publicación consistente
-Publicar capítulos semanales o quincenales genera expectativa y fidelidad. Aprovecha las fechas de publicación y actualización visibles en tu ficha de novela para mantener a tu comunidad expectante.
-
-4. Interactúa con las opiniones y comentarios
-Responde a las preguntas y valoraciones que tus lectores publican en la sección de opiniones. El feedback directo te ayudará a enriquecer el arco de tus personajes."""
-        },
-        {
-            'title': 'Top Recomendaciones: Obras Maestras del Anime que Revolucionaron la Narrativa',
-            'category': 'Recomendaciones',
-            'cover_image_url': 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1200&auto=format&fit=crop&q=80',
-            'summary': 'Un análisis profundo de historias como Sousou no Frieren, Fullmetal Alchemist y Steins;Gate, explorando cómo la construcción de mundos elevó el estándar de la animación.',
-            'content': """La animación japonesa ha alcanzado niveles de madurez narrativa comparables con las mejores obras de la literatura universal.
-
-En este artículo exploramos tres pilares indispensables:
-
-- Sousou no Frieren: Una meditación conmovedora sobre el paso del tiempo, el duelo y los recuerdos. A través de la perspectiva casi eterna de una elfa, la serie redefine el viaje del héroe posterior a la batalla final.
-- Fullmetal Alchemist: Brotherhood: Un equilibrio magistral entre alquimia, dilemas morales, hermandad y crítica sociopolítica sin fisuras en su desarrollo.
-- Steins;Gate: El referente definitivo de ciencia ficción temporal, estructurado con precisión milimétrica donde cada detalle inicial desencadena consecuencias irreversibles.
-
-Todas estas obras se encuentran catalogadas en GrowUp con detalles completos de emisión, sinopsis y enlaces para disfrutar de sus adaptaciones."""
-        }
-    ]
-
-    for item in sample_articles:
-        BlogPost.objects.create(
-            title=item['title'],
-            category=item['category'],
-            cover_image_url=item['cover_image_url'],
-            summary=item['summary'],
-            content=item['content'],
-            author=author,
-            is_published=True
-        )
 
 
 # ==============================================================================

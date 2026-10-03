@@ -156,3 +156,18 @@ class BlogPost(models.Model):
     def __str__(self):
         return self.title
 
+
+class BlogComment(models.Model):
+    post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_comments')
+    content = models.TextField(help_text="Comentario del usuario en el artículo")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Comentario de Blog"
+        verbose_name_plural = "Comentarios de Blog"
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"Comentario de @{self.user.username} en '{self.post.title}'"
+

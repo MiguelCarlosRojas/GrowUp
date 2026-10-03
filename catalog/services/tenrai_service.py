@@ -24,8 +24,6 @@ CACHE_TTL = 3600  # 1 hour cache for ultra-fluid page loads
 
 def get_base_url():
     url = getattr(settings, 'TENRAI_API_BASE_URL', None) or os.getenv('TENRAI_API_BASE_URL', '')
-    if not url:
-        url = 'https://api.tenrai.org/v1'
     return url.rstrip('/')
 
 

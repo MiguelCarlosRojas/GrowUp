@@ -612,11 +612,6 @@ class TenraiService:
         return _safe_request(f'/people/{person_id}/full', params=params)
 
     @staticmethod
-    def get_person_manga(person_id):
-        """GET /people/{id}/manga - Get manga publication credits of a person."""
-        return _safe_request(f'/people/{person_id}/manga')
-
-    @staticmethod
     def get_person_pictures(person_id):
         """GET /people/{id}/pictures - Get pictures for a person."""
         return _safe_request(f'/people/{person_id}/pictures')
@@ -716,12 +711,7 @@ class TenraiService:
         params.update(kwargs)
         return _safe_request('/schedules', params=params)
 
-    # --- 14. Seasons Endpoints (4) ---
-    @staticmethod
-    def get_seasons():
-        """GET /seasons - Get available seasons list."""
-        return _safe_request('/seasons')
-
+    # --- 14. Seasons Endpoints (3) ---
     @staticmethod
     def get_season_now(sfw=None, sfw_strict=None, unapproved=None, page=1, limit=25, **kwargs):
         """GET /seasons/now - Get currently airing seasonal anime."""
@@ -861,6 +851,69 @@ def get_top_lightnovels(limit=8):
     if res and 'data' in res:
         items = res['data']
         _register_items(items)
+        _set_cache(cache_key, items)
+        return items
+    return []
+
+
+def get_season_now_items(limit=6):
+    """Fetches real current season anime from Tenrai API (/seasons/now)."""
+    cache_key = f"season_now_limit_{limit}"
+    cached = _get_cache(cache_key)
+    if cached is not None:
+        return cached
+
+    res = TenraiService.get_season_now(limit=limit)
+    if res and 'data' in res:
+        items = res['data']
+        _register_items(items)
+        _set_cache(cache_key, items)
+        return items
+    return []
+
+
+def get_upcoming_items(limit=6):
+    """Fetches real upcoming seasonal anime from Tenrai API (/seasons/upcoming)."""
+    cache_key = f"upcoming_limit_{limit}"
+    cached = _get_cache(cache_key)
+    if cached is not None:
+        return cached
+
+    res = TenraiService.get_season_upcoming(limit=limit)
+    if res and 'data' in res:
+        items = res['data']
+        _register_items(items)
+        _set_cache(cache_key, items)
+        return items
+    return []
+
+
+def get_schedules_items(limit=6):
+    """Fetches real airing schedules from Tenrai API (/schedules)."""
+    cache_key = f"schedules_limit_{limit}"
+    cached = _get_cache(cache_key)
+    if cached is not None:
+        return cached
+
+    res = TenraiService.get_schedules(limit=limit)
+    if res and 'data' in res:
+        items = res['data']
+        _register_items(items)
+        _set_cache(cache_key, items)
+        return items
+    return []
+
+
+def get_news_items(limit=4):
+    """Fetches real latest news from Tenrai API (/news)."""
+    cache_key = f"news_limit_{limit}"
+    cached = _get_cache(cache_key)
+    if cached is not None:
+        return cached
+
+    res = TenraiService.get_news(limit=limit)
+    if res and 'data' in res:
+        items = res['data']
         _set_cache(cache_key, items)
         return items
     return []

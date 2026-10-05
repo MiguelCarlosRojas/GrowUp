@@ -234,9 +234,9 @@
 {% endif %}
 
 <!-- ==========================================================================
-     TENRAI REST API v1.0.19 (94 GET ENDPOINTS EXPLORER & METADATA VIEWER)
+     TENRAI REST API v1.0.19 (ENDPOINTS DE CONSULTA INDIVIDUAL & VISOR JSON)
      ========================================================================== -->
-<div class="tenrai-explorer-card mb-5" id="tenraiExplorer">
+<div class="tenrai-apartados-container mb-5" id="tenraiApartadosSection">
     <!-- Header -->
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 pb-3 border-bottom border-secondary border-opacity-25">
         <div class="d-flex align-items-center gap-3">
@@ -245,109 +245,80 @@
             </div>
             <div>
                 <div class="d-flex align-items-center gap-2 mb-1">
-                    <h4 class="text-white fw-bold mb-0">Explorador Tenrai API v1 (94 Endpoints GET)</h4>
-                    <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 px-2 py-1 small">v1.0.19 OpenAPI</span>
+                    <h4 class="text-white fw-bold mb-0">Endpoints Tenrai API v1 (Consultas Individuales & JSON)</h4>
+                    <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 px-2 py-1 small">88 Endpoints REST</span>
                 </div>
-                <small class="text-muted">Consulta, filtra e inspecciona en vivo los 94 endpoints de Tenrai REST API sincronizados con MyAnimeList.</small>
+                <small class="text-muted">Cada consulta se presenta en su propio apartado independiente con visualización adaptada y estructura JSON en vivo.</small>
             </div>
         </div>
 
         <div class="d-flex align-items-center gap-2">
-            <span class="badge bg-dark border border-secondary text-secondary d-none d-md-inline-flex align-items-center gap-1">
-                <i class="bi bi-broadcast text-info"></i> Base: {{ item_type|upper }} #{{ item_id }}
+            <span class="badge bg-dark border border-secondary text-info d-inline-flex align-items-center gap-1">
+                <i class="bi bi-broadcast"></i> Obra Base: {{ item_type|upper }} #{{ item_id }}
             </span>
-            <button type="button" class="btn btn-sm btn-outline-glow" onclick="runActiveTenraiEndpoint()" title="Volver a consultar endpoint actual">
-                <i class="bi bi-arrow-clockwise me-1"></i> Actualizar
+        </div>
+    </div>
+
+    <!-- Category Nav (Pills for clear category separation) -->
+    <ul class="nav nav-pills tenrai-category-nav gap-2 mb-4" id="tenraiCategoryNav" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-btn-anime" data-bs-toggle="pill" data-bs-target="#pane-anime" type="button" role="tab">
+                <i class="bi bi-tv me-1"></i> Anime (26)
             </button>
-        </div>
-    </div>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-btn-manga" data-bs-toggle="pill" data-bs-target="#pane-manga" type="button" role="tab">
+                <i class="bi bi-book me-1"></i> Manga (16)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-btn-characters" data-bs-toggle="pill" data-bs-target="#pane-characters" type="button" role="tab">
+                <i class="bi bi-person-badge me-1"></i> Personajes (7)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-btn-people" data-bs-toggle="pill" data-bs-target="#pane-people" type="button" role="tab">
+                <i class="bi bi-mic me-1"></i> Creadores & Staff (6)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-btn-seasons" data-bs-toggle="pill" data-bs-target="#pane-seasons" type="button" role="tab">
+                <i class="bi bi-calendar-range me-1"></i> Temporadas (3)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-btn-top" data-bs-toggle="pill" data-bs-target="#pane-top" type="button" role="tab">
+                <i class="bi bi-trophy me-1"></i> Rankings Top (5)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-btn-news" data-bs-toggle="pill" data-bs-target="#pane-news" type="button" role="tab">
+                <i class="bi bi-newspaper me-1"></i> Noticias & Artículos (6)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-btn-producers" data-bs-toggle="pill" data-bs-target="#pane-producers" type="button" role="tab">
+                <i class="bi bi-buildings me-1"></i> Productoras & Estudios (5)
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-btn-other" data-bs-toggle="pill" data-bs-target="#pane-other" type="button" role="tab">
+                <i class="bi bi-compass me-1"></i> Comunidad & Descubrimiento (14)
+            </button>
+        </li>
+    </ul>
 
-    <!-- Search & Category Filters -->
-    <div class="row g-3 mb-3 align-items-center">
-        <div class="col-md-5 col-lg-4">
-            <div class="input-group input-group-sm">
-                <span class="input-group-text bg-dark border-secondary border-opacity-50 text-muted">
-                    <i class="bi bi-search"></i>
-                </span>
-                <input type="text" id="tenraiSearchInput" class="form-control form-control-pro form-control-sm" placeholder="Filtrar por ruta o nombre (ej: characters, episodes, top)..." oninput="filterTenraiEndpoints()">
-            </div>
-        </div>
-        <div class="col-md-7 col-lg-8">
-            <div class="tenrai-filter-pills" id="tenraiCategoryPills">
-                <span class="tenrai-filter-pill active" onclick="setTenraiCategory('all', this)">Todos (94)</span>
-                <span class="tenrai-filter-pill" onclick="setTenraiCategory('anime', this)">Anime (26)</span>
-                <span class="tenrai-filter-pill" onclick="setTenraiCategory('manga', this)">Manga (16)</span>
-                <span class="tenrai-filter-pill" onclick="setTenraiCategory('characters', this)">Personajes (9)</span>
-                <span class="tenrai-filter-pill" onclick="setTenraiCategory('people', this)">Personas / Seiyuus (9)</span>
-                <span class="tenrai-filter-pill" onclick="setTenraiCategory('seasons', this)">Temporadas (4)</span>
-                <span class="tenrai-filter-pill" onclick="setTenraiCategory('top', this)">Top Lists (5)</span>
-                <span class="tenrai-filter-pill" onclick="setTenraiCategory('news_articles', this)">Noticias & Artículos (6)</span>
-                <span class="tenrai-filter-pill" onclick="setTenraiCategory('producers', this)">Productores (5)</span>
-                <span class="tenrai-filter-pill" onclick="setTenraiCategory('other', this)">Otros / Random (14)</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2-Column Explorer Interface -->
-    <div class="row g-3">
-        <!-- Left Column: Endpoints Directory -->
-        <div class="col-lg-5">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-                <span class="text-muted small fw-semibold text-uppercase tracking-wider">
-                    Endpoints Disponibles (<span id="tenraiCountLabel">94</span>)
-                </span>
-                <span class="text-secondary small" style="font-size: 0.72rem;">Clic para consultar en vivo</span>
-            </div>
-            <div class="tenrai-endpoint-list-box" id="tenraiEndpointsList">
-                <!-- Dynamically populated via JS -->
-            </div>
-        </div>
-
-        <!-- Right Column: Live Data Inspector -->
-        <div class="col-lg-7">
-            <div class="tenrai-viewer-box">
-                <!-- Viewer Header -->
-                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 pb-3 mb-3 border-bottom border-secondary border-opacity-25">
-                    <div>
-                        <div class="d-flex align-items-center gap-2 mb-1">
-                            <span class="tenrai-method-badge" id="activeMethodBadge">GET</span>
-                            <strong class="text-white font-monospace small text-break" id="activePathText">/anime/{{ item_id }}/characters</strong>
-                        </div>
-                        <div class="text-muted small" id="activeEndpointDesc">Obtiene los personajes y actores de voz vinculados a la obra.</div>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-dark border border-secondary text-secondary" id="activeStatusBadge">200 OK</span>
-                        <span class="badge bg-dark border border-secondary text-info" id="activeLatencyBadge">-- ms</span>
-                        <div class="btn-group btn-group-sm" role="group">
-                            <button type="button" class="btn btn-secondary active" id="btnViewAdapted" onclick="setTenraiViewMode('adapted')">
-                                <i class="bi bi-grid-fill me-1"></i> Visual
-                            </button>
-                            <button type="button" class="btn btn-secondary" id="btnViewJson" onclick="setTenraiViewMode('json')">
-                                <i class="bi bi-code-slash me-1"></i> JSON
-                            </button>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="copyTenraiJson(this)" title="Copiar JSON">
-                            <i class="bi bi-clipboard"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Viewer Body: Adapted Mode -->
-                <div id="tenraiAdaptedView" class="flex-grow-1 overflow-y-auto" style="max-height: 420px;">
-                    <div id="tenraiAdaptedContent" class="d-flex flex-column gap-2">
-                        <div class="text-center py-5 text-muted">
-                            <div class="spinner-border spinner-border-sm text-danger mb-2" role="status"></div>
-                            <p class="small mb-0">Cargando metadatos desde Tenrai API...</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Viewer Body: Raw JSON Mode -->
-                <div id="tenraiJsonView" class="d-none flex-grow-1">
-                    <pre class="tenrai-code-output mb-0" id="tenraiJsonCode">Cargando datos...</pre>
-                </div>
-            </div>
-        </div>
+    <!-- Tab Panes Container (Each Category holds its own separate apartados) -->
+    <div class="tab-content" id="tenraiTabContent">
+        <div class="tab-pane fade show active" id="pane-anime" role="tabpanel"></div>
+        <div class="tab-pane fade" id="pane-manga" role="tabpanel"></div>
+        <div class="tab-pane fade" id="pane-characters" role="tabpanel"></div>
+        <div class="tab-pane fade" id="pane-people" role="tabpanel"></div>
+        <div class="tab-pane fade" id="pane-seasons" role="tabpanel"></div>
+        <div class="tab-pane fade" id="pane-top" role="tabpanel"></div>
+        <div class="tab-pane fade" id="pane-news" role="tabpanel"></div>
+        <div class="tab-pane fade" id="pane-producers" role="tabpanel"></div>
+        <div class="tab-pane fade" id="pane-other" role="tabpanel"></div>
     </div>
 </div>
 
@@ -405,7 +376,7 @@ const TENRAI_ENDPOINTS = [
     { id: 41, category: 'manga', method: 'GET', path: '/manga/{id}/ranking-history', name: 'Histórico de Ranking Manga', desc: 'Evolución en la tabla de clasificación.' },
     { id: 42, category: 'manga', method: 'GET', path: '/manga/{id}/rating-history', name: 'Histórico de Notas Manga', desc: 'Historial de calificaciones a lo largo del tiempo.' },
 
-    // 3. Characters Endpoints (9)
+    // 3. Characters Endpoints (7 - Obsoletos eliminados)
     { id: 43, category: 'characters', method: 'GET', path: '/characters', name: 'Buscador de Personajes', desc: 'Explorador y búsqueda de personajes.' },
     { id: 44, category: 'characters', method: 'GET', path: '/characters/1', name: 'Ficha de Personaje (ID 1)', desc: 'Datos biográficos del personaje.' },
     { id: 45, category: 'characters', method: 'GET', path: '/characters/1/full', name: 'Personaje Completo', desc: 'Ficha integral con animes, mangas y voces.' },
@@ -413,25 +384,19 @@ const TENRAI_ENDPOINTS = [
     { id: 47, category: 'characters', method: 'GET', path: '/characters/1/manga', name: 'Mangas del Personaje', desc: 'Publicaciones donde interviene el personaje.' },
     { id: 48, category: 'characters', method: 'GET', path: '/characters/1/voices', name: 'Actores de Voz (Seiyuus)', desc: 'Doblaje en japonés e idiomas internacionales.' },
     { id: 49, category: 'characters', method: 'GET', path: '/characters/1/pictures', name: 'Retratos del Personaje', desc: 'Galería de ilustraciones y capturas oficiales.' },
-    { id: 50, category: 'characters', method: 'GET', path: '/characters/1/article-mentions', name: 'Menciones en Artículos', desc: 'Artículos editoriales donde se analiza el personaje.' },
-    { id: 51, category: 'characters', method: 'GET', path: '/characters/1/club-mentions', name: 'Clubes de Fans', desc: 'Clubes temáticos dedicados al personaje.' },
 
-    // 4. People Endpoints (9)
-    { id: 52, category: 'people', method: 'GET', path: '/people', name: 'Directorio de Personas', desc: 'Directorio de mangakas, seiyuus y directores.' },
-    { id: 53, category: 'people', method: 'GET', path: '/people/1', name: 'Ficha de Creador / Actor', desc: 'Datos biográficos de la personalidad.' },
-    { id: 54, category: 'people', method: 'GET', path: '/people/1/full', name: 'Perfil Completo de Creador', desc: 'Trayectoria profesional integral.' },
-    { id: 55, category: 'people', method: 'GET', path: '/people/1/anime', name: 'Animes Producidos', desc: 'Obras de anime dirigidas o producidas.' },
-    { id: 56, category: 'people', method: 'GET', path: '/people/1/voices', name: 'Roles de Doblaje', desc: 'Personajes interpretados en la animación.' },
-    { id: 57, category: 'people', method: 'GET', path: '/people/1/manga', name: 'Mangas Creados', desc: 'Mangas escritos o ilustrados por el autor.' },
-    { id: 58, category: 'people', method: 'GET', path: '/people/1/pictures', name: 'Fotografías del Creador', desc: 'Galería fotográfica oficial.' },
-    { id: 59, category: 'people', method: 'GET', path: '/people/1/article-mentions', name: 'Menciones Editoriales', desc: 'Columnas y coberturas sobre el autor.' },
-    { id: 60, category: 'people', method: 'GET', path: '/people/1/club-mentions', name: 'Clubes de Admiradores', desc: 'Comunidades dedicadas a la personalidad.' },
+    // 4. People Endpoints (6 - Obsoletos eliminados)
+    { id: 50, category: 'people', method: 'GET', path: '/people', name: 'Directorio de Personas', desc: 'Directorio de mangakas, seiyuus y directores.' },
+    { id: 51, category: 'people', method: 'GET', path: '/people/1', name: 'Ficha de Creador / Actor', desc: 'Datos biográficos de la personalidad.' },
+    { id: 52, category: 'people', method: 'GET', path: '/people/1/full', name: 'Perfil Completo de Creador', desc: 'Trayectoria profesional integral.' },
+    { id: 53, category: 'people', method: 'GET', path: '/people/1/anime', name: 'Animes Producidos', desc: 'Obras de anime dirigidas o producidas.' },
+    { id: 54, category: 'people', method: 'GET', path: '/people/1/voices', name: 'Roles de Doblaje', desc: 'Personajes interpretados en la animación.' },
+    { id: 55, category: 'people', method: 'GET', path: '/people/1/pictures', name: 'Fotografías del Creador', desc: 'Galería fotográfica oficial.' },
 
-    // 5. Seasons Endpoints (4)
-    { id: 61, category: 'seasons', method: 'GET', path: '/seasons', name: 'Archivo de Temporadas', desc: 'Índice de años y temporadas desde 1970.' },
-    { id: 62, category: 'seasons', method: 'GET', path: '/seasons/now', name: 'Temporada Actual en Emisión', desc: 'Estrenos y continuaciones en emisión activa.' },
-    { id: 63, category: 'seasons', method: 'GET', path: '/seasons/upcoming', name: 'Próximos Estrenos', desc: 'Animes anunciados para las próximas temporadas.' },
-    { id: 64, category: 'seasons', method: 'GET', path: '/seasons/2026/winter', name: 'Temporada Invierno 2026', desc: 'Catálogo de animes de una temporada específica.' },
+    // 5. Seasons Endpoints (3 - Obsoleto /seasons eliminado)
+    { id: 56, category: 'seasons', method: 'GET', path: '/seasons/now', name: 'Temporada Actual en Emisión', desc: 'Estrenos y continuaciones en emisión activa.' },
+    { id: 57, category: 'seasons', method: 'GET', path: '/seasons/upcoming', name: 'Próximos Estrenos', desc: 'Animes anunciados para las próximas temporadas.' },
+    { id: 58, category: 'seasons', method: 'GET', path: '/seasons/2026/winter', name: 'Temporada Invierno 2026', desc: 'Catálogo de animes de una temporada específica.' },
 
     // 6. Top Lists (5)
     { id: 65, category: 'top', method: 'GET', path: '/top/anime', name: 'Top Animes de la Historia', desc: 'Ranking de animes mejor valorados de todos los tiempos.' },
@@ -486,10 +451,32 @@ const TENRAI_ENDPOINTS = [
     { id: 94, category: 'other', method: 'GET', path: '/random/people', name: 'Persona / Creador Aleatorio', desc: 'Descubrimiento al azar de un autor o seiyuu.' }
 ];
 
-let activeTenraiEndpointIndex = 3; // Default to characters (index 3)
-let activeTenraiCategory = 'all';
-let activeTenraiData = null;
-let currentViewMode = 'adapted';
+const tenraiDataStore = {};
+const fetchedCategories = new Set();
+
+const CATEGORY_PANE_MAP = {
+    'anime': 'pane-anime',
+    'manga': 'pane-manga',
+    'characters': 'pane-characters',
+    'people': 'pane-people',
+    'seasons': 'pane-seasons',
+    'top': 'pane-top',
+    'news_articles': 'pane-news',
+    'producers': 'pane-producers',
+    'other': 'pane-other'
+};
+
+const PANE_CATEGORY_MAP = {
+    'pane-anime': 'anime',
+    'pane-manga': 'manga',
+    'pane-characters': 'characters',
+    'pane-people': 'people',
+    'pane-seasons': 'seasons',
+    'pane-top': 'top',
+    'pane-news': 'news_articles',
+    'pane-producers': 'producers',
+    'pane-other': 'other'
+};
 
 function resolveEndpointPath(pathTemplate) {
     let resolved = pathTemplate;
@@ -499,115 +486,116 @@ function resolveEndpointPath(pathTemplate) {
     return resolved;
 }
 
-function renderTenraiEndpointsList() {
-    const listContainer = document.getElementById('tenraiEndpointsList');
-    const searchVal = (document.getElementById('tenraiSearchInput')?.value || '').toLowerCase().trim();
-    if (!listContainer) return;
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
 
-    let count = 0;
-    let html = '';
+function renderAllApartados() {
+    // Populate each tab pane with its respective endpoints
+    const categories = Object.keys(CATEGORY_PANE_MAP);
+    
+    categories.forEach(catKey => {
+        const paneId = CATEGORY_PANE_MAP[catKey];
+        const paneEl = document.getElementById(paneId);
+        if (!paneEl) return;
 
-    TENRAI_ENDPOINTS.forEach((ep, idx) => {
-        const matchesCategory = (activeTenraiCategory === 'all') || (ep.category === activeTenraiCategory);
-        const resolved = resolveEndpointPath(ep.path);
-        const matchesSearch = !searchVal || 
-                              ep.name.toLowerCase().includes(searchVal) || 
-                              ep.path.toLowerCase().includes(searchVal) || 
-                              resolved.toLowerCase().includes(searchVal) ||
-                              ep.desc.toLowerCase().includes(searchVal);
+        const endpoints = TENRAI_ENDPOINTS.filter(ep => ep.category === catKey);
+        if (endpoints.length === 0) {
+            paneEl.innerHTML = '<div class="p-4 text-center text-muted small">No hay endpoints disponibles en esta categoría.</div>';
+            return;
+        }
 
-        if (matchesCategory && matchesSearch) {
-            count++;
-            const isSelected = (idx === activeTenraiEndpointIndex);
+        let html = '';
+        endpoints.forEach(ep => {
+            const resolved = resolveEndpointPath(ep.path);
             html += `
-                <div class="tenrai-endpoint-row ${isSelected ? 'selected' : ''}" onclick="selectTenraiEndpoint(${idx})">
-                    <div class="d-flex align-items-center gap-2 overflow-hidden">
-                        <span class="tenrai-method-badge">${ep.method}</span>
-                        <div class="text-truncate">
-                            <strong class="text-white small d-block text-truncate">${ep.name}</strong>
-                            <span class="text-muted font-monospace" style="font-size: 0.72rem;">${resolved}</span>
+                <div class="tenrai-apartado-card mb-4" id="apartado-card-${ep.id}">
+                    <div class="tenrai-apartado-header d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <div class="d-flex align-items-center gap-2 overflow-hidden">
+                            <span class="tenrai-method-badge">${ep.method}</span>
+                            <div class="overflow-hidden">
+                                <strong class="text-white d-block text-truncate">${escapeHtml(ep.name)}</strong>
+                                <span class="text-muted font-monospace small">${escapeHtml(resolved)}</span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <span class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25">#${ep.id}</span>
+                            <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25" id="status-badge-${ep.id}">Pendiente</span>
+                            <span class="badge bg-dark border border-secondary text-muted" id="latency-badge-${ep.id}">-- ms</span>
+                            <button class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" onclick="toggleApartadoJson(${ep.id})" title="Ver JSON">
+                                <i class="bi bi-code-slash"></i> JSON
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="copyApartadoJson(${ep.id}, this)" title="Copiar JSON">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
                         </div>
                     </div>
-                    <span class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25" style="font-size: 0.65rem;">
-                        #${ep.id}
-                    </span>
+                    <div class="px-3 py-2 border-bottom border-secondary border-opacity-10 text-secondary small">
+                        ${escapeHtml(ep.desc)}
+                    </div>
+                    
+                    <!-- Visual Result -->
+                    <div class="p-3" id="visual-container-${ep.id}">
+                        <div class="text-center py-3 text-muted small">
+                            <div class="spinner-border spinner-border-sm text-danger me-2" role="status"></div>
+                            Cargando datos del endpoint...
+                        </div>
+                    </div>
+
+                    <!-- Collapsible Raw JSON -->
+                    <div class="p-3 bg-black border-top border-secondary border-opacity-25 d-none" id="json-container-${ep.id}">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="text-secondary font-monospace small"><i class="bi bi-terminal me-1"></i>Estructura JSON (Tenrai API v1)</span>
+                            <button class="btn btn-xs btn-outline-secondary btn-sm" onclick="copyApartadoJson(${ep.id}, this)">
+                                <i class="bi bi-clipboard me-1"></i>Copiar
+                            </button>
+                        </div>
+                        <pre class="m-0 text-success font-monospace small" style="max-height: 280px; overflow-y: auto;" id="json-code-${ep.id}">Cargando JSON...</pre>
+                    </div>
                 </div>
             `;
-        }
+        });
+
+        paneEl.innerHTML = html;
     });
-
-    const countLabel = document.getElementById('tenraiCountLabel');
-    if (countLabel) countLabel.textContent = count;
-
-    if (count === 0) {
-        html = '<div class="p-4 text-center text-muted small">No se encontraron endpoints coincidentes.</div>';
-    }
-
-    listContainer.innerHTML = html;
 }
 
-function setTenraiCategory(category, pillEl) {
-    activeTenraiCategory = category;
-    document.querySelectorAll('#tenraiCategoryPills .tenrai-filter-pill').forEach(p => p.classList.remove('active'));
-    if (pillEl) pillEl.classList.add('active');
-    renderTenraiEndpointsList();
-}
-
-function filterTenraiEndpoints() {
-    renderTenraiEndpointsList();
-}
-
-function setTenraiViewMode(mode) {
-    currentViewMode = mode;
-    const btnAdapted = document.getElementById('btnViewAdapted');
-    const btnJson = document.getElementById('btnViewJson');
-    const viewAdapted = document.getElementById('tenraiAdaptedView');
-    const viewJson = document.getElementById('tenraiJsonView');
-
-    if (mode === 'adapted') {
-        btnAdapted?.classList.add('active');
-        btnJson?.classList.remove('active');
-        viewAdapted?.classList.remove('d-none');
-        viewJson?.classList.add('d-none');
-    } else {
-        btnJson?.classList.add('active');
-        btnAdapted?.classList.remove('active');
-        viewJson?.classList.remove('d-none');
-        viewAdapted?.classList.add('d-none');
+function toggleApartadoJson(id) {
+    const jsonContainer = document.getElementById(`json-container-${id}`);
+    if (jsonContainer) {
+        jsonContainer.classList.toggle('d-none');
     }
 }
 
-function selectTenraiEndpoint(index) {
-    activeTenraiEndpointIndex = index;
-    renderTenraiEndpointsList();
-    runActiveTenraiEndpoint();
+function copyApartadoJson(id, btn) {
+    const data = tenraiDataStore[id];
+    const textToCopy = data ? JSON.stringify(data, null, 2) : (document.getElementById(`json-code-${id}`)?.textContent || '');
+    if (!textToCopy) return;
+
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-check-lg text-success"></i>';
+        setTimeout(() => btn.innerHTML = orig, 1800);
+        if (window.showToast) window.showToast('JSON de la consulta copiado al portapapeles', 'success', 2000);
+    });
 }
 
-async function runActiveTenraiEndpoint() {
-    const ep = TENRAI_ENDPOINTS[activeTenraiEndpointIndex];
-    if (!ep) return;
-
+async function fetchEndpointData(ep) {
     const resolved = resolveEndpointPath(ep.path);
-    const pathText = document.getElementById('activePathText');
-    const pathDesc = document.getElementById('activeEndpointDesc');
-    const statusBadge = document.getElementById('activeStatusBadge');
-    const latencyBadge = document.getElementById('activeLatencyBadge');
-    const adaptedContent = document.getElementById('tenraiAdaptedContent');
-    const jsonCode = document.getElementById('tenraiJsonCode');
+    const statusBadge = document.getElementById(`status-badge-${ep.id}`);
+    const latencyBadge = document.getElementById(`latency-badge-${ep.id}`);
+    const visualContainer = document.getElementById(`visual-container-${ep.id}`);
+    const jsonCode = document.getElementById(`json-code-${ep.id}`);
 
-    if (pathText) pathText.textContent = resolved;
-    if (pathDesc) pathDesc.textContent = ep.desc;
     if (statusBadge) {
         statusBadge.className = 'badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25';
         statusBadge.textContent = 'Consultando...';
-    }
-    if (adaptedContent) {
-        adaptedContent.innerHTML = `
-            <div class="text-center py-5 text-muted">
-                <div class="spinner-border spinner-border-sm text-danger mb-2" role="status"></div>
-                <p class="small mb-0">Consultando ${escapeHtml(resolved)} en Tenrai API...</p>
-            </div>
-        `;
     }
 
     const startTime = performance.now();
@@ -621,63 +609,51 @@ async function runActiveTenraiEndpoint() {
 
         if (response.ok) {
             const data = await response.json();
-            activeTenraiData = data;
+            tenraiDataStore[ep.id] = data;
 
             if (statusBadge) {
                 statusBadge.className = 'badge bg-success bg-opacity-25 text-success border border-success border-opacity-25';
                 statusBadge.textContent = '200 OK';
             }
-
             if (jsonCode) jsonCode.textContent = JSON.stringify(data, null, 2);
-            renderAdaptedView(ep, data);
+            renderApartadoVisual(ep, data, visualContainer);
         } else {
             if (statusBadge) {
                 statusBadge.className = 'badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25';
                 statusBadge.textContent = `${response.status} Error`;
             }
-            if (jsonCode) jsonCode.textContent = `Error ${response.status}: No se pudo cargar el recurso desde Tenrai API.`;
-            if (adaptedContent) {
-                adaptedContent.innerHTML = `
-                    <div class="p-4 rounded-3 text-center" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25);">
-                        <i class="bi bi-exclamation-triangle-fill text-danger fs-3 mb-2 d-block"></i>
-                        <h6 class="text-white fw-bold">Recurso No Disponible (${response.status})</h6>
-                        <p class="text-secondary small mb-0">El endpoint '${escapeHtml(resolved)}' no devolvió datos para este ID o parámetro.</p>
+            if (jsonCode) jsonCode.textContent = `Error ${response.status}: Recurso no disponible para esta consulta en Tenrai API.`;
+            if (visualContainer) {
+                visualContainer.innerHTML = `
+                    <div class="p-3 rounded-3 text-center" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25);">
+                        <i class="bi bi-info-circle text-secondary fs-4 mb-2 d-block"></i>
+                        <h6 class="text-white fw-bold mb-1">Sin Registros Asociados (${response.status})</h6>
+                        <p class="text-secondary small mb-0 font-monospace">${escapeHtml(resolved)}</p>
                     </div>
                 `;
             }
         }
     } catch (err) {
         if (statusBadge) {
-            statusBadge.className = 'badge bg-danger bg-opacity-25 text-danger';
+            statusBadge.className = 'badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25';
             statusBadge.textContent = 'Error Red';
         }
-        if (jsonCode) jsonCode.textContent = `Error de conexión: ${err.message}`;
-        if (adaptedContent) {
-            adaptedContent.innerHTML = `
-                <div class="p-4 rounded-3 text-center text-danger small">
-                    Error al conectar con la pasarela de Tenrai API: ${escapeHtml(err.message)}
+        if (jsonCode) jsonCode.textContent = `Error de red: ${err.message}`;
+        if (visualContainer) {
+            visualContainer.innerHTML = `
+                <div class="p-3 rounded-3 text-center text-secondary small">
+                    Error al conectar con la pasarela: ${escapeHtml(err.message)}
                 </div>
             `;
         }
     }
 }
 
-function escapeHtml(str) {
-    if (!str) return '';
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-}
-
-function renderAdaptedView(ep, data) {
-    const container = document.getElementById('tenraiAdaptedContent');
+function renderApartadoVisual(ep, data, container) {
     if (!container) return;
 
     if (!data) {
-        container.innerHTML = '<div class="text-center py-4 text-muted small">Sin datos disponibles.</div>';
+        container.innerHTML = '<div class="text-center py-3 text-muted small">Sin datos devueltos.</div>';
         return;
     }
 
@@ -686,11 +662,11 @@ function renderAdaptedView(ep, data) {
     // 1. Array of Characters
     if (ep.path.includes('/characters') && Array.isArray(payload)) {
         if (payload.length === 0) {
-            container.innerHTML = '<div class="p-4 text-center text-muted small">No se registraron personajes para esta obra.</div>';
+            container.innerHTML = '<div class="p-3 text-center text-muted small">No se registraron personajes para esta obra.</div>';
             return;
         }
         let itemsHtml = '<div class="row row-cols-1 row-cols-md-2 g-2">';
-        payload.slice(0, 16).forEach(c => {
+        payload.slice(0, 8).forEach(c => {
             const charObj = c.character || c;
             const img = charObj.images?.jpg?.image_url || 'https://via.placeholder.com/80x100?text=No+Img';
             const name = charObj.name || 'Personaje';
@@ -700,7 +676,7 @@ function renderAdaptedView(ep, data) {
             itemsHtml += `
                 <div class="col">
                     <div class="tenrai-adapted-item-card d-flex align-items-center gap-3">
-                        <img src="${escapeHtml(img)}" alt="${escapeHtml(name)}" class="rounded-3" style="width: 50px; height: 65px; object-fit: cover; flex-shrink: 0;">
+                        <img src="${escapeHtml(img)}" alt="${escapeHtml(name)}" class="rounded-3" style="width: 44px; height: 58px; object-fit: cover; flex-shrink: 0;">
                         <div class="overflow-hidden">
                             <strong class="text-white small d-block text-truncate">${escapeHtml(name)}</strong>
                             <span class="badge bg-danger bg-opacity-25 text-danger" style="font-size: 0.68rem;">${escapeHtml(role)}</span>
@@ -718,11 +694,11 @@ function renderAdaptedView(ep, data) {
     // 2. Episodes List
     if (ep.path.includes('/episodes') && Array.isArray(payload)) {
         if (payload.length === 0) {
-            container.innerHTML = '<div class="p-4 text-center text-muted small">No hay lista de episodios disponible.</div>';
+            container.innerHTML = '<div class="p-3 text-center text-muted small">No hay lista de episodios disponible.</div>';
             return;
         }
         let epsHtml = '<div class="d-flex flex-column gap-2">';
-        payload.slice(0, 20).forEach(epItem => {
+        payload.slice(0, 10).forEach(epItem => {
             const num = epItem.mal_id || epItem.episode || '#';
             const title = epItem.title || `Episodio ${num}`;
             const aired = epItem.aired ? new Date(epItem.aired).toLocaleDateString() : '';
@@ -731,7 +707,7 @@ function renderAdaptedView(ep, data) {
             epsHtml += `
                 <div class="tenrai-adapted-item-card d-flex align-items-center justify-content-between gap-3">
                     <div class="d-flex align-items-center gap-3 overflow-hidden">
-                        <span class="badge bg-dark border border-secondary text-info fw-bold" style="min-width: 44px;">#${num}</span>
+                        <span class="badge bg-dark border border-secondary text-info fw-bold" style="min-width: 40px;">#${num}</span>
                         <div class="text-truncate">
                             <strong class="text-white small d-block text-truncate">${escapeHtml(title)}</strong>
                             ${aired ? `<small class="text-muted" style="font-size: 0.72rem;">Emisión: ${escapeHtml(aired)}</small>` : ''}
@@ -749,16 +725,16 @@ function renderAdaptedView(ep, data) {
     // 3. Pictures Gallery
     if (ep.path.includes('/pictures') && Array.isArray(payload)) {
         if (payload.length === 0) {
-            container.innerHTML = '<div class="p-4 text-center text-muted small">No hay imágenes en la galería.</div>';
+            container.innerHTML = '<div class="p-3 text-center text-muted small">No hay imágenes en la galería.</div>';
             return;
         }
-        let picsHtml = '<div class="row row-cols-3 row-cols-md-4 g-2">';
-        payload.slice(0, 12).forEach(p => {
+        let picsHtml = '<div class="row row-cols-3 row-cols-md-6 g-2">';
+        payload.slice(0, 6).forEach(p => {
             const imgUrl = p.jpg?.large_image_url || p.jpg?.image_url;
             if (imgUrl) {
                 picsHtml += `
                     <div class="col">
-                        <a href="${escapeHtml(imgUrl)}" target="_blank" rel="noopener noreferrer" class="d-block rounded-3 overflow-hidden border border-secondary border-opacity-25 shadow-sm" style="height: 110px;">
+                        <a href="${escapeHtml(imgUrl)}" target="_blank" rel="noopener noreferrer" class="d-block rounded-3 overflow-hidden border border-secondary border-opacity-25 shadow-sm" style="height: 90px;">
                             <img src="${escapeHtml(imgUrl)}" alt="Póster" class="w-100 h-100" style="object-fit: cover;">
                         </a>
                     </div>
@@ -773,7 +749,7 @@ function renderAdaptedView(ep, data) {
     // 4. Staff List
     if (ep.path.includes('/staff') && Array.isArray(payload)) {
         let staffHtml = '<div class="row row-cols-1 row-cols-md-2 g-2">';
-        payload.slice(0, 14).forEach(s => {
+        payload.slice(0, 8).forEach(s => {
             const p = s.person || {};
             const img = p.images?.jpg?.image_url || 'https://via.placeholder.com/60?text=Staff';
             const name = p.name || 'Miembro';
@@ -782,7 +758,7 @@ function renderAdaptedView(ep, data) {
             staffHtml += `
                 <div class="col">
                     <div class="tenrai-adapted-item-card d-flex align-items-center gap-3">
-                        <img src="${escapeHtml(img)}" alt="${escapeHtml(name)}" class="rounded-circle" style="width: 44px; height: 44px; object-fit: cover; flex-shrink: 0;">
+                        <img src="${escapeHtml(img)}" alt="${escapeHtml(name)}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; flex-shrink: 0;">
                         <div class="overflow-hidden">
                             <strong class="text-white small d-block text-truncate">${escapeHtml(name)}</strong>
                             <small class="text-secondary text-truncate d-block" style="font-size: 0.72rem;">${escapeHtml(positions)}</small>
@@ -800,8 +776,8 @@ function renderAdaptedView(ep, data) {
     if (ep.path.includes('/videos')) {
         const promoList = payload.promo || [];
         if (promoList.length > 0) {
-            let vidHtml = '<div class="row row-cols-1 row-cols-md-2 g-3">';
-            promoList.slice(0, 4).forEach(v => {
+            let vidHtml = '<div class="row row-cols-1 row-cols-md-2 g-2">';
+            promoList.slice(0, 2).forEach(v => {
                 const title = v.title || 'Trailer Oficial';
                 const youtubeUrl = v.trailer?.url || v.trailer?.embed_url;
                 const thumb = v.trailer?.images?.maximum_image_url || v.trailer?.images?.medium_image_url || 'https://via.placeholder.com/320x180';
@@ -809,9 +785,9 @@ function renderAdaptedView(ep, data) {
                 vidHtml += `
                     <div class="col">
                         <div class="tenrai-adapted-item-card overflow-hidden">
-                            <div class="position-relative mb-2 rounded-2 overflow-hidden" style="height: 120px;">
+                            <div class="position-relative mb-2 rounded-2 overflow-hidden" style="height: 110px;">
                                 <img src="${escapeHtml(thumb)}" alt="${escapeHtml(title)}" class="w-100 h-100" style="object-fit: cover;">
-                                ${youtubeUrl ? `<a href="${escapeHtml(youtubeUrl)}" target="_blank" rel="noopener noreferrer" class="position-absolute top-50 start-50 translate-middle btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;"><i class="bi bi-play-fill fs-5"></i></a>` : ''}
+                                ${youtubeUrl ? `<a href="${escapeHtml(youtubeUrl)}" target="_blank" rel="noopener noreferrer" class="position-absolute top-50 start-50 translate-middle btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><i class="bi bi-play-fill fs-5"></i></a>` : ''}
                             </div>
                             <strong class="text-white small d-block text-truncate">${escapeHtml(title)}</strong>
                         </div>
@@ -831,10 +807,10 @@ function renderAdaptedView(ep, data) {
         statKeys.forEach(k => {
             if (payload[k] !== undefined) {
                 statsHtml += `
-                    <div class="col-6 col-sm-4">
-                        <div class="p-3 rounded-3 text-center" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                            <span class="text-muted text-uppercase d-block" style="font-size: 0.68rem;">${escapeHtml(k.replace('_', ' '))}</span>
-                            <strong class="text-white fs-5">${Number(payload[k]).toLocaleString()}</strong>
+                    <div class="col-6 col-sm-3">
+                        <div class="p-2 rounded-3 text-center" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
+                            <span class="text-muted text-uppercase d-block" style="font-size: 0.65rem;">${escapeHtml(k.replace('_', ' '))}</span>
+                            <strong class="text-white fs-6">${Number(payload[k]).toLocaleString()}</strong>
                         </div>
                     </div>
                 `;
@@ -848,11 +824,11 @@ function renderAdaptedView(ep, data) {
     // 7. General Entity Array (Top lists, Seasons, Recommendations, News, Stacks, etc.)
     if (Array.isArray(payload)) {
         if (payload.length === 0) {
-            container.innerHTML = '<div class="p-4 text-center text-muted small">No se encontraron registros en este endpoint.</div>';
+            container.innerHTML = '<div class="p-3 text-center text-muted small">No se encontraron registros en este endpoint.</div>';
             return;
         }
         let listHtml = '<div class="row row-cols-1 row-cols-md-2 g-2">';
-        payload.slice(0, 12).forEach(it => {
+        payload.slice(0, 8).forEach(it => {
             const itemEntity = it.entry || it;
             const title = itemEntity.title || itemEntity.name || itemEntity.username || 'Elemento';
             const img = itemEntity.images?.jpg?.image_url || itemEntity.images?.jpg?.large_image_url || 'https://via.placeholder.com/50x65';
@@ -862,7 +838,7 @@ function renderAdaptedView(ep, data) {
             listHtml += `
                 <div class="col">
                     <div class="tenrai-adapted-item-card d-flex align-items-center gap-3">
-                        <img src="${escapeHtml(img)}" alt="${escapeHtml(title)}" class="rounded-3" style="width: 44px; height: 58px; object-fit: cover; flex-shrink: 0;">
+                        <img src="${escapeHtml(img)}" alt="${escapeHtml(title)}" class="rounded-3" style="width: 40px; height: 52px; object-fit: cover; flex-shrink: 0;">
                         <div class="overflow-hidden flex-grow-1">
                             <strong class="text-white small d-block text-truncate">${escapeHtml(title)}</strong>
                             <div class="d-flex align-items-center gap-2 mt-1">
@@ -882,7 +858,7 @@ function renderAdaptedView(ep, data) {
     // 8. General Object Fallback
     if (typeof payload === 'object' && payload !== null) {
         let objHtml = '<div class="d-flex flex-column gap-2">';
-        const keys = Object.keys(payload).slice(0, 12);
+        const keys = Object.keys(payload).slice(0, 10);
         keys.forEach(k => {
             const val = payload[k];
             if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
@@ -902,26 +878,45 @@ function renderAdaptedView(ep, data) {
     container.innerHTML = `<div class="p-3 text-white small">${escapeHtml(String(payload))}</div>`;
 }
 
-function copyTenraiJson(btn) {
-    if (!activeTenraiData) return;
-    navigator.clipboard.writeText(JSON.stringify(activeTenraiData, null, 2)).then(() => {
-        const orig = btn.innerHTML;
-        btn.innerHTML = '<i class="bi bi-check-lg text-success"></i>';
-        setTimeout(() => btn.innerHTML = orig, 2000);
-        if (window.showToast) window.showToast('JSON de Tenrai API copiado al portapapeles', 'success', 2500);
-    });
+async function autoFetchCategory(categoryKey) {
+    if (fetchedCategories.has(categoryKey)) return;
+    fetchedCategories.add(categoryKey);
+
+    const endpoints = TENRAI_ENDPOINTS.filter(ep => ep.category === categoryKey);
+    for (const ep of endpoints) {
+        await fetchEndpointData(ep);
+        // Small delay between calls to preserve smooth UI rendering and avoid 429
+        await new Promise(r => setTimeout(r, 60));
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    renderTenraiEndpointsList();
-    // Default endpoint: if manga, pick characters (idx 29); if anime, pick characters (idx 3)
+    renderAllApartados();
+
+    // Determine initial active category tab
+    const initialCategory = (CURRENT_MEDIA_TYPE === 'manga') ? 'manga' : 'anime';
     if (CURRENT_MEDIA_TYPE === 'manga') {
-        activeTenraiEndpointIndex = 29;
-    } else {
-        activeTenraiEndpointIndex = 3;
+        const mangaTabBtn = document.getElementById('tab-btn-manga');
+        if (mangaTabBtn && typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+            const tab = new bootstrap.Tab(mangaTabBtn);
+            tab.show();
+        }
     }
-    renderTenraiEndpointsList();
-    runActiveTenraiEndpoint();
+
+    // Auto-fetch initial category
+    autoFetchCategory(initialCategory);
+
+    // Listen to tab switch events to auto-fetch category endpoints when opened
+    const tabButtons = document.querySelectorAll('#tenraiCategoryNav button[data-bs-toggle="pill"]');
+    tabButtons.forEach(btn => {
+        btn.addEventListener('shown.bs.tab', function(event) {
+            const targetPaneId = (event.target.getAttribute('data-bs-target') || '').replace('#', '');
+            const categoryKey = PANE_CATEGORY_MAP[targetPaneId];
+            if (categoryKey) {
+                autoFetchCategory(categoryKey);
+            }
+        });
+    });
 });
 
 // ==============================================================================

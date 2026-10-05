@@ -15,6 +15,12 @@ def home_view(request):
     top_mangas = tenrai_service.get_top_manga(limit=8)
     top_lightnovels = tenrai_service.get_top_lightnovels(limit=8)
 
+    # Seasonal, upcoming, schedule and news datasets from Tenrai API
+    season_now = tenrai_service.get_season_now_items(limit=6)
+    upcoming_animes = tenrai_service.get_upcoming_items(limit=6)
+    schedules_animes = tenrai_service.get_schedules_items(limit=6)
+    industry_news = tenrai_service.get_news_items(limit=4)
+
     # Community original light novels from local database - single query with only needed fields
     original_novels = Novel.objects.exclude(status='draft').select_related(
         'author', 'author__profile'
@@ -31,6 +37,10 @@ def home_view(request):
         'top_animes': top_animes,
         'top_mangas': top_mangas,
         'top_lightnovels': top_lightnovels,
+        'season_now': season_now,
+        'upcoming_animes': upcoming_animes,
+        'schedules_animes': schedules_animes,
+        'industry_news': industry_news,
         'original_novels': original_novels,
         'genres': tenrai_service.get_common_genres(),
     }

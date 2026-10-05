@@ -234,205 +234,89 @@
 {% endif %}
 
 <!-- ==========================================================================
-     TENRAI REST API v1.0.19 (ENDPOINTS DE CONSULTA INDIVIDUAL & VISOR JSON)
+     TENRAI REST API v1.0.19 (ENDPOINTS DEDICADOS POR ENTIDAD)
      ========================================================================== -->
+{% if item_type == 'anime' %}
 <div class="tenrai-apartados-container mb-5" id="tenraiApartadosSection">
-    <!-- Header -->
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 pb-3 border-bottom border-secondary border-opacity-25">
-        <div class="d-flex align-items-center gap-3">
-            <div class="pro-icon-box pro-icon-primary">
-                <i class="bi bi-cpu-fill"></i>
-            </div>
-            <div>
-                <div class="d-flex align-items-center gap-2 mb-1">
-                    <h4 class="text-white fw-bold mb-0">Endpoints Tenrai API v1 (Consultas Individuales & JSON)</h4>
-                    <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 px-2 py-1 small">88 Endpoints REST</span>
+    <section class="tenrai-session-block" id="session-anime">
+        <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="session-icon-circle bg-danger bg-opacity-25 text-danger">
+                    <i class="bi bi-tv fs-5"></i>
                 </div>
-                <small class="text-muted">Cada consulta se presenta en su propio apartado independiente con visualización adaptada y estructura JSON en vivo.</small>
+                <div>
+                    <h5 class="text-white fw-bold mb-0">Endpoints del Catálogo Anime</h5>
+                    <small class="text-muted">Metadatos completos, relaciones de franquicia, trailers oficiales, episodios y temas musicales de esta obra.</small>
+                </div>
             </div>
-        </div>
-
-        <div class="d-flex align-items-center gap-2">
-            <span class="badge bg-dark border border-secondary text-info d-inline-flex align-items-center gap-1">
-                <i class="bi bi-broadcast"></i> Obra Base: {{ item_type|upper }} #{{ item_id }}
+            <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25 px-3 py-2 font-monospace">
+                26 Endpoints GET
             </span>
         </div>
-    </div>
-
-    <!-- 9 Sesiones Independientes de Endpoints (Sin Filtros ni Pestañas) -->
-    <div class="tenrai-sessions-wrapper d-flex flex-column gap-5">
-        <!-- Sesión 1: Anime -->
-        <section class="tenrai-session-block" id="session-anime">
-            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="session-icon-circle bg-danger bg-opacity-25 text-danger">
-                        <i class="bi bi-tv fs-5"></i>
-                    </div>
-                    <div>
-                        <h5 class="text-white fw-bold mb-0">Sesión 1: Endpoints del Catálogo Anime</h5>
-                        <small class="text-muted">Metadatos completos, relaciones de franquicia, trailers oficiales, episodios y temas musicales.</small>
-                    </div>
-                </div>
-                <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25 px-3 py-2 font-monospace">
-                    26 Endpoints GET
-                </span>
-            </div>
-            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-anime"></div>
-        </section>
-
-        <!-- Sesión 2: Manga -->
-        <section class="tenrai-session-block" id="session-manga">
-            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="session-icon-circle bg-warning bg-opacity-25 text-warning">
-                        <i class="bi bi-book fs-5"></i>
-                    </div>
-                    <div>
-                        <h5 class="text-white fw-bold mb-0">Sesión 2: Endpoints del Catálogo Manga</h5>
-                        <small class="text-muted">Metadatos de la obra literaria, serializaciones, capítulos, autores y reseñas críticas.</small>
-                    </div>
-                </div>
-                <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 px-3 py-2 font-monospace">
-                    16 Endpoints GET
-                </span>
-            </div>
-            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-manga"></div>
-        </section>
-
-        <!-- Sesión 3: Personajes -->
-        <section class="tenrai-session-block" id="session-characters">
-            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="session-icon-circle bg-info bg-opacity-25 text-info">
-                        <i class="bi bi-person-badge fs-5"></i>
-                    </div>
-                    <div>
-                        <h5 class="text-white fw-bold mb-0">Sesión 3: Personajes & Actores de Voz (Seiyuus)</h5>
-                        <small class="text-muted">Fichas biográficas, roles de doblaje internacional, apariciones en manga e ilustraciones oficiales.</small>
-                    </div>
-                </div>
-                <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-25 px-3 py-2 font-monospace">
-                    7 Endpoints GET
-                </span>
-            </div>
-            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-characters"></div>
-        </section>
-
-        <!-- Sesión 4: Creadores & Staff -->
-        <section class="tenrai-session-block" id="session-people">
-            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="session-icon-circle bg-success bg-opacity-25 text-success">
-                        <i class="bi bi-mic fs-5"></i>
-                    </div>
-                    <div>
-                        <h5 class="text-white fw-bold mb-0">Sesión 4: Creadores, Directores & Equipo de Producción</h5>
-                        <small class="text-muted">Trayectorias profesionales integrales, obras dirigidas o producidas y fotos oficiales.</small>
-                    </div>
-                </div>
-                <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 px-3 py-2 font-monospace">
-                    6 Endpoints GET
-                </span>
-            </div>
-            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-people"></div>
-        </section>
-
-        <!-- Sesión 5: Temporadas -->
-        <section class="tenrai-session-block" id="session-seasons">
-            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="session-icon-circle bg-primary bg-opacity-25 text-primary">
-                        <i class="bi bi-calendar-range fs-5"></i>
-                    </div>
-                    <div>
-                        <h5 class="text-white fw-bold mb-0">Sesión 5: Temporadas y Calendario de Estrenos</h5>
-                        <small class="text-muted">Transmisiones en curso, próximos estrenos de temporada y catálogos estacionales.</small>
-                    </div>
-                </div>
-                <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25 px-3 py-2 font-monospace">
-                    3 Endpoints GET
-                </span>
-            </div>
-            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-seasons"></div>
-        </section>
-
-        <!-- Sesión 6: Rankings Top -->
-        <section class="tenrai-session-block" id="session-top">
-            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="session-icon-circle bg-warning bg-opacity-25 text-warning">
-                        <i class="bi bi-trophy fs-5"></i>
-                    </div>
-                    <div>
-                        <h5 class="text-white fw-bold mb-0">Sesión 6: Rankings Top & Tablas de Clasificación</h5>
-                        <small class="text-muted">Top animes, top mangas, personalidades más seguidas y personajes más populares de la historia.</small>
-                    </div>
-                </div>
-                <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 px-3 py-2 font-monospace">
-                    5 Endpoints GET
-                </span>
-            </div>
-            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-top"></div>
-        </section>
-
-        <!-- Sesión 7: Noticias & Artículos -->
-        <section class="tenrai-session-block" id="session-news">
-            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="session-icon-circle bg-danger bg-opacity-25 text-danger">
-                        <i class="bi bi-newspaper fs-5"></i>
-                    </div>
-                    <div>
-                        <h5 class="text-white fw-bold mb-0">Sesión 7: Noticias, Prensa & Artículos Editoriales</h5>
-                        <small class="text-muted">Lanzamientos de la industria, coberturas de prensa y análisis periodísticos a fondo.</small>
-                    </div>
-                </div>
-                <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25 px-3 py-2 font-monospace">
-                    6 Endpoints GET
-                </span>
-            </div>
-            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-news"></div>
-        </section>
-
-        <!-- Sesión 8: Productoras -->
-        <section class="tenrai-session-block" id="session-producers">
-            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="session-icon-circle bg-info bg-opacity-25 text-info">
-                        <i class="bi bi-buildings fs-5"></i>
-                    </div>
-                    <div>
-                        <h5 class="text-white fw-bold mb-0">Sesión 8: Productoras, Estudios de Animación & Editoriales</h5>
-                        <small class="text-muted">Directorio de compañías de animación, obras producidas y enlaces corporativos.</small>
-                    </div>
-                </div>
-                <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-25 px-3 py-2 font-monospace">
-                    5 Endpoints GET
-                </span>
-            </div>
-            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-producers"></div>
-        </section>
-
-        <!-- Sesión 9: Comunidad & Otros -->
-        <section class="tenrai-session-block" id="session-other">
-            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="session-icon-circle bg-secondary bg-opacity-25 text-white">
-                        <i class="bi bi-compass fs-5"></i>
-                    </div>
-                    <div>
-                        <h5 class="text-white fw-bold mb-0">Sesión 9: Comunidad, Stacks & Descubrimiento Aleatorio</h5>
-                        <small class="text-muted">Programación de emisión, colecciones curadas de usuarios, taxonomía de géneros y recomendaciones.</small>
-                    </div>
-                </div>
-                <span class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25 px-3 py-2 font-monospace">
-                    14 Endpoints GET
-                </span>
-            </div>
-            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-other"></div>
-        </section>
-    </div>
+        <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-anime"></div>
+    </section>
 </div>
+{% elif item_type in 'manga,lightnovel' %}
+<div class="tenrai-apartados-container mb-5" id="tenraiApartadosSection">
+    <section class="tenrai-session-block" id="session-manga">
+        <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="session-icon-circle bg-warning bg-opacity-25 text-warning">
+                    <i class="bi bi-book fs-5"></i>
+                </div>
+                <div>
+                    <h5 class="text-white fw-bold mb-0">Endpoints del Catálogo Manga</h5>
+                    <small class="text-muted">Metadatos de la obra literaria, serializaciones, capítulos, autores y reseñas críticas.</small>
+                </div>
+            </div>
+            <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 px-3 py-2 font-monospace">
+                16 Endpoints GET
+            </span>
+        </div>
+        <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-manga"></div>
+    </section>
+</div>
+{% elif item_type in 'characters,character' %}
+<div class="tenrai-apartados-container mb-5" id="tenraiApartadosSection">
+    <section class="tenrai-session-block" id="session-characters">
+        <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="session-icon-circle bg-info bg-opacity-25 text-info">
+                    <i class="bi bi-person-badge fs-5"></i>
+                </div>
+                <div>
+                    <h5 class="text-white fw-bold mb-0">Endpoints de Personajes & Actores de Voz (Seiyuus)</h5>
+                    <small class="text-muted">Fichas biográficas, roles de doblaje internacional, apariciones en anime y manga e ilustraciones oficiales.</small>
+                </div>
+            </div>
+            <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-25 px-3 py-2 font-monospace">
+                7 Endpoints GET
+            </span>
+        </div>
+        <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-characters"></div>
+    </section>
+</div>
+{% elif item_type in 'people,person' %}
+<div class="tenrai-apartados-container mb-5" id="tenraiApartadosSection">
+    <section class="tenrai-session-block" id="session-people">
+        <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="session-icon-circle bg-success bg-opacity-25 text-success">
+                    <i class="bi bi-mic fs-5"></i>
+                </div>
+                <div>
+                    <h5 class="text-white fw-bold mb-0">Endpoints de Creadores, Directores & Mangakas</h5>
+                    <small class="text-muted">Trayectorias profesionales integrales, obras dirigidas o producidas y fotos oficiales.</small>
+                </div>
+            </div>
+            <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 px-3 py-2 font-monospace">
+                6 Endpoints GET
+            </span>
+        </div>
+        <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-people"></div>
+    </section>
+</div>
+{% endif %}
 
 <script>
 // ==============================================================================
@@ -490,20 +374,20 @@ const TENRAI_ENDPOINTS = [
 
     // 3. Characters Endpoints (7 - Obsoletos eliminados)
     { id: 43, category: 'characters', method: 'GET', path: '/characters', name: 'Buscador de Personajes', desc: 'Explorador y búsqueda de personajes.' },
-    { id: 44, category: 'characters', method: 'GET', path: '/characters/1', name: 'Ficha de Personaje (ID 1)', desc: 'Datos biográficos del personaje.' },
-    { id: 45, category: 'characters', method: 'GET', path: '/characters/1/full', name: 'Personaje Completo', desc: 'Ficha integral con animes, mangas y voces.' },
-    { id: 46, category: 'characters', method: 'GET', path: '/characters/1/anime', name: 'Animes del Personaje', desc: 'Lista de adaptaciones animadas donde aparece.' },
-    { id: 47, category: 'characters', method: 'GET', path: '/characters/1/manga', name: 'Mangas del Personaje', desc: 'Publicaciones donde interviene el personaje.' },
-    { id: 48, category: 'characters', method: 'GET', path: '/characters/1/voices', name: 'Actores de Voz (Seiyuus)', desc: 'Doblaje en japonés e idiomas internacionales.' },
-    { id: 49, category: 'characters', method: 'GET', path: '/characters/1/pictures', name: 'Retratos del Personaje', desc: 'Galería de ilustraciones y capturas oficiales.' },
+    { id: 44, category: 'characters', method: 'GET', path: '/characters/{id}', name: 'Ficha de Personaje', desc: 'Datos biográficos del personaje.' },
+    { id: 45, category: 'characters', method: 'GET', path: '/characters/{id}/full', name: 'Personaje Completo', desc: 'Ficha integral con animes, mangas y voces.' },
+    { id: 46, category: 'characters', method: 'GET', path: '/characters/{id}/anime', name: 'Animes del Personaje', desc: 'Lista de adaptaciones animadas donde aparece.' },
+    { id: 47, category: 'characters', method: 'GET', path: '/characters/{id}/manga', name: 'Mangas del Personaje', desc: 'Publicaciones donde interviene el personaje.' },
+    { id: 48, category: 'characters', method: 'GET', path: '/characters/{id}/voices', name: 'Actores de Voz (Seiyuus)', desc: 'Doblaje en japonés e idiomas internacionales.' },
+    { id: 49, category: 'characters', method: 'GET', path: '/characters/{id}/pictures', name: 'Retratos del Personaje', desc: 'Galería de ilustraciones y capturas oficiales.' },
 
     // 4. People Endpoints (6 - Obsoletos eliminados)
     { id: 50, category: 'people', method: 'GET', path: '/people', name: 'Directorio de Personas', desc: 'Directorio de mangakas, seiyuus y directores.' },
-    { id: 51, category: 'people', method: 'GET', path: '/people/1', name: 'Ficha de Creador / Actor', desc: 'Datos biográficos de la personalidad.' },
-    { id: 52, category: 'people', method: 'GET', path: '/people/1/full', name: 'Perfil Completo de Creador', desc: 'Trayectoria profesional integral.' },
-    { id: 53, category: 'people', method: 'GET', path: '/people/1/anime', name: 'Animes Producidos', desc: 'Obras de anime dirigidas o producidas.' },
-    { id: 54, category: 'people', method: 'GET', path: '/people/1/voices', name: 'Roles de Doblaje', desc: 'Personajes interpretados en la animación.' },
-    { id: 55, category: 'people', method: 'GET', path: '/people/1/pictures', name: 'Fotografías del Creador', desc: 'Galería fotográfica oficial.' },
+    { id: 51, category: 'people', method: 'GET', path: '/people/{id}', name: 'Ficha de Creador / Actor', desc: 'Datos biográficos de la personalidad.' },
+    { id: 52, category: 'people', method: 'GET', path: '/people/{id}/full', name: 'Perfil Completo de Creador', desc: 'Trayectoria profesional integral.' },
+    { id: 53, category: 'people', method: 'GET', path: '/people/{id}/anime', name: 'Animes Producidos', desc: 'Obras de anime dirigidas o producidas.' },
+    { id: 54, category: 'people', method: 'GET', path: '/people/{id}/voices', name: 'Roles de Doblaje', desc: 'Personajes interpretados en la animación.' },
+    { id: 55, category: 'people', method: 'GET', path: '/people/{id}/pictures', name: 'Fotografías del Creador', desc: 'Galería fotográfica oficial.' },
 
     // 5. Seasons Endpoints (3 - Obsoleto /seasons eliminado)
     { id: 56, category: 'seasons', method: 'GET', path: '/seasons/now', name: 'Temporada Actual en Emisión', desc: 'Estrenos y continuaciones en emisión activa.' },
@@ -995,7 +879,7 @@ async function autoFetchCategory(categoryKey) {
 document.addEventListener('DOMContentLoaded', function() {
     renderAllApartados();
 
-    // Initial priority session load (matching current media type)
+    // Dedicated entity session load (matching current media type)
     let primaryCat = 'anime';
     if (CURRENT_MEDIA_TYPE === 'manga' || CURRENT_MEDIA_TYPE === 'lightnovel') {
         primaryCat = 'manga';
@@ -1005,31 +889,6 @@ document.addEventListener('DOMContentLoaded', function() {
         primaryCat = 'people';
     }
     autoFetchCategory(primaryCat);
-
-    // Setup progressive IntersectionObserver to auto-fetch each session as it enters viewport
-    if ('IntersectionObserver' in window) {
-        const sessionObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const secId = entry.target.id;
-                    const catKey = secId.replace('session-', '');
-                    const resolvedCat = (catKey === 'news') ? 'news_articles' : catKey;
-                    autoFetchCategory(resolvedCat);
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { rootMargin: '300px' });
-
-        document.querySelectorAll('.tenrai-session-block').forEach(sec => {
-            sessionObserver.observe(sec);
-        });
-    } else {
-        // Fallback for older browsers: fetch remaining sessions sequentially
-        setTimeout(() => {
-            const allCats = Object.keys(CATEGORY_CONTAINER_MAP);
-            allCats.forEach(cat => autoFetchCategory(cat));
-        }, 300);
-    }
 });
 
 // ==============================================================================

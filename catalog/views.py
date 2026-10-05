@@ -26,12 +26,15 @@ def home_view(request):
 
 
 def explore_view(request):
-    media_type = request.GET.get('type', 'anime')  # anime, manga, lightnovel, original_novel
+    media_type = request.GET.get('type', 'anime')  # anime, manga, lightnovel, original_novel, characters, people
     q = request.GET.get('q', '').strip()
     genre = request.GET.get('genre', '').strip()
     status = request.GET.get('status', '').strip()
     order_by = request.GET.get('order_by', 'score').strip()
     sort = request.GET.get('sort', 'desc').strip()
+    format_type = request.GET.get('format', '').strip()
+    rating = request.GET.get('rating', '').strip()
+    min_score = request.GET.get('min_score', '').strip()
 
     try:
         page = int(request.GET.get('page', 1))
@@ -83,6 +86,8 @@ def explore_view(request):
                 'status': n.get_status_display(),
             })
 
+        page_range = tenrai_service.get_sliding_page_range(novels_page.number, paginator.num_pages, window_size=5)
+
         pagination = {
             'current_page': novels_page.number,
             'total_pages': paginator.num_pages,
@@ -92,7 +97,7 @@ def explore_view(request):
             'has_next_page': novels_page.has_next(),
             'previous_page_number': novels_page.previous_page_number() if novels_page.has_previous() else None,
             'next_page_number': novels_page.next_page_number() if novels_page.has_next() else None,
-            'page_range': list(paginator.page_range),
+            'page_range': page_range,
             'start_index': novels_page.start_index() if paginator.count > 0 else 0,
             'end_index': novels_page.end_index() if paginator.count > 0 else 0,
         }
@@ -105,7 +110,10 @@ def explore_view(request):
             order_by=order_by,
             sort=sort,
             page=page,
-            per_page=per_page
+            per_page=per_page,
+            format_type=format_type,
+            rating=rating,
+            min_score=min_score,
         )
         items = results.get('items', [])
         pagination = results.get('pagination', {
@@ -131,6 +139,9 @@ def explore_view(request):
         'selected_status': status,
         'selected_order_by': order_by,
         'selected_sort': sort,
+        'selected_format': format_type,
+        'selected_rating': rating,
+        'selected_min_score': min_score,
         'genres': tenrai_service.get_common_genres(),
         'novel_categories': Category.objects.all(),
     }

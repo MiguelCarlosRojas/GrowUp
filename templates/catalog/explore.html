@@ -27,19 +27,51 @@
         <a href="{% url 'catalog:explore' %}?type=original_novel{% if selected_q %}&q={{ selected_q }}{% endif %}" class="btn-subtle-pill {% if selected_type == 'original_novel' %}active{% endif %}">
             <i class="bi bi-feather"></i> Obras de la Comunidad
         </a>
+        <a href="{% url 'catalog:explore' %}?type=characters{% if selected_q %}&q={{ selected_q }}{% endif %}" class="btn-subtle-pill {% if selected_type == 'characters' or selected_type == 'character' %}active{% endif %}">
+            <i class="bi bi-person-badge"></i> Personajes
+        </a>
+        <a href="{% url 'catalog:explore' %}?type=people{% if selected_q %}&q={{ selected_q }}{% endif %}" class="btn-subtle-pill {% if selected_type == 'people' or selected_type == 'person' %}active{% endif %}">
+            <i class="bi bi-mic"></i> Creadores & Mangakas
+        </a>
     </div>
 
     <form action="{% url 'catalog:explore' %}" method="GET" class="row g-2 g-md-3">
         <input type="hidden" name="type" value="{{ selected_type }}">
         
         <!-- Text Query -->
-        <div class="col-12 col-sm-6 col-lg-4">
-            <label class="form-label text-muted small fw-semibold">Buscar por Título</label>
+        <div class="col-12 col-sm-6 col-lg-3">
+            <label class="form-label text-muted small fw-semibold">Buscar por Título o Nombre</label>
             <input type="text" name="q" value="{{ selected_q }}" class="form-control filter-input-pro" placeholder="Ej: Naruto, Bleach, Berserk...">
         </div>
 
+        <!-- Format / Subtype Filter -->
+        <div class="col-6 col-sm-3 col-lg-2">
+            <label class="form-label text-muted small fw-semibold">Formato</label>
+            <select name="format" class="form-select filter-select-pro">
+                <option value="">Todos los Formatos</option>
+                {% if selected_type == 'anime' %}
+                    <option value="tv" {% if selected_format == 'tv' %}selected{% endif %}>Serie TV</option>
+                    <option value="movie" {% if selected_format == 'movie' %}selected{% endif %}>Película</option>
+                    <option value="ova" {% if selected_format == 'ova' %}selected{% endif %}>OVA</option>
+                    <option value="special" {% if selected_format == 'special' %}selected{% endif %}>Especial</option>
+                    <option value="ona" {% if selected_format == 'ona' %}selected{% endif %}>ONA</option>
+                    <option value="music" {% if selected_format == 'music' %}selected{% endif %}>Música</option>
+                {% elif selected_type == 'manga' or selected_type == 'lightnovel' %}
+                    <option value="manga" {% if selected_format == 'manga' %}selected{% endif %}>Manga</option>
+                    <option value="novel" {% if selected_format == 'novel' %}selected{% endif %}>Novela</option>
+                    <option value="lightnovel" {% if selected_format == 'lightnovel' %}selected{% endif %}>Novela Ligera</option>
+                    <option value="oneshot" {% if selected_format == 'oneshot' %}selected{% endif %}>One-shot</option>
+                    <option value="doujin" {% if selected_format == 'doujin' %}selected{% endif %}>Doujinshi</option>
+                    <option value="manhwa" {% if selected_format == 'manhwa' %}selected{% endif %}>Manhwa</option>
+                    <option value="manhua" {% if selected_format == 'manhua' %}selected{% endif %}>Manhua</option>
+                {% else %}
+                    <option value="" selected>Estándar</option>
+                {% endif %}
+            </select>
+        </div>
+
         <!-- Genre Selection -->
-        <div class="col-6 col-sm-3 col-lg-3">
+        <div class="col-6 col-sm-3 col-lg-2">
             <label class="form-label text-muted small fw-semibold">Género</label>
             <select name="genre" class="form-select filter-select-pro">
                 <option value="">Todos los Géneros</option>
@@ -66,13 +98,48 @@
             </select>
         </div>
 
-        <!-- Sort Option -->
-        <div class="col-12 col-sm-6 col-lg-3">
+        <!-- Min Score Filter -->
+        <div class="col-6 col-sm-3 col-lg-1">
+            <label class="form-label text-muted small fw-semibold">Nota Mín.</label>
+            <select name="min_score" class="form-select filter-select-pro">
+                <option value="">Todas</option>
+                <option value="9" {% if selected_min_score == '9' %}selected{% endif %}>9+</option>
+                <option value="8" {% if selected_min_score == '8' %}selected{% endif %}>8+</option>
+                <option value="7" {% if selected_min_score == '7' %}selected{% endif %}>7+</option>
+                <option value="6" {% if selected_min_score == '6' %}selected{% endif %}>6+</option>
+                <option value="5" {% if selected_min_score == '5' %}selected{% endif %}>5+</option>
+            </select>
+        </div>
+
+        <!-- Rating Filter (Age Classification) -->
+        <div class="col-6 col-sm-3 col-lg-2">
+            <label class="form-label text-muted small fw-semibold">Edad / Clasif.</label>
+            <select name="rating" class="form-select filter-select-pro">
+                <option value="">Cualquiera</option>
+                <option value="g" {% if selected_rating == 'g' %}selected{% endif %}>G (Todos)</option>
+                <option value="pg" {% if selected_rating == 'pg' %}selected{% endif %}>PG (Familiar)</option>
+                <option value="pg13" {% if selected_rating == 'pg13' %}selected{% endif %}>PG-13 (+13)</option>
+                <option value="r17" {% if selected_rating == 'r17' %}selected{% endif %}>R-17 (+17)</option>
+                <option value="r" {% if selected_rating == 'r' %}selected{% endif %}>R (+18)</option>
+            </select>
+        </div>
+
+        <!-- Sort / Order By -->
+        <div class="col-6 col-sm-4 col-lg-2">
             <label class="form-label text-muted small fw-semibold">Ordenar Por</label>
             <select name="order_by" class="form-select filter-select-pro">
-                <option value="score" {% if selected_order_by == 'score' %}selected{% endif %}>Mayor Puntuación</option>
-                <option value="popularity" {% if selected_order_by == 'popularity' %}selected{% endif %}>Mayor Popularidad</option>
-                <option value="title" {% if selected_order_by == 'title' %}selected{% endif %}>Título Alfabético (A-Z)</option>
+                <option value="score" {% if selected_order_by == 'score' %}selected{% endif %}>Puntuación / Favoritos</option>
+                <option value="popularity" {% if selected_order_by == 'popularity' %}selected{% endif %}>Popularidad</option>
+                <option value="title" {% if selected_order_by == 'title' %}selected{% endif %}>Título (A-Z)</option>
+            </select>
+        </div>
+
+        <!-- Sort Direction -->
+        <div class="col-6 col-sm-2 col-lg-1">
+            <label class="form-label text-muted small fw-semibold">Sentido</label>
+            <select name="sort" class="form-select filter-select-pro">
+                <option value="desc" {% if selected_sort == 'desc' %}selected{% endif %}>Desc</option>
+                <option value="asc" {% if selected_sort == 'asc' %}selected{% endif %}>Asc</option>
             </select>
         </div>
 
@@ -102,6 +169,8 @@
         {% if selected_type == 'anime' %}Animes
         {% elif selected_type == 'manga' %}Mangas
         {% elif selected_type == 'lightnovel' %}Novelas Ligeras
+        {% elif selected_type == 'characters' or selected_type == 'character' %}Personajes
+        {% elif selected_type == 'people' or selected_type == 'person' %}Creadores & Mangakas
         {% else %}Obras de la Comunidad
         {% endif %}
     </span>
@@ -115,6 +184,10 @@
         <div class="media-card">
             {% if item.is_original %}
                 <a href="{% url 'novels:novel_detail' slug=item.mal_id %}" class="text-decoration-none">
+            {% elif selected_type == 'characters' or selected_type == 'character' %}
+                <a href="{% url 'catalog:item_detail' item_type='characters' item_id=item.mal_id %}" class="text-decoration-none">
+            {% elif selected_type == 'people' or selected_type == 'person' %}
+                <a href="{% url 'catalog:item_detail' item_type='people' item_id=item.mal_id %}" class="text-decoration-none">
             {% else %}
                 <a href="{% url 'catalog:item_detail' item_type=selected_type item_id=item.mal_id %}" class="text-decoration-none">
             {% endif %}
@@ -143,6 +216,14 @@
                     <a href="{% url 'novels:novel_detail' slug=item.mal_id %}" class="text-decoration-none">
                         <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
                     </a>
+                {% elif selected_type == 'characters' or selected_type == 'character' %}
+                    <a href="{% url 'catalog:item_detail' item_type='characters' item_id=item.mal_id %}" class="text-decoration-none">
+                        <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
+                    </a>
+                {% elif selected_type == 'people' or selected_type == 'person' %}
+                    <a href="{% url 'catalog:item_detail' item_type='people' item_id=item.mal_id %}" class="text-decoration-none">
+                        <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
+                    </a>
                 {% else %}
                     <a href="{% url 'catalog:item_detail' item_type=selected_type item_id=item.mal_id %}" class="text-decoration-none">
                         <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
@@ -159,41 +240,38 @@
     {% endfor %}
 </div>
 
-<!-- 24-Records Pagination Controls -->
+<!-- Sliding 5-Page Pagination Controls -->
 {% if pagination and pagination.total_pages > 1 %}
 <nav aria-label="Navegación del catálogo" class="mt-4">
     <div class="pagination-pro-container">
-        <!-- Previous Page -->
+        <!-- Previous Page: Visible only when has_previous_page is true (hidden on page 1) -->
         {% if pagination.has_previous_page %}
-            <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}&page={{ pagination.previous_page_number }}" class="page-btn-pro" title="Página Anterior">
+            <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_format %}&format={{ selected_format }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_min_score %}&min_score={{ selected_min_score }}{% endif %}{% if selected_rating %}&rating={{ selected_rating }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}&page={{ pagination.previous_page_number }}" class="page-btn-pro" title="Página Anterior">
                 <i class="bi bi-chevron-left me-1"></i> Anterior
             </a>
-        {% else %}
-            <span class="page-btn-pro disabled">
-                <i class="bi bi-chevron-left me-1"></i> Anterior
-            </span>
         {% endif %}
 
-        <!-- Page Numbers -->
+        <!-- Page Numbers (Sliding 5-page window) -->
         {% for p_num in pagination.page_range %}
             {% if p_num == pagination.current_page %}
                 <span class="page-btn-pro active">{{ p_num }}</span>
             {% else %}
-                <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}&page={{ p_num }}" class="page-btn-pro">
+                <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_format %}&format={{ selected_format }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_min_score %}&min_score={{ selected_min_score }}{% endif %}{% if selected_rating %}&rating={{ selected_rating }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}&page={{ p_num }}" class="page-btn-pro">
                     {{ p_num }}
                 </a>
             {% endif %}
         {% endfor %}
 
+        <!-- Ellipsis when there are pages beyond current window -->
+        {% if pagination.total_pages > pagination.page_range|last %}
+            <span class="page-btn-pro disabled px-2">...</span>
+        {% endif %}
+
         <!-- Next Page -->
         {% if pagination.has_next_page %}
-            <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}&page={{ pagination.next_page_number }}" class="page-btn-pro" title="Página Siguiente">
+            <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_format %}&format={{ selected_format }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_min_score %}&min_score={{ selected_min_score }}{% endif %}{% if selected_rating %}&rating={{ selected_rating }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}&page={{ pagination.next_page_number }}" class="page-btn-pro" title="Página Siguiente">
                 Siguiente <i class="bi bi-chevron-right ms-1"></i>
             </a>
-        {% else %}
-            <span class="page-btn-pro disabled">
-                Siguiente <i class="bi bi-chevron-right ms-1"></i>
-            </span>
         {% endif %}
     </div>
 </nav>

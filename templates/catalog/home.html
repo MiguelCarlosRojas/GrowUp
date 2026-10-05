@@ -1,840 +1,674 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}GrowUp - Biblioteca de Manga, Anime y Novelas Ligeras{% endblock %}
 
 {% block content %}
-<!-- Cinematic Hero Billboard (Crunchyroll / Netflix Anime Aesthetic) -->
-{% if hero_item %}
-<div class="hero-billboard">
-    <div class="hero-backdrop-layer" style="background-image: url('{{ hero_item.images.jpg.large_image_url }}');"></div>
-    <div class="hero-gradient-overlay"></div>
-    
-    <div class="hero-content-wrap">
-        <div class="row align-items-center g-4">
-            <div class="col-lg-8 col-xl-9">
-                <!-- Badges Row -->
-                <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
-                    <span class="badge px-3 py-1 fw-bold text-uppercase" style="background: var(--grad-primary); letter-spacing: 0.05em; font-size: 0.75rem;">
-                        <i class="bi bi-fire me-1"></i> TOP #1 RANKING GLOBAL
-                    </span>
-                    <span class="badge-top-right position-static">
-                        <i class="bi bi-star-fill text-warning"></i> {{ hero_item.score|default:'N/A' }}
-                    </span>
-                    <span class="badge bg-black bg-opacity-75 border border-secondary border-opacity-50 text-light px-2 py-1">
-                        {{ hero_item.type }}{% if hero_item.year %} &bull; {{ hero_item.year }}{% endif %}
-                    </span>
-                    <span class="small text-white-50 ms-1">
-                        <span class="status-dot me-1"></span> Sincronizado en Vivo
-                    </span>
-                </div>
+<style>
+/* Skeleton Loader CSS */
+.skeleton-card { background: rgba(255,255,255,0.03); border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+.skeleton-poster { width: 100%; aspect-ratio: 2/3; background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.03) 75%); background-size: 200% 100%; animation: skeleton-pulse 1.5s infinite; }
+.skeleton-text { height: 14px; background: rgba(255,255,255,0.05); border-radius: 4px; margin: 10px 8px 6px; width: 80%; animation: skeleton-pulse 1.5s infinite; }
+.skeleton-text-sm { height: 10px; background: rgba(255,255,255,0.03); border-radius: 4px; margin: 0 8px 12px; width: 55%; animation: skeleton-pulse 1.5s infinite; }
+.skeleton-circle { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.05); animation: skeleton-pulse 1.5s infinite; flex-shrink: 0; }
+.skeleton-rect { height: 68px; background: rgba(255,255,255,0.03); border-radius: 12px; animation: skeleton-pulse 1.5s infinite; border: 1px solid rgba(255,255,255,0.04); }
+.skeleton-review-card { height: 140px; background: rgba(255,255,255,0.03); border-radius: 16px; animation: skeleton-pulse 1.5s infinite; border: 1px solid rgba(255,255,255,0.04); }
+.skeleton-hero { width: 100%; height: 480px; background: linear-gradient(90deg, rgba(255,255,255,0.02) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.02) 75%); background-size: 200% 100%; animation: skeleton-pulse 1.5s infinite; border-radius: 20px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.05); }
+@keyframes skeleton-pulse { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+</style>
 
-                <!-- Main Title -->
-                <h1 class="hero-title">{{ hero_item.title }}</h1>
-                {% if hero_item.title_japanese %}
-                    <p class="text-white-50 font-monospace mb-3 small">{{ hero_item.title_japanese }}</p>
-                {% endif %}
-
-                <!-- Synopsis -->
-                <p class="hero-synopsis">
-                    {{ hero_item.synopsis|truncatewords:45 }}
-                </p>
-
-                <!-- Genres Tags -->
-                <div class="d-flex flex-wrap gap-2 mb-4">
-                    {% for genre in hero_item.genres %}
-                        <span class="genre-tag-pill">{{ genre.name }}</span>
-                    {% endfor %}
-                </div>
-
-                <!-- Action CTA Buttons -->
-                <div class="d-flex flex-wrap gap-3">
-                    <a href="{% url 'catalog:item_detail' item_type='anime' item_id=hero_item.mal_id %}" class="btn btn-accent px-4 py-3">
-                        <i class="bi bi-play-circle-fill fs-5"></i> Ver Ficha & Opiniones
-                    </a>
-                    <a href="{% url 'catalog:explore' %}?type=anime" class="btn btn-outline-glow px-4 py-3">
-                        <i class="bi bi-compass fs-5"></i> Explorar Catálogo
-                    </a>
-                </div>
-            </div>
-
-            <!-- Hero Poster Column -->
-            <div class="col-lg-4 col-xl-3 text-center d-none d-lg-block">
-                <div class="hero-poster-showcase mx-auto" style="max-width: 280px;">
-                    <img src="{{ hero_item.images.jpg.large_image_url }}" alt="{{ hero_item.title }}" class="img-fluid" style="width: 100%; aspect-ratio: 2/3; object-fit: cover;">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{% else %}
-<div class="hero-billboard py-5 text-center mb-4">
-    <div class="hero-content-wrap py-4">
-        <span class="badge px-3 py-1 fw-bold text-uppercase mb-3" style="background: var(--grad-primary); letter-spacing: 0.05em; font-size: 0.75rem;">
-            <i class="bi bi-stars me-1"></i> Plataforma Oficial GrowUp
-        </span>
-        <h1 class="hero-title mb-3">Biblioteca Global de Manga, Anime y Novelas Ligeras</h1>
-        <p class="hero-synopsis mx-auto mb-4" style="max-width: 720px;">
-            Explora miles de obras sincronizadas en tiempo real con Tenrai API v1, descubre novelas originales publicadas por autores de nuestra comunidad y comparte tus opiniones, debates y reseñas.
-        </p>
-        <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a href="{% url 'catalog:explore' %}?type=anime" class="btn btn-accent px-4 py-3">
-                <i class="bi bi-compass fs-5"></i> Explorar Catálogo
-            </a>
-            <a href="{% url 'novels:novel_list' %}" class="btn btn-outline-glow px-4 py-3">
-                <i class="bi bi-feather fs-5"></i> Taller de Escritores
-            </a>
-        </div>
-    </div>
-</div>
-{% endif %}
-
-<!-- Live Search & Advanced Filter Command Bar -->
-<div class="filter-bar-pro">
-    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-        <h5 class="mb-0 text-white fw-bold d-flex align-items-center gap-2">
-            <i class="bi bi-sliders2 text-danger"></i> Buscador Avanzado & Filtros en Vivo
-        </h5>
-        
-        <!-- Media Quick Tabs -->
-        <div class="d-flex gap-2 flex-wrap">
-            <a href="{% url 'catalog:explore' %}?type=anime" class="btn-subtle-pill active"><i class="bi bi-tv"></i> Anime</a>
-            <a href="{% url 'catalog:explore' %}?type=manga" class="btn-subtle-pill"><i class="bi bi-book"></i> Manga</a>
-            <a href="{% url 'catalog:explore' %}?type=lightnovel" class="btn-subtle-pill"><i class="bi bi-journal-bookmark"></i> Novelas Ligeras</a>
-            <a href="{% url 'novels:novel_list' %}" class="btn-subtle-pill"><i class="bi bi-feather"></i> Comunidad</a>
-        </div>
-    </div>
-    
-    <form action="{% url 'catalog:explore' %}" method="GET" class="row g-2 g-md-3">
-        <div class="col-12 col-sm-6 col-lg-3">
-            <label class="form-label text-muted small fw-semibold">Tipo de Catálogo</label>
-            <select name="type" class="form-select filter-select-pro">
-                <option value="anime">Anime (Tenrai API)</option>
-                <option value="manga">Manga (Tenrai API)</option>
-                <option value="lightnovel">Novela Ligera (Tenrai API)</option>
-                <option value="original_novel">Novela Original (Escritores GrowUp)</option>
-            </select>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-3">
-            <label class="form-label text-muted small fw-semibold">Palabra Clave o Título</label>
-            <div class="input-group">
-                <input type="text" name="q" class="form-control filter-input-pro" placeholder="Ej: Solo Leveling, Frieren...">
-            </div>
-        </div>
-        <div class="col-6 col-sm-4 col-lg-2">
-            <label class="form-label text-muted small fw-semibold">Género Principal</label>
-            <select name="genre" class="form-select filter-select-pro">
-                <option value="">Todos los Géneros</option>
-                {% for g in genres %}
-                    <option value="{{ g.id }}">{{ g.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-6 col-sm-4 col-lg-2">
-            <label class="form-label text-muted small fw-semibold">Ordenar Por</label>
-            <select name="order_by" class="form-select filter-select-pro">
-                <option value="score">Mayor Puntuación</option>
-                <option value="popularity">Más Popular</option>
-                <option value="title">Título Alfabético (A-Z)</option>
-            </select>
-        </div>
-        <div class="col-12 col-sm-4 col-lg-2 d-flex align-items-end">
-            <button type="submit" class="btn btn-accent w-100 py-2">
-                <i class="bi bi-funnel"></i> Filtrar
-            </button>
-        </div>
-    </form>
+<!-- Hero Billboard -->
+<div id="section-hero">
+    <div class="skeleton-hero"></div>
 </div>
 
-<!-- Section: Top Animes (Ultra-Sleek Modern Poster Grid) -->
-<div class="mb-5">
-    <div class="section-header-wrap">
-        <div>
-            <h3 class="section-title">
-                <span class="section-accent-bar"></span>
-                <i class="bi bi-tv text-danger"></i> Animes en Tendencia & Aclamados
-            </h3>
-            <span class="text-muted small">Información en tiempo real sincronizada con Tenrai API v1</span>
-        </div>
-        <a href="{% url 'catalog:explore' %}?type=anime" class="btn btn-sm btn-outline-glow">
-            Ver catálogo completo <i class="bi bi-arrow-right ms-1"></i>
-        </a>
-    </div>
+<div class="container-fluid py-4 px-md-4">
 
-    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 g-md-4">
-        {% for anime in top_animes %}
-        <div class="col">
-            <div class="media-card">
-                <a href="{% url 'catalog:item_detail' item_type='anime' item_id=anime.mal_id %}" class="text-decoration-none">
-                    <div class="media-poster-box">
-                        <img src="{{ anime.images.jpg.large_image_url }}" alt="{{ anime.title }}" loading="lazy" class="media-poster-img">
-                        <div class="media-poster-overlay"></div>
-                        
-                        <!-- Badges -->
-                        <span class="badge-top-left">{{ anime.type|default:'ANIME' }}</span>
-                        {% if anime.score %}
-                        <span class="badge-top-right">
-                            <i class="bi bi-star-fill"></i> {{ anime.score }}
-                        </span>
-                        {% endif %}
-
-                        <!-- Hover overlay -->
-                        <div class="media-hover-overlay">
-                            <span class="hover-icon-circle"><i class="bi bi-play-fill"></i></span>
-                            <span class="hover-label">Ver Ficha</span>
-                        </div>
-                    </div>
-                </a>
-
-                <div class="media-info-wrap">
-                    <a href="{% url 'catalog:item_detail' item_type='anime' item_id=anime.mal_id %}" class="text-decoration-none">
-                        <h6 class="media-title" title="{{ anime.title }}">{{ anime.title }}</h6>
-                    </a>
-                    <div class="media-meta-line">
-                        <span><span class="status-dot me-1"></span>{{ anime.episodes|default:'?' }} eps</span>
-                        <span>{{ anime.status|default:'Emisión' }}</span>
-                    </div>
+    <!-- Buscador / Explorar -->
+    <div class="filter-bar-pro mb-5 p-3 rounded-4 shadow-sm" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+        <form action="/explore/" method="GET" class="d-flex align-items-center gap-3 flex-wrap">
+            <div class="flex-grow-1">
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-secondary text-light"><i class="bi bi-search"></i></span>
+                    <input type="text" name="q" class="form-control bg-transparent border-secondary text-light" placeholder="Buscar animes, mangas, novelas..." style="box-shadow: none;">
                 </div>
             </div>
-        </div>
-        {% empty %}
-        <div class="col-12 py-5 text-center text-muted">
-            <i class="bi bi-broadcast fs-2 d-block mb-2 text-danger"></i>
-            <p class="mb-0">Sincronizando información en tiempo real con Tenrai API v1...</p>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- Section: En Emisión - Temporada Actual (Tenrai API GET /seasons/now) -->
-<div class="mb-5">
-    <div class="section-header-wrap">
-        <div>
-            <h3 class="section-title">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #10b981, #06b6d4);"></span>
-                <i class="bi bi-broadcast text-success"></i> Temporada Actual en Emisión
-            </h3>
-            <span class="text-muted small">Estrenos y episodios en transmisión activa vía Tenrai API (/seasons/now)</span>
-        </div>
-        <a href="{% url 'catalog:explore' %}?type=anime" class="btn btn-sm btn-outline-glow">
-            Ver emisión completa <i class="bi bi-arrow-right ms-1"></i>
-        </a>
-    </div>
-
-    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 g-md-4">
-        {% for anime in season_now %}
-        <div class="col">
-            <div class="media-card">
-                <a href="{% url 'catalog:item_detail' item_type='anime' item_id=anime.mal_id %}" class="text-decoration-none">
-                    <div class="media-poster-box">
-                        <img src="{{ anime.images.jpg.large_image_url|default:anime.images.jpg.image_url }}" alt="{{ anime.title }}" loading="lazy" class="media-poster-img">
-                        <div class="media-poster-overlay"></div>
-                        <span class="badge-top-left" style="background: rgba(16, 185, 129, 0.85); color: #fff;">EN EMISIÓN</span>
-                        {% if anime.score %}
-                        <span class="badge-top-right">
-                            <i class="bi bi-star-fill text-warning"></i> {{ anime.score }}
-                        </span>
-                        {% endif %}
-                        <div class="media-hover-overlay">
-                            <span class="hover-icon-circle"><i class="bi bi-play-fill"></i></span>
-                            <span class="hover-label">Ver Ficha</span>
-                        </div>
-                    </div>
-                </a>
-                <div class="media-info-wrap">
-                    <a href="{% url 'catalog:item_detail' item_type='anime' item_id=anime.mal_id %}" class="text-decoration-none">
-                        <h6 class="media-title" title="{{ anime.title }}">{{ anime.title }}</h6>
-                    </a>
-                    <div class="media-meta-line">
-                        <span>{{ anime.type|default:'TV' }}</span>
-                        <span>{{ anime.episodes|default:'?' }} eps</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% empty %}
-        <div class="col-12 py-4 text-center text-muted">
-            <i class="bi bi-broadcast text-success fs-3 d-block mb-1"></i>
-            <p class="small mb-0">Cargando temporada activa desde Tenrai API...</p>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- Section: Próximos Estrenos (Tenrai API GET /seasons/upcoming) -->
-<div class="mb-5">
-    <div class="section-header-wrap">
-        <div>
-            <h3 class="section-title">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #a855f7, #ec4899);"></span>
-                <i class="bi bi-calendar-event text-danger"></i> Próximos Estrenos & Nueva Temporada
-            </h3>
-            <span class="text-muted small">Animes anunciados y futuras emisiones vía Tenrai API (/seasons/upcoming)</span>
-        </div>
-        <a href="{% url 'catalog:explore' %}?type=anime" class="btn btn-sm btn-outline-glow">
-            Ver próximos estrenos <i class="bi bi-arrow-right ms-1"></i>
-        </a>
-    </div>
-
-    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 g-md-4">
-        {% for anime in upcoming_animes %}
-        <div class="col">
-            <div class="media-card">
-                <a href="{% url 'catalog:item_detail' item_type='anime' item_id=anime.mal_id %}" class="text-decoration-none">
-                    <div class="media-poster-box">
-                        <img src="{{ anime.images.jpg.large_image_url|default:anime.images.jpg.image_url }}" alt="{{ anime.title }}" loading="lazy" class="media-poster-img">
-                        <div class="media-poster-overlay"></div>
-                        <span class="badge-top-left" style="background: rgba(168, 85, 247, 0.85); color: #fff;">PRÓXIMO</span>
-                        <div class="media-hover-overlay">
-                            <span class="hover-icon-circle"><i class="bi bi-info-circle-fill"></i></span>
-                            <span class="hover-label">Detalles</span>
-                        </div>
-                    </div>
-                </a>
-                <div class="media-info-wrap">
-                    <a href="{% url 'catalog:item_detail' item_type='anime' item_id=anime.mal_id %}" class="text-decoration-none">
-                        <h6 class="media-title" title="{{ anime.title }}">{{ anime.title }}</h6>
-                    </a>
-                    <div class="media-meta-line">
-                        <span>{{ anime.type|default:'TV' }}</span>
-                        <span>{{ anime.season|default:'Próximamente'|capfirst }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% empty %}
-        <div class="col-12 py-4 text-center text-muted">
-            <i class="bi bi-calendar-event text-danger fs-3 d-block mb-1"></i>
-            <p class="small mb-0">Cargando próximos estrenos desde Tenrai API...</p>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- Section: Top Mangas (Ultra-Sleek Modern Poster Grid) -->
-<div class="mb-5">
-    <div class="section-header-wrap">
-        <div>
-            <h3 class="section-title">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);"></span>
-                <i class="bi bi-book text-warning"></i> Mangas Imprescindibles
-            </h3>
-            <span class="text-muted small">Obras maestras del manga japonés con opiniones de la comunidad</span>
-        </div>
-        <a href="{% url 'catalog:explore' %}?type=manga" class="btn btn-sm btn-outline-glow">
-            Ver catálogo completo <i class="bi bi-arrow-right ms-1"></i>
-        </a>
-    </div>
-
-    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 g-md-4">
-        {% for manga in top_mangas %}
-        <div class="col">
-            <div class="media-card">
-                <a href="{% url 'catalog:item_detail' item_type='manga' item_id=manga.mal_id %}" class="text-decoration-none">
-                    <div class="media-poster-box">
-                        <img src="{{ manga.images.jpg.large_image_url }}" alt="{{ manga.title }}" loading="lazy" class="media-poster-img">
-                        <div class="media-poster-overlay"></div>
-                        
-                        <!-- Badges -->
-                        <span class="badge-top-left">MANGA</span>
-                        {% if manga.score %}
-                        <span class="badge-top-right">
-                            <i class="bi bi-star-fill"></i> {{ manga.score }}
-                        </span>
-                        {% endif %}
-
-                        <!-- Hover overlay -->
-                        <div class="media-hover-overlay">
-                            <span class="hover-icon-circle"><i class="bi bi-book-half"></i></span>
-                            <span class="hover-label">Ver Manga</span>
-                        </div>
-                    </div>
-                </a>
-
-                <div class="media-info-wrap">
-                    <a href="{% url 'catalog:item_detail' item_type='manga' item_id=manga.mal_id %}" class="text-decoration-none">
-                        <h6 class="media-title" title="{{ manga.title }}">{{ manga.title }}</h6>
-                    </a>
-                    <div class="media-meta-line">
-                        <span>{{ manga.chapters|default:'+' }} capítulos</span>
-                        <span>{{ manga.status|default:'Publicándose' }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% empty %}
-        <div class="col-12 py-5 text-center text-muted">
-            <i class="bi bi-book fs-2 d-block mb-2 text-warning"></i>
-            <p class="mb-0">Sincronizando información en tiempo real con Tenrai API v1...</p>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- Section: Top Light Novels (Ultra-Sleek Modern Poster Grid) -->
-<div class="mb-5">
-    <div class="section-header-wrap">
-        <div>
-            <h3 class="section-title">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #6366f1);"></span>
-                <i class="bi bi-journal-bookmark text-info"></i> Novelas Ligeras (Light Novels)
-            </h3>
-            <span class="text-muted small">Historias y adaptaciones oficiales sincronizadas con Tenrai API v1</span>
-        </div>
-        <a href="{% url 'catalog:explore' %}?type=lightnovel" class="btn btn-sm btn-outline-glow">
-            Ver catálogo completo <i class="bi bi-arrow-right ms-1"></i>
-        </a>
-    </div>
-
-    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 g-md-4">
-        {% for novel in top_lightnovels %}
-        <div class="col">
-            <div class="media-card">
-                <a href="{% url 'catalog:item_detail' item_type='lightnovel' item_id=novel.mal_id %}" class="text-decoration-none">
-                    <div class="media-poster-box">
-                        <img src="{{ novel.images.jpg.large_image_url }}" alt="{{ novel.title }}" loading="lazy" class="media-poster-img">
-                        <div class="media-poster-overlay"></div>
-                        
-                        <!-- Badges -->
-                        <span class="badge-top-left">NOVELA</span>
-                        {% if novel.score %}
-                        <span class="badge-top-right">
-                            <i class="bi bi-star-fill"></i> {{ novel.score }}
-                        </span>
-                        {% endif %}
-
-                        <!-- Hover overlay -->
-                        <div class="media-hover-overlay">
-                            <span class="hover-icon-circle"><i class="bi bi-eye-fill"></i></span>
-                            <span class="hover-label">Ver Novela</span>
-                        </div>
-                    </div>
-                </a>
-
-                <div class="media-info-wrap">
-                    <a href="{% url 'catalog:item_detail' item_type='lightnovel' item_id=novel.mal_id %}" class="text-decoration-none">
-                        <h6 class="media-title" title="{{ novel.title }}">{{ novel.title }}</h6>
-                    </a>
-                    <div class="media-meta-line">
-                        <span>Novela Ligera</span>
-                        <span>{{ novel.status|default:'Activa' }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% empty %}
-        <div class="col-12 py-5 text-center text-muted">
-            <i class="bi bi-journal-bookmark fs-2 d-block mb-2 text-info"></i>
-            <p class="mb-0">Sincronizando información en tiempo real con Tenrai API v1...</p>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- Section: Taller de Escritores de GrowUp (Comunidad de Autores) -->
-<div class="workshop-showcase-box">
-    <div class="row align-items-center g-4 mb-4">
-        <div class="col-lg-8 col-xl-9">
-            <span class="badge bg-warning text-dark fw-bold mb-2 px-3 py-1">
-                <i class="bi bi-feather me-1"></i> Taller del Escritor GrowUp
-            </span>
-            <h2 class="fw-bold text-white mb-2">¿Tienes una historia que el mundo debe conocer?</h2>
-            <p class="text-light mb-0" style="max-width: 780px; line-height: 1.7;">
-                Publica tus novelas ligeras originales con portada personalizada, sinopsis, categorías temáticas y gestión completa de capítulos. Recibe opiniones, valoraciones y debate con lectores de toda la comunidad.
-            </p>
-        </div>
-        <div class="col-lg-4 col-xl-3 text-lg-end">
-            <a href="{% url 'novels:novel_create' %}" class="btn btn-accent px-4 py-3 w-100 w-lg-auto">
-                <i class="bi bi-plus-circle me-1"></i> Publicar Mi Novela
-            </a>
-        </div>
-    </div>
-
-    {% if original_novels %}
-    <h5 class="text-white fw-bold mb-3"><i class="bi bi-stars text-warning me-1"></i> Obras Recientes de la Comunidad</h5>
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3">
-        {% for novel in original_novels %}
-        <div class="col">
-            <div class="original-novel-card">
-                <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="original-cover-thumb">
-                <div class="d-flex flex-column flex-grow-1 overflow-hidden">
-                    <h6 class="fw-bold text-white mb-1 text-truncate" title="{{ novel.title }}">{{ novel.title }}</h6>
-                    <span class="small text-muted mb-1 text-truncate"><i class="bi bi-person me-1"></i> {{ novel.author.username }}</span>
-                    <div class="d-flex gap-1 flex-wrap mb-2">
-                        {% for cat in novel.categories.all|slice:":2" %}
-                            <span class="genre-tag-pill" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;">{{ cat.name }}</span>
-                        {% endfor %}
-                    </div>
-                    <div class="mt-auto d-flex justify-content-between align-items-center">
-                        <span class="small text-muted"><i class="bi bi-eye me-1"></i> {{ novel.views_count }}</span>
-                        <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="btn btn-sm btn-outline-warning">Leer</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-</div>
-
-<!-- Section: Schedules & News (Tenrai API GET /schedules & GET /news) -->
-<div class="row g-4 mt-2 mb-5">
-    <!-- Airing Schedules Column -->
-    <div class="col-12 col-lg-7">
-        <div class="section-header-wrap mb-3">
             <div>
-                <h4 class="section-title text-white fw-bold mb-1">
-                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #3b82f6);"></span>
-                    <i class="bi bi-clock-history text-info me-1"></i> Programación Semanal en Emisión
-                </h4>
-                <small class="text-muted">Horarios oficiales de emisión sincronizados desde Tenrai API (/schedules)</small>
+                <select name="type" class="form-select bg-dark border-secondary text-light">
+                    <option value="">Todo el catalogo</option>
+                    <option value="anime">Anime</option>
+                    <option value="manga">Manga</option>
+                    <option value="original_novel">Novelas de la Comunidad</option>
+                </select>
             </div>
-        </div>
-        <div class="d-flex flex-column gap-2">
-            {% for item in schedules_animes %}
-            <div class="tenrai-adapted-item-card d-flex align-items-center justify-content-between p-3">
-                <div class="d-flex align-items-center gap-3 overflow-hidden">
-                    <img src="{{ item.images.jpg.image_url }}" alt="{{ item.title }}" class="rounded-2" style="width: 48px; height: 60px; object-fit: cover; flex-shrink: 0;">
-                    <div class="overflow-hidden">
-                        <a href="{% url 'catalog:item_detail' item_type='anime' item_id=item.mal_id %}" class="text-white text-decoration-none fw-semibold small d-block text-truncate">
-                            {{ item.title }}
-                        </a>
-                        <small class="text-muted d-block" style="font-size: 0.75rem;">
-                            <i class="bi bi-broadcast text-success me-1"></i>{{ item.broadcast.string|default:'Horario no especificado' }}
-                        </small>
-                    </div>
-                </div>
-                <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                    {% if item.score %}
-                    <span class="badge bg-warning bg-opacity-25 text-warning font-monospace">
-                        <i class="bi bi-star-fill me-1"></i>{{ item.score }}
-                    </span>
-                    {% endif %}
-                    <a href="{% url 'catalog:item_detail' item_type='anime' item_id=item.mal_id %}" class="btn btn-sm btn-outline-secondary">
-                        <i class="bi bi-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-            {% empty %}
-            <div class="p-4 text-center text-muted small border border-secondary border-opacity-25 rounded-3">
-                Información de horarios en emisión disponible en la API.
-            </div>
-            {% endfor %}
-        </div>
+            <button type="submit" class="btn btn-accent px-4 py-2 fw-semibold">
+                <i class="bi bi-compass me-1"></i> Explorar
+            </button>
+        </form>
     </div>
 
-    <!-- Industry News Column -->
-    <div class="col-12 col-lg-5">
-        <div class="section-header-wrap mb-3">
-            <div>
-                <h4 class="section-title text-white fw-bold mb-1">
-                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #ef4444, #f97316);"></span>
-                    <i class="bi bi-newspaper text-danger me-1"></i> Actualidad & Noticias de la Industria
-                </h4>
-                <small class="text-muted">Boletines y anuncios de prensa oficiales (/news)</small>
-            </div>
-        </div>
-        <div class="d-flex flex-column gap-2">
-            {% for news in industry_news %}
-            <div class="tenrai-adapted-item-card p-3">
-                <div class="d-flex align-items-start gap-3">
-                    {% if news.images.jpg.image_url %}
-                    <img src="{{ news.images.jpg.image_url }}" alt="Noticia" class="rounded-2" style="width: 55px; height: 55px; object-fit: cover; flex-shrink: 0;">
-                    {% endif %}
-                    <div class="overflow-hidden flex-grow-1">
-                        <a href="{{ news.url }}" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none fw-semibold small d-block mb-1 text-truncate">
-                            {{ news.title }}
-                        </a>
-                        <small class="text-muted d-block" style="font-size: 0.72rem;">
-                            <i class="bi bi-calendar3 me-1"></i>{{ news.date|truncatechars:25|default:'Reciente' }} &bull; {{ news.author_username|default:'Redacción' }}
-                        </small>
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <div class="p-4 text-center text-muted small border border-secondary border-opacity-25 rounded-3">
-                Actualidad de la industria sincronizada desde Tenrai API.
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
-
-<!-- ==========================================================================
-     APARTADO DEDICADO: RANKINGS TOP (5) - TOP PERSONAJES POPULARES (CON PAGINACIÓN)
-     ========================================================================== -->
-<div class="mb-5" id="topCharactersSection">
-    <div class="section-header-wrap d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+    <!-- Taller de Escritores (Django Context - Server Rendered) -->
+    <div class="section-header-wrap mb-3">
         <div>
-            <h3 class="section-title mb-1">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #ec4899, #8b5cf6);"></span>
-                <i class="bi bi-person-heart text-danger me-1"></i> Top Personajes Populares de la Industria
+            <h3 class="section-title">
+                <span class="section-accent-bar" style="background: linear-gradient(135deg, #FF6B6B, #C0392B);"></span>
+                <i class="bi bi-pen text-danger"></i> Taller de Escritores
             </h3>
-            <span class="text-muted small">Los personajes más queridos del anime y manga con navegación paginada en vivo (Tenrai API GET /top/characters)</span>
+            <span class="text-muted small">Novelas originales producidas por la comunidad de GrowUp</span>
         </div>
-        <div class="d-flex align-items-center gap-2">
-            <button class="btn btn-sm btn-outline-secondary" id="btnPrevCharPage" onclick="changeCharactersPage(-1)" disabled>
-                <i class="bi bi-chevron-left me-1"></i> Anterior
-            </button>
-            <span class="badge bg-dark border border-secondary text-info px-3 py-2 font-monospace" id="charPageBadge">
-                Página 1
-            </span>
-            <button class="btn btn-sm btn-outline-secondary" id="btnNextCharPage" onclick="changeCharactersPage(1)">
-                Siguiente <i class="bi bi-chevron-right ms-1"></i>
-            </button>
-        </div>
+        <a href="{% url 'novels:novel_list' %}" class="btn btn-sm btn-outline-glow">
+            Ver taller <i class="bi bi-arrow-right ms-1"></i>
+        </a>
     </div>
-
-    <!-- Characters Grid -->
-    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3" id="charactersGrid">
-        {% for char in top_characters_data.items %}
-        <div class="col">
-            <div class="tenrai-adapted-item-card h-100 d-flex flex-column text-center p-2">
-                <div class="position-relative mb-2 rounded-3 overflow-hidden" style="height: 180px;">
-                    <img src="{{ char.images.jpg.image_url|default:'https://via.placeholder.com/150x200?text=Personaje' }}" 
-                         alt="{{ char.name }}" 
-                         loading="lazy"
-                         class="w-100 h-100" 
-                         style="object-fit: cover;">
-                    <span class="badge bg-dark bg-opacity-75 text-white border border-secondary position-absolute top-0 start-0 m-2 font-monospace small">
-                        #{{ forloop.counter }}
-                    </span>
-                </div>
-                <strong class="text-white small d-block text-truncate mb-1" title="{{ char.name }}">{{ char.name }}</strong>
-                {% if char.name_kanji %}
-                <small class="text-secondary d-block font-monospace mb-1" style="font-size: 0.72rem;">{{ char.name_kanji }}</small>
-                {% endif %}
-                <div class="mt-auto d-flex align-items-center justify-content-center gap-1 text-danger small">
-                    <i class="bi bi-heart-fill" style="font-size: 0.75rem;"></i>
-                    <span class="font-monospace text-light" style="font-size: 0.78rem;">{{ char.favorites|default:0 }}</span>
-                </div>
-            </div>
-        </div>
-        {% empty %}
-        <div class="col-12 py-5 text-center text-muted">
-            <div class="spinner-border spinner-border-sm text-danger me-2" role="status"></div>
-            Sincronizando personajes populares desde Tenrai API...
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-<!-- ==========================================================================
-     APARTADO DEDICADO: RANKINGS TOP (5) - CREADORES & RESEÑAS COMUNITARIAS
-     ========================================================================== -->
-<div class="row g-4 mb-5">
-    <!-- Top Creators Column -->
-    <div class="col-12 col-lg-6">
-        <div class="section-header-wrap mb-3">
-            <div>
-                <h4 class="section-title text-white fw-bold mb-1">
-                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #10b981, #06b6d4);"></span>
-                    <i class="bi bi-brush text-success me-1"></i> Top Creadores & Mangakas
-                </h4>
-                <small class="text-muted">Las figuras más influyentes del manga y animación (/top/people)</small>
-            </div>
-        </div>
-        <div class="row row-cols-1 row-cols-sm-2 g-3">
-            {% for person in top_people %}
+    <div class="workshop-showcase-box mb-5 p-4 rounded-4" style="background: rgba(220, 53, 69, 0.05); border: 1px solid rgba(220, 53, 69, 0.12);">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+            {% for novel in original_novels %}
             <div class="col">
-                <div class="tenrai-adapted-item-card d-flex align-items-center gap-3 p-3 h-100">
-                    <img src="{{ person.images.jpg.image_url|default:'https://via.placeholder.com/60?text=Autor' }}" 
-                         alt="{{ person.name }}" 
-                         class="rounded-circle border border-secondary border-opacity-50"
-                         style="width: 52px; height: 52px; object-fit: cover; flex-shrink: 0;">
-                    <div class="overflow-hidden flex-grow-1">
-                        <strong class="text-white small d-block text-truncate" title="{{ person.name }}">{{ person.name }}</strong>
-                        {% if person.given_name %}
-                        <small class="text-secondary d-block text-truncate" style="font-size: 0.72rem;">{{ person.given_name }}</small>
-                        {% endif %}
-                        <span class="text-warning small font-monospace d-inline-flex align-items-center gap-1 mt-1">
-                            <i class="bi bi-star-fill text-warning" style="font-size: 0.65rem;"></i> {{ person.favorites|default:0 }} favs
-                        </span>
+                <div class="original-novel-card d-flex gap-3 align-items-center p-3 rounded-3" style="background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.06); transition: 0.3s;">
+                    <div class="original-cover-thumb rounded" style="width: 75px; height: 105px; background: #1a1a1a; overflow: hidden; flex-shrink: 0;">
+                        <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="w-100 h-100 object-fit-cover" loading="lazy">
                     </div>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-12 py-3 text-center text-muted small border border-secondary border-opacity-25 rounded-3">
-                Información de creadores disponible en Tenrai API.
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-
-    <!-- Top Reviews Column -->
-    <div class="col-12 col-lg-6">
-        <div class="section-header-wrap mb-3">
-            <div>
-                <h4 class="section-title text-white fw-bold mb-1">
-                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #f59e0b, #ec4899);"></span>
-                    <i class="bi bi-chat-square-quote text-warning me-1"></i> Top Reseñas Críticas de la Comunidad
-                </h4>
-                <small class="text-muted">Análisis literarios y calificaciones más valoradas (/top/reviews)</small>
-            </div>
-        </div>
-        <div class="d-flex flex-column gap-2">
-            {% for rev in top_reviews %}
-            <div class="tenrai-adapted-item-card p-3">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <div class="d-flex align-items-center gap-2 overflow-hidden">
-                        <div class="rounded-circle bg-secondary bg-opacity-25 d-flex align-items-center justify-content-center text-white small" style="width: 28px; height: 28px;">
-                            <i class="bi bi-person-fill"></i>
+                    <div class="overflow-hidden">
+                        <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="text-decoration-none">
+                            <h6 class="text-light mb-1 text-truncate" style="max-width: 220px;" title="{{ novel.title }}">{{ novel.title }}</h6>
+                        </a>
+                        <div class="text-muted small mb-2 d-flex align-items-center gap-2">
+                            <span><i class="bi bi-person"></i> {{ novel.author.username }}</span>
+                            <span>&bull;</span>
+                            <span><i class="bi bi-eye"></i> {{ novel.views_count }}</span>
                         </div>
-                        <strong class="text-white small text-truncate">@{{ rev.user.username|default:'Miembro' }}</strong>
+                        <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-50 fw-normal">Novela Original</span>
                     </div>
-                    {% if rev.score %}
-                    <span class="badge bg-warning bg-opacity-25 text-warning font-monospace">
-                        <i class="bi bi-star-fill me-1"></i>{{ rev.score }}/10
-                    </span>
-                    {% endif %}
-                </div>
-                <p class="text-secondary small mb-2 line-clamp-2" style="font-size: 0.78rem; line-height: 1.5;">
-                    {{ rev.review|truncatechars:140 }}
-                </p>
-                <div class="d-flex align-items-center justify-content-between text-muted" style="font-size: 0.72rem;">
-                    <span><i class="bi bi-calendar3 me-1"></i>{{ rev.date|truncatechars:20|default:'Reciente' }}</span>
-                    <span><i class="bi bi-hand-thumbs-up me-1"></i>{{ rev.reactions.overall|default:0 }} útiles</span>
                 </div>
             </div>
             {% empty %}
-            <div class="p-4 text-center text-muted small border border-secondary border-opacity-25 rounded-3">
-                Reseñas de la comunidad sincronizadas desde Tenrai API.
+            <div class="col-12 text-center py-4 text-muted">
+                <i class="bi bi-journal-plus fs-2 mb-2 d-block"></i>
+                <p>Aun no hay novelas publicadas en el taller.</p>
+                <a href="{% url 'novels:novel_create' %}" class="btn btn-outline-danger btn-sm mt-2">
+                    <i class="bi bi-pencil-square me-1"></i> Publicar primera novela
+                </a>
             </div>
             {% endfor %}
         </div>
     </div>
-</div>
 
-<!-- ==========================================================================
-     APARTADO DEDICADO: CATÁLOGO Y ECOSISTEMA MANGA (16 ENDPOINTS DE TENRAI)
-     ========================================================================== -->
-<div class="mb-5" id="mangaEcosystemSection">
-    <div class="section-header-wrap mb-4">
+    <!-- Top Anime -->
+    <div class="section-header-wrap mb-3">
         <div>
-            <h3 class="section-title mb-1">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #f97316, #ef4444);"></span>
-                <i class="bi bi-book-half text-danger me-1"></i> Ecosistema Manga en Tendencia
+            <h3 class="section-title">
+                <span class="section-accent-bar" style="background: linear-gradient(135deg, #4A90E2, #003366);"></span>
+                <i class="bi bi-trophy text-primary"></i> Top Anime
             </h3>
-            <span class="text-muted small">Obras con mayor popularidad y seguimiento editorial (Tenrai API v1 - 16 Endpoints Manga)</span>
+            <span class="text-muted small">Animes en Tendencia & Aclamados de todos los tiempos</span>
         </div>
-        <a href="{% url 'catalog:explore' %}?type=manga" class="btn btn-sm btn-outline-glow">
-            Explorar todo el manga <i class="bi bi-arrow-right ms-1"></i>
+        <a href="/explore/?type=anime" class="btn btn-sm btn-outline-glow">
+            Ver todo <i class="bi bi-arrow-right ms-1"></i>
         </a>
     </div>
+    <div id="section-top-anime" class="mb-5">
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+        </div>
+    </div>
 
-    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
-        {% for manga in manga_destacados %}
-        <div class="col">
-            <div class="media-card">
-                <a href="{% url 'catalog:item_detail' item_type='manga' item_id=manga.mal_id %}" class="text-decoration-none">
-                    <div class="media-poster-box">
-                        <img src="{{ manga.images.jpg.large_image_url|default:manga.images.jpg.image_url }}" alt="{{ manga.title }}" loading="lazy" class="media-poster-img">
-                        <div class="media-poster-overlay"></div>
-                        <span class="badge-top-left" style="background: rgba(249, 115, 22, 0.85); color: #fff;">MANGA</span>
-                        {% if manga.score %}
-                        <span class="badge-top-right">
-                            <i class="bi bi-star-fill"></i> {{ manga.score }}
-                        </span>
-                        {% endif %}
-                        <div class="media-hover-overlay">
-                            <span class="hover-icon-circle"><i class="bi bi-book"></i></span>
-                            <span class="hover-label">Ficha Manga</span>
-                        </div>
-                    </div>
-                </a>
-                <div class="media-info-wrap">
-                    <a href="{% url 'catalog:item_detail' item_type='manga' item_id=manga.mal_id %}" class="text-decoration-none">
-                        <h6 class="media-title" title="{{ manga.title }}">{{ manga.title }}</h6>
-                    </a>
-                    <div class="media-meta-line">
-                        <span>{{ manga.chapters|default:'+' }} caps</span>
-                        <span class="text-truncate">{{ manga.authors.0.name|default:'Autor' }}</span>
-                    </div>
+    <!-- Top Manga -->
+    <div class="section-header-wrap mb-3">
+        <div>
+            <h3 class="section-title">
+                <span class="section-accent-bar" style="background: linear-gradient(135deg, #27AE60, #145A32);"></span>
+                <i class="bi bi-journal-text text-success"></i> Top Manga
+            </h3>
+            <span class="text-muted small">Obras maestras del manga publicadas</span>
+        </div>
+        <a href="/explore/?type=manga" class="btn btn-sm btn-outline-glow">
+            Ver todo <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+    </div>
+    <div id="section-top-manga" class="mb-5">
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+        </div>
+    </div>
+
+    <!-- Novelas Ligeras -->
+    <div class="section-header-wrap mb-3">
+        <div>
+            <h3 class="section-title">
+                <span class="section-accent-bar" style="background: linear-gradient(135deg, #9B59B6, #4A235A);"></span>
+                <i class="bi bi-book text-info"></i> Novelas Ligeras
+            </h3>
+            <span class="text-muted small">Grandes sagas literarias japonesas</span>
+        </div>
+        <a href="/explore/?type=manga" class="btn btn-sm btn-outline-glow">
+            Ver todo <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+    </div>
+    <div id="section-light-novels" class="mb-5">
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+        </div>
+    </div>
+
+    <!-- Temporada Actual & Proximos Estrenos -->
+    <div class="row mb-5">
+        <div class="col-xl-6 mb-4 mb-xl-0">
+            <div class="section-header-wrap mb-3">
+                <div>
+                    <h3 class="section-title">
+                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #F39C12, #D35400);"></span>
+                        <i class="bi bi-play-circle text-warning"></i> Temporada Actual
+                    </h3>
+                    <span class="text-muted small">Series transmitidas durante la temporada en curso</span>
+                </div>
+            </div>
+            <div id="section-season-now">
+                <div class="row row-cols-2 row-cols-sm-3 g-3">
+                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
                 </div>
             </div>
         </div>
-        {% empty %}
-        <div class="col-12 py-4 text-center text-muted">
-            <p class="small mb-0">Sincronizando catálogo manga con Tenrai API...</p>
+        <div class="col-xl-6">
+            <div class="section-header-wrap mb-3">
+                <div>
+                    <h3 class="section-title">
+                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #E74C3C, #78281F);"></span>
+                        <i class="bi bi-calendar-event text-danger"></i> Proximos Estrenos
+                    </h3>
+                    <span class="text-muted small">Estrenos confirmados para las siguientes temporadas</span>
+                </div>
+            </div>
+            <div id="section-season-upcoming">
+                <div class="row row-cols-2 row-cols-sm-3 g-3">
+                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                </div>
+            </div>
         </div>
-        {% endfor %}
     </div>
+
+    <!-- Personajes Populares & Creadores / Noticias & Programacion -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-8">
+            <!-- Personajes Populares -->
+            <div class="section-header-wrap mb-3">
+                <div>
+                    <h3 class="section-title">
+                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #E67E22, #A04000);"></span>
+                        <i class="bi bi-person-heart text-warning"></i> Personajes Populares
+                    </h3>
+                    <span class="text-muted small">Los personajes mas queridos de la comunidad</span>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="changeCharactersPage(-1)" id="btn-char-prev" disabled>
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="changeCharactersPage(1)" id="btn-char-next">
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="section-characters" style="min-height: 200px;">
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                </div>
+            </div>
+
+            <!-- Creadores -->
+            <div class="section-header-wrap mt-5 mb-3">
+                <div>
+                    <h3 class="section-title">
+                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #BDC3C7, #7F8C8D);"></span>
+                        <i class="bi bi-mic text-secondary"></i> Creadores & Mangakas
+                    </h3>
+                    <span class="text-muted small">Voces ilustres, directores y autores</span>
+                </div>
+            </div>
+            <div id="section-people">
+                <div class="row row-cols-2 row-cols-md-3 g-3">
+                    <div class="col"><div class="d-flex align-items-center gap-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="col"><div class="d-flex align-items-center gap-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <!-- Noticias -->
+            <div class="section-header-wrap mb-3">
+                <div>
+                    <h3 class="section-title">
+                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #3498DB, #1F618D);"></span>
+                        <i class="bi bi-newspaper text-primary"></i> Noticias de la Industria
+                    </h3>
+                </div>
+            </div>
+            <div id="section-news" class="d-flex flex-column gap-3 mb-5">
+                <div class="skeleton-rect"></div>
+                <div class="skeleton-rect"></div>
+                <div class="skeleton-rect"></div>
+                <div class="skeleton-rect"></div>
+            </div>
+
+            <!-- Programacion -->
+            <div class="section-header-wrap mb-3">
+                <div>
+                    <h3 class="section-title">
+                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #1ABC9C, #117A65);"></span>
+                        <i class="bi bi-clock-history text-success"></i> Programacion Semanal
+                    </h3>
+                </div>
+            </div>
+            <div id="section-schedule" class="d-flex flex-column gap-2">
+                <div class="skeleton-rect" style="height: 40px;"></div>
+                <div class="skeleton-rect" style="height: 40px;"></div>
+                <div class="skeleton-rect" style="height: 40px;"></div>
+                <div class="skeleton-rect" style="height: 40px;"></div>
+                <div class="skeleton-rect" style="height: 40px;"></div>
+                <div class="skeleton-rect" style="height: 40px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Resenas Criticas de la Comunidad -->
+    <div class="section-header-wrap mb-3">
+        <div>
+            <h3 class="section-title">
+                <span class="section-accent-bar" style="background: linear-gradient(135deg, #F1C40F, #B7950B);"></span>
+                <i class="bi bi-chat-square-quote text-warning"></i> Resenas Criticas de la Comunidad
+            </h3>
+            <span class="text-muted small">Analisis de profundidad compartidos por lectores y espectadores</span>
+        </div>
+    </div>
+    <div id="section-reviews" class="mb-5">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
+            <div class="col"><div class="skeleton-review-card"></div></div>
+            <div class="col"><div class="skeleton-review-card"></div></div>
+            <div class="col"><div class="skeleton-review-card"></div></div>
+            <div class="col"><div class="skeleton-review-card"></div></div>
+        </div>
+    </div>
+
 </div>
 
 <script>
-// ==============================================================================
-// TOP CHARACTERS INTERACTIVE PAGINATION (TENRAI API /top/characters)
-// ==============================================================================
-let currentCharPage = 1;
-let isCharLoading = false;
+// Utilities
+function escapeHtml(unsafe) {
+    if (!unsafe) return '';
+    return unsafe
+         .toString()
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+}
 
-async function changeCharactersPage(delta) {
-    if (isCharLoading) return;
-    const targetPage = currentCharPage + delta;
-    if (targetPage < 1) return;
+function truncate(str, n) {
+    if (!str) return '';
+    return (str.length > n) ? str.substr(0, n - 1) + '&hellip;' : str;
+}
 
-    isCharLoading = true;
-    const grid = document.getElementById('charactersGrid');
-    const badge = document.getElementById('charPageBadge');
-    const prevBtn = document.getElementById('btnPrevCharPage');
-    const nextBtn = document.getElementById('btnNextCharPage');
+// Media Card Generator
+function createMediaCardHtml(item, type, badgeLabel, scoreVal) {
+    const title = escapeHtml(item.title || item.name || 'Desconocido');
+    const img = item.images?.webp?.image_url || item.images?.jpg?.image_url || '';
+    const score = (scoreVal !== undefined && scoreVal !== null && scoreVal !== '') ? Number(scoreVal).toFixed(2) : (item.score ? Number(item.score).toFixed(2) : '');
+    const meta1 = type === 'anime' ? (item.type || 'TV') : (type === 'manga' ? 'Manga' : 'Novela Ligera');
+    const meta2 = item.year ? item.year : (item.members ? `${(item.members / 1000).toFixed(1)}k miembros` : '');
+    const id = item.mal_id;
+    
+    let typePath = type;
+    if (type === 'lightnovel') typePath = 'manga';
 
-    if (badge) badge.textContent = `Página ${targetPage}...`;
-    if (grid) {
-        grid.style.opacity = '0.5';
-    }
+    return `
+    <div class="col">
+        <div class="media-card">
+            <a href="/detail/${typePath}/${id}/" class="text-decoration-none">
+                <div class="media-poster-box position-relative overflow-hidden rounded-3" style="aspect-ratio: 2/3; background: #1a1a1a;">
+                    <img src="${img}" alt="${title}" loading="lazy" class="media-poster-img w-100 h-100 object-fit-cover">
+                    <div class="media-poster-overlay position-absolute w-100 h-100 top-0 start-0" style="background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%);"></div>
+                    ${badgeLabel ? `<span class="badge position-absolute top-0 start-0 m-2 bg-dark bg-opacity-75 border border-secondary border-opacity-50 text-light small">${badgeLabel}</span>` : ''}
+                    ${score ? `<span class="badge position-absolute top-0 end-0 m-2 bg-dark bg-opacity-75 border border-secondary border-opacity-50 text-warning small"><i class="bi bi-star-fill me-1"></i>${score}</span>` : ''}
+                    <div class="media-hover-overlay position-absolute w-100 h-100 top-0 start-0 d-flex flex-column align-items-center justify-content-center opacity-0 transition-opacity" style="background: rgba(0,0,0,0.6);">
+                        <span class="btn btn-sm btn-accent rounded-pill px-3 py-1">
+                            <i class="bi bi-eye-fill me-1"></i> Ficha Completa
+                        </span>
+                    </div>
+                </div>
+            </a>
+            <div class="media-info-wrap mt-2">
+                <a href="/detail/${typePath}/${id}/" class="text-decoration-none">
+                    <h6 class="media-title text-light mb-1 text-truncate" title="${title}">${title}</h6>
+                </a>
+                <div class="media-meta-line d-flex justify-content-between text-muted small">
+                    <span>${meta1}</span>
+                    <span>${meta2}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+}
 
+// Data Fetcher
+async function loadSection(apiPath, containerId, renderFn) {
     try {
-        const response = await fetch(`/api/tenrai/top/characters?page=${targetPage}&limit=12`);
-        if (response.ok) {
-            const result = await response.json();
-            const characters = result.data || [];
-
-            if (characters.length > 0) {
-                currentCharPage = targetPage;
-                if (badge) badge.textContent = `Página ${currentCharPage}`;
-                if (prevBtn) prevBtn.disabled = (currentCharPage <= 1);
-
-                let html = '';
-                const baseRank = (currentCharPage - 1) * 12;
-                characters.forEach((char, index) => {
-                    const rank = baseRank + index + 1;
-                    const img = char.images?.jpg?.image_url || 'https://via.placeholder.com/150x200?text=Personaje';
-                    const name = char.name || 'Personaje';
-                    const kanji = char.name_kanji || '';
-                    const favs = Number(char.favorites || 0).toLocaleString();
-
-                    html += `
-                        <div class="col">
-                            <div class="tenrai-adapted-item-card h-100 d-flex flex-column text-center p-2">
-                                <div class="position-relative mb-2 rounded-3 overflow-hidden" style="height: 180px;">
-                                    <img src="${img}" alt="${name}" loading="lazy" class="w-100 h-100" style="object-fit: cover;">
-                                    <span class="badge bg-dark bg-opacity-75 text-white border border-secondary position-absolute top-0 start-0 m-2 font-monospace small">
-                                        #${rank}
-                                    </span>
-                                </div>
-                                <strong class="text-white small d-block text-truncate mb-1" title="${name}">${name}</strong>
-                                ${kanji ? `<small class="text-secondary d-block font-monospace mb-1" style="font-size: 0.72rem;">${kanji}</small>` : ''}
-                                <div class="mt-auto d-flex align-items-center justify-content-center gap-1 text-danger small">
-                                    <i class="bi bi-heart-fill" style="font-size: 0.75rem;"></i>
-                                    <span class="font-monospace text-light" style="font-size: 0.78rem;">${favs}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                if (grid) grid.innerHTML = html;
-            } else {
-                if (badge) badge.textContent = `Página ${currentCharPage}`;
-                if (nextBtn) nextBtn.disabled = true;
-            }
+        const res = await fetch(apiPath);
+        if (!res.ok) throw new Error(res.status);
+        const json = await res.json();
+        const items = json.data || [];
+        const container = document.getElementById(containerId);
+        if (container && items.length > 0) {
+            container.innerHTML = renderFn(items);
         }
-    } catch (err) {
-        console.error('Error fetching characters page:', err);
-        if (badge) badge.textContent = `Página ${currentCharPage}`;
-    } finally {
-        isCharLoading = false;
-        if (grid) grid.style.opacity = '1';
+    } catch (e) {
+        console.warn('Section load error:', apiPath, e);
     }
 }
+
+// Hero Loader
+async function loadHero() {
+    try {
+        const res = await fetch('/api/tenrai/top/anime?limit=1');
+        if (!res.ok) throw new Error(res.status);
+        const json = await res.json();
+        const items = json.data || [];
+        const container = document.getElementById('section-hero');
+        if (container && items.length > 0) {
+            const item = items[0];
+            const title = escapeHtml(item.title);
+            const synopsis = escapeHtml(truncate(item.synopsis, 240));
+            const imgLg = item.trailer?.images?.maximum_image_url || item.images?.webp?.large_image_url || '';
+            const imgSm = item.images?.webp?.large_image_url || '';
+            const score = item.score ? Number(item.score).toFixed(2) : 'N/A';
+            const genres = item.genres ? item.genres.map(g => `<span class="badge bg-dark bg-opacity-75 border border-secondary border-opacity-50 px-2 py-1 rounded-pill small">${escapeHtml(g.name)}</span>`).join(' ') : '';
+            
+            container.innerHTML = `
+            <div class="hero-billboard position-relative rounded-4 overflow-hidden mb-4" style="min-height: 480px; background: #0c0d14; border: 1px solid rgba(255,255,255,0.08);">
+                <div class="hero-backdrop-layer position-absolute w-100 h-100" style="background: url('${imgLg}') center/cover no-repeat; opacity: 0.35; filter: blur(2px);"></div>
+                <div class="hero-gradient-overlay position-absolute w-100 h-100" style="background: linear-gradient(90deg, rgba(12,13,20,1) 0%, rgba(12,13,20,0.85) 45%, rgba(12,13,20,0.1) 100%);"></div>
+                
+                <div class="hero-content-wrap position-relative h-100 d-flex align-items-center p-4 p-md-5">
+                    <div class="row w-100 align-items-center">
+                        <div class="col-lg-7 col-xl-6 z-2">
+                            <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+                                <span class="badge bg-danger px-3 py-2 fw-bold text-uppercase rounded-pill" style="letter-spacing: 0.05em; font-size: 0.75rem;">
+                                    <i class="bi bi-fire me-1"></i> TOP #1 RANKING GLOBAL
+                                </span>
+                                <span class="badge bg-dark bg-opacity-75 border border-secondary border-opacity-50 text-warning px-2 py-1">
+                                    <i class="bi bi-star-fill me-1"></i> ${score}
+                                </span>
+                                <span class="badge bg-dark bg-opacity-75 border border-secondary border-opacity-50 text-light px-2 py-1">
+                                    ${item.type || 'TV'}${item.year ? ' &bull; ' + item.year : ''}
+                                </span>
+                            </div>
+
+                            <h1 class="hero-title text-white fw-bold display-5 mb-3" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.9);">${title}</h1>
+                            
+                            <div class="d-flex gap-2 flex-wrap mb-3">
+                                ${genres}
+                            </div>
+                            
+                            <p class="hero-synopsis text-light opacity-75 fs-6 lh-base mb-4" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">
+                                ${synopsis}
+                            </p>
+                            
+                            <div class="d-flex gap-3 flex-wrap">
+                                <a href="/detail/anime/${item.mal_id}/" class="btn btn-accent btn-lg px-4 py-2 fw-semibold rounded-pill">
+                                    <i class="bi bi-play-circle-fill me-2"></i> Ver Ficha & Opiniones
+                                </a>
+                                <a href="/explore/?type=anime" class="btn btn-outline-light btn-lg px-4 py-2 fw-semibold rounded-pill">
+                                    <i class="bi bi-compass me-2"></i> Explorar Catalogo
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-5 col-xl-6 d-none d-lg-flex justify-content-end align-items-center z-1">
+                            <div class="hero-poster-showcase rounded-4 shadow-lg overflow-hidden border border-secondary border-opacity-50" style="width: 260px; height: 380px; box-shadow: 0 20px 40px rgba(0,0,0,0.8);">
+                                <img src="${imgSm}" class="w-100 h-100 object-fit-cover" alt="${title}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+    } catch (e) {
+        console.warn('Hero load error:', e);
+    }
+}
+
+// Characters Pagination Logic
+let currentCharPage = 1;
+function renderCharacters(items) {
+    let html = '<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">';
+    items.forEach((item, idx) => {
+        const name = escapeHtml(item.name);
+        const img = item.images?.webp?.image_url || item.images?.jpg?.image_url || '';
+        const rank = (currentCharPage - 1) * 12 + idx + 1;
+        const favs = item.favorites ? (item.favorites / 1000).toFixed(1) + 'k' : '';
+        html += `
+        <div class="col">
+            <div class="d-flex align-items-center gap-3 p-2 rounded-3 h-100" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+                <div class="fw-bold text-muted small" style="min-width: 22px;">#${rank}</div>
+                <img src="${img}" alt="${name}" loading="lazy" class="rounded-circle object-fit-cover" style="width: 48px; height: 48px; border: 1px solid rgba(255,255,255,0.1);">
+                <div class="overflow-hidden">
+                    <h6 class="text-light mb-0 text-truncate small fw-semibold" title="${name}">${name}</h6>
+                    <small class="text-muted"><i class="bi bi-heart-fill text-danger small"></i> ${favs}</small>
+                </div>
+            </div>
+        </div>
+        `;
+    });
+    html += '</div>';
+    return html;
+}
+
+function loadCharacters() {
+    loadSection(`/api/tenrai/top/characters?limit=12&page=${currentCharPage}`, 'section-characters', renderCharacters)
+    .then(() => {
+        const prevBtn = document.getElementById('btn-char-prev');
+        if (prevBtn) prevBtn.disabled = currentCharPage <= 1;
+    });
+}
+
+function changeCharactersPage(delta) {
+    currentCharPage += delta;
+    if (currentCharPage < 1) currentCharPage = 1;
+    const c = document.getElementById('section-characters');
+    if (c) {
+        c.innerHTML = '<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">' + 
+            Array(12).fill(0).map(() => `<div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>`).join('') + 
+            '</div>';
+    }
+    loadCharacters();
+}
+
+// Initial Data Load (Parallel async dispatch on DOMContentLoaded)
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Hero
+    loadHero();
+    
+    // 2. Top Anime
+    loadSection('/api/tenrai/top/anime?limit=8', 'section-top-anime', (items) => {
+        return `<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">` + 
+            items.map(i => createMediaCardHtml(i, 'anime', i.type, i.score)).join('') + 
+            `</div>`;
+    });
+    
+    // 3. Top Manga
+    loadSection('/api/tenrai/top/manga?limit=8&type=manga', 'section-top-manga', (items) => {
+        return `<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">` + 
+            items.map(i => createMediaCardHtml(i, 'manga', 'Manga', i.score)).join('') + 
+            `</div>`;
+    });
+    
+    // 4. Novelas Ligeras
+    loadSection('/api/tenrai/top/manga?limit=8&type=lightnovel', 'section-light-novels', (items) => {
+        return `<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">` + 
+            items.map(i => createMediaCardHtml(i, 'lightnovel', 'LN', i.score)).join('') + 
+            `</div>`;
+    });
+    
+    // 5. Temporada Actual
+    loadSection('/api/tenrai/seasons/now?limit=6', 'section-season-now', (items) => {
+        return `<div class="row row-cols-2 row-cols-sm-3 g-3">` + 
+            items.map(i => createMediaCardHtml(i, 'anime', 'En Emision', i.score)).join('') + 
+            `</div>`;
+    });
+    
+    // 6. Proximos Estrenos
+    loadSection('/api/tenrai/seasons/upcoming?limit=6', 'section-season-upcoming', (items) => {
+        return `<div class="row row-cols-2 row-cols-sm-3 g-3">` + 
+            items.map(i => createMediaCardHtml(i, 'anime', 'Proximo', i.score)).join('') + 
+            `</div>`;
+    });
+    
+    // 7. Personajes Populares
+    loadCharacters();
+    
+    // 8. Creadores & Mangakas
+    loadSection('/api/tenrai/top/people?limit=6', 'section-people', (items) => {
+        let html = '<div class="row row-cols-2 row-cols-md-3 g-3">';
+        items.forEach(item => {
+            const name = escapeHtml(item.name);
+            const img = item.images?.jpg?.image_url || '';
+            const favs = item.favorites ? (item.favorites / 1000).toFixed(1) + 'k' : '';
+            html += `
+            <div class="col">
+                <div class="d-flex align-items-center gap-3 p-2 rounded-3 h-100" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+                    <img src="${img}" alt="${name}" loading="lazy" class="rounded-circle object-fit-cover" style="width: 48px; height: 48px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="overflow-hidden">
+                        <h6 class="text-light mb-0 text-truncate small fw-semibold" title="${name}">${name}</h6>
+                        <small class="text-muted"><i class="bi bi-heart-fill text-danger small"></i> ${favs}</small>
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+        html += '</div>';
+        return html;
+    });
+
+    // 9. Top Resenas Criticas
+    loadSection('/api/tenrai/top/reviews?limit=4', 'section-reviews', (items) => {
+        let html = '<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">';
+        items.forEach(item => {
+            const user = escapeHtml(item.user?.username || 'Critico');
+            const userImg = item.user?.images?.webp?.image_url || item.user?.images?.jpg?.image_url || '';
+            const score = item.score || item.scores?.overall || 'N/A';
+            const excerpt = escapeHtml(truncate(item.review || '', 130));
+            const entryTitle = escapeHtml(item.entry?.title || 'Obra');
+            const entryUrl = item.entry?.mal_id ? `/detail/${item.type || 'anime'}/${item.entry.mal_id}/` : '#';
+            html += `
+            <div class="col">
+                <div class="p-3 rounded-4 h-100 d-flex flex-column justify-content-between" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+                    <div>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <div class="d-flex align-items-center gap-2 overflow-hidden">
+                                ${userImg ? `<img src="${userImg}" class="rounded-circle" style="width:26px;height:26px;object-fit:cover;">` : `<i class="bi bi-person-circle fs-6 text-secondary"></i>`}
+                                <span class="small text-light fw-semibold text-truncate">${user}</span>
+                            </div>
+                            <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 small"><i class="bi bi-star-fill me-1"></i>${score}</span>
+                        </div>
+                        <div class="mb-2">
+                            <a href="${entryUrl}" class="text-decoration-none small text-info fw-bold text-truncate d-block">${entryTitle}</a>
+                        </div>
+                        <p class="text-white-50 small mb-0 lh-sm" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                            "${excerpt}"
+                        </p>
+                    </div>
+                </div>
+            </div>
+            `;
+        });
+        html += '</div>';
+        return html;
+    });
+
+    // 10. Programacion Semanal
+    loadSection('/api/tenrai/schedules?limit=6', 'section-schedule', (items) => {
+        let html = '<div class="d-flex flex-column gap-2">';
+        items.forEach(item => {
+            const title = escapeHtml(item.title);
+            const time = item.broadcast?.string || item.broadcast?.time || 'Horario por confirmar';
+            html += `
+            <div class="d-flex justify-content-between align-items-center p-2 rounded-3" style="background: rgba(255,255,255,0.02); border-left: 3px solid #1ABC9C;">
+                <div class="text-truncate me-2"><a href="/detail/anime/${item.mal_id}/" class="text-light text-decoration-none small">${title}</a></div>
+                <div class="badge bg-dark text-muted small flex-shrink-0">${escapeHtml(time)}</div>
+            </div>
+            `;
+        });
+        html += '</div>';
+        return html;
+    });
+
+    // 11. Noticias de la Industria
+    loadSection('/api/tenrai/news?limit=4', 'section-news', (items) => {
+        let html = '<div class="d-flex flex-column gap-3">';
+        items.forEach(item => {
+            const title = escapeHtml(item.title);
+            const img = item.images?.jpg?.image_url || '';
+            const url = item.url || '#';
+            const date = item.date ? new Date(item.date).toLocaleDateString() : '';
+            html += `
+            <div class="d-flex gap-3 align-items-center bg-dark bg-opacity-25 p-2 rounded-3 border border-secondary border-opacity-25">
+                ${img ? `<img src="${img}" alt="Noticia" class="rounded object-fit-cover" style="width: 75px; height: 55px; flex-shrink: 0;">` : `<div class="rounded bg-secondary bg-opacity-25" style="width: 75px; height: 55px; flex-shrink: 0;"></div>`}
+                <div class="overflow-hidden">
+                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-light text-decoration-none"><h6 class="mb-1 text-truncate small" title="${title}">${title}</h6></a>
+                    <small class="text-muted">${date}</small>
+                </div>
+            </div>
+            `;
+        });
+        html += '</div>';
+        return html;
+    });
+
+});
 </script>
 {% endblock %}

@@ -259,66 +259,178 @@
         </div>
     </div>
 
-    <!-- Category Nav (Pills for clear category separation) -->
-    <ul class="nav nav-pills tenrai-category-nav gap-2 mb-4" id="tenraiCategoryNav" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="tab-btn-anime" data-bs-toggle="pill" data-bs-target="#pane-anime" type="button" role="tab">
-                <i class="bi bi-tv me-1"></i> Anime (26)
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-btn-manga" data-bs-toggle="pill" data-bs-target="#pane-manga" type="button" role="tab">
-                <i class="bi bi-book me-1"></i> Manga (16)
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-btn-characters" data-bs-toggle="pill" data-bs-target="#pane-characters" type="button" role="tab">
-                <i class="bi bi-person-badge me-1"></i> Personajes (7)
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-btn-people" data-bs-toggle="pill" data-bs-target="#pane-people" type="button" role="tab">
-                <i class="bi bi-mic me-1"></i> Creadores & Staff (6)
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-btn-seasons" data-bs-toggle="pill" data-bs-target="#pane-seasons" type="button" role="tab">
-                <i class="bi bi-calendar-range me-1"></i> Temporadas (3)
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-btn-top" data-bs-toggle="pill" data-bs-target="#pane-top" type="button" role="tab">
-                <i class="bi bi-trophy me-1"></i> Rankings Top (5)
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-btn-news" data-bs-toggle="pill" data-bs-target="#pane-news" type="button" role="tab">
-                <i class="bi bi-newspaper me-1"></i> Noticias & Artículos (6)
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-btn-producers" data-bs-toggle="pill" data-bs-target="#pane-producers" type="button" role="tab">
-                <i class="bi bi-buildings me-1"></i> Productoras & Estudios (5)
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tab-btn-other" data-bs-toggle="pill" data-bs-target="#pane-other" type="button" role="tab">
-                <i class="bi bi-compass me-1"></i> Comunidad & Descubrimiento (14)
-            </button>
-        </li>
-    </ul>
+    <!-- 9 Sesiones Independientes de Endpoints (Sin Filtros ni Pestañas) -->
+    <div class="tenrai-sessions-wrapper d-flex flex-column gap-5">
+        <!-- Sesión 1: Anime -->
+        <section class="tenrai-session-block" id="session-anime">
+            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="session-icon-circle bg-danger bg-opacity-25 text-danger">
+                        <i class="bi bi-tv fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-white fw-bold mb-0">Sesión 1: Endpoints del Catálogo Anime</h5>
+                        <small class="text-muted">Metadatos completos, relaciones de franquicia, trailers oficiales, episodios y temas musicales.</small>
+                    </div>
+                </div>
+                <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25 px-3 py-2 font-monospace">
+                    26 Endpoints GET
+                </span>
+            </div>
+            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-anime"></div>
+        </section>
 
-    <!-- Tab Panes Container (Each Category holds its own separate apartados) -->
-    <div class="tab-content" id="tenraiTabContent">
-        <div class="tab-pane fade show active" id="pane-anime" role="tabpanel"></div>
-        <div class="tab-pane fade" id="pane-manga" role="tabpanel"></div>
-        <div class="tab-pane fade" id="pane-characters" role="tabpanel"></div>
-        <div class="tab-pane fade" id="pane-people" role="tabpanel"></div>
-        <div class="tab-pane fade" id="pane-seasons" role="tabpanel"></div>
-        <div class="tab-pane fade" id="pane-top" role="tabpanel"></div>
-        <div class="tab-pane fade" id="pane-news" role="tabpanel"></div>
-        <div class="tab-pane fade" id="pane-producers" role="tabpanel"></div>
-        <div class="tab-pane fade" id="pane-other" role="tabpanel"></div>
+        <!-- Sesión 2: Manga -->
+        <section class="tenrai-session-block" id="session-manga">
+            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="session-icon-circle bg-warning bg-opacity-25 text-warning">
+                        <i class="bi bi-book fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-white fw-bold mb-0">Sesión 2: Endpoints del Catálogo Manga</h5>
+                        <small class="text-muted">Metadatos de la obra literaria, serializaciones, capítulos, autores y reseñas críticas.</small>
+                    </div>
+                </div>
+                <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 px-3 py-2 font-monospace">
+                    16 Endpoints GET
+                </span>
+            </div>
+            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-manga"></div>
+        </section>
+
+        <!-- Sesión 3: Personajes -->
+        <section class="tenrai-session-block" id="session-characters">
+            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="session-icon-circle bg-info bg-opacity-25 text-info">
+                        <i class="bi bi-person-badge fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-white fw-bold mb-0">Sesión 3: Personajes & Actores de Voz (Seiyuus)</h5>
+                        <small class="text-muted">Fichas biográficas, roles de doblaje internacional, apariciones en manga e ilustraciones oficiales.</small>
+                    </div>
+                </div>
+                <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-25 px-3 py-2 font-monospace">
+                    7 Endpoints GET
+                </span>
+            </div>
+            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-characters"></div>
+        </section>
+
+        <!-- Sesión 4: Creadores & Staff -->
+        <section class="tenrai-session-block" id="session-people">
+            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="session-icon-circle bg-success bg-opacity-25 text-success">
+                        <i class="bi bi-mic fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-white fw-bold mb-0">Sesión 4: Creadores, Directores & Equipo de Producción</h5>
+                        <small class="text-muted">Trayectorias profesionales integrales, obras dirigidas o producidas y fotos oficiales.</small>
+                    </div>
+                </div>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 px-3 py-2 font-monospace">
+                    6 Endpoints GET
+                </span>
+            </div>
+            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-people"></div>
+        </section>
+
+        <!-- Sesión 5: Temporadas -->
+        <section class="tenrai-session-block" id="session-seasons">
+            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="session-icon-circle bg-primary bg-opacity-25 text-primary">
+                        <i class="bi bi-calendar-range fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-white fw-bold mb-0">Sesión 5: Temporadas y Calendario de Estrenos</h5>
+                        <small class="text-muted">Transmisiones en curso, próximos estrenos de temporada y catálogos estacionales.</small>
+                    </div>
+                </div>
+                <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25 px-3 py-2 font-monospace">
+                    3 Endpoints GET
+                </span>
+            </div>
+            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-seasons"></div>
+        </section>
+
+        <!-- Sesión 6: Rankings Top -->
+        <section class="tenrai-session-block" id="session-top">
+            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="session-icon-circle bg-warning bg-opacity-25 text-warning">
+                        <i class="bi bi-trophy fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-white fw-bold mb-0">Sesión 6: Rankings Top & Tablas de Clasificación</h5>
+                        <small class="text-muted">Top animes, top mangas, personalidades más seguidas y personajes más populares de la historia.</small>
+                    </div>
+                </div>
+                <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 px-3 py-2 font-monospace">
+                    5 Endpoints GET
+                </span>
+            </div>
+            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-top"></div>
+        </section>
+
+        <!-- Sesión 7: Noticias & Artículos -->
+        <section class="tenrai-session-block" id="session-news">
+            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="session-icon-circle bg-danger bg-opacity-25 text-danger">
+                        <i class="bi bi-newspaper fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-white fw-bold mb-0">Sesión 7: Noticias, Prensa & Artículos Editoriales</h5>
+                        <small class="text-muted">Lanzamientos de la industria, coberturas de prensa y análisis periodísticos a fondo.</small>
+                    </div>
+                </div>
+                <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25 px-3 py-2 font-monospace">
+                    6 Endpoints GET
+                </span>
+            </div>
+            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-news"></div>
+        </section>
+
+        <!-- Sesión 8: Productoras -->
+        <section class="tenrai-session-block" id="session-producers">
+            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="session-icon-circle bg-info bg-opacity-25 text-info">
+                        <i class="bi bi-buildings fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-white fw-bold mb-0">Sesión 8: Productoras, Estudios de Animación & Editoriales</h5>
+                        <small class="text-muted">Directorio de compañías de animación, obras producidas y enlaces corporativos.</small>
+                    </div>
+                </div>
+                <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-25 px-3 py-2 font-monospace">
+                    5 Endpoints GET
+                </span>
+            </div>
+            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-producers"></div>
+        </section>
+
+        <!-- Sesión 9: Comunidad & Otros -->
+        <section class="tenrai-session-block" id="session-other">
+            <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="session-icon-circle bg-secondary bg-opacity-25 text-white">
+                        <i class="bi bi-compass fs-5"></i>
+                    </div>
+                    <div>
+                        <h5 class="text-white fw-bold mb-0">Sesión 9: Comunidad, Stacks & Descubrimiento Aleatorio</h5>
+                        <small class="text-muted">Programación de emisión, colecciones curadas de usuarios, taxonomía de géneros y recomendaciones.</small>
+                    </div>
+                </div>
+                <span class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25 px-3 py-2 font-monospace">
+                    14 Endpoints GET
+                </span>
+            </div>
+            <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-other"></div>
+        </section>
     </div>
 </div>
 
@@ -454,28 +566,16 @@ const TENRAI_ENDPOINTS = [
 const tenraiDataStore = {};
 const fetchedCategories = new Set();
 
-const CATEGORY_PANE_MAP = {
-    'anime': 'pane-anime',
-    'manga': 'pane-manga',
-    'characters': 'pane-characters',
-    'people': 'pane-people',
-    'seasons': 'pane-seasons',
-    'top': 'pane-top',
-    'news_articles': 'pane-news',
-    'producers': 'pane-producers',
-    'other': 'pane-other'
-};
-
-const PANE_CATEGORY_MAP = {
-    'pane-anime': 'anime',
-    'pane-manga': 'manga',
-    'pane-characters': 'characters',
-    'pane-people': 'people',
-    'pane-seasons': 'seasons',
-    'pane-top': 'top',
-    'pane-news': 'news_articles',
-    'pane-producers': 'producers',
-    'pane-other': 'other'
+const CATEGORY_CONTAINER_MAP = {
+    'anime': 'session-container-anime',
+    'manga': 'session-container-manga',
+    'characters': 'session-container-characters',
+    'people': 'session-container-people',
+    'seasons': 'session-container-seasons',
+    'top': 'session-container-top',
+    'news_articles': 'session-container-news',
+    'producers': 'session-container-producers',
+    'other': 'session-container-other'
 };
 
 function resolveEndpointPath(pathTemplate) {
@@ -497,17 +597,17 @@ function escapeHtml(str) {
 }
 
 function renderAllApartados() {
-    // Populate each tab pane with its respective endpoints
-    const categories = Object.keys(CATEGORY_PANE_MAP);
+    // Populate each independent session block with its respective endpoints
+    const categories = Object.keys(CATEGORY_CONTAINER_MAP);
     
     categories.forEach(catKey => {
-        const paneId = CATEGORY_PANE_MAP[catKey];
-        const paneEl = document.getElementById(paneId);
-        if (!paneEl) return;
+        const containerId = CATEGORY_CONTAINER_MAP[catKey];
+        const containerEl = document.getElementById(containerId);
+        if (!containerEl) return;
 
         const endpoints = TENRAI_ENDPOINTS.filter(ep => ep.category === catKey);
         if (endpoints.length === 0) {
-            paneEl.innerHTML = '<div class="p-4 text-center text-muted small">No hay endpoints disponibles en esta categoría.</div>';
+            containerEl.innerHTML = '<div class="col-12 p-4 text-center text-muted small">No hay endpoints disponibles en esta sesión.</div>';
             return;
         }
 
@@ -515,54 +615,56 @@ function renderAllApartados() {
         endpoints.forEach(ep => {
             const resolved = resolveEndpointPath(ep.path);
             html += `
-                <div class="tenrai-apartado-card mb-4" id="apartado-card-${ep.id}">
-                    <div class="tenrai-apartado-header d-flex align-items-center justify-content-between flex-wrap gap-2">
-                        <div class="d-flex align-items-center gap-2 overflow-hidden">
-                            <span class="tenrai-method-badge">${ep.method}</span>
-                            <div class="overflow-hidden">
-                                <strong class="text-white d-block text-truncate">${escapeHtml(ep.name)}</strong>
-                                <span class="text-muted font-monospace small">${escapeHtml(resolved)}</span>
+                <div class="col">
+                    <div class="tenrai-apartado-card h-100 d-flex flex-column" id="apartado-card-${ep.id}">
+                        <div class="tenrai-apartado-header d-flex align-items-center justify-content-between flex-wrap gap-2 p-3">
+                            <div class="d-flex align-items-center gap-2 overflow-hidden">
+                                <span class="tenrai-method-badge">${ep.method}</span>
+                                <div class="overflow-hidden">
+                                    <strong class="text-white d-block text-truncate">${escapeHtml(ep.name)}</strong>
+                                    <span class="text-muted font-monospace small">${escapeHtml(resolved)}</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <span class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25">#${ep.id}</span>
+                                <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25" id="status-badge-${ep.id}">Pendiente</span>
+                                <span class="badge bg-dark border border-secondary text-muted" id="latency-badge-${ep.id}">-- ms</span>
+                                <button class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" onclick="toggleApartadoJson(${ep.id})" title="Ver JSON">
+                                    <i class="bi bi-code-slash"></i> JSON
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="copyApartadoJson(${ep.id}, this)" title="Copiar JSON">
+                                    <i class="bi bi-clipboard"></i>
+                                </button>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center gap-2 flex-wrap">
-                            <span class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25">#${ep.id}</span>
-                            <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25" id="status-badge-${ep.id}">Pendiente</span>
-                            <span class="badge bg-dark border border-secondary text-muted" id="latency-badge-${ep.id}">-- ms</span>
-                            <button class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" onclick="toggleApartadoJson(${ep.id})" title="Ver JSON">
-                                <i class="bi bi-code-slash"></i> JSON
-                            </button>
-                            <button class="btn btn-sm btn-outline-secondary" onclick="copyApartadoJson(${ep.id}, this)" title="Copiar JSON">
-                                <i class="bi bi-clipboard"></i>
-                            </button>
+                        <div class="px-3 py-2 border-bottom border-secondary border-opacity-10 text-secondary small">
+                            ${escapeHtml(ep.desc)}
                         </div>
-                    </div>
-                    <div class="px-3 py-2 border-bottom border-secondary border-opacity-10 text-secondary small">
-                        ${escapeHtml(ep.desc)}
-                    </div>
-                    
-                    <!-- Visual Result -->
-                    <div class="p-3" id="visual-container-${ep.id}">
-                        <div class="text-center py-3 text-muted small">
-                            <div class="spinner-border spinner-border-sm text-danger me-2" role="status"></div>
-                            Cargando datos del endpoint...
+                        
+                        <!-- Visual Result -->
+                        <div class="p-3 flex-grow-1" id="visual-container-${ep.id}">
+                            <div class="text-center py-3 text-muted small">
+                                <div class="spinner-border spinner-border-sm text-danger me-2" role="status"></div>
+                                Esperando consulta...
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Collapsible Raw JSON -->
-                    <div class="p-3 bg-black border-top border-secondary border-opacity-25 d-none" id="json-container-${ep.id}">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="text-secondary font-monospace small"><i class="bi bi-terminal me-1"></i>Estructura JSON (Tenrai API v1)</span>
-                            <button class="btn btn-xs btn-outline-secondary btn-sm" onclick="copyApartadoJson(${ep.id}, this)">
-                                <i class="bi bi-clipboard me-1"></i>Copiar
-                            </button>
+                        <!-- Collapsible Raw JSON -->
+                        <div class="p-3 bg-black border-top border-secondary border-opacity-25 d-none mt-auto" id="json-container-${ep.id}">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="text-secondary font-monospace small"><i class="bi bi-terminal me-1"></i>Estructura JSON (Tenrai API v1)</span>
+                                <button class="btn btn-xs btn-outline-secondary btn-sm" onclick="copyApartadoJson(${ep.id}, this)">
+                                    <i class="bi bi-clipboard me-1"></i>Copiar
+                                </button>
+                            </div>
+                            <pre class="m-0 text-success font-monospace small" style="max-height: 280px; overflow-y: auto;" id="json-code-${ep.id}">Cargando JSON...</pre>
                         </div>
-                        <pre class="m-0 text-success font-monospace small" style="max-height: 280px; overflow-y: auto;" id="json-code-${ep.id}">Cargando JSON...</pre>
                     </div>
                 </div>
             `;
         });
 
-        paneEl.innerHTML = html;
+        containerEl.innerHTML = html;
     });
 }
 
@@ -893,30 +995,35 @@ async function autoFetchCategory(categoryKey) {
 document.addEventListener('DOMContentLoaded', function() {
     renderAllApartados();
 
-    // Determine initial active category tab
-    const initialCategory = (CURRENT_MEDIA_TYPE === 'manga') ? 'manga' : 'anime';
-    if (CURRENT_MEDIA_TYPE === 'manga') {
-        const mangaTabBtn = document.getElementById('tab-btn-manga');
-        if (mangaTabBtn && typeof bootstrap !== 'undefined' && bootstrap.Tab) {
-            const tab = new bootstrap.Tab(mangaTabBtn);
-            tab.show();
-        }
-    }
+    // Initial priority session load (matching current media type)
+    const primaryCat = (CURRENT_MEDIA_TYPE === 'manga') ? 'manga' : 'anime';
+    autoFetchCategory(primaryCat);
+    autoFetchCategory('characters');
 
-    // Auto-fetch initial category
-    autoFetchCategory(initialCategory);
+    // Setup progressive IntersectionObserver to auto-fetch each session as it enters viewport
+    if ('IntersectionObserver' in window) {
+        const sessionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const secId = entry.target.id;
+                    const catKey = secId.replace('session-', '');
+                    const resolvedCat = (catKey === 'news') ? 'news_articles' : catKey;
+                    autoFetchCategory(resolvedCat);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { rootMargin: '300px' });
 
-    // Listen to tab switch events to auto-fetch category endpoints when opened
-    const tabButtons = document.querySelectorAll('#tenraiCategoryNav button[data-bs-toggle="pill"]');
-    tabButtons.forEach(btn => {
-        btn.addEventListener('shown.bs.tab', function(event) {
-            const targetPaneId = (event.target.getAttribute('data-bs-target') || '').replace('#', '');
-            const categoryKey = PANE_CATEGORY_MAP[targetPaneId];
-            if (categoryKey) {
-                autoFetchCategory(categoryKey);
-            }
+        document.querySelectorAll('.tenrai-session-block').forEach(sec => {
+            sessionObserver.observe(sec);
         });
-    });
+    } else {
+        // Fallback for older browsers: fetch remaining sessions sequentially
+        setTimeout(() => {
+            const allCats = Object.keys(CATEGORY_CONTAINER_MAP);
+            allCats.forEach(cat => autoFetchCategory(cat));
+        }, 300);
+    }
 });
 
 // ==============================================================================

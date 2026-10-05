@@ -205,6 +205,111 @@
     </div>
 </div>
 
+<!-- Section: En Emisión - Temporada Actual (Tenrai API GET /seasons/now) -->
+<div class="mb-5">
+    <div class="section-header-wrap">
+        <div>
+            <h3 class="section-title">
+                <span class="section-accent-bar" style="background: linear-gradient(135deg, #10b981, #06b6d4);"></span>
+                <i class="bi bi-broadcast text-success"></i> Temporada Actual en Emisión
+            </h3>
+            <span class="text-muted small">Estrenos y episodios en transmisión activa vía Tenrai API (/seasons/now)</span>
+        </div>
+        <a href="{% url 'catalog:explore' %}?type=anime" class="btn btn-sm btn-outline-glow">
+            Ver emisión completa <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+    </div>
+
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 g-md-4">
+        {% for anime in season_now %}
+        <div class="col">
+            <div class="media-card">
+                <a href="{% url 'catalog:item_detail' item_type='anime' item_id=anime.mal_id %}" class="text-decoration-none">
+                    <div class="media-poster-box">
+                        <img src="{{ anime.images.jpg.large_image_url|default:anime.images.jpg.image_url }}" alt="{{ anime.title }}" loading="lazy" class="media-poster-img">
+                        <div class="media-poster-overlay"></div>
+                        <span class="badge-top-left" style="background: rgba(16, 185, 129, 0.85); color: #fff;">EN EMISIÓN</span>
+                        {% if anime.score %}
+                        <span class="badge-top-right">
+                            <i class="bi bi-star-fill text-warning"></i> {{ anime.score }}
+                        </span>
+                        {% endif %}
+                        <div class="media-hover-overlay">
+                            <span class="hover-icon-circle"><i class="bi bi-play-fill"></i></span>
+                            <span class="hover-label">Ver Ficha</span>
+                        </div>
+                    </div>
+                </a>
+                <div class="media-info-wrap">
+                    <a href="{% url 'catalog:item_detail' item_type='anime' item_id=anime.mal_id %}" class="text-decoration-none">
+                        <h6 class="media-title" title="{{ anime.title }}">{{ anime.title }}</h6>
+                    </a>
+                    <div class="media-meta-line">
+                        <span>{{ anime.type|default:'TV' }}</span>
+                        <span>{{ anime.episodes|default:'?' }} eps</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 py-4 text-center text-muted">
+            <i class="bi bi-broadcast text-success fs-3 d-block mb-1"></i>
+            <p class="small mb-0">Cargando temporada activa desde Tenrai API...</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Section: Próximos Estrenos (Tenrai API GET /seasons/upcoming) -->
+<div class="mb-5">
+    <div class="section-header-wrap">
+        <div>
+            <h3 class="section-title">
+                <span class="section-accent-bar" style="background: linear-gradient(135deg, #a855f7, #ec4899);"></span>
+                <i class="bi bi-calendar-event text-danger"></i> Próximos Estrenos & Nueva Temporada
+            </h3>
+            <span class="text-muted small">Animes anunciados y futuras emisiones vía Tenrai API (/seasons/upcoming)</span>
+        </div>
+        <a href="{% url 'catalog:explore' %}?type=anime" class="btn btn-sm btn-outline-glow">
+            Ver próximos estrenos <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+    </div>
+
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 g-md-4">
+        {% for anime in upcoming_animes %}
+        <div class="col">
+            <div class="media-card">
+                <a href="{% url 'catalog:item_detail' item_type='anime' item_id=anime.mal_id %}" class="text-decoration-none">
+                    <div class="media-poster-box">
+                        <img src="{{ anime.images.jpg.large_image_url|default:anime.images.jpg.image_url }}" alt="{{ anime.title }}" loading="lazy" class="media-poster-img">
+                        <div class="media-poster-overlay"></div>
+                        <span class="badge-top-left" style="background: rgba(168, 85, 247, 0.85); color: #fff;">PRÓXIMO</span>
+                        <div class="media-hover-overlay">
+                            <span class="hover-icon-circle"><i class="bi bi-info-circle-fill"></i></span>
+                            <span class="hover-label">Detalles</span>
+                        </div>
+                    </div>
+                </a>
+                <div class="media-info-wrap">
+                    <a href="{% url 'catalog:item_detail' item_type='anime' item_id=anime.mal_id %}" class="text-decoration-none">
+                        <h6 class="media-title" title="{{ anime.title }}">{{ anime.title }}</h6>
+                    </a>
+                    <div class="media-meta-line">
+                        <span>{{ anime.type|default:'TV' }}</span>
+                        <span>{{ anime.season|default:'Próximamente'|capfirst }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 py-4 text-center text-muted">
+            <i class="bi bi-calendar-event text-danger fs-3 d-block mb-1"></i>
+            <p class="small mb-0">Cargando próximos estrenos desde Tenrai API...</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
 <!-- Section: Top Mangas (Ultra-Sleek Modern Poster Grid) -->
 <div class="mb-5">
     <div class="section-header-wrap">
@@ -369,5 +474,88 @@
         {% endfor %}
     </div>
     {% endif %}
+</div>
+
+<!-- Section: Schedules & News (Tenrai API GET /schedules & GET /news) -->
+<div class="row g-4 mt-2 mb-5">
+    <!-- Airing Schedules Column -->
+    <div class="col-12 col-lg-7">
+        <div class="section-header-wrap mb-3">
+            <div>
+                <h4 class="section-title text-white fw-bold mb-1">
+                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #06b6d4, #3b82f6);"></span>
+                    <i class="bi bi-clock-history text-info me-1"></i> Programación Semanal en Emisión
+                </h4>
+                <small class="text-muted">Horarios oficiales de emisión sincronizados desde Tenrai API (/schedules)</small>
+            </div>
+        </div>
+        <div class="d-flex flex-column gap-2">
+            {% for item in schedules_animes %}
+            <div class="tenrai-adapted-item-card d-flex align-items-center justify-content-between p-3">
+                <div class="d-flex align-items-center gap-3 overflow-hidden">
+                    <img src="{{ item.images.jpg.image_url }}" alt="{{ item.title }}" class="rounded-2" style="width: 48px; height: 60px; object-fit: cover; flex-shrink: 0;">
+                    <div class="overflow-hidden">
+                        <a href="{% url 'catalog:item_detail' item_type='anime' item_id=item.mal_id %}" class="text-white text-decoration-none fw-semibold small d-block text-truncate">
+                            {{ item.title }}
+                        </a>
+                        <small class="text-muted d-block" style="font-size: 0.75rem;">
+                            <i class="bi bi-broadcast text-success me-1"></i>{{ item.broadcast.string|default:'Horario no especificado' }}
+                        </small>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                    {% if item.score %}
+                    <span class="badge bg-warning bg-opacity-25 text-warning font-monospace">
+                        <i class="bi bi-star-fill me-1"></i>{{ item.score }}
+                    </span>
+                    {% endif %}
+                    <a href="{% url 'catalog:item_detail' item_type='anime' item_id=item.mal_id %}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="p-4 text-center text-muted small border border-secondary border-opacity-25 rounded-3">
+                Información de horarios en emisión disponible en la API.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Industry News Column -->
+    <div class="col-12 col-lg-5">
+        <div class="section-header-wrap mb-3">
+            <div>
+                <h4 class="section-title text-white fw-bold mb-1">
+                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #ef4444, #f97316);"></span>
+                    <i class="bi bi-newspaper text-danger me-1"></i> Actualidad & Noticias de la Industria
+                </h4>
+                <small class="text-muted">Boletines y anuncios de prensa oficiales (/news)</small>
+            </div>
+        </div>
+        <div class="d-flex flex-column gap-2">
+            {% for news in industry_news %}
+            <div class="tenrai-adapted-item-card p-3">
+                <div class="d-flex align-items-start gap-3">
+                    {% if news.images.jpg.image_url %}
+                    <img src="{{ news.images.jpg.image_url }}" alt="Noticia" class="rounded-2" style="width: 55px; height: 55px; object-fit: cover; flex-shrink: 0;">
+                    {% endif %}
+                    <div class="overflow-hidden flex-grow-1">
+                        <a href="{{ news.url }}" target="_blank" rel="noopener noreferrer" class="text-white text-decoration-none fw-semibold small d-block mb-1 text-truncate">
+                            {{ news.title }}
+                        </a>
+                        <small class="text-muted d-block" style="font-size: 0.72rem;">
+                            <i class="bi bi-calendar3 me-1"></i>{{ news.date|truncatechars:25|default:'Reciente' }} &bull; {{ news.author_username|default:'Redacción' }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="p-4 text-center text-muted small border border-secondary border-opacity-25 rounded-3">
+                Actualidad de la industria sincronizada desde Tenrai API.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock %}

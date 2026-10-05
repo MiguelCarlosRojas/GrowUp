@@ -1010,31 +1010,60 @@ def get_common_genres():
     ]
 
 
-def search_items(media_type='anime', category=None, query='', genre='', status='', order_by='score', sort='desc', page=1, per_page=24):
+def get_sliding_page_range(current_page, total_pages, window_size=5):
     """
-    Unified search querying Tenrai API for anime, manga, and light novels.
-    Accepts media_type or category for complete backwards and forwards compatibility.
+    Computes a sliding window of page numbers: 1, 2, 3, 4, 5.
+    When navigating to page 6, 1 is hidden and 6 appears ([2, 3, 4, 5, 6]).
+    """
+    total = max(1, int(total_pages or 1))
+    curr = max(1, min(int(current_page or 1), total))
+    if curr <= window_size:
+        start_p = 1
+        end_p = min(total, window_size)
+    else:
+        end_p = curr
+        start_p = max(1, curr - window_size + 1)
+    return list(range(start_p, end_p + 1))
+
+
+def search_items(media_type='anime', category=None, query='', genre='', status='',
+                 order_by='score', sort='desc', page=1, per_page=24,
+                 format_type=None, rating=None, min_score=None):
+    """
+    Unified search querying Tenrai API for anime, manga, characters, and creators.
+    Accepts rich filter criteria: format/subtype, rating, min_score, genre, status.
     """
     if category:
         media_type = category
 
-    if media_type == 'anime':
-        endpoint = '/anime'
+    norm_type = (media_type or 'anime').lower()
+
+    if norm_type in ('characters', 'character'):
+        endpoint = '/characters'
         m_type = None
-    elif media_type == 'lightnovel':
+    elif norm_type in ('people', 'person'):
+        endpoint = '/people'
+        m_type = None
+    elif norm_type == 'anime':
+        endpoint = '/anime'
+        m_type = format_type if format_type else None
+    elif norm_type == 'lightnovel':
         endpoint = '/manga'
         m_type = 'lightnovel'
     else:
         endpoint = '/manga'
-        m_type = 'manga' if media_type == 'manga' else None
+        m_type = format_type if format_type else ('manga' if norm_type == 'manga' else None)
 
     params = {
         'page': page,
         'limit': per_page,
-        'order_by': order_by if order_by else 'score',
-        'sort': sort if sort else 'desc',
         'sfw': 'true'
     }
+
+    if order_by:
+        params['order_by'] = order_by
+    if sort:
+        params['sort'] = sort
 
     if m_type:
         params['type'] = m_type
@@ -1042,20 +1071,71 @@ def search_items(media_type='anime', category=None, query='', genre='', status='
     if query:
         params['q'] = query
 
-    if genre:
+    if genre and norm_type in ('anime', 'manga', 'lightnovel'):
         params['genres'] = genre
 
-    if status:
+    if status and norm_type in ('anime', 'manga', 'lightnovel'):
         params['status'] = status
+
+    if rating and norm_type == 'anime':
+        params['rating'] = rating
+
+    if min_score and norm_type in ('anime', 'manga', 'lightnovel'):
+        params['min_score'] = min_score
 
     res = _safe_request(endpoint, params=params)
 
+    # If characters or people had no query and returned empty or None, fallback to /top/
+    if (not res or not res.get('data')) and not query:
+        if norm_type in ('characters', 'character'):
+            res = _safe_request('/top/characters', params={'page': page, 'limit': per_page})
+        elif norm_type in ('people', 'person'):
+            res = _safe_request('/top/people', params={'page': page, 'limit': per_page})
+
     if res and 'data' in res:
         items = res.get('data', [])
-        _register_items(items)
+        normalized_items = []
+        for it in items:
+            if norm_type in ('characters', 'character'):
+                it_copy = dict(it)
+                it_copy['title'] = it.get('name') or it.get('name_kanji') or 'Personaje'
+                it_copy['type'] = 'PERSONAJE'
+                it_copy['score'] = it.get('favorites')
+                it_copy['status'] = f"{it.get('favorites', 0):,} favs" if it.get('favorites') else 'Popular'
+                imgs = it.get('images') or {}
+                jpg_imgs = dict(imgs.get('jpg') or {})
+                if 'large_image_url' not in jpg_imgs:
+                    jpg_imgs['large_image_url'] = jpg_imgs.get('image_url') or ''
+                imgs = dict(imgs)
+                imgs['jpg'] = jpg_imgs
+                it_copy['images'] = imgs
+                normalized_items.append(it_copy)
+            elif norm_type in ('people', 'person'):
+                it_copy = dict(it)
+                it_copy['title'] = it.get('name') or it.get('given_name') or 'Creador'
+                it_copy['type'] = 'CREADOR'
+                it_copy['score'] = it.get('favorites')
+                it_copy['status'] = f"{it.get('favorites', 0):,} favs" if it.get('favorites') else 'Staff'
+                imgs = it.get('images') or {}
+                jpg_imgs = dict(imgs.get('jpg') or {})
+                if 'large_image_url' not in jpg_imgs:
+                    jpg_imgs['large_image_url'] = jpg_imgs.get('image_url') or ''
+                imgs = dict(imgs)
+                imgs['jpg'] = jpg_imgs
+                it_copy['images'] = imgs
+                normalized_items.append(it_copy)
+            else:
+                normalized_items.append(it)
+
+        _register_items(normalized_items)
         pagination = res.get('pagination', {})
-        total_items = pagination.get('items', {}).get('total', len(items))
+        total_items = pagination.get('items', {}).get('total', len(normalized_items))
         last_page = pagination.get('last_visible_page', page)
+        if pagination.get('has_next_page') and last_page <= page:
+            last_page = page + 1
+
+        page_range = get_sliding_page_range(page, last_page, window_size=5)
+
         pagination_data = {
             'current_page': pagination.get('current_page', page),
             'total_pages': last_page,
@@ -1065,12 +1145,12 @@ def search_items(media_type='anime', category=None, query='', genre='', status='
             'has_next_page': pagination.get('has_next_page', False),
             'previous_page_number': page - 1 if page > 1 else None,
             'next_page_number': page + 1 if pagination.get('has_next_page', False) else None,
-            'page_range': list(range(1, min(last_page + 1, 100))),
-            'start_index': (page - 1) * per_page + 1 if items else 0,
+            'page_range': page_range,
+            'start_index': (page - 1) * per_page + 1 if normalized_items else 0,
             'end_index': min(page * per_page, total_items),
         }
         return {
-            'items': items,
+            'items': normalized_items,
             'pagination': pagination_data,
             'has_next': pagination.get('has_next_page', False),
             'current_page': pagination.get('current_page', page),

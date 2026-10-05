@@ -202,22 +202,16 @@
                     Endpoints principales: /top/characters y /top/people. Al hacer clic en un personaje o creador, se ejecutan todos sus endpoints de biografía, apariciones y voces.
                 </span>
             </div>
-            <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-secondary" onclick="changeCharactersPage(-1)" id="btn-char-prev" disabled>
-                    <i class="bi bi-chevron-left me-1"></i> Anterior
-                </button>
-                <button class="btn btn-sm btn-outline-secondary" onclick="changeCharactersPage(1)" id="btn-char-next">
-                    Siguiente <i class="bi bi-chevron-right ms-1"></i>
-                </button>
-            </div>
         </div>
 
         <div class="row g-4">
-            <!-- Personajes Populares (Paginado interactivo) -->
+            <!-- Personajes Populares -->
             <div class="col-lg-8">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-white small fw-bold text-uppercase"><i class="bi bi-star-fill text-warning me-1"></i> Top Personajes Populares</span>
-                    <span class="text-muted small" id="char-page-indicator">Página 1</span>
+                    <a href="/explore/?type=characters" class="btn btn-xs btn-outline-glow btn-sm">
+                        Explorar Personajes <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
                 </div>
                 <div id="session-3-characters-grid" style="min-height: 220px;">
                     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
@@ -237,7 +231,9 @@
             <div class="col-lg-4">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-white small fw-bold text-uppercase"><i class="bi bi-mic-fill text-info me-1"></i> Creadores & Mangakas</span>
-                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /top/people</span>
+                    <a href="/explore/?type=people" class="btn btn-xs btn-outline-glow btn-sm">
+                        Explorar Creadores <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
                 </div>
                 <div id="session-3-people-grid">
                     <div class="d-flex flex-column gap-2">
@@ -681,14 +677,12 @@ async function loadHero() {
     }
 }
 
-// Characters Pagination Logic
-let currentCharPage = 1;
 function renderCharacters(items) {
     let html = '<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">';
     items.forEach((item, idx) => {
         const name = escapeHtml(item.name);
         const img = item.images?.webp?.image_url || item.images?.jpg?.image_url || '';
-        const rank = (currentCharPage - 1) * 12 + idx + 1;
+        const rank = idx + 1;
         const favs = item.favorites ? (item.favorites / 1000).toFixed(1) + 'k' : '';
         html += `
         <div class="col">
@@ -713,25 +707,7 @@ function renderCharacters(items) {
 }
 
 function loadCharacters() {
-    loadSection(`/api/tenrai/top/characters?limit=12&page=${currentCharPage}`, 'session-3-characters-grid', renderCharacters)
-    .then(() => {
-        const prevBtn = document.getElementById('btn-char-prev');
-        const indicator = document.getElementById('char-page-indicator');
-        if (prevBtn) prevBtn.disabled = currentCharPage <= 1;
-        if (indicator) indicator.textContent = `Página ${currentCharPage}`;
-    });
-}
-
-function changeCharactersPage(delta) {
-    currentCharPage += delta;
-    if (currentCharPage < 1) currentCharPage = 1;
-    const c = document.getElementById('session-3-characters-grid');
-    if (c) {
-        c.innerHTML = '<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">' + 
-            Array(12).fill(0).map(() => `<div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>`).join('') + 
-            '</div>';
-    }
-    loadCharacters();
+    loadSection('/api/tenrai/top/characters?limit=12', 'session-3-characters-grid', renderCharacters);
 }
 
 // Random Item Generator (Sesión 9 Interactive Widget)

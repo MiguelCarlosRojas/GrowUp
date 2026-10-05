@@ -919,6 +919,73 @@ def get_news_items(limit=4):
     return []
 
 
+def get_top_characters_data(page=1, limit=12):
+    """Fetches real top popular characters from Tenrai API (/top/characters) with pagination metadata."""
+    cache_key = f"top_characters_page_{page}_limit_{limit}"
+    cached = _get_cache(cache_key)
+    if cached is not None:
+        return cached
+
+    res = TenraiService.get_top_characters(page=page, limit=limit)
+    if res and 'data' in res:
+        data = {
+            'items': res['data'],
+            'pagination': res.get('pagination', {
+                'current_page': page,
+                'has_next_page': len(res['data']) == limit,
+            })
+        }
+        _set_cache(cache_key, data)
+        return data
+    return {'items': [], 'pagination': {'current_page': page, 'has_next_page': False}}
+
+
+def get_top_people_items(limit=6):
+    """Fetches real top creators and seiyuus from Tenrai API (/top/people)."""
+    cache_key = f"top_people_limit_{limit}"
+    cached = _get_cache(cache_key)
+    if cached is not None:
+        return cached
+
+    res = TenraiService.get_top_people(limit=limit)
+    if res and 'data' in res:
+        items = res['data']
+        _set_cache(cache_key, items)
+        return items
+    return []
+
+
+def get_top_reviews_items(limit=4):
+    """Fetches real top community reviews from Tenrai API (/top/reviews)."""
+    cache_key = f"top_reviews_limit_{limit}"
+    cached = _get_cache(cache_key)
+    if cached is not None:
+        return cached
+
+    res = TenraiService.get_top_reviews(limit=limit)
+    if res and 'data' in res:
+        items = res['data']
+        _set_cache(cache_key, items)
+        return items
+    return []
+
+
+def get_manga_destacados(limit=6):
+    """Fetches featured manga from Tenrai API (/manga?order_by=popularity)."""
+    cache_key = f"manga_destacados_limit_{limit}"
+    cached = _get_cache(cache_key)
+    if cached is not None:
+        return cached
+
+    res = TenraiService.search_manga(order_by='popularity', sort='desc', limit=limit)
+    if res and 'data' in res:
+        items = res['data']
+        _register_items(items)
+        _set_cache(cache_key, items)
+        return items
+    return []
+
+
 def get_common_genres():
     """Returns canonical genre list with real MAL IDs matching Tenrai genres."""
     return [

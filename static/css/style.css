@@ -2758,3 +2758,26 @@ h1, h2, h3, h4, h5, h6, .brand-font {
     padding: 1rem;
 }
 
+.tenrai-session-block {
+    background: rgba(10, 15, 26, 0.45);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: clamp(1.2rem, 2.5vw, 1.8rem);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.tenrai-session-header {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.session-icon-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+

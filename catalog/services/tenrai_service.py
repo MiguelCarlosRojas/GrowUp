@@ -19,7 +19,7 @@ _SESSION.headers.update(HEADERS)
 # Fast in-memory cache for instant page navigation
 _CACHE = {}
 _ITEMS_REGISTRY = {}
-CACHE_TTL = 3600  # 1 hour cache for ultra-fluid page loads
+CACHE_TTL = 86400  # 24 hours cache for ultra-fluid page loads
 
 
 def get_base_url():
@@ -70,7 +70,7 @@ def _clean_params(params):
     return cleaned
 
 
-def _safe_request(endpoint_path, params=None, timeout=10, retries=1):
+def _safe_request(endpoint_path, params=None, timeout=3.5, retries=0):
     base_url = get_base_url()
     if not base_url:
         return None
@@ -95,6 +95,12 @@ def _safe_request(endpoint_path, params=None, timeout=10, retries=1):
             if response.status_code == 200:
                 data = response.json()
                 _set_cache(cache_key, data)
+                if isinstance(data, dict) and 'data' in data:
+                    raw_data = data['data']
+                    if isinstance(raw_data, list):
+                        _register_items(raw_data)
+                    elif isinstance(raw_data, dict):
+                        _register_items([raw_data])
                 return data
             elif response.status_code in (429, 504, 502, 503) and attempt < retries:
                 retry_after = 1.0
@@ -1104,27 +1110,50 @@ def search_items(media_type='anime', category=None, query='', genre='', status='
 def get_item_detail(media_type, item_id):
     """
     Retrieves full details for an item from Tenrai API.
+    Normalizes item_type to support anime, manga, characters, and people.
     """
-    endpoint = f"/{media_type}/{item_id}"
-    cache_key = f"detail_{media_type}_{item_id}"
+    norm = (media_type or 'anime').lower()
+    if norm in ('character', 'characters'):
+        endpoint = f"/characters/{item_id}"
+        norm_type = 'characters'
+    elif norm in ('person', 'people'):
+        endpoint = f"/people/{item_id}"
+        norm_type = 'people'
+    elif norm in ('manga', 'lightnovel'):
+        endpoint = f"/manga/{item_id}"
+        norm_type = 'manga'
+    else:
+        endpoint = f"/anime/{item_id}"
+        norm_type = 'anime'
+
+    str_id = str(item_id)
+    cache_key = f"detail_{norm_type}_{str_id}"
     cached = _get_cache(cache_key)
     if cached is not None:
         return cached
 
+    if str_id in _ITEMS_REGISTRY:
+        reg_item = _ITEMS_REGISTRY[str_id]
+        if reg_item.get('synopsis') or reg_item.get('about'):
+            return reg_item
+
     res = _safe_request(endpoint)
     if res and 'data' in res:
         data = res['data']
-        _ITEMS_REGISTRY[str(data.get('mal_id', item_id))] = data
+        if 'name' in data and not data.get('title'):
+            data['title'] = data['name']
+        if 'about' in data and not data.get('synopsis'):
+            data['synopsis'] = data['about']
+        _ITEMS_REGISTRY[str_id] = data
         _set_cache(cache_key, data)
         return data
 
-    str_id = str(item_id)
     if str_id in _ITEMS_REGISTRY:
         return _ITEMS_REGISTRY[str_id]
 
     return {
         'mal_id': item_id,
-        'title': f"{media_type.capitalize()} #{item_id}",
+        'title': f"{norm_type.capitalize()} #{item_id}",
         'title_japanese': '',
         'score': 0.0,
         'scored_by': 0,
@@ -1133,12 +1162,145 @@ def get_item_detail(media_type, item_id):
         'synopsis': 'Sin información disponible actualmente.',
         'images': {'webp': {'large_image_url': ''}, 'jpg': {'large_image_url': ''}},
         'genres': [],
-        'type': media_type.capitalize(),
+        'type': norm_type.capitalize(),
         'status': 'Desconocido',
         'episodes': 'N/A',
         'chapters': 'N/A',
         'volumes': 'N/A',
     }
+
+
+def get_platforms_fast(media_type, title, item_id=None):
+    """
+    Non-blocking version of get_platforms that immediately provides
+    high-definition official and community streaming/reading links
+    without holding the web worker on slow external network calls.
+    """
+    encoded_title = urllib.parse.quote_plus(title or '')
+    if media_type in ('character', 'characters', 'person', 'people'):
+        return {
+            'official': [
+                {
+                    'name': 'MyAnimeList Oficial',
+                    'icon': 'bi-globe',
+                    'tag': 'Base de Datos Oficial',
+                    'badge_class': 'badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25',
+                    'url': f'https://myanimelist.net/{media_type}/{item_id}',
+                    'description': f'Ficha oficial verificada de {title}.'
+                }
+            ],
+            'community': []
+        }
+    if media_type == 'anime':
+        return {
+            'official': [
+                {
+                    'name': 'Crunchyroll',
+                    'icon': 'bi-play-circle-fill text-warning',
+                    'tag': 'Simulcast Oficial',
+                    'badge_class': 'badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25',
+                    'url': f'https://www.crunchyroll.com/search?q={encoded_title}',
+                    'description': 'Simulcast en alta definición con audio original japonés y doblaje en español.'
+                },
+                {
+                    'name': 'Netflix',
+                    'icon': 'bi-film text-danger',
+                    'tag': 'Suscripción Global',
+                    'badge_class': 'badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25',
+                    'url': f'https://www.netflix.com/search?q={encoded_title}',
+                    'description': 'Temporadas completas en calidad 4K Ultra HD con subtítulos multilingües.'
+                },
+                {
+                    'name': 'Anime Onegai',
+                    'icon': 'bi-broadcast text-info',
+                    'tag': 'Latinoamérica Oficial',
+                    'badge_class': 'badge bg-info bg-opacity-25 text-info border border-info border-opacity-25',
+                    'url': f'https://www.animeonegai.com/es/search?query={encoded_title}',
+                    'description': 'Plataforma oficial con doblajes exclusivos para Latinoamérica.'
+                },
+                {
+                    'name': 'Amazon Prime Video',
+                    'icon': 'bi-tv-fill text-primary',
+                    'tag': 'Transmisión Oficial',
+                    'badge_class': 'badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25',
+                    'url': f'https://www.amazon.com/s?k={encoded_title}+anime',
+                    'description': 'Emisión internacional y películas licenciadas disponibles.'
+                }
+            ],
+            'community': [
+                {
+                    'name': 'AnimeFLV',
+                    'icon': 'bi-play-btn-fill',
+                    'tag': 'Comunidad / Fansub',
+                    'badge_class': 'badge bg-secondary bg-opacity-25 text-light border border-secondary border-opacity-25',
+                    'url': f'https://www3.animeflv.net/browse?q={encoded_title}',
+                    'description': 'Catálogo comunitario de episodios subtitulados en español.'
+                },
+                {
+                    'name': 'JKAnime',
+                    'icon': 'bi-play-btn',
+                    'tag': 'Comunidad',
+                    'badge_class': 'badge bg-secondary bg-opacity-25 text-light border border-secondary border-opacity-25',
+                    'url': f'https://jkanime.net/buscar/{encoded_title}/',
+                    'description': 'Comunidad de streaming con múltiples servidores de reproducción.'
+                }
+            ]
+        }
+    else:
+        return {
+            'official': [
+                {
+                    'name': 'MANGA Plus by SHUEISHA',
+                    'icon': 'bi-book-half text-danger',
+                    'tag': 'Oficial y Gratuito',
+                    'badge_class': 'badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25',
+                    'url': f'https://mangaplus.shueisha.co.jp/search_result?keyword={encoded_title}',
+                    'description': 'Lectura simultánea con Japón de los últimos capítulos en español oficial.'
+                },
+                {
+                    'name': 'BookWalker Global',
+                    'icon': 'bi-journal-bookmark-fill text-primary',
+                    'tag': 'Digital Oficial / Novelas',
+                    'badge_class': 'badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25',
+                    'url': f'https://global.bookwalker.jp/search/?word={encoded_title}',
+                    'description': 'Tienda digital oficial de Kadokawa para mangas y novelas ligeras en formato e-book.'
+                },
+                {
+                    'name': 'Norma Editorial',
+                    'icon': 'bi-shop text-warning',
+                    'tag': 'Edición Física en Español',
+                    'badge_class': 'badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25',
+                    'url': f'https://www.normaeditorial.com/catalogo/buscar?q={encoded_title}',
+                    'description': 'Volúmenes físicos traducidos y distribuidos en librerías de habla hispana.'
+                },
+                {
+                    'name': 'Panini Manga',
+                    'icon': 'bi-journals text-danger',
+                    'tag': 'Distribuidor Oficial',
+                    'badge_class': 'badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25',
+                    'url': f'https://tiendapanini.com.mx/search?q={encoded_title}',
+                    'description': 'Ediciones impresas coleccionables para México y Latinoamérica.'
+                }
+            ],
+            'community': [
+                {
+                    'name': 'TuMangaOnline (TMO)',
+                    'icon': 'bi-book',
+                    'tag': 'Comunidad / Scanlation',
+                    'badge_class': 'badge bg-secondary bg-opacity-25 text-light border border-secondary border-opacity-25',
+                    'url': f'https://visortmo.com/library?_title={encoded_title}',
+                    'description': 'Portal colaborativo de scanlations en español.'
+                },
+                {
+                    'name': 'MangaDex',
+                    'icon': 'bi-grid-fill',
+                    'tag': 'Comunidad Global',
+                    'badge_class': 'badge bg-secondary bg-opacity-25 text-light border border-secondary border-opacity-25',
+                    'url': f'https://mangadex.org/search?q={encoded_title}',
+                    'description': 'Plataforma comunitaria de lectura internacional de manga.'
+                }
+            ]
+        }
 
 
 def get_platforms(media_type, title, item_id=None):

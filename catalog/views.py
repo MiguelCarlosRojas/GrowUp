@@ -163,9 +163,9 @@ def item_detail_view(request, item_type, item_id):
         is_bookmarked = Bookmark.objects.filter(user=request.user, item_type=item_type, item_id=str(item_id)).exists()
 
     # Platforms (Official and Community / Streaming & Reading)
-    platforms = tenrai_service.get_platforms(item_type, item.get('title', ''), item_id)
+    platforms = tenrai_service.get_platforms_fast(item_type, item.get('title') or item.get('name') or '', item_id)
     share_url = request.build_absolute_uri()
-    share_title = item.get('title', 'GrowUp')
+    share_title = item.get('title') or item.get('name') or 'GrowUp'
 
     review_form = ReviewForm()
     discussion_form = DiscussionForm()

@@ -996,9 +996,15 @@ document.addEventListener('DOMContentLoaded', function() {
     renderAllApartados();
 
     // Initial priority session load (matching current media type)
-    const primaryCat = (CURRENT_MEDIA_TYPE === 'manga') ? 'manga' : 'anime';
+    let primaryCat = 'anime';
+    if (CURRENT_MEDIA_TYPE === 'manga' || CURRENT_MEDIA_TYPE === 'lightnovel') {
+        primaryCat = 'manga';
+    } else if (CURRENT_MEDIA_TYPE === 'characters' || CURRENT_MEDIA_TYPE === 'character') {
+        primaryCat = 'characters';
+    } else if (CURRENT_MEDIA_TYPE === 'people' || CURRENT_MEDIA_TYPE === 'person') {
+        primaryCat = 'people';
+    }
     autoFetchCategory(primaryCat);
-    autoFetchCategory('characters');
 
     // Setup progressive IntersectionObserver to auto-fetch each session as it enters viewport
     if ('IntersectionObserver' in window) {

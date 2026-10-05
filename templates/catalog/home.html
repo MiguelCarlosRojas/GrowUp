@@ -5,331 +5,524 @@
 
 {% block content %}
 <style>
-/* Skeleton Loader CSS */
+/* Skeleton Loader Animations */
 .skeleton-card { background: rgba(255,255,255,0.03); border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-.skeleton-poster { width: 100%; aspect-ratio: 2/3; background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0.03) 75%); background-size: 200% 100%; animation: skeleton-pulse 1.5s infinite; }
-.skeleton-text { height: 14px; background: rgba(255,255,255,0.05); border-radius: 4px; margin: 10px 8px 6px; width: 80%; animation: skeleton-pulse 1.5s infinite; }
-.skeleton-text-sm { height: 10px; background: rgba(255,255,255,0.03); border-radius: 4px; margin: 0 8px 12px; width: 55%; animation: skeleton-pulse 1.5s infinite; }
-.skeleton-circle { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.05); animation: skeleton-pulse 1.5s infinite; flex-shrink: 0; }
-.skeleton-rect { height: 68px; background: rgba(255,255,255,0.03); border-radius: 12px; animation: skeleton-pulse 1.5s infinite; border: 1px solid rgba(255,255,255,0.04); }
-.skeleton-review-card { height: 140px; background: rgba(255,255,255,0.03); border-radius: 16px; animation: skeleton-pulse 1.5s infinite; border: 1px solid rgba(255,255,255,0.04); }
-.skeleton-hero { width: 100%; height: 480px; background: linear-gradient(90deg, rgba(255,255,255,0.02) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.02) 75%); background-size: 200% 100%; animation: skeleton-pulse 1.5s infinite; border-radius: 20px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.05); }
+.skeleton-poster { width: 100%; aspect-ratio: 2/3; background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%); background-size: 200% 100%; animation: skeleton-pulse 1.4s infinite; }
+.skeleton-text { height: 14px; background: rgba(255,255,255,0.05); border-radius: 4px; margin: 10px 8px 6px; width: 80%; animation: skeleton-pulse 1.4s infinite; }
+.skeleton-text-sm { height: 10px; background: rgba(255,255,255,0.03); border-radius: 4px; margin: 0 8px 12px; width: 55%; animation: skeleton-pulse 1.4s infinite; }
+.skeleton-circle { width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.05); animation: skeleton-pulse 1.4s infinite; flex-shrink: 0; }
+.skeleton-rect { height: 68px; background: rgba(255,255,255,0.03); border-radius: 12px; animation: skeleton-pulse 1.4s infinite; border: 1px solid rgba(255,255,255,0.04); }
+.skeleton-review-card { height: 145px; background: rgba(255,255,255,0.03); border-radius: 16px; animation: skeleton-pulse 1.4s infinite; border: 1px solid rgba(255,255,255,0.04); }
+.skeleton-hero { width: 100%; height: 490px; background: linear-gradient(90deg, rgba(255,255,255,0.02) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.02) 75%); background-size: 200% 100%; animation: skeleton-pulse 1.4s infinite; border-radius: 20px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.06); }
 @keyframes skeleton-pulse { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+/* Session Badge Header Styles */
+.session-badge-pill {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 0.35rem 0.75rem;
+    border-radius: 50rem;
+    font-family: var(--font-mono, monospace);
+}
+.session-card-interactive {
+    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.22s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.22s ease;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(15, 18, 28, 0.7);
+    backdrop-filter: blur(8px);
+}
+.session-card-interactive:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 42, 84, 0.15);
+    border-color: rgba(255, 42, 84, 0.4);
+}
+.media-hover-overlay {
+    transition: opacity 0.22s ease;
+}
+.media-poster-box:hover .media-hover-overlay {
+    opacity: 1 !important;
+}
 </style>
 
-<!-- Hero Billboard -->
+<!-- Hero Billboard Cinematic Spotlight -->
 <div id="section-hero">
     <div class="skeleton-hero"></div>
 </div>
 
 <div class="container-fluid py-4 px-md-4">
 
-    <!-- Buscador / Explorar -->
+    <!-- Buscador / Explorar Rápido -->
     <div class="filter-bar-pro mb-5 p-3 rounded-4 shadow-sm" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
         <form action="/explore/" method="GET" class="d-flex align-items-center gap-3 flex-wrap">
             <div class="flex-grow-1">
                 <div class="input-group">
                     <span class="input-group-text bg-transparent border-secondary text-light"><i class="bi bi-search"></i></span>
-                    <input type="text" name="q" class="form-control bg-transparent border-secondary text-light" placeholder="Buscar animes, mangas, novelas..." style="box-shadow: none;">
+                    <input type="text" name="q" class="form-control bg-transparent border-secondary text-light" placeholder="Buscar en animes, mangas, novelas ligeras..." style="box-shadow: none;">
                 </div>
             </div>
             <div>
                 <select name="type" class="form-select bg-dark border-secondary text-light">
-                    <option value="">Todo el catalogo</option>
-                    <option value="anime">Anime</option>
-                    <option value="manga">Manga</option>
+                    <option value="">Todo el catálogo</option>
+                    <option value="anime">Anime (Sesión 1)</option>
+                    <option value="manga">Manga (Sesión 2)</option>
                     <option value="original_novel">Novelas de la Comunidad</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-accent px-4 py-2 fw-semibold">
-                <i class="bi bi-compass me-1"></i> Explorar
+                <i class="bi bi-compass me-1"></i> Explorar Catálogo
             </button>
         </form>
     </div>
 
-    <!-- Taller de Escritores (Django Context - Server Rendered) -->
-    <div class="section-header-wrap mb-3">
-        <div>
-            <h3 class="section-title">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #FF6B6B, #C0392B);"></span>
-                <i class="bi bi-pen text-danger"></i> Taller de Escritores
-            </h3>
-            <span class="text-muted small">Novelas originales producidas por la comunidad de GrowUp</span>
+    <!-- ======================================================================
+         SESIÓN 1: ENDPOINTS DEL CATÁLOGO ANIME (26 Endpoints)
+         ====================================================================== -->
+    <div class="session-block-wrapper mb-5 pb-3">
+        <div class="section-header-wrap mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #00C6FF, #0072FF);"></span>
+                    <h3 class="section-title mb-0">
+                        <i class="bi bi-tv text-primary me-2"></i>Sesión 1: Endpoints del Catálogo Anime
+                    </h3>
+                    <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-25 session-badge-pill">
+                        26 Endpoints GET
+                    </span>
+                </div>
+                <span class="text-muted small">
+                    Animes en Tendencia & Aclamados de todos los tiempos. Haz clic en cualquier obra para abrir su ficha y detonar todos los 26 endpoints del anime.
+                </span>
+            </div>
+            <a href="/explore/?type=anime" class="btn btn-sm btn-outline-glow">
+                Explorar Animes <i class="bi bi-arrow-right ms-1"></i>
+            </a>
         </div>
-        <a href="{% url 'novels:novel_list' %}" class="btn btn-sm btn-outline-glow">
-            Ver taller <i class="bi bi-arrow-right ms-1"></i>
-        </a>
+
+        <div id="session-1-anime-grid">
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
+                <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+                <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+                <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+                <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+                <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+                <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+                <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+                <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+                <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+                <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+                <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+                <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
+            </div>
+        </div>
     </div>
-    <div class="workshop-showcase-box mb-5 p-4 rounded-4" style="background: rgba(220, 53, 69, 0.05); border: 1px solid rgba(220, 53, 69, 0.12);">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
-            {% for novel in original_novels %}
-            <div class="col">
-                <div class="original-novel-card d-flex gap-3 align-items-center p-3 rounded-3" style="background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.06); transition: 0.3s;">
-                    <div class="original-cover-thumb rounded" style="width: 75px; height: 105px; background: #1a1a1a; overflow: hidden; flex-shrink: 0;">
-                        <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="w-100 h-100 object-fit-cover" loading="lazy">
+
+    <!-- ======================================================================
+         SESIÓN 2: ENDPOINTS DEL CATÁLOGO MANGA (16 Endpoints)
+         ====================================================================== -->
+    <div class="session-block-wrapper mb-5 pb-3">
+        <div class="section-header-wrap mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #11998e, #38ef7d);"></span>
+                    <h3 class="section-title mb-0">
+                        <i class="bi bi-book text-success me-2"></i>Sesión 2: Endpoints del Catálogo Manga
+                    </h3>
+                    <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 session-badge-pill">
+                        16 Endpoints GET
+                    </span>
+                </div>
+                <span class="text-muted small">
+                    Obras maestras impresas y novelas ligeras. Al hacer clic en cualquier manga o novela ligera, se ejecutan todos sus 16 endpoints asociados.
+                </span>
+            </div>
+            <a href="/explore/?type=manga" class="btn btn-sm btn-outline-glow">
+                Explorar Mangas <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+            <!-- Sub-sección Top Manga -->
+            <div class="col-12 col-xl-6">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h5 class="text-white fw-bold small text-uppercase" style="letter-spacing: 0.05em;">
+                        <i class="bi bi-journal-richtext text-success me-1"></i> Top Mangas Destacados
+                    </h5>
+                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /top/manga</span>
+                </div>
+                <div id="session-2-manga-grid">
+                    <div class="row row-cols-2 row-cols-sm-3 g-3">
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
                     </div>
-                    <div class="overflow-hidden">
-                        <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="text-decoration-none">
-                            <h6 class="text-light mb-1 text-truncate" style="max-width: 220px;" title="{{ novel.title }}">{{ novel.title }}</h6>
-                        </a>
-                        <div class="text-muted small mb-2 d-flex align-items-center gap-2">
-                            <span><i class="bi bi-person"></i> {{ novel.author.username }}</span>
-                            <span>&bull;</span>
-                            <span><i class="bi bi-eye"></i> {{ novel.views_count }}</span>
+                </div>
+            </div>
+
+            <!-- Sub-sección Novelas Ligeras -->
+            <div class="col-12 col-xl-6">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h5 class="text-white fw-bold small text-uppercase" style="letter-spacing: 0.05em;">
+                        <i class="bi bi-journal-bookmark text-info me-1"></i> Novelas Ligeras Oficiales
+                    </h5>
+                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /top/manga?type=lightnovel</span>
+                </div>
+                <div id="session-2-lightnovel-grid">
+                    <div class="row row-cols-2 row-cols-sm-3 g-3">
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================
+         SESIÓN 3: PERSONAJES & ACTORES DE VOZ (SEIYUUS) (13 Endpoints)
+         ====================================================================== -->
+    <div class="session-block-wrapper mb-5 pb-3">
+        <div class="section-header-wrap mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #f857a6, #ff5858);"></span>
+                    <h3 class="section-title mb-0">
+                        <i class="bi bi-person-badge text-danger me-2"></i>Sesión 3: Personajes & Actores de Voz (Seiyuus)
+                    </h3>
+                    <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25 session-badge-pill">
+                        13 Endpoints GET
+                    </span>
+                </div>
+                <span class="text-muted small">
+                    Endpoints principales: /top/characters y /top/people. Al hacer clic en un personaje o creador, se ejecutan todos sus endpoints de biografía, apariciones y voces.
+                </span>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-secondary" onclick="changeCharactersPage(-1)" id="btn-char-prev" disabled>
+                    <i class="bi bi-chevron-left me-1"></i> Anterior
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" onclick="changeCharactersPage(1)" id="btn-char-next">
+                    Siguiente <i class="bi bi-chevron-right ms-1"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Personajes Populares (Paginado interactivo) -->
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="text-white small fw-bold text-uppercase"><i class="bi bi-star-fill text-warning me-1"></i> Top Personajes Populares</span>
+                    <span class="text-muted small" id="char-page-indicator">Página 1</span>
+                </div>
+                <div id="session-3-characters-grid" style="min-height: 220px;">
+                    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Creadores, Mangakas & Seiyuus -->
+            <div class="col-lg-4">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="text-white small fw-bold text-uppercase"><i class="bi bi-mic-fill text-info me-1"></i> Creadores & Mangakas</span>
+                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /top/people</span>
+                </div>
+                <div id="session-3-people-grid">
+                    <div class="d-flex flex-column gap-2">
+                        <div class="skeleton-rect" style="height: 52px;"></div>
+                        <div class="skeleton-rect" style="height: 52px;"></div>
+                        <div class="skeleton-rect" style="height: 52px;"></div>
+                        <div class="skeleton-rect" style="height: 52px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================
+         SESIÓN 5: TEMPORADAS Y CALENDARIO DE ESTRENOS (3 Endpoints)
+         ====================================================================== -->
+    <div class="session-block-wrapper mb-5 pb-3">
+        <div class="section-header-wrap mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #f7971e, #ffd200);"></span>
+                    <h3 class="section-title mb-0">
+                        <i class="bi bi-calendar-range text-warning me-2"></i>Sesión 5: Temporadas y Calendario de Estrenos
+                    </h3>
+                    <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 session-badge-pill">
+                        3 Endpoints GET
+                    </span>
+                </div>
+                <span class="text-muted small">
+                    Endpoints: /seasons/now, /seasons/upcoming y /schedules. Transmisiones en emisión continua, estrenos y programación semanal.
+                </span>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Temporada Actual -->
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="text-white small fw-bold text-uppercase"><i class="bi bi-play-circle-fill text-warning me-1"></i> Temporada Actual</span>
+                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /seasons/now</span>
+                </div>
+                <div id="session-5-season-now">
+                    <div class="row row-cols-2 g-3">
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Próximos Estrenos -->
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="text-white small fw-bold text-uppercase"><i class="bi bi-calendar-plus text-danger me-1"></i> Próximos Estrenos</span>
+                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /seasons/upcoming</span>
+                </div>
+                <div id="session-5-season-upcoming">
+                    <div class="row row-cols-2 g-3">
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                        <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Programación Semanal de Emisión -->
+            <div class="col-12 col-xl-4">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="text-white small fw-bold text-uppercase"><i class="bi bi-clock-history text-success me-1"></i> Programación Semanal</span>
+                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /schedules</span>
+                </div>
+                <div id="session-5-schedules" class="d-flex flex-column gap-2">
+                    <div class="skeleton-rect" style="height: 44px;"></div>
+                    <div class="skeleton-rect" style="height: 44px;"></div>
+                    <div class="skeleton-rect" style="height: 44px;"></div>
+                    <div class="skeleton-rect" style="height: 44px;"></div>
+                    <div class="skeleton-rect" style="height: 44px;"></div>
+                    <div class="skeleton-rect" style="height: 44px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================
+         SESIÓN 6: RANKINGS TOP & TABLAS DE CLASIFICACIÓN (5 Endpoints)
+         ====================================================================== -->
+    <div class="session-block-wrapper mb-5 pb-3">
+        <div class="section-header-wrap mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #FFE000, #799F0C);"></span>
+                    <h3 class="section-title mb-0">
+                        <i class="bi bi-trophy text-warning me-2"></i>Sesión 6: Rankings Top & Tablas de Clasificación
+                    </h3>
+                    <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 session-badge-pill">
+                        5 Endpoints GET
+                    </span>
+                </div>
+                <span class="text-muted small">
+                    Endpoints: /top/anime, /top/manga y /top/reviews. Cuadros de honor históricos y análisis críticos redactados por la comunidad.
+                </span>
+            </div>
+        </div>
+
+        <!-- Reseñas Críticas de la Comunidad -->
+        <div class="mb-3">
+            <span class="text-white small fw-bold text-uppercase d-block mb-3">
+                <i class="bi bi-chat-square-quote-fill text-warning me-1"></i> Reseñas Críticas de la Comunidad (GET /top/reviews)
+            </span>
+            <div id="session-6-reviews">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
+                    <div class="col"><div class="skeleton-review-card"></div></div>
+                    <div class="col"><div class="skeleton-review-card"></div></div>
+                    <div class="col"><div class="skeleton-review-card"></div></div>
+                    <div class="col"><div class="skeleton-review-card"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================
+         SESIÓN 7: NOTICIAS, PRENSA & ARTÍCULOS EDITORIALES (6 Endpoints)
+         ====================================================================== -->
+    <div class="session-block-wrapper mb-5 pb-3">
+        <div class="section-header-wrap mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #00b4db, #0083b0);"></span>
+                    <h3 class="section-title mb-0">
+                        <i class="bi bi-newspaper text-info me-2"></i>Sesión 7: Noticias, Prensa & Artículos Editoriales
+                    </h3>
+                    <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-25 session-badge-pill">
+                        6 Endpoints GET
+                    </span>
+                </div>
+                <span class="text-muted small">
+                    Endpoints: /news y /articles. Cobertura de prensa oficial de la industria del anime, manga y notas editoriales.
+                </span>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Noticias de la Industria -->
+            <div class="col-12 col-lg-6">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="text-white small fw-bold text-uppercase"><i class="bi bi-megaphone-fill text-primary me-1"></i> Noticias de la Industria</span>
+                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /news</span>
+                </div>
+                <div id="session-7-news" class="d-flex flex-column gap-3">
+                    <div class="skeleton-rect"></div>
+                    <div class="skeleton-rect"></div>
+                    <div class="skeleton-rect"></div>
+                    <div class="skeleton-rect"></div>
+                </div>
+            </div>
+
+            <!-- Artículos Editoriales -->
+            <div class="col-12 col-lg-6">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="text-white small fw-bold text-uppercase"><i class="bi bi-journal-text text-info me-1"></i> Artículos Editoriales</span>
+                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /articles</span>
+                </div>
+                <div id="session-7-articles" class="d-flex flex-column gap-3">
+                    <div class="skeleton-rect"></div>
+                    <div class="skeleton-rect"></div>
+                    <div class="skeleton-rect"></div>
+                    <div class="skeleton-rect"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================
+         SESIÓN 9: COMUNIDAD, STACKS & DESCUBRIMIENTO ALEATORIO (14 Endpoints)
+         ====================================================================== -->
+    <div class="session-block-wrapper mb-5 pb-3">
+        <div class="section-header-wrap mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <span class="section-accent-bar" style="background: linear-gradient(135deg, #8A2387, #E94057, #F27121);"></span>
+                    <h3 class="section-title mb-0">
+                        <i class="bi bi-compass text-danger me-2"></i>Sesión 9: Comunidad, Stacks & Descubrimiento Aleatorio
+                    </h3>
+                    <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-25 session-badge-pill">
+                        14 Endpoints GET
+                    </span>
+                </div>
+                <span class="text-muted small">
+                    Endpoints: /random/anime, /random/manga, /random/characters, /stacks y el Taller de Escritores oficial de GrowUp.
+                </span>
+            </div>
+        </div>
+
+        <!-- Ruleta Interactiva de Descubrimiento Aleatorio -->
+        <div class="card p-4 rounded-4 mb-4" style="background: linear-gradient(135deg, rgba(138, 35, 135, 0.12), rgba(233, 64, 87, 0.08)); border: 1px solid rgba(233, 64, 87, 0.25);">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-6">
+                    <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-50 px-3 py-1 mb-2 rounded-pill small">
+                        Ruleta Aleatoria en Tiempo Real
+                    </span>
+                    <h4 class="text-white fw-bold mb-2">¿No sabes qué ver o leer hoy?</h4>
+                    <p class="text-muted small mb-3">
+                        Genera un descubrimiento instantáneo de los catálogos públicos oficiales mediante los endpoints aleatorios de Tenrai API.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-sm btn-accent px-3 py-2 fw-semibold" onclick="fetchRandomItem('anime')">
+                            <i class="bi bi-dice-5-fill me-1"></i> Anime Aleatorio
+                        </button>
+                        <button class="btn btn-sm btn-outline-glow px-3 py-2 fw-semibold" onclick="fetchRandomItem('manga')">
+                            <i class="bi bi-dice-3-fill me-1"></i> Manga Aleatorio
+                        </button>
+                        <button class="btn btn-sm btn-outline-light px-3 py-2 fw-semibold" onclick="fetchRandomItem('characters')">
+                            <i class="bi bi-person-fill me-1"></i> Personaje Aleatorio
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Showcase de Resultado Aleatorio -->
+                <div class="col-lg-6">
+                    <div id="random-result-box" class="p-3 rounded-3" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.08); min-height: 120px;">
+                        <div class="text-center py-3 text-muted small">
+                            <i class="bi bi-shuffle fs-3 d-block mb-1 opacity-50"></i>
+                            Presiona cualquiera de los botones de la izquierda para descubrir una obra al azar y explorar todos sus endpoints.
                         </div>
-                        <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-50 fw-normal">Novela Original</span>
                     </div>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center py-4 text-muted">
-                <i class="bi bi-journal-plus fs-2 mb-2 d-block"></i>
-                <p>Aun no hay novelas publicadas en el taller.</p>
-                <a href="{% url 'novels:novel_create' %}" class="btn btn-outline-danger btn-sm mt-2">
-                    <i class="bi bi-pencil-square me-1"></i> Publicar primera novela
-                </a>
-            </div>
-            {% endfor %}
         </div>
-    </div>
 
-    <!-- Top Anime -->
-    <div class="section-header-wrap mb-3">
+        <!-- Interest Stacks de la Comunidad -->
+        <div class="mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="text-white small fw-bold text-uppercase"><i class="bi bi-layers-fill text-warning me-1"></i> Interest Stacks Comunitarios</span>
+                <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /stacks</span>
+            </div>
+            <div id="session-9-stacks">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
+                    <div class="col"><div class="skeleton-rect"></div></div>
+                    <div class="col"><div class="skeleton-rect"></div></div>
+                    <div class="col"><div class="skeleton-rect"></div></div>
+                    <div class="col"><div class="skeleton-rect"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Taller de Escritores de GrowUp (Novelas Originales) -->
         <div>
-            <h3 class="section-title">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #4A90E2, #003366);"></span>
-                <i class="bi bi-trophy text-primary"></i> Top Anime
-            </h3>
-            <span class="text-muted small">Animes en Tendencia & Aclamados de todos los tiempos</span>
-        </div>
-        <a href="/explore/?type=anime" class="btn btn-sm btn-outline-glow">
-            Ver todo <i class="bi bi-arrow-right ms-1"></i>
-        </a>
-    </div>
-    <div id="section-top-anime" class="mb-5">
-        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-        </div>
-    </div>
-
-    <!-- Top Manga -->
-    <div class="section-header-wrap mb-3">
-        <div>
-            <h3 class="section-title">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #27AE60, #145A32);"></span>
-                <i class="bi bi-journal-text text-success"></i> Top Manga
-            </h3>
-            <span class="text-muted small">Obras maestras del manga publicadas</span>
-        </div>
-        <a href="/explore/?type=manga" class="btn btn-sm btn-outline-glow">
-            Ver todo <i class="bi bi-arrow-right ms-1"></i>
-        </a>
-    </div>
-    <div id="section-top-manga" class="mb-5">
-        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-        </div>
-    </div>
-
-    <!-- Novelas Ligeras -->
-    <div class="section-header-wrap mb-3">
-        <div>
-            <h3 class="section-title">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #9B59B6, #4A235A);"></span>
-                <i class="bi bi-book text-info"></i> Novelas Ligeras
-            </h3>
-            <span class="text-muted small">Grandes sagas literarias japonesas</span>
-        </div>
-        <a href="/explore/?type=manga" class="btn btn-sm btn-outline-glow">
-            Ver todo <i class="bi bi-arrow-right ms-1"></i>
-        </a>
-    </div>
-    <div id="section-light-novels" class="mb-5">
-        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-            <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div><div class="skeleton-text-sm"></div></div></div>
-        </div>
-    </div>
-
-    <!-- Temporada Actual & Proximos Estrenos -->
-    <div class="row mb-5">
-        <div class="col-xl-6 mb-4 mb-xl-0">
-            <div class="section-header-wrap mb-3">
-                <div>
-                    <h3 class="section-title">
-                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #F39C12, #D35400);"></span>
-                        <i class="bi bi-play-circle text-warning"></i> Temporada Actual
-                    </h3>
-                    <span class="text-muted small">Series transmitidas durante la temporada en curso</span>
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="text-white small fw-bold text-uppercase"><i class="bi bi-pen-fill text-danger me-1"></i> Taller de Escritores GrowUp (Novelas de la Comunidad)</span>
+                <a href="{% url 'novels:novel_list' %}" class="btn btn-xs btn-outline-glow btn-sm">Ver taller completo</a>
+            </div>
+            <div class="workshop-showcase-box p-4 rounded-4" style="background: rgba(220, 53, 69, 0.05); border: 1px solid rgba(220, 53, 69, 0.15);">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                    {% for novel in original_novels %}
+                    <div class="col">
+                        <div class="original-novel-card d-flex gap-3 align-items-center p-3 rounded-3" style="background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.06); transition: 0.3s;">
+                            <div class="original-cover-thumb rounded" style="width: 75px; height: 105px; background: #1a1a1a; overflow: hidden; flex-shrink: 0;">
+                                <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="w-100 h-100 object-fit-cover" loading="lazy">
+                            </div>
+                            <div class="overflow-hidden">
+                                <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="text-decoration-none">
+                                    <h6 class="text-light mb-1 text-truncate" style="max-width: 220px;" title="{{ novel.title }}">{{ novel.title }}</h6>
+                                </a>
+                                <div class="text-muted small mb-2 d-flex align-items-center gap-2">
+                                    <span><i class="bi bi-person"></i> {{ novel.author.username }}</span>
+                                    <span>&bull;</span>
+                                    <span><i class="bi bi-eye"></i> {{ novel.views_count }}</span>
+                                </div>
+                                <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-50 fw-normal">Novela Original</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center py-4 text-muted">
+                        <i class="bi bi-journal-plus fs-2 mb-2 d-block"></i>
+                        <p>Aún no hay novelas publicadas en el taller.</p>
+                        <a href="{% url 'novels:novel_create' %}" class="btn btn-outline-danger btn-sm mt-2">
+                            <i class="bi bi-pencil-square me-1"></i> Publicar primera novela
+                        </a>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
-            <div id="section-season-now">
-                <div class="row row-cols-2 row-cols-sm-3 g-3">
-                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
-                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
-                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
-                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
-                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
-                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6">
-            <div class="section-header-wrap mb-3">
-                <div>
-                    <h3 class="section-title">
-                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #E74C3C, #78281F);"></span>
-                        <i class="bi bi-calendar-event text-danger"></i> Proximos Estrenos
-                    </h3>
-                    <span class="text-muted small">Estrenos confirmados para las siguientes temporadas</span>
-                </div>
-            </div>
-            <div id="section-season-upcoming">
-                <div class="row row-cols-2 row-cols-sm-3 g-3">
-                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
-                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
-                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
-                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
-                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
-                    <div class="col"><div class="skeleton-card"><div class="skeleton-poster"></div><div class="skeleton-text"></div></div></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Personajes Populares & Creadores / Noticias & Programacion -->
-    <div class="row g-4 mb-5">
-        <div class="col-lg-8">
-            <!-- Personajes Populares -->
-            <div class="section-header-wrap mb-3">
-                <div>
-                    <h3 class="section-title">
-                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #E67E22, #A04000);"></span>
-                        <i class="bi bi-person-heart text-warning"></i> Personajes Populares
-                    </h3>
-                    <span class="text-muted small">Los personajes mas queridos de la comunidad</span>
-                </div>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-sm btn-outline-secondary" onclick="changeCharactersPage(-1)" id="btn-char-prev" disabled>
-                        <i class="bi bi-chevron-left"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="changeCharactersPage(1)" id="btn-char-next">
-                        <i class="bi bi-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-            <div id="section-characters" style="min-height: 200px;">
-                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
-                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                </div>
-            </div>
-
-            <!-- Creadores -->
-            <div class="section-header-wrap mt-5 mb-3">
-                <div>
-                    <h3 class="section-title">
-                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #BDC3C7, #7F8C8D);"></span>
-                        <i class="bi bi-mic text-secondary"></i> Creadores & Mangakas
-                    </h3>
-                    <span class="text-muted small">Voces ilustres, directores y autores</span>
-                </div>
-            </div>
-            <div id="section-people">
-                <div class="row row-cols-2 row-cols-md-3 g-3">
-                    <div class="col"><div class="d-flex align-items-center gap-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                    <div class="col"><div class="d-flex align-items-center gap-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-lg-4">
-            <!-- Noticias -->
-            <div class="section-header-wrap mb-3">
-                <div>
-                    <h3 class="section-title">
-                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #3498DB, #1F618D);"></span>
-                        <i class="bi bi-newspaper text-primary"></i> Noticias de la Industria
-                    </h3>
-                </div>
-            </div>
-            <div id="section-news" class="d-flex flex-column gap-3 mb-5">
-                <div class="skeleton-rect"></div>
-                <div class="skeleton-rect"></div>
-                <div class="skeleton-rect"></div>
-                <div class="skeleton-rect"></div>
-            </div>
-
-            <!-- Programacion -->
-            <div class="section-header-wrap mb-3">
-                <div>
-                    <h3 class="section-title">
-                        <span class="section-accent-bar" style="background: linear-gradient(135deg, #1ABC9C, #117A65);"></span>
-                        <i class="bi bi-clock-history text-success"></i> Programacion Semanal
-                    </h3>
-                </div>
-            </div>
-            <div id="section-schedule" class="d-flex flex-column gap-2">
-                <div class="skeleton-rect" style="height: 40px;"></div>
-                <div class="skeleton-rect" style="height: 40px;"></div>
-                <div class="skeleton-rect" style="height: 40px;"></div>
-                <div class="skeleton-rect" style="height: 40px;"></div>
-                <div class="skeleton-rect" style="height: 40px;"></div>
-                <div class="skeleton-rect" style="height: 40px;"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Top Resenas Criticas de la Comunidad -->
-    <div class="section-header-wrap mb-3">
-        <div>
-            <h3 class="section-title">
-                <span class="section-accent-bar" style="background: linear-gradient(135deg, #F1C40F, #B7950B);"></span>
-                <i class="bi bi-chat-square-quote text-warning"></i> Resenas Criticas de la Comunidad
-            </h3>
-            <span class="text-muted small">Analisis de profundidad compartidos por lectores y espectadores</span>
-        </div>
-    </div>
-    <div id="section-reviews" class="mb-5">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
-            <div class="col"><div class="skeleton-review-card"></div></div>
-            <div class="col"><div class="skeleton-review-card"></div></div>
-            <div class="col"><div class="skeleton-review-card"></div></div>
-            <div class="col"><div class="skeleton-review-card"></div></div>
         </div>
     </div>
 
@@ -353,9 +546,9 @@ function truncate(str, n) {
     return (str.length > n) ? str.substr(0, n - 1) + '&hellip;' : str;
 }
 
-// Media Card Generator
-function createMediaCardHtml(item, type, badgeLabel, scoreVal) {
-    const title = escapeHtml(item.title || item.name || 'Desconocido');
+// Media Card Generator (Linked directly to detail page executing all endpoints)
+function createMediaCardHtml(item, type, badgeLabel, scoreVal, endpointsCount) {
+    const title = escapeHtml(item.title || item.name || 'Obra');
     const img = item.images?.webp?.image_url || item.images?.jpg?.image_url || '';
     const score = (scoreVal !== undefined && scoreVal !== null && scoreVal !== '') ? Number(scoreVal).toFixed(2) : (item.score ? Number(item.score).toFixed(2) : '');
     const meta1 = type === 'anime' ? (item.type || 'TV') : (type === 'manga' ? 'Manga' : 'Novela Ligera');
@@ -365,23 +558,26 @@ function createMediaCardHtml(item, type, badgeLabel, scoreVal) {
     let typePath = type;
     if (type === 'lightnovel') typePath = 'manga';
 
+    const epCountText = endpointsCount ? `${endpointsCount} Endpoints` : 'Ficha Completa';
+
     return `
     <div class="col">
-        <div class="media-card">
+        <div class="media-card session-card-interactive rounded-3 overflow-hidden h-100 d-flex flex-column">
             <a href="/detail/${typePath}/${id}/" class="text-decoration-none">
-                <div class="media-poster-box position-relative overflow-hidden rounded-3" style="aspect-ratio: 2/3; background: #1a1a1a;">
+                <div class="media-poster-box position-relative overflow-hidden" style="aspect-ratio: 2/3; background: #12141f;">
                     <img src="${img}" alt="${title}" loading="lazy" class="media-poster-img w-100 h-100 object-fit-cover">
-                    <div class="media-poster-overlay position-absolute w-100 h-100 top-0 start-0" style="background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%);"></div>
+                    <div class="media-poster-overlay position-absolute w-100 h-100 top-0 start-0" style="background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.75) 100%);"></div>
                     ${badgeLabel ? `<span class="badge position-absolute top-0 start-0 m-2 bg-dark bg-opacity-75 border border-secondary border-opacity-50 text-light small">${badgeLabel}</span>` : ''}
                     ${score ? `<span class="badge position-absolute top-0 end-0 m-2 bg-dark bg-opacity-75 border border-secondary border-opacity-50 text-warning small"><i class="bi bi-star-fill me-1"></i>${score}</span>` : ''}
-                    <div class="media-hover-overlay position-absolute w-100 h-100 top-0 start-0 d-flex flex-column align-items-center justify-content-center opacity-0 transition-opacity" style="background: rgba(0,0,0,0.6);">
-                        <span class="btn btn-sm btn-accent rounded-pill px-3 py-1">
-                            <i class="bi bi-eye-fill me-1"></i> Ficha Completa
+                    <div class="media-hover-overlay position-absolute w-100 h-100 top-0 start-0 d-flex flex-column align-items-center justify-content-center opacity-0 transition-opacity" style="background: rgba(8, 10, 16, 0.78);">
+                        <span class="btn btn-sm btn-accent rounded-pill px-3 py-1 mb-1">
+                            <i class="bi bi-play-circle-fill me-1"></i> Ver Ficha
                         </span>
+                        <span class="badge bg-secondary bg-opacity-50 text-light small">${epCountText}</span>
                     </div>
                 </div>
             </a>
-            <div class="media-info-wrap mt-2">
+            <div class="media-info-wrap p-2 mt-auto">
                 <a href="/detail/${typePath}/${id}/" class="text-decoration-none">
                     <h6 class="media-title text-light mb-1 text-truncate" title="${title}">${title}</h6>
                 </a>
@@ -429,7 +625,7 @@ async function loadHero() {
             const genres = item.genres ? item.genres.map(g => `<span class="badge bg-dark bg-opacity-75 border border-secondary border-opacity-50 px-2 py-1 rounded-pill small">${escapeHtml(g.name)}</span>`).join(' ') : '';
             
             container.innerHTML = `
-            <div class="hero-billboard position-relative rounded-4 overflow-hidden mb-4" style="min-height: 480px; background: #0c0d14; border: 1px solid rgba(255,255,255,0.08);">
+            <div class="hero-billboard position-relative rounded-4 overflow-hidden mb-4" style="min-height: 490px; background: #0c0d14; border: 1px solid rgba(255,255,255,0.08);">
                 <div class="hero-backdrop-layer position-absolute w-100 h-100" style="background: url('${imgLg}') center/cover no-repeat; opacity: 0.35; filter: blur(2px);"></div>
                 <div class="hero-gradient-overlay position-absolute w-100 h-100" style="background: linear-gradient(90deg, rgba(12,13,20,1) 0%, rgba(12,13,20,0.85) 45%, rgba(12,13,20,0.1) 100%);"></div>
                 
@@ -446,6 +642,9 @@ async function loadHero() {
                                 <span class="badge bg-dark bg-opacity-75 border border-secondary border-opacity-50 text-light px-2 py-1">
                                     ${item.type || 'TV'}${item.year ? ' &bull; ' + item.year : ''}
                                 </span>
+                                <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-25 px-2 py-1">
+                                    26 Endpoints GET
+                                </span>
                             </div>
 
                             <h1 class="hero-title text-white fw-bold display-5 mb-3" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.9);">${title}</h1>
@@ -460,10 +659,10 @@ async function loadHero() {
                             
                             <div class="d-flex gap-3 flex-wrap">
                                 <a href="/detail/anime/${item.mal_id}/" class="btn btn-accent btn-lg px-4 py-2 fw-semibold rounded-pill">
-                                    <i class="bi bi-play-circle-fill me-2"></i> Ver Ficha & Opiniones
+                                    <i class="bi bi-play-circle-fill me-2"></i> Ver Ficha & 26 Endpoints
                                 </a>
                                 <a href="/explore/?type=anime" class="btn btn-outline-light btn-lg px-4 py-2 fw-semibold rounded-pill">
-                                    <i class="bi bi-compass me-2"></i> Explorar Catalogo
+                                    <i class="bi bi-compass me-2"></i> Explorar Catálogo
                                 </a>
                             </div>
                         </div>
@@ -493,14 +692,19 @@ function renderCharacters(items) {
         const favs = item.favorites ? (item.favorites / 1000).toFixed(1) + 'k' : '';
         html += `
         <div class="col">
-            <div class="d-flex align-items-center gap-3 p-2 rounded-3 h-100" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
-                <div class="fw-bold text-muted small" style="min-width: 22px;">#${rank}</div>
-                <img src="${img}" alt="${name}" loading="lazy" class="rounded-circle object-fit-cover" style="width: 48px; height: 48px; border: 1px solid rgba(255,255,255,0.1);">
-                <div class="overflow-hidden">
-                    <h6 class="text-light mb-0 text-truncate small fw-semibold" title="${name}">${name}</h6>
-                    <small class="text-muted"><i class="bi bi-heart-fill text-danger small"></i> ${favs}</small>
+            <a href="/detail/characters/${item.mal_id}/" class="text-decoration-none">
+                <div class="d-flex align-items-center gap-3 p-2 rounded-3 h-100 session-card-interactive" title="Ver ficha y 7 endpoints de ${name}">
+                    <div class="fw-bold text-muted small" style="min-width: 22px;">#${rank}</div>
+                    <img src="${img}" alt="${name}" loading="lazy" class="rounded-circle object-fit-cover" style="width: 48px; height: 48px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="overflow-hidden flex-grow-1">
+                        <h6 class="text-light mb-0 text-truncate small fw-semibold">${name}</h6>
+                        <div class="d-flex align-items-center justify-content-between mt-1">
+                            <small class="text-muted"><i class="bi bi-heart-fill text-danger small"></i> ${favs}</small>
+                            <span class="badge bg-dark text-info" style="font-size: 0.65rem;">7 Endpoints</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
         `;
     });
@@ -509,17 +713,19 @@ function renderCharacters(items) {
 }
 
 function loadCharacters() {
-    loadSection(`/api/tenrai/top/characters?limit=12&page=${currentCharPage}`, 'section-characters', renderCharacters)
+    loadSection(`/api/tenrai/top/characters?limit=12&page=${currentCharPage}`, 'session-3-characters-grid', renderCharacters)
     .then(() => {
         const prevBtn = document.getElementById('btn-char-prev');
+        const indicator = document.getElementById('char-page-indicator');
         if (prevBtn) prevBtn.disabled = currentCharPage <= 1;
+        if (indicator) indicator.textContent = `Página ${currentCharPage}`;
     });
 }
 
 function changeCharactersPage(delta) {
     currentCharPage += delta;
     if (currentCharPage < 1) currentCharPage = 1;
-    const c = document.getElementById('section-characters');
+    const c = document.getElementById('session-3-characters-grid');
     if (c) {
         c.innerHTML = '<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">' + 
             Array(12).fill(0).map(() => `<div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>`).join('') + 
@@ -528,65 +734,127 @@ function changeCharactersPage(delta) {
     loadCharacters();
 }
 
+// Random Item Generator (Sesión 9 Interactive Widget)
+async function fetchRandomItem(category) {
+    const box = document.getElementById('random-result-box');
+    if (!box) return;
+    box.innerHTML = `
+        <div class="text-center py-3 text-light small">
+            <div class="spinner-border spinner-border-sm text-danger me-2" role="status"></div>
+            Consultando Tenrai API aleatorio (/random/${category})...
+        </div>
+    `;
+
+    try {
+        const res = await fetch(`/api/tenrai/random/${category}`);
+        if (!res.ok) throw new Error(res.status);
+        const json = await res.json();
+        const item = json.data || {};
+        const title = escapeHtml(item.title || item.name || 'Descubrimiento Sorpresa');
+        const img = item.images?.webp?.image_url || item.images?.jpg?.image_url || '';
+        const synopsis = escapeHtml(truncate(item.synopsis || item.about || 'Sin descripción disponible.', 130));
+        const id = item.mal_id;
+        const targetType = (category === 'characters') ? 'characters' : (category === 'manga' ? 'manga' : 'anime');
+
+        box.innerHTML = `
+            <div class="d-flex align-items-center gap-3">
+                ${img ? `<img src="${img}" alt="${title}" class="rounded-3 object-fit-cover" style="width: 70px; height: 95px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.15);">` : ''}
+                <div class="overflow-hidden flex-grow-1">
+                    <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-50 small mb-1">
+                        ${category.toUpperCase()} ALEATORIO
+                    </span>
+                    <h6 class="text-white mb-1 text-truncate fw-bold">${title}</h6>
+                    <p class="text-white-50 small mb-2 lh-sm">${synopsis}</p>
+                    <a href="/detail/${targetType}/${id}/" class="btn btn-xs btn-accent btn-sm py-1 px-3 rounded-pill fw-semibold">
+                        <i class="bi bi-play-circle-fill me-1"></i> Abrir Ficha & Endpoints
+                    </a>
+                </div>
+            </div>
+        `;
+    } catch (e) {
+        box.innerHTML = `
+            <div class="text-center py-3 text-secondary small">
+                No se pudo obtener recurso aleatorio en este momento. Intenta de nuevo.
+            </div>
+        `;
+    }
+}
+
 // Initial Data Load (Parallel async dispatch on DOMContentLoaded)
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Hero
+    // 0. Hero Billboard
     loadHero();
-    
-    // 2. Top Anime
-    loadSection('/api/tenrai/top/anime?limit=8', 'section-top-anime', (items) => {
+
+    // 1. Sesión 1: Catálogo Anime (12 items)
+    loadSection('/api/tenrai/top/anime?limit=12', 'session-1-anime-grid', (items) => {
         return `<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">` + 
-            items.map(i => createMediaCardHtml(i, 'anime', i.type, i.score)).join('') + 
+            items.map(i => createMediaCardHtml(i, 'anime', i.type, i.score, 26)).join('') + 
             `</div>`;
     });
-    
-    // 3. Top Manga
-    loadSection('/api/tenrai/top/manga?limit=8&type=manga', 'section-top-manga', (items) => {
-        return `<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">` + 
-            items.map(i => createMediaCardHtml(i, 'manga', 'Manga', i.score)).join('') + 
-            `</div>`;
-    });
-    
-    // 4. Novelas Ligeras
-    loadSection('/api/tenrai/top/manga?limit=8&type=lightnovel', 'section-light-novels', (items) => {
-        return `<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">` + 
-            items.map(i => createMediaCardHtml(i, 'lightnovel', 'LN', i.score)).join('') + 
-            `</div>`;
-    });
-    
-    // 5. Temporada Actual
-    loadSection('/api/tenrai/seasons/now?limit=6', 'section-season-now', (items) => {
+
+    // 2. Sesión 2: Catálogo Manga (6 items) & Novelas Ligeras (6 items)
+    loadSection('/api/tenrai/top/manga?limit=6&type=manga', 'session-2-manga-grid', (items) => {
         return `<div class="row row-cols-2 row-cols-sm-3 g-3">` + 
-            items.map(i => createMediaCardHtml(i, 'anime', 'En Emision', i.score)).join('') + 
+            items.map(i => createMediaCardHtml(i, 'manga', 'Manga', i.score, 16)).join('') + 
             `</div>`;
     });
-    
-    // 6. Proximos Estrenos
-    loadSection('/api/tenrai/seasons/upcoming?limit=6', 'section-season-upcoming', (items) => {
+
+    loadSection('/api/tenrai/top/manga?limit=6&type=lightnovel', 'session-2-lightnovel-grid', (items) => {
         return `<div class="row row-cols-2 row-cols-sm-3 g-3">` + 
-            items.map(i => createMediaCardHtml(i, 'anime', 'Proximo', i.score)).join('') + 
+            items.map(i => createMediaCardHtml(i, 'lightnovel', 'LN', i.score, 16)).join('') + 
             `</div>`;
     });
-    
-    // 7. Personajes Populares
+
+    // 3. Sesión 3: Personajes Populares & Creadores
     loadCharacters();
-    
-    // 8. Creadores & Mangakas
-    loadSection('/api/tenrai/top/people?limit=6', 'section-people', (items) => {
-        let html = '<div class="row row-cols-2 row-cols-md-3 g-3">';
+
+    loadSection('/api/tenrai/top/people?limit=6', 'session-3-people-grid', (items) => {
+        let html = '<div class="d-flex flex-column gap-2">';
         items.forEach(item => {
             const name = escapeHtml(item.name);
             const img = item.images?.jpg?.image_url || '';
             const favs = item.favorites ? (item.favorites / 1000).toFixed(1) + 'k' : '';
             html += `
-            <div class="col">
-                <div class="d-flex align-items-center gap-3 p-2 rounded-3 h-100" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
-                    <img src="${img}" alt="${name}" loading="lazy" class="rounded-circle object-fit-cover" style="width: 48px; height: 48px; border: 1px solid rgba(255,255,255,0.1);">
-                    <div class="overflow-hidden">
-                        <h6 class="text-light mb-0 text-truncate small fw-semibold" title="${name}">${name}</h6>
-                        <small class="text-muted"><i class="bi bi-heart-fill text-danger small"></i> ${favs}</small>
+            <a href="/detail/people/${item.mal_id}/" class="text-decoration-none">
+                <div class="d-flex align-items-center gap-3 p-2 rounded-3 session-card-interactive" title="Ver trayectoria y 6 endpoints de ${name}">
+                    <img src="${img}" alt="${name}" loading="lazy" class="rounded-circle object-fit-cover" style="width: 44px; height: 44px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="overflow-hidden flex-grow-1">
+                        <h6 class="text-light mb-0 text-truncate small fw-semibold">${name}</h6>
+                        <small class="text-muted"><i class="bi bi-heart-fill text-danger small"></i> ${favs} fans</small>
                     </div>
+                    <span class="badge bg-dark text-info" style="font-size: 0.65rem;">6 Endpoints</span>
                 </div>
+            </a>
+            `;
+        });
+        html += '</div>';
+        return html;
+    });
+
+    // 5. Sesión 5: Temporadas Actual, Próximos Estrenos y Programación Semanal
+    loadSection('/api/tenrai/seasons/now?limit=4', 'session-5-season-now', (items) => {
+        return `<div class="row row-cols-2 g-3">` + 
+            items.map(i => createMediaCardHtml(i, 'anime', 'En Emisión', i.score, 26)).join('') + 
+            `</div>`;
+    });
+
+    loadSection('/api/tenrai/seasons/upcoming?limit=4', 'session-5-season-upcoming', (items) => {
+        return `<div class="row row-cols-2 g-3">` + 
+            items.map(i => createMediaCardHtml(i, 'anime', 'Próximo', i.score, 26)).join('') + 
+            `</div>`;
+    });
+
+    loadSection('/api/tenrai/schedules?limit=6', 'session-5-schedules', (items) => {
+        let html = '<div class="d-flex flex-column gap-2">';
+        items.forEach(item => {
+            const title = escapeHtml(item.title);
+            const time = item.broadcast?.string || item.broadcast?.time || 'Horario por confirmar';
+            html += `
+            <div class="d-flex justify-content-between align-items-center p-2 rounded-3 session-card-interactive" style="border-left: 3px solid #1ABC9C;">
+                <div class="text-truncate me-2">
+                    <a href="/detail/anime/${item.mal_id}/" class="text-light text-decoration-none small fw-semibold">${title}</a>
+                </div>
+                <div class="badge bg-dark text-muted small flex-shrink-0">${escapeHtml(time)}</div>
             </div>
             `;
         });
@@ -594,11 +862,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return html;
     });
 
-    // 9. Top Resenas Criticas
-    loadSection('/api/tenrai/top/reviews?limit=4', 'section-reviews', (items) => {
+    // 6. Sesión 6: Reseñas Críticas de la Comunidad
+    loadSection('/api/tenrai/top/reviews?limit=4', 'session-6-reviews', (items) => {
         let html = '<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">';
         items.forEach(item => {
-            const user = escapeHtml(item.user?.username || 'Critico');
+            const user = escapeHtml(item.user?.username || 'Crítico');
             const userImg = item.user?.images?.webp?.image_url || item.user?.images?.jpg?.image_url || '';
             const score = item.score || item.scores?.overall || 'N/A';
             const excerpt = escapeHtml(truncate(item.review || '', 130));
@@ -606,7 +874,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const entryUrl = item.entry?.mal_id ? `/detail/${item.type || 'anime'}/${item.entry.mal_id}/` : '#';
             html += `
             <div class="col">
-                <div class="p-3 rounded-4 h-100 d-flex flex-column justify-content-between" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+                <div class="p-3 rounded-4 h-100 d-flex flex-column justify-content-between session-card-interactive">
                     <div>
                         <div class="d-flex align-items-center justify-content-between mb-2">
                             <div class="d-flex align-items-center gap-2 overflow-hidden">
@@ -622,6 +890,11 @@ document.addEventListener("DOMContentLoaded", () => {
                             "${excerpt}"
                         </p>
                     </div>
+                    <div class="mt-3 pt-2 border-top border-secondary border-opacity-10 d-flex justify-content-end">
+                        <a href="${entryUrl}" class="text-decoration-none small text-muted hover-light">
+                            Ver ficha & endpoints <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
             `;
@@ -630,25 +903,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return html;
     });
 
-    // 10. Programacion Semanal
-    loadSection('/api/tenrai/schedules?limit=6', 'section-schedule', (items) => {
-        let html = '<div class="d-flex flex-column gap-2">';
-        items.forEach(item => {
-            const title = escapeHtml(item.title);
-            const time = item.broadcast?.string || item.broadcast?.time || 'Horario por confirmar';
-            html += `
-            <div class="d-flex justify-content-between align-items-center p-2 rounded-3" style="background: rgba(255,255,255,0.02); border-left: 3px solid #1ABC9C;">
-                <div class="text-truncate me-2"><a href="/detail/anime/${item.mal_id}/" class="text-light text-decoration-none small">${title}</a></div>
-                <div class="badge bg-dark text-muted small flex-shrink-0">${escapeHtml(time)}</div>
-            </div>
-            `;
-        });
-        html += '</div>';
-        return html;
-    });
-
-    // 11. Noticias de la Industria
-    loadSection('/api/tenrai/news?limit=4', 'section-news', (items) => {
+    // 7. Sesión 7: Noticias de la Industria y Artículos Editoriales
+    loadSection('/api/tenrai/news?limit=4', 'session-7-news', (items) => {
         let html = '<div class="d-flex flex-column gap-3">';
         items.forEach(item => {
             const title = escapeHtml(item.title);
@@ -656,11 +912,56 @@ document.addEventListener("DOMContentLoaded", () => {
             const url = item.url || '#';
             const date = item.date ? new Date(item.date).toLocaleDateString() : '';
             html += `
-            <div class="d-flex gap-3 align-items-center bg-dark bg-opacity-25 p-2 rounded-3 border border-secondary border-opacity-25">
+            <div class="d-flex gap-3 align-items-center p-2 rounded-3 session-card-interactive">
                 ${img ? `<img src="${img}" alt="Noticia" class="rounded object-fit-cover" style="width: 75px; height: 55px; flex-shrink: 0;">` : `<div class="rounded bg-secondary bg-opacity-25" style="width: 75px; height: 55px; flex-shrink: 0;"></div>`}
-                <div class="overflow-hidden">
-                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-light text-decoration-none"><h6 class="mb-1 text-truncate small" title="${title}">${title}</h6></a>
+                <div class="overflow-hidden flex-grow-1">
+                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-light text-decoration-none"><h6 class="mb-1 text-truncate small fw-semibold" title="${title}">${title}</h6></a>
                     <small class="text-muted">${date}</small>
+                </div>
+            </div>
+            `;
+        });
+        html += '</div>';
+        return html;
+    });
+
+    loadSection('/api/tenrai/articles?limit=4', 'session-7-articles', (items) => {
+        let html = '<div class="d-flex flex-column gap-3">';
+        items.forEach(item => {
+            const title = escapeHtml(item.title || 'Artículo');
+            const summary = escapeHtml(truncate(item.summary || item.snippet || '', 90));
+            const url = item.url || '#';
+            html += `
+            <div class="p-2 rounded-3 session-card-interactive">
+                <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-light text-decoration-none">
+                    <h6 class="mb-1 text-truncate small fw-semibold text-info" title="${title}">${title}</h6>
+                </a>
+                <p class="text-white-50 small mb-0 lh-sm text-truncate">${summary}</p>
+            </div>
+            `;
+        });
+        html += '</div>';
+        return html;
+    });
+
+    // 9. Sesión 9: Interest Stacks de la Comunidad
+    loadSection('/api/tenrai/stacks?limit=4', 'session-9-stacks', (items) => {
+        let html = '<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">';
+        items.forEach(st => {
+            const title = escapeHtml(st.title || 'Colección Temática');
+            const author = escapeHtml(st.author?.username || 'Comunidad');
+            const count = st.entries_count || st.count || 0;
+            html += `
+            <div class="col">
+                <div class="p-3 rounded-3 session-card-interactive h-100 d-flex flex-column justify-content-between">
+                    <div>
+                        <span class="badge bg-warning bg-opacity-25 text-warning small mb-2 font-monospace">Interest Stack</span>
+                        <h6 class="text-light fw-bold text-truncate mb-1" title="${title}">${title}</h6>
+                        <small class="text-muted d-block"><i class="bi bi-person me-1"></i>${author}</small>
+                    </div>
+                    <div class="mt-2 text-muted small">
+                        <span><i class="bi bi-collection me-1"></i>${count} obras agrupadas</span>
+                    </div>
                 </div>
             </div>
             `;

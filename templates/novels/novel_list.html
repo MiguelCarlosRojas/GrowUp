@@ -3,29 +3,21 @@
 {% block title %}Comunidad de Escritores & Novelas Ligeras - GrowUp{% endblock %}
 
 {% block content %}
-<div class="p-4 p-md-5 rounded-4 mb-4 shadow-lg position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(18, 25, 40, 0.95) 0%, rgba(10, 15, 26, 0.98) 100%); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
-    <div class="position-absolute top-0 end-0 p-4 opacity-10 d-none d-lg-block pointer-events-none">
-        <i class="bi bi-feather text-warning" style="font-size: 10rem;"></i>
-    </div>
-    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 position-relative" style="z-index: 1;">
-        <div>
-            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35);">
-                <span class="badge bg-warning rounded-circle p-1"></span>
-                <span class="text-white small fw-bold text-uppercase tracking-wider">Literatura Independiente & Comunidad</span>
-            </div>
-            <h1 class="display-6 fw-bold text-white mb-2">Novelas Ligeras de la Comunidad</h1>
-            <p class="text-secondary lead mb-0" style="font-size: 1rem; max-width: 780px;">
-                Historias, mundos y universos originales creados por la comunidad de autores de GrowUp. Lectura libre con capítulos organizados y trazabilidad de publicación.
-            </p>
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="section-accent-bar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);"></span>
+            <h2 class="fw-bold text-white mb-0">Novelas Ligeras de la Comunidad</h2>
         </div>
-        <a href="{% url 'novels:novel_create' %}" class="btn btn-accent px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 shadow-sm">
-            <i class="bi bi-feather"></i> Publicar Mi Novela
-        </a>
+        <p class="text-muted mb-0">Historias y mundos originales creados por la comunidad de autores de GrowUp.</p>
     </div>
+    <a href="{% url 'novels:novel_create' %}" class="btn btn-accent px-4 py-2">
+        <i class="bi bi-feather me-1"></i> Publicar Mi Novela
+    </a>
 </div>
 
 <!-- Filters Bar -->
-<div class="filter-bar-pro mb-4 p-4 rounded-4 shadow-lg" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+<div class="filter-bar-pro mb-4">
     <form action="{% url 'novels:novel_list' %}" method="GET" class="row g-2 g-md-3 align-items-end">
         <div class="col-12 col-md-4">
             <label class="form-label small text-muted fw-semibold">Buscar por Título / Sinopsis / Autor</label>
@@ -50,7 +42,7 @@
             </select>
         </div>
         <div class="col-12 col-md-2">
-            <button type="submit" class="btn btn-accent w-100 py-2 fw-semibold"><i class="bi bi-funnel me-1"></i> Filtrar</button>
+            <button type="submit" class="btn btn-accent w-100 py-2"><i class="bi bi-funnel me-1"></i> Filtrar</button>
         </div>
     </form>
 </div>
@@ -60,17 +52,15 @@
 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-3 g-md-4">
     {% for novel in novels %}
     <div class="col">
-        <div class="p-3 rounded-4 h-100 d-flex flex-column session-card-interactive" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+        <div class="p-3 rounded-4 h-100 d-flex flex-column" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle); transition: transform 0.2s ease;">
             <div class="d-flex gap-3">
-                <div class="original-cover-thumb rounded-3 shadow" style="width: 84px; height: 120px; overflow: hidden; flex-shrink: 0; border: 1px solid rgba(255, 255, 255, 0.08);">
-                    <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="w-100 h-100 object-fit-cover" loading="lazy">
-                </div>
+                <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="original-cover-thumb">
                 <div class="d-flex flex-column flex-grow-1 overflow-hidden">
-                    <span class="badge align-self-start mb-1 small" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; font-size: 0.72rem;">{{ novel.get_status_display }}</span>
+                    <span class="badge bg-dark border border-secondary text-secondary align-self-start mb-1" style="font-size: 0.72rem;">{{ novel.get_status_display }}</span>
                     <h5 class="fw-bold text-white mb-1 text-truncate" title="{{ novel.title }}">
                         <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="text-white text-decoration-none">{{ novel.title }}</a>
                     </h5>
-                    <span class="small text-muted mb-2 text-truncate"><i class="bi bi-person text-danger me-1"></i> {{ novel.author.username }}</span>
+                    <span class="small text-muted mb-2 text-truncate"><i class="bi bi-person me-1"></i> {{ novel.author.username }}</span>
                     <div class="d-flex flex-wrap gap-1 mb-2">
                         {% for cat in novel.categories.all|slice:":2" %}
                             <span class="genre-tag-pill" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;">{{ cat.name }}</span>
@@ -82,9 +72,9 @@
                 {{ novel.synopsis }}
             </p>
             <div class="d-flex justify-content-between align-items-center pt-2 border-top border-secondary border-opacity-25 mt-auto small text-muted">
-                <span><i class="bi bi-journal-text text-warning me-1"></i> {{ novel.chapters.count }} Caps</span>
-                <span><i class="bi bi-eye text-info me-1"></i> {{ novel.views_count }}</span>
-                <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="btn btn-sm btn-outline-warning py-1 px-3">Leer Obra</a>
+                <span><i class="bi bi-journal-text me-1"></i> {{ novel.chapters.count }} Caps</span>
+                <span><i class="bi bi-eye me-1"></i> {{ novel.views_count }}</span>
+                <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="btn btn-sm btn-outline-warning">Leer</a>
             </div>
         </div>
     </div>

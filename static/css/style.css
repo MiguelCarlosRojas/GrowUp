@@ -422,6 +422,185 @@ h1, h2, h3, h4, h5, h6, .brand-font {
 }
 
 /* ==========================================================================
+   Explore Lateral Sidebar Navigation (Filtros Laterales Pro)
+   ========================================================================== */
+.explore-layout {
+    display: flex;
+    gap: 1.75rem;
+    align-items: flex-start;
+}
+
+.explore-sidebar-col {
+    width: 290px;
+    flex-shrink: 0;
+}
+
+.explore-content-col {
+    flex: 1;
+    min-width: 0;
+}
+
+@media (max-width: 991.98px) {
+    .explore-layout {
+        flex-direction: column;
+    }
+    .explore-sidebar-col {
+        width: 100%;
+    }
+}
+
+.explore-filter-sidebar {
+    background: rgba(12, 17, 30, 0.88);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border-card);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-card);
+    position: sticky;
+    top: 86px;
+    z-index: 10;
+    max-height: calc(100vh - 105px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 42, 84, 0.3) rgba(255, 255, 255, 0.05);
+}
+
+.explore-filter-sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+.explore-filter-sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+}
+.explore-filter-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 42, 84, 0.35);
+    border-radius: 999px;
+}
+.explore-filter-sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-primary);
+}
+
+.explore-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.explore-sidebar-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    letter-spacing: -0.01em;
+}
+
+.explore-type-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.explore-type-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 0.95rem;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid transparent;
+    transition: all 0.22s ease;
+}
+
+.explore-type-nav-link .nav-item-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.explore-type-nav-link .nav-item-icon {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.explore-type-nav-link:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+    transform: translateX(3px);
+}
+
+.explore-type-nav-link:hover .nav-item-icon {
+    color: var(--accent-primary);
+    transform: scale(1.15);
+}
+
+.explore-type-nav-link.active {
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(255, 42, 84, 0.22) 0%, rgba(255, 107, 74, 0.12) 100%);
+    border-color: rgba(255, 42, 84, 0.45);
+    box-shadow: 0 4px 16px rgba(255, 42, 84, 0.2);
+}
+
+.explore-type-nav-link.active .nav-item-icon {
+    color: #ff3366;
+    text-shadow: 0 0 10px rgba(255, 42, 84, 0.6);
+}
+
+.explore-filter-group {
+    margin-bottom: 1.15rem;
+}
+
+.explore-filter-label {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 0.45rem;
+}
+
+.explore-filter-label i {
+    font-size: 0.85rem;
+    color: var(--accent-primary);
+}
+
+/* Radiant Icon Glows */
+.icon-glow-danger {
+    color: #ff2a54 !important;
+    filter: drop-shadow(0 0 8px rgba(255, 42, 84, 0.55));
+}
+.icon-glow-warning {
+    color: #fbbf24 !important;
+    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.55));
+}
+.icon-glow-info {
+    color: #38bdf8 !important;
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.55));
+}
+.icon-glow-success {
+    color: #10b981 !important;
+    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.55));
+}
+
+
+/* ==========================================================================
    Media Poster Cards (Ultra Sleek Vertical Grid)
    ========================================================================== */
 .section-header-wrap {

@@ -10,7 +10,7 @@
 .skeleton-poster { width: 100%; aspect-ratio: 2/3; background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%); background-size: 200% 100%; animation: skeleton-pulse 1.4s infinite; }
 .skeleton-text { height: 14px; background: rgba(255,255,255,0.05); border-radius: 4px; margin: 10px 8px 6px; width: 80%; animation: skeleton-pulse 1.4s infinite; }
 .skeleton-text-sm { height: 10px; background: rgba(255,255,255,0.03); border-radius: 4px; margin: 0 8px 12px; width: 55%; animation: skeleton-pulse 1.4s infinite; }
-.skeleton-circle { width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.05); animation: skeleton-pulse 1.4s infinite; flex-shrink: 0; }
+.skeleton-circle { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.05); animation: skeleton-pulse 1.4s infinite; flex-shrink: 0; }
 .skeleton-rect { height: 68px; background: rgba(255,255,255,0.03); border-radius: 12px; animation: skeleton-pulse 1.4s infinite; border: 1px solid rgba(255,255,255,0.04); }
 .skeleton-review-card { height: 145px; background: rgba(255,255,255,0.03); border-radius: 16px; animation: skeleton-pulse 1.4s infinite; border: 1px solid rgba(255,255,255,0.04); }
 .skeleton-hero { width: 100%; height: 490px; background: linear-gradient(90deg, rgba(255,255,255,0.02) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.02) 75%); background-size: 200% 100%; animation: skeleton-pulse 1.4s infinite; border-radius: 20px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.06); }
@@ -42,6 +42,12 @@
 .media-poster-box:hover .media-hover-overlay {
     opacity: 1 !important;
 }
+.review-card-clickable {
+    cursor: pointer;
+}
+.stack-card-clickable {
+    cursor: pointer;
+}
 </style>
 
 <!-- Hero Billboard Cinematic Spotlight -->
@@ -51,7 +57,7 @@
 
 <div class="container-fluid py-4 px-md-4">
 
-    <!-- Buscador / Explorar Rápido -->
+    <!-- Buscador / Explorar Rapido -->
     <div class="filter-bar-pro mb-5 p-3 rounded-4 shadow-sm" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
         <form action="/explore/" method="GET" class="d-flex align-items-center gap-3 flex-wrap">
             <div class="flex-grow-1">
@@ -63,8 +69,8 @@
             <div>
                 <select name="type" class="form-select bg-dark border-secondary text-light">
                     <option value="">Todo el catálogo</option>
-                    <option value="anime">Anime (Sesión 1)</option>
-                    <option value="manga">Manga (Sesión 2)</option>
+                    <option value="anime">Catálogo Anime</option>
+                    <option value="manga">Catálogo Manga</option>
                     <option value="original_novel">Novelas de la Comunidad</option>
                 </select>
             </div>
@@ -75,7 +81,7 @@
     </div>
 
     <!-- ======================================================================
-         SESIÓN 1: ENDPOINTS DEL CATÁLOGO ANIME (26 Endpoints)
+         CATALOGO ANIME: TENDENCIAS & OBRAS DESTACADAS
          ====================================================================== -->
     <div class="session-block-wrapper mb-5 pb-3">
         <div class="section-header-wrap mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
@@ -83,14 +89,14 @@
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <span class="section-accent-bar" style="background: linear-gradient(135deg, #00C6FF, #0072FF);"></span>
                     <h3 class="section-title mb-0">
-                        <i class="bi bi-tv text-primary me-2"></i>Sesión 1: Endpoints del Catálogo Anime
+                        <i class="bi bi-tv text-primary me-2"></i>Catálogo Anime: Tendencias & Obras Destacadas
                     </h3>
                     <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-25 session-badge-pill">
-                        26 Endpoints GET
+                        Tendencias Globales
                     </span>
                 </div>
                 <span class="text-muted small">
-                    Animes en Tendencia & Aclamados de todos los tiempos. Haz clic en cualquier obra para abrir su ficha y detonar todos los 26 endpoints del anime.
+                    Animes en Tendencia & Aclamados de todos los tiempos. Haz clic en cualquier obra para abrir su ficha completa.
                 </span>
             </div>
             <a href="/explore/?type=anime" class="btn btn-sm btn-outline-glow">
@@ -117,7 +123,7 @@
     </div>
 
     <!-- ======================================================================
-         SESIÓN 2: ENDPOINTS DEL CATÁLOGO MANGA (16 Endpoints)
+         CATALOGO MANGA & NOVELAS LIGERAS
          ====================================================================== -->
     <div class="session-block-wrapper mb-5 pb-3">
         <div class="section-header-wrap mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
@@ -125,14 +131,14 @@
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <span class="section-accent-bar" style="background: linear-gradient(135deg, #11998e, #38ef7d);"></span>
                     <h3 class="section-title mb-0">
-                        <i class="bi bi-book text-success me-2"></i>Sesión 2: Endpoints del Catálogo Manga
+                        <i class="bi bi-book text-success me-2"></i>Catálogo Manga & Novelas Ligeras
                     </h3>
                     <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 session-badge-pill">
-                        16 Endpoints GET
+                        Obras Maestras
                     </span>
                 </div>
                 <span class="text-muted small">
-                    Obras maestras impresas y novelas ligeras. Al hacer clic en cualquier manga o novela ligera, se ejecutan todos sus 16 endpoints asociados.
+                    Obras maestras impresas y novelas ligeras oficiales. Haz clic en cualquier obra para acceder a su ficha completa.
                 </span>
             </div>
             <a href="/explore/?type=manga" class="btn btn-sm btn-outline-glow">
@@ -141,13 +147,13 @@
         </div>
 
         <div class="row g-4">
-            <!-- Sub-sección Top Manga -->
+            <!-- Sub-seccion Top Manga -->
             <div class="col-12 col-xl-6">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <h5 class="text-white fw-bold small text-uppercase" style="letter-spacing: 0.05em;">
                         <i class="bi bi-journal-richtext text-success me-1"></i> Top Mangas Destacados
                     </h5>
-                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /top/manga</span>
+                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">Top Semanal</span>
                 </div>
                 <div id="session-2-manga-grid">
                     <div class="row row-cols-2 row-cols-sm-3 g-3">
@@ -161,13 +167,13 @@
                 </div>
             </div>
 
-            <!-- Sub-sección Novelas Ligeras -->
+            <!-- Sub-seccion Novelas Ligeras -->
             <div class="col-12 col-xl-6">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <h5 class="text-white fw-bold small text-uppercase" style="letter-spacing: 0.05em;">
                         <i class="bi bi-journal-bookmark text-info me-1"></i> Novelas Ligeras Oficiales
                     </h5>
-                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /top/manga?type=lightnovel</span>
+                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">Colección Oficial</span>
                 </div>
                 <div id="session-2-lightnovel-grid">
                     <div class="row row-cols-2 row-cols-sm-3 g-3">
@@ -184,7 +190,7 @@
     </div>
 
     <!-- ======================================================================
-         SESIÓN 3: PERSONAJES & ACTORES DE VOZ (SEIYUUS) (13 Endpoints)
+         PERSONAJES & CREADORES DESTACADOS
          ====================================================================== -->
     <div class="session-block-wrapper mb-5 pb-3">
         <div class="section-header-wrap mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
@@ -192,20 +198,20 @@
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <span class="section-accent-bar" style="background: linear-gradient(135deg, #f857a6, #ff5858);"></span>
                     <h3 class="section-title mb-0">
-                        <i class="bi bi-person-badge text-danger me-2"></i>Sesión 3: Personajes & Actores de Voz (Seiyuus)
+                        <i class="bi bi-person-badge text-danger me-2"></i>Personajes & Creadores Destacados
                     </h3>
                     <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25 session-badge-pill">
-                        13 Endpoints GET
+                        Favoritos Globales
                     </span>
                 </div>
                 <span class="text-muted small">
-                    Endpoints principales: /top/characters y /top/people. Al hacer clic en un personaje o creador, se ejecutan todos sus endpoints de biografía, apariciones y voces.
+                    Descubre los personajes más queridos por la audiencia y las mentes maestras detrás de cada producción.
                 </span>
             </div>
         </div>
 
         <div class="row g-4">
-            <!-- Personajes Populares -->
+            <!-- Personajes Populares (3 Columnas x 4 Filas = 12 items) -->
             <div class="col-lg-8">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-white small fw-bold text-uppercase"><i class="bi bi-star-fill text-warning me-1"></i> Top Personajes Populares</span>
@@ -214,15 +220,19 @@
                     </a>
                 </div>
                 <div id="session-3-characters-grid" style="min-height: 220px;">
-                    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
-                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
-                        <div class="col"><div class="d-flex align-items-center gap-2 mb-2"><div class="skeleton-circle"></div><div><div class="skeleton-text m-0 mb-1" style="width:90px;"></div><div class="skeleton-text-sm m-0" style="width:50px;"></div></div></div></div>
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                        <div class="col"><div class="d-flex align-items-center gap-2 p-2 rounded-3 session-card-interactive"><div class="skeleton-circle"></div><div class="flex-grow-1"><div class="skeleton-text m-0 mb-1" style="width:80px;"></div><div class="skeleton-text-sm m-0" style="width:45px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 p-2 rounded-3 session-card-interactive"><div class="skeleton-circle"></div><div class="flex-grow-1"><div class="skeleton-text m-0 mb-1" style="width:80px;"></div><div class="skeleton-text-sm m-0" style="width:45px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 p-2 rounded-3 session-card-interactive"><div class="skeleton-circle"></div><div class="flex-grow-1"><div class="skeleton-text m-0 mb-1" style="width:80px;"></div><div class="skeleton-text-sm m-0" style="width:45px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 p-2 rounded-3 session-card-interactive"><div class="skeleton-circle"></div><div class="flex-grow-1"><div class="skeleton-text m-0 mb-1" style="width:80px;"></div><div class="skeleton-text-sm m-0" style="width:45px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 p-2 rounded-3 session-card-interactive"><div class="skeleton-circle"></div><div class="flex-grow-1"><div class="skeleton-text m-0 mb-1" style="width:80px;"></div><div class="skeleton-text-sm m-0" style="width:45px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 p-2 rounded-3 session-card-interactive"><div class="skeleton-circle"></div><div class="flex-grow-1"><div class="skeleton-text m-0 mb-1" style="width:80px;"></div><div class="skeleton-text-sm m-0" style="width:45px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 p-2 rounded-3 session-card-interactive"><div class="skeleton-circle"></div><div class="flex-grow-1"><div class="skeleton-text m-0 mb-1" style="width:80px;"></div><div class="skeleton-text-sm m-0" style="width:45px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 p-2 rounded-3 session-card-interactive"><div class="skeleton-circle"></div><div class="flex-grow-1"><div class="skeleton-text m-0 mb-1" style="width:80px;"></div><div class="skeleton-text-sm m-0" style="width:45px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 p-2 rounded-3 session-card-interactive"><div class="skeleton-circle"></div><div class="flex-grow-1"><div class="skeleton-text m-0 mb-1" style="width:80px;"></div><div class="skeleton-text-sm m-0" style="width:45px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 p-2 rounded-3 session-card-interactive"><div class="skeleton-circle"></div><div class="flex-grow-1"><div class="skeleton-text m-0 mb-1" style="width:80px;"></div><div class="skeleton-text-sm m-0" style="width:45px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 p-2 rounded-3 session-card-interactive"><div class="skeleton-circle"></div><div class="flex-grow-1"><div class="skeleton-text m-0 mb-1" style="width:80px;"></div><div class="skeleton-text-sm m-0" style="width:45px;"></div></div></div></div>
+                        <div class="col"><div class="d-flex align-items-center gap-2 p-2 rounded-3 session-card-interactive"><div class="skeleton-circle"></div><div class="flex-grow-1"><div class="skeleton-text m-0 mb-1" style="width:80px;"></div><div class="skeleton-text-sm m-0" style="width:45px;"></div></div></div></div>
                     </div>
                 </div>
             </div>
@@ -248,7 +258,7 @@
     </div>
 
     <!-- ======================================================================
-         SESIÓN 5: TEMPORADAS Y CALENDARIO DE ESTRENOS (3 Endpoints)
+         TEMPORADAS Y CALENDARIO DE ESTRENOS
          ====================================================================== -->
     <div class="session-block-wrapper mb-5 pb-3">
         <div class="section-header-wrap mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
@@ -256,14 +266,14 @@
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <span class="section-accent-bar" style="background: linear-gradient(135deg, #f7971e, #ffd200);"></span>
                     <h3 class="section-title mb-0">
-                        <i class="bi bi-calendar-range text-warning me-2"></i>Sesión 5: Temporadas y Calendario de Estrenos
+                        <i class="bi bi-calendar-range text-warning me-2"></i>Temporadas y Calendario de Estrenos
                     </h3>
                     <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 session-badge-pill">
-                        3 Endpoints GET
+                        En Emisión
                     </span>
                 </div>
                 <span class="text-muted small">
-                    Endpoints: /seasons/now, /seasons/upcoming y /schedules. Transmisiones en emisión continua, estrenos y programación semanal.
+                    Transmisiones en emisión continua, próximos lanzamientos y programación semanal detallada.
                 </span>
             </div>
         </div>
@@ -287,7 +297,7 @@
                 </div>
             </div>
 
-            <!-- Próximos Estrenos -->
+            <!-- Proximos Estrenos -->
             <div class="col-12 col-md-6 col-xl-4">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-white small fw-bold text-uppercase"><i class="bi bi-calendar-plus text-danger me-1"></i> Próximos Estrenos</span>
@@ -305,7 +315,7 @@
                 </div>
             </div>
 
-            <!-- Programación Semanal de Emisión -->
+            <!-- Programacion Semanal de Emision -->
             <div class="col-12 col-xl-4">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-white small fw-bold text-uppercase"><i class="bi bi-clock-history text-success me-1"></i> Programación Semanal</span>
@@ -326,7 +336,7 @@
     </div>
 
     <!-- ======================================================================
-         SESIÓN 6: RANKINGS TOP & TABLAS DE CLASIFICACIÓN (5 Endpoints)
+         RANKINGS TOP & CUADROS DE HONOR
          ====================================================================== -->
     <div class="session-block-wrapper mb-5 pb-3">
         <div class="section-header-wrap mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
@@ -334,30 +344,32 @@
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <span class="section-accent-bar" style="background: linear-gradient(135deg, #FFE000, #799F0C);"></span>
                     <h3 class="section-title mb-0">
-                        <i class="bi bi-trophy text-warning me-2"></i>Sesión 6: Rankings Top & Tablas de Clasificación
+                        <i class="bi bi-trophy text-warning me-2"></i>Rankings Top & Cuadros de Honor
                     </h3>
                     <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 session-badge-pill">
-                        5 Endpoints GET
+                        Cuadro de Honor
                     </span>
                 </div>
                 <span class="text-muted small">
-                    Endpoints: /top/anime, /top/manga y /top/reviews. Cuadros de honor históricos y análisis críticos redactados por la comunidad.
+                    Cuadros de honor históricos y análisis críticos exhaustivos redactados por la comunidad.
                 </span>
             </div>
         </div>
 
-        <!-- Reseñas Críticas de la Comunidad -->
+        <!-- Reseñas Criticas de la Comunidad -->
         <div class="mb-3">
             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                 <span class="text-white small fw-bold text-uppercase">
                     <i class="bi bi-chat-square-quote-fill text-warning me-1"></i> Reseñas Críticas de la Comunidad
                 </span>
-                <a href="/explore/?type=anime&order_by=score" class="btn btn-xs btn-outline-glow btn-sm">
-                    Explorar Reseñas Críticas de la Comunidad <i class="bi bi-arrow-right ms-1"></i>
-                </a>
+                <div class="d-flex align-items-center gap-2">
+                    <button id="btn-load-more-reviews" class="btn btn-xs btn-outline-glow btn-sm" onclick="loadMoreReviews()">
+                        <i class="bi bi-plus-circle me-1"></i> Ver más Reseñas
+                    </button>
+                </div>
             </div>
             <div id="session-6-reviews">
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3" id="reviews-cards-row">
                     <div class="col"><div class="skeleton-review-card"></div></div>
                     <div class="col"><div class="skeleton-review-card"></div></div>
                     <div class="col"><div class="skeleton-review-card"></div></div>
@@ -368,7 +380,7 @@
     </div>
 
     <!-- ======================================================================
-         SESIÓN 7: NOTICIAS, PRENSA & ARTÍCULOS EDITORIALES (6 Endpoints)
+         NOTICIAS DE LA INDUSTRIA & NOTAS EDITORIALES
          ====================================================================== -->
     <div class="session-block-wrapper mb-5 pb-3">
         <div class="section-header-wrap mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
@@ -376,14 +388,14 @@
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <span class="section-accent-bar" style="background: linear-gradient(135deg, #00b4db, #0083b0);"></span>
                     <h3 class="section-title mb-0">
-                        <i class="bi bi-newspaper text-info me-2"></i>Sesión 7: Noticias, Prensa & Artículos Editoriales
+                        <i class="bi bi-newspaper text-info me-2"></i>Noticias de la Industria & Notas Editoriales
                     </h3>
                     <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-25 session-badge-pill">
-                        6 Endpoints GET
+                        Actualidad
                     </span>
                 </div>
                 <span class="text-muted small">
-                    Endpoints: /news y /articles. Cobertura de prensa oficial de la industria del anime, manga y notas editoriales.
+                    Cobertura periodística oficial de la industria del anime y manga, análisis y reportajes.
                 </span>
             </div>
         </div>
@@ -393,9 +405,9 @@
             <div class="col-12 col-lg-6">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-white small fw-bold text-uppercase"><i class="bi bi-megaphone-fill text-primary me-1"></i> Noticias de la Industria</span>
-                    <a href="/blog/" class="btn btn-xs btn-outline-glow btn-sm">
-                        Explorar Noticias <i class="bi bi-arrow-right ms-1"></i>
-                    </a>
+                    <button id="btn-load-more-news" class="btn btn-xs btn-outline-glow btn-sm" onclick="loadMoreNews()">
+                        <i class="bi bi-plus-circle me-1"></i> Ver más Noticias
+                    </button>
                 </div>
                 <div id="session-7-news" class="d-flex flex-column gap-3">
                     <div class="skeleton-rect"></div>
@@ -409,9 +421,9 @@
             <div class="col-12 col-lg-6">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-white small fw-bold text-uppercase"><i class="bi bi-journal-text text-info me-1"></i> Artículos Editoriales</span>
-                    <a href="/blog/" class="btn btn-xs btn-outline-glow btn-sm">
-                        Explorar Artículos <i class="bi bi-arrow-right ms-1"></i>
-                    </a>
+                    <button id="btn-load-more-articles" class="btn btn-xs btn-outline-glow btn-sm" onclick="loadMoreArticles()">
+                        <i class="bi bi-plus-circle me-1"></i> Ver más Artículos
+                    </button>
                 </div>
                 <div id="session-7-articles" class="d-flex flex-column gap-3">
                     <div class="skeleton-rect"></div>
@@ -424,7 +436,7 @@
     </div>
 
     <!-- ======================================================================
-         SESIÓN 9: COMUNIDAD, STACKS & DESCUBRIMIENTO ALEATORIO (14 Endpoints)
+         COMUNIDAD, COLECCIONES & DESCUBRIMIENTO
          ====================================================================== -->
     <div class="session-block-wrapper mb-5 pb-3">
         <div class="section-header-wrap mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
@@ -432,14 +444,14 @@
                 <div class="d-flex align-items-center gap-2 mb-1">
                     <span class="section-accent-bar" style="background: linear-gradient(135deg, #8A2387, #E94057, #F27121);"></span>
                     <h3 class="section-title mb-0">
-                        <i class="bi bi-compass text-danger me-2"></i>Sesión 9: Comunidad, Stacks & Descubrimiento Aleatorio
+                        <i class="bi bi-compass text-danger me-2"></i>Comunidad, Colecciones & Descubrimiento
                     </h3>
                     <span class="badge bg-secondary bg-opacity-25 text-white border border-secondary border-opacity-25 session-badge-pill">
-                        14 Endpoints GET
+                        Colecciones
                     </span>
                 </div>
                 <span class="text-muted small">
-                    Endpoints: /random/anime, /random/manga, /random/characters, /stacks y el Taller de Escritores oficial de GrowUp.
+                    Colecciones temáticas, ruleta de descubrimiento y el taller de novelas independientes de GrowUp.
                 </span>
             </div>
         </div>
@@ -453,7 +465,7 @@
                     </span>
                     <h4 class="text-white fw-bold mb-2">¿No sabes qué ver o leer hoy?</h4>
                     <p class="text-muted small mb-3">
-                        Genera un descubrimiento instantáneo de los catálogos públicos oficiales mediante los endpoints aleatorios de Tenrai API.
+                        Genera un descubrimiento instantáneo explorando obras al azar de la base de datos oficial.
                     </p>
                     <div class="d-flex flex-wrap gap-2">
                         <button class="btn btn-sm btn-accent px-3 py-2 fw-semibold" onclick="fetchRandomItem('anime')">
@@ -473,7 +485,7 @@
                     <div id="random-result-box" class="p-3 rounded-3" style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.08); min-height: 120px;">
                         <div class="text-center py-3 text-muted small">
                             <i class="bi bi-shuffle fs-3 d-block mb-1 opacity-50"></i>
-                            Presiona cualquiera de los botones de la izquierda para descubrir una obra al azar y explorar todos sus endpoints.
+                            Presiona cualquiera de los botones de la izquierda para descubrir una obra al azar y explorar su ficha completa.
                         </div>
                     </div>
                 </div>
@@ -484,10 +496,12 @@
         <div class="mb-4">
             <div class="d-flex align-items-center justify-content-between mb-2">
                 <span class="text-white small fw-bold text-uppercase"><i class="bi bi-layers-fill text-warning me-1"></i> Interest Stacks Comunitarios</span>
-                <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /stacks</span>
+                <button id="btn-load-more-stacks" class="btn btn-xs btn-outline-glow btn-sm" onclick="loadMoreStacks()">
+                    <i class="bi bi-plus-circle me-1"></i> Ver más Stacks
+                </button>
             </div>
             <div id="session-9-stacks">
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3" id="stacks-cards-row">
                     <div class="col"><div class="skeleton-rect"></div></div>
                     <div class="col"><div class="skeleton-rect"></div></div>
                     <div class="col"><div class="skeleton-rect"></div></div>
@@ -539,6 +553,43 @@
 
 </div>
 
+<!-- Modal Detalle de Reseña de la Comunidad -->
+<div class="modal fade" id="reviewDetailModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content text-light" style="background: #11141d; border: 1px solid rgba(255,255,255,0.12); border-radius: 16px;">
+            <div class="modal-header border-secondary border-opacity-25 py-3">
+                <div class="d-flex align-items-center gap-3">
+                    <img id="reviewModalUserImg" src="" alt="Avatar" class="rounded-circle object-fit-cover shadow-sm" style="width: 44px; height: 44px; border: 1px solid rgba(255,255,255,0.2);">
+                    <div>
+                        <h6 class="modal-title fw-bold text-white mb-0" id="reviewModalUsername">Crítico</h6>
+                        <div class="small text-muted" id="reviewModalDate"></div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 px-3 py-2 fs-6" id="reviewModalScore"></span>
+                    <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-4">
+                <div class="p-3 rounded-3 mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+                    <div>
+                        <span class="text-muted small text-uppercase fw-semibold d-block">Obra Reseñada</span>
+                        <span class="text-info fw-bold fs-6" id="reviewModalEntryTitle">Obra</span>
+                    </div>
+                    <a id="reviewModalEntryLink" href="#" class="btn btn-sm btn-outline-glow rounded-pill px-3">
+                        <i class="bi bi-play-circle me-1"></i> Ir a la Ficha
+                    </a>
+                </div>
+                <div class="review-modal-content text-light opacity-90 lh-lg" id="reviewModalBody" style="font-size: 0.95rem;">
+                </div>
+            </div>
+            <div class="modal-footer border-secondary border-opacity-25 py-2">
+                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-4" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 // Utilities
 function escapeHtml(unsafe) {
@@ -557,8 +608,8 @@ function truncate(str, n) {
     return (str.length > n) ? str.substr(0, n - 1) + '&hellip;' : str;
 }
 
-// Media Card Generator (Linked directly to detail page executing all endpoints)
-function createMediaCardHtml(item, type, badgeLabel, scoreVal, endpointsCount) {
+// Media Card Generator
+function createMediaCardHtml(item, type, badgeLabel, scoreVal) {
     const title = escapeHtml(item.title || item.name || 'Obra');
     const img = item.images?.webp?.image_url || item.images?.jpg?.image_url || '';
     const score = (scoreVal !== undefined && scoreVal !== null && scoreVal !== '') ? Number(scoreVal).toFixed(2) : (item.score ? Number(item.score).toFixed(2) : '');
@@ -568,8 +619,6 @@ function createMediaCardHtml(item, type, badgeLabel, scoreVal, endpointsCount) {
     
     let typePath = type;
     if (type === 'lightnovel') typePath = 'manga';
-
-    const epCountText = endpointsCount ? `${endpointsCount} Endpoints` : 'Ficha Completa';
 
     return `
     <div class="col">
@@ -581,10 +630,9 @@ function createMediaCardHtml(item, type, badgeLabel, scoreVal, endpointsCount) {
                     ${badgeLabel ? `<span class="badge position-absolute top-0 start-0 m-2 bg-dark bg-opacity-75 border border-secondary border-opacity-50 text-light small">${badgeLabel}</span>` : ''}
                     ${score ? `<span class="badge position-absolute top-0 end-0 m-2 bg-dark bg-opacity-75 border border-secondary border-opacity-50 text-warning small"><i class="bi bi-star-fill me-1"></i>${score}</span>` : ''}
                     <div class="media-hover-overlay position-absolute w-100 h-100 top-0 start-0 d-flex flex-column align-items-center justify-content-center opacity-0 transition-opacity" style="background: rgba(8, 10, 16, 0.78);">
-                        <span class="btn btn-sm btn-accent rounded-pill px-3 py-1 mb-1">
+                        <span class="btn btn-sm btn-accent rounded-pill px-3 py-1">
                             <i class="bi bi-play-circle-fill me-1"></i> Ver Ficha
                         </span>
-                        <span class="badge bg-secondary bg-opacity-50 text-light small">${epCountText}</span>
                     </div>
                 </div>
             </a>
@@ -653,9 +701,6 @@ async function loadHero() {
                                 <span class="badge bg-dark bg-opacity-75 border border-secondary border-opacity-50 text-light px-2 py-1">
                                     ${item.type || 'TV'}${item.year ? ' &bull; ' + item.year : ''}
                                 </span>
-                                <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-25 px-2 py-1">
-                                    26 Endpoints GET
-                                </span>
                             </div>
 
                             <h1 class="hero-title text-white fw-bold display-5 mb-3" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.9);">${title}</h1>
@@ -670,7 +715,7 @@ async function loadHero() {
                             
                             <div class="d-flex gap-3 flex-wrap">
                                 <a href="/detail/anime/${item.mal_id}/" class="btn btn-accent btn-lg px-4 py-2 fw-semibold rounded-pill">
-                                    <i class="bi bi-play-circle-fill me-2"></i> Ver Ficha & 26 Endpoints
+                                    <i class="bi bi-play-circle-fill me-2"></i> Ver Ficha Completa
                                 </a>
                                 <a href="/explore/?type=anime" class="btn btn-outline-light btn-lg px-4 py-2 fw-semibold rounded-pill">
                                     <i class="bi bi-compass me-2"></i> Explorar Catálogo
@@ -692,8 +737,9 @@ async function loadHero() {
     }
 }
 
+// 3. Characters Renderer: Exactly 3 columns on large screens (12 items = 4 rows)
 function renderCharacters(items) {
-    let html = '<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">';
+    let html = '<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">';
     items.forEach((item, idx) => {
         const name = escapeHtml(item.name);
         const img = item.images?.webp?.image_url || item.images?.jpg?.image_url || '';
@@ -702,14 +748,13 @@ function renderCharacters(items) {
         html += `
         <div class="col">
             <a href="/detail/characters/${item.mal_id}/" class="text-decoration-none">
-                <div class="d-flex align-items-center gap-3 p-2 rounded-3 h-100 session-card-interactive" title="Ver ficha y 7 endpoints de ${name}">
+                <div class="d-flex align-items-center gap-3 p-2 rounded-3 h-100 session-card-interactive" title="Ver ficha de ${name}">
                     <div class="fw-bold text-muted small" style="min-width: 22px;">#${rank}</div>
                     <img src="${img}" alt="${name}" loading="lazy" class="rounded-circle object-fit-cover" style="width: 48px; height: 48px; border: 1px solid rgba(255,255,255,0.1);">
                     <div class="overflow-hidden flex-grow-1">
                         <h6 class="text-light mb-0 text-truncate small fw-semibold">${name}</h6>
                         <div class="d-flex align-items-center justify-content-between mt-1">
                             <small class="text-muted"><i class="bi bi-heart-fill text-danger small"></i> ${favs}</small>
-                            <span class="badge bg-dark text-info" style="font-size: 0.65rem;">7 Endpoints</span>
                         </div>
                     </div>
                 </div>
@@ -725,14 +770,293 @@ function loadCharacters() {
     loadSection('/api/tenrai/top/characters?limit=12', 'session-3-characters-grid', renderCharacters);
 }
 
-// Random Item Generator (Sesión 9 Interactive Widget)
+// 6. Reviews State & Pagination
+let currentReviewsPage = 1;
+let allLoadedReviews = [];
+
+function openReviewModal(idx) {
+    const review = allLoadedReviews[idx];
+    if (!review) return;
+    const user = escapeHtml(review.user?.username || 'Usuario');
+    const userImg = review.user?.images?.webp?.image_url || review.user?.images?.jpg?.image_url || '';
+    const score = review.score || review.scores?.overall || 'N/A';
+    const entryTitle = escapeHtml(review.entry?.title || 'Obra');
+    const entryUrl = review.entry?.mal_id ? `/detail/${review.type || 'anime'}/${review.entry.mal_id}/` : '#';
+    const fullText = escapeHtml(review.review || 'Sin contenido de reseña.').replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>');
+    const date = review.date ? new Date(review.date).toLocaleDateString() : '';
+    const episodesWatched = review.episodes_watched ? `${review.episodes_watched} episodios vistos` : '';
+
+    const imgEl = document.getElementById('reviewModalUserImg');
+    if (imgEl) {
+        imgEl.src = userImg || '';
+        imgEl.style.display = userImg ? 'block' : 'none';
+    }
+    const userEl = document.getElementById('reviewModalUsername');
+    if (userEl) userEl.textContent = user;
+    const scoreEl = document.getElementById('reviewModalScore');
+    if (scoreEl) scoreEl.innerHTML = `<i class="bi bi-star-fill text-warning me-1"></i> ${score} / 10`;
+    const entryTitleEl = document.getElementById('reviewModalEntryTitle');
+    if (entryTitleEl) entryTitleEl.textContent = entryTitle;
+    const entryLinkEl = document.getElementById('reviewModalEntryLink');
+    if (entryLinkEl) entryLinkEl.href = entryUrl;
+    const dateEl = document.getElementById('reviewModalDate');
+    if (dateEl) dateEl.textContent = date + (episodesWatched ? ` • ${episodesWatched}` : '');
+    const bodyEl = document.getElementById('reviewModalBody');
+    if (bodyEl) bodyEl.innerHTML = fullText;
+
+    const modalEl = document.getElementById('reviewDetailModal');
+    if (modalEl && window.bootstrap) {
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+    }
+}
+
+function appendReviewsHtml(items) {
+    const startIdx = allLoadedReviews.length;
+    allLoadedReviews.push(...items);
+    let html = '';
+    items.forEach((item, relIdx) => {
+        const globalIdx = startIdx + relIdx;
+        const user = escapeHtml(item.user?.username || 'Crítico');
+        const userImg = item.user?.images?.webp?.image_url || item.user?.images?.jpg?.image_url || '';
+        const score = item.score || item.scores?.overall || 'N/A';
+        const excerpt = escapeHtml(truncate(item.review || '', 130));
+        const entryTitle = escapeHtml(item.entry?.title || 'Obra');
+        const entryUrl = item.entry?.mal_id ? `/detail/${item.type || 'anime'}/${item.entry.mal_id}/` : '#';
+        html += `
+        <div class="col">
+            <div class="p-3 rounded-4 h-100 d-flex flex-column justify-content-between session-card-interactive review-card-clickable" onclick="openReviewModal(${globalIdx})" title="Haz clic para leer la reseña completa de ${user}">
+                <div>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="d-flex align-items-center gap-2 overflow-hidden">
+                            ${userImg ? `<img src="${userImg}" class="rounded-circle" style="width:26px;height:26px;object-fit:cover;">` : `<i class="bi bi-person-circle fs-6 text-secondary"></i>`}
+                            <span class="small text-light fw-semibold text-truncate">${user}</span>
+                        </div>
+                        <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 small"><i class="bi bi-star-fill me-1"></i>${score}</span>
+                    </div>
+                    <div class="mb-2">
+                        <span class="small text-info fw-bold text-truncate d-block">${entryTitle}</span>
+                    </div>
+                    <p class="text-white-50 small mb-0 lh-sm" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                        "${excerpt}"
+                    </p>
+                </div>
+                <div class="mt-3 pt-2 border-top border-secondary border-opacity-10 d-flex justify-content-between align-items-center">
+                    <span class="text-warning small" style="font-size:0.75rem;"><i class="bi bi-eye me-1"></i>Leer completa</span>
+                    <a href="${entryUrl}" onclick="event.stopPropagation();" class="text-decoration-none small text-muted hover-light" style="font-size:0.75rem;">
+                        Ver ficha <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        `;
+    });
+    return html;
+}
+
+async function loadMoreReviews() {
+    const btn = document.getElementById('btn-load-more-reviews');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Cargando...';
+    }
+    currentReviewsPage++;
+    try {
+        const res = await fetch(`/api/tenrai/top/reviews?page=${currentReviewsPage}&limit=4`);
+        if (!res.ok) throw new Error(res.status);
+        const json = await res.json();
+        const items = json.data || [];
+        const row = document.getElementById('reviews-cards-row');
+        if (row && items.length > 0) {
+            row.insertAdjacentHTML('beforeend', appendReviewsHtml(items));
+        } else if (btn) {
+            btn.textContent = 'No hay más reseñas';
+            return;
+        }
+    } catch (e) {
+        console.warn('Error loading more reviews:', e);
+    } finally {
+        if (btn && btn.textContent !== 'No hay más reseñas') {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Ver más Reseñas';
+        }
+    }
+}
+
+// 7. News & Articles State & Pagination
+let currentNewsPage = 1;
+let currentArticlesPage = 1;
+
+function renderNewsItems(items) {
+    return items.map(item => {
+        const title = escapeHtml(item.title);
+        const img = item.images?.jpg?.image_url || '';
+        const url = item.url || '#';
+        const date = item.date ? new Date(item.date).toLocaleDateString() : '';
+        return `
+        <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+            <div class="d-flex gap-3 align-items-center p-2 rounded-3 session-card-interactive" title="Leer noticia: ${title}">
+                ${img ? `<img src="${img}" alt="Noticia" class="rounded object-fit-cover" style="width: 75px; height: 55px; flex-shrink: 0;">` : `<div class="rounded bg-secondary bg-opacity-25" style="width: 75px; height: 55px; flex-shrink: 0;"></div>`}
+                <div class="overflow-hidden flex-grow-1">
+                    <h6 class="mb-1 text-truncate small fw-semibold text-light" title="${title}">${title}</h6>
+                    <div class="d-flex align-items-center gap-2 text-muted small">
+                        <span>${date}</span>
+                        <span>&bull;</span>
+                        <span class="text-info"><i class="bi bi-box-arrow-up-right me-1"></i>Leer noticia</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+        `;
+    }).join('');
+}
+
+async function loadMoreNews() {
+    const btn = document.getElementById('btn-load-more-news');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Cargando...';
+    }
+    currentNewsPage++;
+    try {
+        const res = await fetch(`/api/tenrai/news?page=${currentNewsPage}&limit=4`);
+        if (!res.ok) throw new Error(res.status);
+        const json = await res.json();
+        const items = json.data || [];
+        const container = document.getElementById('session-7-news');
+        if (container && items.length > 0) {
+            container.insertAdjacentHTML('beforeend', renderNewsItems(items));
+        } else if (btn) {
+            btn.textContent = 'No hay más noticias';
+            return;
+        }
+    } catch (e) {
+        console.warn('Error loading more news:', e);
+    } finally {
+        if (btn && btn.textContent !== 'No hay más noticias') {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Ver más Noticias';
+        }
+    }
+}
+
+function renderArticleItems(items) {
+    return items.map(item => {
+        const title = escapeHtml(item.title || 'Artículo');
+        const summary = escapeHtml(truncate(item.summary || item.snippet || item.excerpt || '', 100));
+        const url = item.url || '#';
+        return `
+        <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+            <div class="p-2 rounded-3 session-card-interactive" title="Leer artículo: ${title}">
+                <h6 class="mb-1 text-truncate small fw-semibold text-info" title="${title}">${title}</h6>
+                <p class="text-white-50 small mb-1 lh-sm text-truncate">${summary}</p>
+                <div class="d-flex justify-content-end text-muted small" style="font-size:0.75rem;">
+                    <span class="text-info"><i class="bi bi-box-arrow-up-right me-1"></i>Abrir lectura</span>
+                </div>
+            </div>
+        </a>
+        `;
+    }).join('');
+}
+
+async function loadMoreArticles() {
+    const btn = document.getElementById('btn-load-more-articles');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Cargando...';
+    }
+    currentArticlesPage++;
+    try {
+        const res = await fetch(`/api/tenrai/articles?page=${currentArticlesPage}&limit=4`);
+        if (!res.ok) throw new Error(res.status);
+        const json = await res.json();
+        const items = json.data || [];
+        const container = document.getElementById('session-7-articles');
+        if (container && items.length > 0) {
+            container.insertAdjacentHTML('beforeend', renderArticleItems(items));
+        } else if (btn) {
+            btn.textContent = 'No hay más artículos';
+            return;
+        }
+    } catch (e) {
+        console.warn('Error loading more articles:', e);
+    } finally {
+        if (btn && btn.textContent !== 'No hay más artículos') {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Ver más Artículos';
+        }
+    }
+}
+
+// 9. Interest Stacks State & Pagination
+let currentStacksPage = 1;
+
+function renderStacksHtml(items) {
+    return items.map(st => {
+        const title = escapeHtml(st.title || 'Colección Temática');
+        const author = escapeHtml(st.author_username || st.author?.username || 'Comunidad');
+        const count = st.entry_count || st.entries_count || st.count || 0;
+        const url = st.url || `https://myanimelist.net/stacks/${st.mal_id}`;
+        return `
+        <div class="col">
+            <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-reset d-block h-100">
+                <div class="p-3 rounded-3 session-card-interactive stack-card-clickable h-100 d-flex flex-column justify-content-between" title="Ver colección: ${title}">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-warning bg-opacity-25 text-warning small font-monospace">Interest Stack</span>
+                            <i class="bi bi-box-arrow-up-right text-muted small"></i>
+                        </div>
+                        <h6 class="text-light fw-bold text-truncate mb-1" title="${title}">${title}</h6>
+                        <small class="text-muted d-block"><i class="bi bi-person me-1"></i>${author}</small>
+                    </div>
+                    <div class="mt-3 text-muted small d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-collection me-1 text-warning"></i>${count} obras</span>
+                        <span class="text-warning small" style="font-size:0.75rem;">Explorar stack</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        `;
+    }).join('');
+}
+
+async function loadMoreStacks() {
+    const btn = document.getElementById('btn-load-more-stacks');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Cargando...';
+    }
+    currentStacksPage++;
+    try {
+        const res = await fetch(`/api/tenrai/stacks?page=${currentStacksPage}&limit=4`);
+        if (!res.ok) throw new Error(res.status);
+        const json = await res.json();
+        const items = json.data || [];
+        const row = document.getElementById('stacks-cards-row');
+        if (row && items.length > 0) {
+            row.insertAdjacentHTML('beforeend', renderStacksHtml(items));
+        } else if (btn) {
+            btn.textContent = 'No hay más stacks';
+            return;
+        }
+    } catch (e) {
+        console.warn('Error loading more stacks:', e);
+    } finally {
+        if (btn && btn.textContent !== 'No hay más stacks') {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-plus-circle me-1"></i> Ver más Stacks';
+        }
+    }
+}
+
+// Random Item Generator
 async function fetchRandomItem(category) {
     const box = document.getElementById('random-result-box');
     if (!box) return;
     box.innerHTML = `
         <div class="text-center py-3 text-light small">
             <div class="spinner-border spinner-border-sm text-danger me-2" role="status"></div>
-            Consultando Tenrai API aleatorio (/random/${category})...
+            Consultando descubrimiento aleatorio...
         </div>
     `;
 
@@ -757,7 +1081,7 @@ async function fetchRandomItem(category) {
                     <h6 class="text-white mb-1 text-truncate fw-bold">${title}</h6>
                     <p class="text-white-50 small mb-2 lh-sm">${synopsis}</p>
                     <a href="/detail/${targetType}/${id}/" class="btn btn-xs btn-accent btn-sm py-1 px-3 rounded-pill fw-semibold">
-                        <i class="bi bi-play-circle-fill me-1"></i> Abrir Ficha & Endpoints
+                        <i class="bi bi-play-circle-fill me-1"></i> Abrir Ficha Completa
                     </a>
                 </div>
             </div>
@@ -776,27 +1100,27 @@ document.addEventListener("DOMContentLoaded", () => {
     // 0. Hero Billboard
     loadHero();
 
-    // 1. Sesión 1: Catálogo Anime (12 items)
+    // 1. Catalogo Anime (12 items)
     loadSection('/api/tenrai/top/anime?limit=12', 'session-1-anime-grid', (items) => {
         return `<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">` + 
-            items.map(i => createMediaCardHtml(i, 'anime', i.type, i.score, 26)).join('') + 
+            items.map(i => createMediaCardHtml(i, 'anime', i.type, i.score)).join('') + 
             `</div>`;
     });
 
-    // 2. Sesión 2: Catálogo Manga (6 items) & Novelas Ligeras (6 items)
+    // 2. Catalogo Manga (6 items) & Novelas Ligeras (6 items)
     loadSection('/api/tenrai/top/manga?limit=6&type=manga', 'session-2-manga-grid', (items) => {
         return `<div class="row row-cols-2 row-cols-sm-3 g-3">` + 
-            items.map(i => createMediaCardHtml(i, 'manga', 'Manga', i.score, 16)).join('') + 
+            items.map(i => createMediaCardHtml(i, 'manga', 'Manga', i.score)).join('') + 
             `</div>`;
     });
 
     loadSection('/api/tenrai/top/manga?limit=6&type=lightnovel', 'session-2-lightnovel-grid', (items) => {
         return `<div class="row row-cols-2 row-cols-sm-3 g-3">` + 
-            items.map(i => createMediaCardHtml(i, 'lightnovel', 'LN', i.score, 16)).join('') + 
+            items.map(i => createMediaCardHtml(i, 'lightnovel', 'LN', i.score)).join('') + 
             `</div>`;
     });
 
-    // 3. Sesión 3: Personajes Populares & Creadores
+    // 3. Personajes Populares & Creadores
     loadCharacters();
 
     loadSection('/api/tenrai/top/people?limit=6', 'session-3-people-grid', (items) => {
@@ -807,13 +1131,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const favs = item.favorites ? (item.favorites / 1000).toFixed(1) + 'k' : '';
             html += `
             <a href="/detail/people/${item.mal_id}/" class="text-decoration-none">
-                <div class="d-flex align-items-center gap-3 p-2 rounded-3 session-card-interactive" title="Ver trayectoria y 6 endpoints de ${name}">
+                <div class="d-flex align-items-center gap-3 p-2 rounded-3 session-card-interactive" title="Ver trayectoria de ${name}">
                     <img src="${img}" alt="${name}" loading="lazy" class="rounded-circle object-fit-cover" style="width: 44px; height: 44px; border: 1px solid rgba(255,255,255,0.1);">
                     <div class="overflow-hidden flex-grow-1">
                         <h6 class="text-light mb-0 text-truncate small fw-semibold">${name}</h6>
                         <small class="text-muted"><i class="bi bi-heart-fill text-danger small"></i> ${favs} fans</small>
                     </div>
-                    <span class="badge bg-dark text-info" style="font-size: 0.65rem;">6 Endpoints</span>
                 </div>
             </a>
             `;
@@ -822,16 +1145,16 @@ document.addEventListener("DOMContentLoaded", () => {
         return html;
     });
 
-    // 5. Sesión 5: Temporadas Actual, Próximos Estrenos y Programación Semanal
+    // 5. Temporadas Actual, Proximos Estrenos y Programacion Semanal
     loadSection('/api/tenrai/seasons/now?limit=4', 'session-5-season-now', (items) => {
         return `<div class="row row-cols-2 g-3">` + 
-            items.map(i => createMediaCardHtml(i, 'anime', 'En Emisión', i.score, 26)).join('') + 
+            items.map(i => createMediaCardHtml(i, 'anime', 'En Emisión', i.score)).join('') + 
             `</div>`;
     });
 
     loadSection('/api/tenrai/seasons/upcoming?limit=4', 'session-5-season-upcoming', (items) => {
         return `<div class="row row-cols-2 g-3">` + 
-            items.map(i => createMediaCardHtml(i, 'anime', 'Próximo', i.score, 26)).join('') + 
+            items.map(i => createMediaCardHtml(i, 'anime', 'Próximo', i.score)).join('') + 
             `</div>`;
     });
 
@@ -853,112 +1176,23 @@ document.addEventListener("DOMContentLoaded", () => {
         return html;
     });
 
-    // 6. Sesión 6: Reseñas Críticas de la Comunidad
-    loadSection('/api/tenrai/top/reviews?limit=4', 'session-6-reviews', (items) => {
-        let html = '<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">';
-        items.forEach(item => {
-            const user = escapeHtml(item.user?.username || 'Crítico');
-            const userImg = item.user?.images?.webp?.image_url || item.user?.images?.jpg?.image_url || '';
-            const score = item.score || item.scores?.overall || 'N/A';
-            const excerpt = escapeHtml(truncate(item.review || '', 130));
-            const entryTitle = escapeHtml(item.entry?.title || 'Obra');
-            const entryUrl = item.entry?.mal_id ? `/detail/${item.type || 'anime'}/${item.entry.mal_id}/` : '#';
-            html += `
-            <div class="col">
-                <div class="p-3 rounded-4 h-100 d-flex flex-column justify-content-between session-card-interactive">
-                    <div>
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <div class="d-flex align-items-center gap-2 overflow-hidden">
-                                ${userImg ? `<img src="${userImg}" class="rounded-circle" style="width:26px;height:26px;object-fit:cover;">` : `<i class="bi bi-person-circle fs-6 text-secondary"></i>`}
-                                <span class="small text-light fw-semibold text-truncate">${user}</span>
-                            </div>
-                            <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50 small"><i class="bi bi-star-fill me-1"></i>${score}</span>
-                        </div>
-                        <div class="mb-2">
-                            <a href="${entryUrl}" class="text-decoration-none small text-info fw-bold text-truncate d-block">${entryTitle}</a>
-                        </div>
-                        <p class="text-white-50 small mb-0 lh-sm" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                            "${excerpt}"
-                        </p>
-                    </div>
-                    <div class="mt-3 pt-2 border-top border-secondary border-opacity-10 d-flex justify-content-end">
-                        <a href="${entryUrl}" class="text-decoration-none small text-muted hover-light">
-                            Ver ficha & endpoints <i class="bi bi-arrow-right ms-1"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            `;
-        });
-        html += '</div>';
-        return html;
+    // 6. Reseñas Criticas de la Comunidad
+    loadSection('/api/tenrai/top/reviews?limit=4', 'reviews-cards-row', (items) => {
+        return appendReviewsHtml(items);
     });
 
-    // 7. Sesión 7: Noticias de la Industria y Artículos Editoriales
+    // 7. Noticias de la Industria y Articulos Editoriales
     loadSection('/api/tenrai/news?limit=4', 'session-7-news', (items) => {
-        let html = '<div class="d-flex flex-column gap-3">';
-        items.forEach(item => {
-            const title = escapeHtml(item.title);
-            const img = item.images?.jpg?.image_url || '';
-            const url = item.url || '#';
-            const date = item.date ? new Date(item.date).toLocaleDateString() : '';
-            html += `
-            <div class="d-flex gap-3 align-items-center p-2 rounded-3 session-card-interactive">
-                ${img ? `<img src="${img}" alt="Noticia" class="rounded object-fit-cover" style="width: 75px; height: 55px; flex-shrink: 0;">` : `<div class="rounded bg-secondary bg-opacity-25" style="width: 75px; height: 55px; flex-shrink: 0;"></div>`}
-                <div class="overflow-hidden flex-grow-1">
-                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-light text-decoration-none"><h6 class="mb-1 text-truncate small fw-semibold" title="${title}">${title}</h6></a>
-                    <small class="text-muted">${date}</small>
-                </div>
-            </div>
-            `;
-        });
-        html += '</div>';
-        return html;
+        return renderNewsItems(items);
     });
 
     loadSection('/api/tenrai/articles?limit=4', 'session-7-articles', (items) => {
-        let html = '<div class="d-flex flex-column gap-3">';
-        items.forEach(item => {
-            const title = escapeHtml(item.title || 'Artículo');
-            const summary = escapeHtml(truncate(item.summary || item.snippet || '', 90));
-            const url = item.url || '#';
-            html += `
-            <div class="p-2 rounded-3 session-card-interactive">
-                <a href="${url}" target="_blank" rel="noopener noreferrer" class="text-light text-decoration-none">
-                    <h6 class="mb-1 text-truncate small fw-semibold text-info" title="${title}">${title}</h6>
-                </a>
-                <p class="text-white-50 small mb-0 lh-sm text-truncate">${summary}</p>
-            </div>
-            `;
-        });
-        html += '</div>';
-        return html;
+        return renderArticleItems(items);
     });
 
-    // 9. Sesión 9: Interest Stacks de la Comunidad
-    loadSection('/api/tenrai/stacks?limit=4', 'session-9-stacks', (items) => {
-        let html = '<div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">';
-        items.forEach(st => {
-            const title = escapeHtml(st.title || 'Colección Temática');
-            const author = escapeHtml(st.author?.username || 'Comunidad');
-            const count = st.entries_count || st.count || 0;
-            html += `
-            <div class="col">
-                <div class="p-3 rounded-3 session-card-interactive h-100 d-flex flex-column justify-content-between">
-                    <div>
-                        <span class="badge bg-warning bg-opacity-25 text-warning small mb-2 font-monospace">Interest Stack</span>
-                        <h6 class="text-light fw-bold text-truncate mb-1" title="${title}">${title}</h6>
-                        <small class="text-muted d-block"><i class="bi bi-person me-1"></i>${author}</small>
-                    </div>
-                    <div class="mt-2 text-muted small">
-                        <span><i class="bi bi-collection me-1"></i>${count} obras agrupadas</span>
-                    </div>
-                </div>
-            </div>
-            `;
-        });
-        html += '</div>';
-        return html;
+    // 9. Interest Stacks de la Comunidad
+    loadSection('/api/tenrai/stacks?limit=4', 'stacks-cards-row', (items) => {
+        return renderStacksHtml(items);
     });
 
 });

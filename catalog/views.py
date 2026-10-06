@@ -26,7 +26,7 @@ def home_view(request):
 
 
 def explore_view(request):
-    media_type = request.GET.get('type', 'anime')  # anime, manga, lightnovel, original_novel, characters, people
+    media_type = request.GET.get('type', 'anime').strip()
     q = request.GET.get('q', '').strip()
     genre = request.GET.get('genre', '').strip()
     status = request.GET.get('status', '').strip()
@@ -35,6 +35,20 @@ def explore_view(request):
     format_type = request.GET.get('format', '').strip()
     rating = request.GET.get('rating', '').strip()
     min_score = request.GET.get('min_score', '').strip()
+
+    # Map subtype selections if passed directly via 'type'
+    anime_formats = {'tv': 'tv', 'movie': 'movie', 'ova': 'ova', 'special': 'special', 'ona': 'ona', 'music': 'music'}
+    manga_formats = {'manhwa': 'manhwa', 'manhua': 'manhua', 'oneshot': 'oneshot', 'doujin': 'doujin'}
+
+    effective_category = media_type
+    if media_type in anime_formats:
+        effective_category = 'anime'
+        if not format_type:
+            format_type = anime_formats[media_type]
+    elif media_type in manga_formats:
+        effective_category = 'manga'
+        if not format_type:
+            format_type = manga_formats[media_type]
 
     try:
         page = int(request.GET.get('page', 1))
@@ -45,7 +59,7 @@ def explore_view(request):
 
     per_page = 24
 
-    if media_type == 'original_novel':
+    if effective_category == 'original_novel':
         novels = Novel.objects.exclude(status='draft').select_related(
             'author', 'author__profile'
         ).prefetch_related('categories').only(
@@ -103,7 +117,7 @@ def explore_view(request):
         }
     else:
         results = tenrai_service.search_items(
-            category=media_type,
+            category=effective_category,
             query=q,
             genre=genre,
             status=status,
@@ -134,6 +148,7 @@ def explore_view(request):
         'items': items,
         'pagination': pagination,
         'selected_type': media_type,
+        'effective_category': effective_category,
         'selected_q': q,
         'selected_genre': genre,
         'selected_status': status,

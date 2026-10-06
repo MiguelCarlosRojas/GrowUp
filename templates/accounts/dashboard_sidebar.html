@@ -15,14 +15,14 @@
 
     <!-- Group: Actividad & Comunidad -->
     <div class="app-nav-group">
-        <span class="app-nav-group-title">Mi Actividad</span>
+        <span class="app-nav-group-title">Comunidad</span>
         <a href="{% url 'accounts:dashboard_reviews' %}" class="app-sidebar-link sidebar-nav-item {% if active_tab == 'reviews' %}active{% endif %}">
             <i class="bi bi-star-fill text-warning"></i>
-            <span>Opiniones y Reseñas</span>
+            <span>Opiniones</span>
         </a>
         <a href="{% url 'accounts:dashboard_discussions' %}" class="app-sidebar-link sidebar-nav-item {% if active_tab == 'discussions' %}active{% endif %}">
             <i class="bi bi-chat-left-text-fill text-info"></i>
-            <span>Debates y Preguntas</span>
+            <span>Debates</span>
         </a>
     </div>
 
@@ -34,45 +34,6 @@
                 <i class="bi bi-feather text-warning"></i>
                 <span>Mi Taller de Escritor</span>
             </a>
-            <a href="{% url 'novels:novel_create' %}" class="app-sidebar-link sidebar-nav-item">
-                <i class="bi bi-plus-circle text-danger"></i>
-                <span>Publicar Novela</span>
-            </a>
         </div>
     {% endif %}
-
-    <!-- Group: Exploración Rápida -->
-    <div class="app-nav-group">
-        <span class="app-nav-group-title">Explorar GrowUp</span>
-        <a href="{% url 'catalog:home' %}" class="app-sidebar-link sidebar-nav-item">
-            <i class="bi bi-house-door text-secondary"></i>
-            <span>Inicio del Sitio</span>
-        </a>
-        <a href="{% url 'catalog:explore' %}" class="app-sidebar-link sidebar-nav-item">
-            <i class="bi bi-compass text-secondary"></i>
-            <span>Catálogo Completo</span>
-        </a>
-        <a href="{% url 'novels:novel_list' %}" class="app-sidebar-link sidebar-nav-item">
-            <i class="bi bi-journal-richtext text-secondary"></i>
-            <span>Novelas Comunitarias</span>
-        </a>
-        <a href="{% url 'catalog:blog' %}" class="app-sidebar-link sidebar-nav-item">
-            <i class="bi bi-newspaper text-secondary"></i>
-            <span>Blog Oficial</span>
-        </a>
-    </div>
-
-    <!-- User Status Footer Inside Sidebar -->
-    <div class="mt-auto pt-3 border-top border-secondary border-opacity-25">
-        <div class="p-2 rounded-3 text-center" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-            <div class="small fw-semibold text-white mb-0 text-truncate">{{ user.username }}</div>
-            <div class="text-muted" style="font-size: 0.72rem;">
-                {% if user.profile.role == 'author' %}
-                    <span class="text-warning"><i class="bi bi-patch-check-fill me-1"></i>Autor Verificado</span>
-                {% else %}
-                    <span class="text-info"><i class="bi bi-book-half me-1"></i>Lector de la Comunidad</span>
-                {% endif %}
-            </div>
-        </div>
-    </div>
 </nav>

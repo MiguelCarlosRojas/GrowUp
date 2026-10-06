@@ -3,16 +3,24 @@
 {% block title %}Explorar Catálogo - GrowUp{% endblock %}
 
 {% block content %}
-<div class="mb-4">
-    <div class="d-flex align-items-center gap-2 mb-1">
-        <span class="section-accent-bar"></span>
-        <h2 class="fw-bold text-white mb-0">Explorar Mangas, Animes y Novelas Ligeras</h2>
+<div class="p-4 p-md-5 rounded-4 mb-4 shadow-lg position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(18, 25, 40, 0.95) 0%, rgba(10, 15, 26, 0.98) 100%); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+    <div class="position-absolute top-0 end-0 p-4 opacity-10 d-none d-lg-block pointer-events-none">
+        <i class="bi bi-compass text-danger" style="font-size: 10rem;"></i>
     </div>
-    <p class="text-muted">Filtros dinámicos en vivo con datos de Tenrai API v1 y la comunidad de escritores de GrowUp.</p>
+    <div class="position-relative" style="z-index: 1;">
+        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.35);">
+            <span class="badge bg-danger rounded-circle p-1"></span>
+            <span class="text-white small fw-bold text-uppercase tracking-wider">Catálogo Global & Filtros Dinámicos</span>
+        </div>
+        <h1 class="display-6 fw-bold text-white mb-2">Explorar Mangas, Animes y Novelas Ligeras</h1>
+        <p class="text-secondary lead mb-0" style="font-size: 1rem; max-width: 780px;">
+            Descubre miles de obras oficiales sincronizadas en tiempo real con Tenrai API v1 y la comunidad de escritores de GrowUp. Filtra por formato, demografía, puntuación y estado de emisión.
+        </p>
+    </div>
 </div>
 
 <!-- Advanced Filter Panel with Pill Selectors -->
-<div class="filter-bar-pro mb-4">
+<div class="filter-bar-pro mb-4 p-4 rounded-4 shadow-lg" style="background: rgba(14, 20, 32, 0.85); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
     <!-- Quick Type Selectors -->
     <div class="d-flex gap-2 mb-3 flex-wrap">
         <a href="{% url 'catalog:explore' %}?type=anime{% if selected_q %}&q={{ selected_q }}{% endif %}" class="btn-subtle-pill {% if selected_type == 'anime' %}active{% endif %}">

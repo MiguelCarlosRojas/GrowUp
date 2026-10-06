@@ -65,7 +65,10 @@
 
     <!-- Modern App Topbar -->
     <header class="app-topbar">
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center gap-2 gap-sm-3">
+            <button class="btn btn-sm btn-outline-glow d-lg-none p-1 px-2 me-1" type="button" id="sidebarToggleBtn" aria-label="Alternar menú lateral">
+                <i class="bi bi-layout-sidebar text-danger fs-5"></i>
+            </button>
             <a href="{% url 'catalog:home' %}" class="d-flex align-items-center text-decoration-none">
                 <img src="{% static 'images/logo.png' %}" alt="GrowUp" class="brand-logo-img" style="height: 38px;">
             </a>
@@ -75,10 +78,18 @@
             </span>
         </div>
 
-        <div class="d-flex align-items-center gap-3">
-            <a href="{% url 'catalog:home' %}" class="btn-app-action">
+        <div class="d-flex align-items-center gap-2 gap-md-3">
+            <a href="{% url 'catalog:explore' %}" class="btn-app-action d-none d-md-inline-flex">
                 <i class="bi bi-compass"></i>
-                <span class="d-none d-md-inline">Volver al Catálogo</span>
+                <span>Explorar</span>
+            </a>
+            <a href="{% url 'novels:novel_list' %}" class="btn-app-action d-none d-md-inline-flex">
+                <i class="bi bi-feather"></i>
+                <span>Novelas</span>
+            </a>
+            <a href="{% url 'catalog:home' %}" class="btn-app-action">
+                <i class="bi bi-house-door"></i>
+                <span class="d-none d-sm-inline">Inicio</span>
             </a>
 
             <!-- Real-Time WebSocket Notification Triggers (Reviews & Debates) -->
@@ -93,11 +104,43 @@
                     <i class="bi bi-chevron-down user-nav-chevron"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end user-nav-dropdown-menu shadow-lg">
+                    <li class="px-3 py-2 border-bottom border-secondary border-opacity-25 mb-1">
+                        <div class="small fw-bold text-white">{{ user.get_full_name|default:user.username }}</div>
+                        <div class="text-muted" style="font-size: 0.75rem;">
+                            {% if user.profile.role == 'author' %}
+                                <span class="text-warning"><i class="bi bi-feather me-1"></i>Autor / Escritor</span>
+                            {% else %}
+                                <span class="text-info"><i class="bi bi-book me-1"></i>Lector</span>
+                            {% endif %}
+                        </div>
+                    </li>
                     <li>
                         <a class="dropdown-item user-nav-dropdown-item" href="{% url 'accounts:profile' %}">
                             <i class="bi bi-person-circle text-info"></i> Mi Perfil
                         </a>
                     </li>
+                    <li>
+                        <a class="dropdown-item user-nav-dropdown-item" href="{% url 'accounts:dashboard' %}">
+                            <i class="bi bi-speedometer2 text-primary"></i> Mi Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item user-nav-dropdown-item" href="{% url 'accounts:dashboard_reviews' %}">
+                            <i class="bi bi-star-fill text-warning"></i> Mis Opiniones
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item user-nav-dropdown-item" href="{% url 'accounts:dashboard_discussions' %}">
+                            <i class="bi bi-chat-left-text-fill text-info"></i> Mis Debates
+                        </a>
+                    </li>
+                    {% if user.profile.role == 'author' %}
+                        <li>
+                            <a class="dropdown-item user-nav-dropdown-item" href="{% url 'novels:author_dashboard' %}">
+                                <i class="bi bi-feather text-warning"></i> Taller de Escritor
+                            </a>
+                        </li>
+                    {% endif %}
                     <li><hr class="dropdown-divider border-secondary border-opacity-25 my-1"></li>
                     <li>
                         <a class="dropdown-item user-nav-dropdown-item user-nav-logout" href="{% url 'accounts:logout' %}">
@@ -219,6 +262,21 @@
                     dismissToast(toast);
                 }, duration);
             });
+
+            // Mobile sidebar toggle
+            var sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+            var sidebar = document.querySelector('.app-sidebar-v2');
+            if (sidebarToggleBtn && sidebar) {
+                sidebarToggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('show-mobile');
+                });
+                document.addEventListener('click', function(e) {
+                    if (sidebar.classList.contains('show-mobile') && !sidebar.contains(e.target)) {
+                        sidebar.classList.remove('show-mobile');
+                    }
+                });
+            }
         });
     </script>
     {% block extra_js %}{% endblock %}

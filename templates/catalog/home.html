@@ -51,9 +51,9 @@
 
 <div class="container-fluid py-4 px-md-4">
 
-    <!-- Buscador / Explorar Rápido -->
-    <div class="filter-bar-pro mb-5 p-3 rounded-4 shadow-sm" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
-        <form action="/explore/" method="GET" class="d-flex align-items-center gap-3 flex-wrap">
+    <!-- Buscador / Explorar Rápido (Obsidian Pro Bar) -->
+    <div class="filter-bar-pro mb-5 p-4 rounded-4 shadow-lg" style="background: linear-gradient(135deg, rgba(18, 25, 40, 0.75) 0%, rgba(10, 15, 26, 0.85) 100%); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
+        <form action="{% url 'catalog:explore' %}" method="GET" class="d-flex align-items-center gap-3 flex-wrap mb-3">
             <div class="flex-grow-1">
                 <div class="input-group">
                     <span class="input-group-text bg-transparent border-secondary text-light"><i class="bi bi-search"></i></span>
@@ -72,6 +72,17 @@
                 <i class="bi bi-compass me-1"></i> Explorar Catálogo
             </button>
         </form>
+
+        <!-- Quick Genre Pills Shortcuts -->
+        <div class="d-flex align-items-center gap-2 flex-wrap pt-2 border-top border-secondary border-opacity-25 small">
+            <span class="text-muted fw-semibold me-1"><i class="bi bi-tag-fill me-1 text-danger"></i>Tendencias:</span>
+            <a href="{% url 'catalog:explore' %}?type=anime&genre=1" class="genre-tag-pill text-decoration-none">Acción</a>
+            <a href="{% url 'catalog:explore' %}?type=anime&genre=2" class="genre-tag-pill text-decoration-none">Aventura</a>
+            <a href="{% url 'catalog:explore' %}?type=anime&genre=10" class="genre-tag-pill text-decoration-none">Fantasía</a>
+            <a href="{% url 'catalog:explore' %}?type=anime&genre=22" class="genre-tag-pill text-decoration-none">Romance</a>
+            <a href="{% url 'catalog:explore' %}?type=anime&genre=24" class="genre-tag-pill text-decoration-none">Sci-Fi</a>
+            <a href="{% url 'catalog:explore' %}?type=original_novel" class="genre-tag-pill text-decoration-none" style="border-color: rgba(245, 158, 11, 0.4); color: #f59e0b;">Novelas Originales</a>
+        </div>
     </div>
 
     <!-- ======================================================================
@@ -502,33 +513,37 @@
                 <span class="text-white small fw-bold text-uppercase"><i class="bi bi-pen-fill text-danger me-1"></i> Taller de Escritores GrowUp (Novelas de la Comunidad)</span>
                 <a href="{% url 'novels:novel_list' %}" class="btn btn-xs btn-outline-glow btn-sm">Ver taller completo</a>
             </div>
-            <div class="workshop-showcase-box p-4 rounded-4" style="background: rgba(220, 53, 69, 0.05); border: 1px solid rgba(220, 53, 69, 0.15);">
+            <div class="workshop-showcase-box p-4 rounded-4" style="background: rgba(14, 20, 32, 0.7); border: 1px solid var(--border-subtle); backdrop-filter: var(--glass-blur);">
                 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                     {% for novel in original_novels %}
                     <div class="col">
-                        <div class="original-novel-card d-flex gap-3 align-items-center p-3 rounded-3" style="background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.06); transition: 0.3s;">
-                            <div class="original-cover-thumb rounded" style="width: 75px; height: 105px; background: #1a1a1a; overflow: hidden; flex-shrink: 0;">
+                        <div class="original-novel-card d-flex gap-3 align-items-center p-3 rounded-4 h-100" style="background: rgba(18, 25, 40, 0.65); border: 1px solid var(--border-subtle); transition: all 0.25s ease;">
+                            <div class="original-cover-thumb rounded-3 shadow" style="width: 80px; height: 114px; background: #12141f; overflow: hidden; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.08);">
                                 <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="w-100 h-100 object-fit-cover" loading="lazy">
                             </div>
-                            <div class="overflow-hidden">
+                            <div class="overflow-hidden flex-grow-1">
                                 <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="text-decoration-none">
-                                    <h6 class="text-light mb-1 text-truncate" style="max-width: 220px;" title="{{ novel.title }}">{{ novel.title }}</h6>
+                                    <h6 class="text-white fw-bold mb-1 text-truncate" style="max-width: 220px;" title="{{ novel.title }}">{{ novel.title }}</h6>
                                 </a>
                                 <div class="text-muted small mb-2 d-flex align-items-center gap-2">
-                                    <span><i class="bi bi-person"></i> {{ novel.author.username }}</span>
+                                    <span><i class="bi bi-person text-danger"></i> {{ novel.author.username }}</span>
                                     <span>&bull;</span>
-                                    <span><i class="bi bi-eye"></i> {{ novel.views_count }}</span>
+                                    <span><i class="bi bi-eye text-info"></i> {{ novel.views_count }}</span>
                                 </div>
-                                <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-50 fw-normal">Novela Original</span>
+                                <div class="d-flex align-items-center justify-content-between gap-2 mt-2">
+                                    <span class="badge px-2 py-1 small" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #f59e0b;">Novela Original</span>
+                                    <a href="{% url 'novels:novel_detail' slug=novel.slug %}" class="btn btn-xs btn-outline-warning btn-sm py-0 px-2">Leer</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                     {% empty %}
-                    <div class="col-12 text-center py-4 text-muted">
-                        <i class="bi bi-journal-plus fs-2 mb-2 d-block"></i>
-                        <p>Aún no hay novelas publicadas en el taller.</p>
-                        <a href="{% url 'novels:novel_create' %}" class="btn btn-outline-danger btn-sm mt-2">
-                            <i class="bi bi-pencil-square me-1"></i> Publicar primera novela
+                    <div class="col-12 text-center py-5 text-muted">
+                        <i class="bi bi-journal-plus fs-1 mb-2 d-block text-danger"></i>
+                        <h6 class="text-white fw-semibold">Aún no hay novelas publicadas en el taller</h6>
+                        <p class="small text-muted mb-3">Sé el primer escritor en compartir su historia original con la comunidad.</p>
+                        <a href="{% url 'novels:novel_create' %}" class="btn btn-accent btn-sm px-4 py-2">
+                            <i class="bi bi-feather me-1"></i> Publicar primera novela
                         </a>
                     </div>
                     {% endfor %}

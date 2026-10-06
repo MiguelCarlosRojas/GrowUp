@@ -26,31 +26,99 @@
 <body class="d-flex flex-column min-vh-100">
 
     <!-- Global Navigation Header (Glassmorphism & Large Brand PNG) -->
-    <nav class="navbar navbar-expand-lg navbar-custom sticky-top py-3">
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top py-2 py-lg-3">
         <div class="container-full d-flex align-items-center justify-content-between">
-            <!-- Brand Logo PNG (Large & Prominent) -->
-            <a class="navbar-brand d-flex align-items-center py-0 me-3 me-xl-4" href="{% url 'catalog:home' %}">
+            <!-- Brand Logo PNG -->
+            <a class="navbar-brand d-flex align-items-center py-0 me-2 me-xl-3" href="{% url 'catalog:home' %}">
                 <img src="{% static 'images/logo.png' %}" alt="GrowUp" class="brand-logo-img">
             </a>
 
             <!-- Mobile Offcanvas / Collapse Toggle -->
             <button class="navbar-toggler border-0 text-white p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Menú principal">
-                <i class="bi bi-list fs-2 text-danger"></i>
+                <i class="bi bi-list fs-1 text-danger"></i>
             </button>
 
-            <!-- Navigation Bar: Search & User Controls -->
-            <div class="collapse navbar-collapse justify-content-end" id="navMain">
+            <!-- Navigation Bar: Links, Search & User Controls -->
+            <div class="collapse navbar-collapse" id="navMain">
+                <!-- Primary Navigation Links -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center gap-1">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'catalog:home' %}">
+                            <i class="bi bi-house-door me-1"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom {% if request.resolver_match.url_name == 'explore' %}active{% endif %}" href="{% url 'catalog:explore' %}">
+                            <i class="bi bi-compass me-1"></i> Explorar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom {% if request.resolver_match.app_name == 'novels' and request.resolver_match.url_name == 'novel_list' %}active{% endif %}" href="{% url 'novels:novel_list' %}">
+                            <i class="bi bi-feather me-1"></i> Novelas Ligeras
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom {% if 'blog' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'catalog:blog' %}">
+                            <i class="bi bi-newspaper me-1"></i> Blog
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link nav-link-custom dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-grid me-1"></i> Comunidad
+                        </a>
+                        <ul class="dropdown-menu user-nav-dropdown-menu shadow-lg">
+                            <li>
+                                <a class="dropdown-item user-nav-dropdown-item" href="{% url 'catalog:quienes_somos' %}">
+                                    <i class="bi bi-people text-danger"></i> Quiénes Somos
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item user-nav-dropdown-item" href="{% url 'catalog:nuestra_historia' %}">
+                                    <i class="bi bi-hourglass-split text-warning"></i> Nuestra Historia
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item user-nav-dropdown-item" href="{% url 'catalog:donde_estamos' %}">
+                                    <i class="bi bi-geo-alt text-info"></i> Dónde Estamos
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider border-secondary border-opacity-25 my-1"></li>
+                            <li>
+                                <a class="dropdown-item user-nav-dropdown-item" href="{% url 'catalog:ayuda' %}">
+                                    <i class="bi bi-question-circle text-primary"></i> Centro de Ayuda
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item user-nav-dropdown-item" href="{% url 'catalog:preguntas_frecuentes' %}">
+                                    <i class="bi bi-patch-question text-success"></i> Preguntas Frecuentes
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item user-nav-dropdown-item" href="{% url 'catalog:contacto' %}">
+                                    <i class="bi bi-envelope text-warning"></i> Contacto
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
                 <!-- Fast Search Bar -->
                 <form class="d-flex my-2 my-lg-0 me-lg-3 flex-grow-1 flex-lg-grow-0" action="{% url 'catalog:explore' %}" method="GET">
-                    <div class="nav-search-wrap" style="min-width: 300px;">
+                    <div class="nav-search-wrap" style="min-width: 250px;">
                         <i class="bi bi-search nav-search-icon"></i>
                         <input class="form-control nav-search-input" type="search" name="q" placeholder="Buscar mangas, animes, novelas..." aria-label="Buscar">
                     </div>
                 </form>
 
                 <!-- Authentication & User Area -->
-                <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+                <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0 flex-wrap">
                     {% if user.is_authenticated %}
+                        {% if user.profile.role == 'author' %}
+                            <a href="{% url 'novels:author_dashboard' %}" class="btn btn-sm btn-outline-warning d-none d-xl-inline-flex align-items-center gap-1 fw-semibold py-1 px-3">
+                                <i class="bi bi-feather"></i> Mi Taller
+                            </a>
+                        {% endif %}
+
                         <!-- Real-Time WebSocket Notification Triggers (Reviews & Debates) -->
                         {% include 'includes/topbar_notifications.html' %}
 
@@ -63,6 +131,16 @@
                                 <i class="bi bi-chevron-down user-nav-chevron"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end user-nav-dropdown-menu shadow-lg">
+                                <li class="px-3 py-2 border-bottom border-secondary border-opacity-25 mb-1">
+                                    <div class="small fw-bold text-white">{{ user.get_full_name|default:user.username }}</div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">
+                                        {% if user.profile.role == 'author' %}
+                                            <span class="text-warning"><i class="bi bi-feather me-1"></i>Autor / Escritor</span>
+                                        {% else %}
+                                            <span class="text-info"><i class="bi bi-book me-1"></i>Lector</span>
+                                        {% endif %}
+                                    </div>
+                                </li>
                                 <li>
                                     <a class="dropdown-item user-nav-dropdown-item" href="{% url 'accounts:profile' %}">
                                         <i class="bi bi-person-circle text-info"></i> Mi Perfil
@@ -296,7 +374,30 @@
                 }, duration);
             });
         });
+
+        // Scroll to Top floating button
+        document.addEventListener('DOMContentLoaded', function() {
+            var btnScrollTop = document.getElementById('btnScrollTop');
+            if (btnScrollTop) {
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 300) {
+                        btnScrollTop.classList.add('visible');
+                    } else {
+                        btnScrollTop.classList.remove('visible');
+                    }
+                });
+                btnScrollTop.addEventListener('click', function() {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+        });
     </script>
+
+    <!-- Floating Scroll-to-Top Button -->
+    <button type="button" id="btnScrollTop" class="btn-scroll-top shadow-lg" aria-label="Volver arriba" title="Volver arriba">
+        <i class="bi bi-chevron-up"></i>
+    </button>
+
     {% block extra_js %}{% endblock %}
 </body>
 </html>

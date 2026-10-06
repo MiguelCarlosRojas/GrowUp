@@ -120,7 +120,7 @@
                 <div class="row g-3">
                     {% for novel in user_novels %}
                         <div class="col-md-6">
-                            <div class="p-3 rounded-3 d-flex gap-3" style="background: rgba(6, 9, 16, 0.7); border: 1px solid var(--border-subtle);">
+                            <div class="p-3 d-flex gap-3 dashboard-item-card">
                                 <img src="{{ novel.final_cover }}" alt="{{ novel.title }}" class="rounded shadow-sm" style="width: 60px; height: 85px; object-fit: cover;">
                                 <div class="d-flex flex-column justify-content-between flex-grow-1">
                                     <div>
@@ -159,7 +159,7 @@
                     {% if recent_reviews %}
                         <div class="d-flex flex-column gap-2">
                             {% for rev in recent_reviews %}
-                                <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.65); border: 1px solid var(--border-subtle);">
+                                <div class="p-3 dashboard-feed-item">
                                     <div class="d-flex justify-content-between align-items-start mb-1">
                                         <strong class="text-white small text-truncate" style="max-width: 220px;">{{ rev.item_title }}</strong>
                                         <span class="badge bg-warning text-dark fw-bold" style="font-size: 0.72rem;">
@@ -196,7 +196,7 @@
                     {% if recent_discussions %}
                         <div class="d-flex flex-column gap-2">
                             {% for disc in recent_discussions %}
-                                <div class="p-3 rounded-3" style="background: rgba(6, 9, 16, 0.65); border: 1px solid var(--border-subtle);">
+                                <div class="p-3 dashboard-feed-item">
                                     <div class="d-flex justify-content-between align-items-start mb-1">
                                         <strong class="text-white small text-truncate" style="max-width: 220px;">
                                             {{ disc.item_title|default:'Debate en Obra' }}

@@ -429,14 +429,15 @@ h1, h2, h3, h4, h5, h6, .brand-font {
     gap: 1.75rem;
     align-items: stretch;
     width: 100%;
+    min-height: calc(100vh - 120px);
 }
 
 .explore-sidebar-col {
-    width: 320px;
-    min-width: 280px;
+    width: clamp(300px, 22vw, 360px);
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
+    min-height: 100%;
 }
 
 .explore-content-col {
@@ -455,7 +456,7 @@ h1, h2, h3, h4, h5, h6, .brand-font {
 }
 
 .explore-filter-sidebar {
-    background: rgba(12, 17, 30, 0.88);
+    background: rgba(12, 17, 30, 0.92);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--border-card);
@@ -465,7 +466,9 @@ h1, h2, h3, h4, h5, h6, .brand-font {
     position: sticky;
     top: 86px;
     z-index: 10;
-    max-height: calc(100vh - 105px);
+    height: calc(100vh - 105px);
+    display: flex;
+    flex-direction: column;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 42, 84, 0.3) rgba(255, 255, 255, 0.05);
@@ -3118,5 +3121,108 @@ h1, h2, h3, h4, h5, h6, .brand-font {
     transform: translateY(-4px);
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 15px rgba(233, 64, 87, 0.2);
     border-color: rgba(233, 64, 87, 0.4);
+}
+
+/* Musical Theme Player Button & Modal */
+.theme-play-btn {
+    transition: all 0.22s ease;
+    border-color: rgba(255, 193, 7, 0.4);
+    color: #ffc107;
+}
+.theme-play-btn:hover {
+    background: rgba(255, 193, 7, 0.2);
+    border-color: #ffc107;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+}
+
+.equalizer-wave {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+}
+.equalizer-bar {
+    width: 3px;
+    background: #ffc107;
+    border-radius: 1px;
+    animation: eq-bounce 0.8s ease-in-out infinite alternate;
+}
+.equalizer-bar:nth-child(1) { height: 40%; animation-delay: 0.1s; }
+.equalizer-bar:nth-child(2) { height: 80%; animation-delay: 0.3s; }
+.equalizer-bar:nth-child(3) { height: 60%; animation-delay: 0.2s; }
+.equalizer-bar:nth-child(4) { height: 100%; animation-delay: 0.4s; }
+@keyframes eq-bounce {
+    0% { transform: scaleY(0.3); }
+    100% { transform: scaleY(1); }
+}
+
+/* Redesigned Modern Official Platforms & Links */
+.platform-stream-badge-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.1rem;
+    border-radius: 50rem;
+    background: rgba(18, 24, 38, 0.85);
+    border: 1px solid rgba(255, 42, 84, 0.35);
+    color: #ffffff;
+    font-size: 0.84rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+.platform-stream-badge-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 42, 84, 0.3), rgba(255, 107, 107, 0.2));
+    border-color: rgba(255, 42, 84, 0.8);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 42, 84, 0.35);
+}
+
+.platform-ext-badge-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1.1rem;
+    border-radius: 50rem;
+    background: rgba(18, 24, 38, 0.85);
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    color: #ffffff;
+    font-size: 0.84rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+.platform-ext-badge-btn:hover {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.3), rgba(59, 130, 246, 0.2));
+    border-color: rgba(6, 182, 212, 0.8);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(6, 182, 212, 0.35);
+}
+
+/* Lightbox Modal & Theater Mode Video Player */
+.lightbox-modal-content {
+    background: rgba(10, 12, 18, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+}
+.lightbox-preview-img {
+    max-height: 75vh;
+    object-fit: contain;
+    border-radius: 12px;
+}
+.video-theater-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000000;
+    border-radius: 14px;
+    overflow: hidden;
 }
 

@@ -273,7 +273,9 @@
             <div class="col-12 col-md-6 col-xl-4">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-white small fw-bold text-uppercase"><i class="bi bi-play-circle-fill text-warning me-1"></i> Temporada Actual</span>
-                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /seasons/now</span>
+                    <a href="/explore/?type=anime&status=airing" class="btn btn-xs btn-outline-glow btn-sm">
+                        Explorar Temporada Actual <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
                 </div>
                 <div id="session-5-season-now">
                     <div class="row row-cols-2 g-3">
@@ -289,7 +291,9 @@
             <div class="col-12 col-md-6 col-xl-4">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-white small fw-bold text-uppercase"><i class="bi bi-calendar-plus text-danger me-1"></i> Próximos Estrenos</span>
-                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /seasons/upcoming</span>
+                    <a href="/explore/?type=anime&status=upcoming" class="btn btn-xs btn-outline-glow btn-sm">
+                        Explorar Próximos Estrenos <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
                 </div>
                 <div id="session-5-season-upcoming">
                     <div class="row row-cols-2 g-3">
@@ -305,7 +309,9 @@
             <div class="col-12 col-xl-4">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-white small fw-bold text-uppercase"><i class="bi bi-clock-history text-success me-1"></i> Programación Semanal</span>
-                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /schedules</span>
+                    <a href="/explore/?type=anime&status=airing&order_by=popularity" class="btn btn-xs btn-outline-glow btn-sm">
+                        Explorar Programación Semanal <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
                 </div>
                 <div id="session-5-schedules" class="d-flex flex-column gap-2">
                     <div class="skeleton-rect" style="height: 44px;"></div>
@@ -342,9 +348,14 @@
 
         <!-- Reseñas Críticas de la Comunidad -->
         <div class="mb-3">
-            <span class="text-white small fw-bold text-uppercase d-block mb-3">
-                <i class="bi bi-chat-square-quote-fill text-warning me-1"></i> Reseñas Críticas de la Comunidad (GET /top/reviews)
-            </span>
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                <span class="text-white small fw-bold text-uppercase">
+                    <i class="bi bi-chat-square-quote-fill text-warning me-1"></i> Reseñas Críticas de la Comunidad
+                </span>
+                <a href="/explore/?type=anime&order_by=score" class="btn btn-xs btn-outline-glow btn-sm">
+                    Explorar Reseñas Críticas de la Comunidad <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
             <div id="session-6-reviews">
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
                     <div class="col"><div class="skeleton-review-card"></div></div>
@@ -382,7 +393,9 @@
             <div class="col-12 col-lg-6">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-white small fw-bold text-uppercase"><i class="bi bi-megaphone-fill text-primary me-1"></i> Noticias de la Industria</span>
-                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /news</span>
+                    <a href="/blog/" class="btn btn-xs btn-outline-glow btn-sm">
+                        Explorar Noticias <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
                 </div>
                 <div id="session-7-news" class="d-flex flex-column gap-3">
                     <div class="skeleton-rect"></div>
@@ -396,7 +409,9 @@
             <div class="col-12 col-lg-6">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="text-white small fw-bold text-uppercase"><i class="bi bi-journal-text text-info me-1"></i> Artículos Editoriales</span>
-                    <span class="badge bg-dark text-muted border border-secondary border-opacity-25 small">GET /articles</span>
+                    <a href="/blog/" class="btn btn-xs btn-outline-glow btn-sm">
+                        Explorar Artículos <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
                 </div>
                 <div id="session-7-articles" class="d-flex flex-column gap-3">
                     <div class="skeleton-rect"></div>

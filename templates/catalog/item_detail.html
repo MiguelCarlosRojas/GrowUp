@@ -234,241 +234,377 @@
 {% endif %}
 
 <!-- ==========================================================================
-     TENRAI REST API v1.0.19 (ENDPOINTS DEDICADOS POR ENTIDAD)
+     CONTENIDO MULTIMEDIA DETALLADO (SECCIONES INDIVIDUALES SEPARADAS)
      ========================================================================== -->
 {% if item_type == 'anime' %}
-<div class="tenrai-apartados-container mb-5" id="tenraiApartadosSection">
-    <section class="tenrai-session-block" id="session-anime">
-        <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
-            <div class="d-flex align-items-center gap-3">
-                <div class="session-icon-circle bg-danger bg-opacity-25 text-danger">
-                    <i class="bi bi-tv fs-5"></i>
-                </div>
-                <div>
-                    <h5 class="text-white fw-bold mb-0">Endpoints del Catálogo Anime</h5>
-                    <small class="text-muted">Metadatos completos, relaciones de franquicia, trailers oficiales, episodios y temas musicales de esta obra.</small>
-                </div>
+<div class="dedicated-entity-content mb-5" id="dedicatedEntityContent">
+    <!-- 1. Trailers & Videos Oficiales -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-anime-videos" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-danger bg-opacity-25 text-danger">
+                <i class="bi bi-play-circle-fill fs-5"></i>
             </div>
-            <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25 px-3 py-2 font-monospace">
-                26 Endpoints GET
-            </span>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Trailers & Videos Oficiales</h5>
+                <small class="text-muted">Avances cinematográficos, teasers promocionales y clips oficiales de la obra.</small>
+            </div>
         </div>
-        <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-anime"></div>
+        <div id="content-anime-videos">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-danger me-2"></div>Cargando videos oficiales...</div>
+        </div>
+    </section>
+
+    <!-- 2. Galería de Imágenes & Key Visuals -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-anime-pictures" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-info bg-opacity-25 text-info">
+                <i class="bi bi-images fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Galería de Imágenes & Key Visuals</h5>
+                <small class="text-muted">Pósters de estreno, carátulas y arte promocional en alta resolución.</small>
+            </div>
+        </div>
+        <div id="content-anime-pictures">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-info me-2"></div>Cargando galería de arte...</div>
+        </div>
+    </section>
+
+    <!-- 3. Personajes & Actores de Voz (Seiyuus) -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-anime-characters" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-warning bg-opacity-25 text-warning">
+                <i class="bi bi-people-fill fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Personajes & Reparto de Doblaje (Seiyuus)</h5>
+                <small class="text-muted">Elenco protagónico y secundario con sus respectivos actores de voz originales.</small>
+            </div>
+        </div>
+        <div id="content-anime-characters">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-warning me-2"></div>Cargando personajes y voces...</div>
+        </div>
+    </section>
+
+    <!-- 4. Guía de Episodios & Emisión -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-anime-episodes" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-success bg-opacity-25 text-success">
+                <i class="bi bi-film fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Guía de Episodios & Emisiones</h5>
+                <small class="text-muted">Capítulos emitidos, títulos originales y fechas de lanzamiento oficial.</small>
+            </div>
+        </div>
+        <div id="content-anime-episodes">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-success me-2"></div>Cargando guía de episodios...</div>
+        </div>
+    </section>
+
+    <!-- 5. Equipo de Producción & Staff Técnico -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-anime-staff" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-primary bg-opacity-25 text-primary">
+                <i class="bi bi-person-gear fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Equipo de Producción & Staff</h5>
+                <small class="text-muted">Directores, guionistas, diseñadores y directores de animación.</small>
+            </div>
+        </div>
+        <div id="content-anime-staff">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Cargando equipo de producción...</div>
+        </div>
+    </section>
+
+    <!-- 6. Banda Sonora Oficial & Temas Musicales (OST) -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-anime-themes" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-danger bg-opacity-25 text-danger">
+                <i class="bi bi-music-note-beamed fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Temas Musicales (Openings & Endings)</h5>
+                <small class="text-muted">Banda sonora oficial, pistas de apertura y temas de cierre interpretados por artistas reconocidos.</small>
+            </div>
+        </div>
+        <div id="content-anime-themes">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-danger me-2"></div>Cargando temas musicales...</div>
+        </div>
+    </section>
+
+    <!-- 7. Estadísticas de Audiencia & Calificaciones -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-anime-statistics" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-warning bg-opacity-25 text-warning">
+                <i class="bi bi-bar-chart-line-fill fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Estadísticas de Audiencia & Calificaciones</h5>
+                <small class="text-muted">Métricas de seguimiento de la comunidad, distribución de notas y estados de visualización.</small>
+            </div>
+        </div>
+        <div id="content-anime-statistics">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-warning me-2"></div>Cargando estadísticas de audiencia...</div>
+        </div>
+    </section>
+
+    <!-- 8. Franquicia Multimedia & Obras Relacionadas -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-anime-relations" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-info bg-opacity-25 text-info">
+                <i class="bi bi-diagram-3-fill fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Franquicia & Obras Relacionadas</h5>
+                <small class="text-muted">Adaptaciones manga/novela, precuelas, secuelas y obras derivadas de la franquicia.</small>
+            </div>
+        </div>
+        <div id="content-anime-relations">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-info me-2"></div>Cargando árbol de franquicia...</div>
+        </div>
+    </section>
+
+    <!-- 9. Recomendaciones Similares & Reseñas Críticas -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-anime-recommendations" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-success bg-opacity-25 text-success">
+                <i class="bi bi-stars fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Recomendaciones Similares & Reseñas Críticas</h5>
+                <small class="text-muted">Títulos afines recomendados por la audiencia y análisis de los lectores.</small>
+            </div>
+        </div>
+        <div id="content-anime-recommendations">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-success me-2"></div>Cargando recomendaciones y reseñas...</div>
+        </div>
+    </section>
+
+    <!-- 10. Noticias de la Industria & Enlaces Oficiales -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-anime-news" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-secondary bg-opacity-25 text-white">
+                <i class="bi bi-newspaper fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Noticias de la Industria & Enlaces Oficiales</h5>
+                <small class="text-muted">Comunicados de prensa, foros de discusión y plataformas de streaming oficiales.</small>
+            </div>
+        </div>
+        <div id="content-anime-news">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-secondary me-2"></div>Cargando enlaces y noticias...</div>
+        </div>
     </section>
 </div>
 {% elif item_type in 'manga,lightnovel' %}
-<div class="tenrai-apartados-container mb-5" id="tenraiApartadosSection">
-    <section class="tenrai-session-block" id="session-manga">
-        <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
-            <div class="d-flex align-items-center gap-3">
-                <div class="session-icon-circle bg-warning bg-opacity-25 text-warning">
-                    <i class="bi bi-book fs-5"></i>
-                </div>
-                <div>
-                    <h5 class="text-white fw-bold mb-0">Endpoints del Catálogo Manga</h5>
-                    <small class="text-muted">Metadatos de la obra literaria, serializaciones, capítulos, autores y reseñas críticas.</small>
-                </div>
+<div class="dedicated-entity-content mb-5" id="dedicatedEntityContent">
+    <!-- 1. Galería de Portadas de Tomos & Diseños -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-manga-pictures" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-warning bg-opacity-25 text-warning">
+                <i class="bi bi-images fs-5"></i>
             </div>
-            <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 px-3 py-2 font-monospace">
-                16 Endpoints GET
-            </span>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Galería de Portadas de Tomos & Diseños</h5>
+                <small class="text-muted">Portadas oficiales de volúmenes, cubiertas y material gráfico editorial.</small>
+            </div>
         </div>
-        <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-manga"></div>
+        <div id="content-manga-pictures">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-warning me-2"></div>Cargando portadas de tomos...</div>
+        </div>
+    </section>
+
+    <!-- 2. Personajes del Manga -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-manga-characters" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-info bg-opacity-25 text-info">
+                <i class="bi bi-people-fill fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Personajes de la Obra</h5>
+                <small class="text-muted">Protagonistas y elenco ilustrado en las páginas del manga.</small>
+            </div>
+        </div>
+        <div id="content-manga-characters">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-info me-2"></div>Cargando personajes del manga...</div>
+        </div>
+    </section>
+
+    <!-- 3. Adaptaciones & Obras Relacionadas -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-manga-relations" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-success bg-opacity-25 text-success">
+                <i class="bi bi-diagram-3-fill fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Adaptaciones & Obras Relacionadas</h5>
+                <small class="text-muted">Series de anime adaptadas, novelas derivadas y precuelas/secuelas.</small>
+            </div>
+        </div>
+        <div id="content-manga-relations">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-success me-2"></div>Cargando adaptaciones de la obra...</div>
+        </div>
+    </section>
+
+    <!-- 4. Estadísticas de Lectores & Histórico -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-manga-statistics" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-warning bg-opacity-25 text-warning">
+                <i class="bi bi-bar-chart-line-fill fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Estadísticas de Lectores & Histórico</h5>
+                <small class="text-muted">Métricas de lectores en la comunidad, volúmenes completados y ranking histórico.</small>
+            </div>
+        </div>
+        <div id="content-manga-statistics">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-warning me-2"></div>Cargando estadísticas de lectura...</div>
+        </div>
+    </section>
+
+    <!-- 5. Mangas Recomendados & Reseñas Críticas -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-manga-recommendations" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-danger bg-opacity-25 text-danger">
+                <i class="bi bi-stars fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Mangas Recomendados & Reseñas Críticas</h5>
+                <small class="text-muted">Recomendaciones de los lectores y valoraciones completas de la comunidad.</small>
+            </div>
+        </div>
+        <div id="content-manga-recommendations">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-danger me-2"></div>Cargando recomendaciones y críticas...</div>
+        </div>
+    </section>
+
+    <!-- 6. Noticias Editoriales & Enlaces Oficiales -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-manga-news" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-secondary bg-opacity-25 text-white">
+                <i class="bi bi-newspaper fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Noticias Editoriales & Enlaces Oficiales</h5>
+                <small class="text-muted">Lanzamientos de tomos, comunicados editoriales y sitios oficiales.</small>
+            </div>
+        </div>
+        <div id="content-manga-news">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-secondary me-2"></div>Cargando noticias editoriales...</div>
+        </div>
     </section>
 </div>
 {% elif item_type in 'characters,character' %}
-<div class="tenrai-apartados-container mb-5" id="tenraiApartadosSection">
-    <section class="tenrai-session-block" id="session-characters">
-        <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
-            <div class="d-flex align-items-center gap-3">
-                <div class="session-icon-circle bg-info bg-opacity-25 text-info">
-                    <i class="bi bi-person-badge fs-5"></i>
-                </div>
-                <div>
-                    <h5 class="text-white fw-bold mb-0">Endpoints de Personajes & Actores de Voz (Seiyuus)</h5>
-                    <small class="text-muted">Fichas biográficas, roles de doblaje internacional, apariciones en anime y manga e ilustraciones oficiales.</small>
-                </div>
+<div class="dedicated-entity-content mb-5" id="dedicatedEntityContent">
+    <!-- 1. Galería de Retratos & Capturas Oficiales -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-char-pictures" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-info bg-opacity-25 text-info">
+                <i class="bi bi-images fs-5"></i>
             </div>
-            <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-25 px-3 py-2 font-monospace">
-                7 Endpoints GET
-            </span>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Galería de Retratos & Capturas Oficiales</h5>
+                <small class="text-muted">Ilustraciones oficiales, key visuals y retratos del personaje.</small>
+            </div>
         </div>
-        <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-characters"></div>
+        <div id="content-char-pictures">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-info me-2"></div>Cargando retratos del personaje...</div>
+        </div>
+    </section>
+
+    <!-- 2. Actores de Voz Oficiales (Seiyuus Internacionales) -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-char-voices" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-warning bg-opacity-25 text-warning">
+                <i class="bi bi-mic-fill fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Actores de Voz Oficiales (Seiyuus Internacionales)</h5>
+                <small class="text-muted">Doblaje original japonés y elenco de voces en idiomas internacionales.</small>
+            </div>
+        </div>
+        <div id="content-char-voices">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-warning me-2"></div>Cargando elenco de voces...</div>
+        </div>
+    </section>
+
+    <!-- 3. Apariciones en Anime & Manga -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-char-appearances" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-success bg-opacity-25 text-success">
+                <i class="bi bi-film fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Apariciones en Anime & Manga</h5>
+                <small class="text-muted">Series, películas y publicaciones donde interviene el personaje.</small>
+            </div>
+        </div>
+        <div id="content-char-appearances">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-success me-2"></div>Cargando obras donde interviene...</div>
+        </div>
     </section>
 </div>
 {% elif item_type in 'people,person' %}
-<div class="tenrai-apartados-container mb-5" id="tenraiApartadosSection">
-    <section class="tenrai-session-block" id="session-people">
-        <div class="tenrai-session-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 p-3 rounded-3">
-            <div class="d-flex align-items-center gap-3">
-                <div class="session-icon-circle bg-success bg-opacity-25 text-success">
-                    <i class="bi bi-mic fs-5"></i>
-                </div>
-                <div>
-                    <h5 class="text-white fw-bold mb-0">Endpoints de Creadores, Directores & Mangakas</h5>
-                    <small class="text-muted">Trayectorias profesionales integrales, obras dirigidas o producidas y fotos oficiales.</small>
-                </div>
+<div class="dedicated-entity-content mb-5" id="dedicatedEntityContent">
+    <!-- 1. Galería Fotográfica Oficial -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-person-pictures" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-success bg-opacity-25 text-success">
+                <i class="bi bi-camera-fill fs-5"></i>
             </div>
-            <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 px-3 py-2 font-monospace">
-                6 Endpoints GET
-            </span>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Galería Fotográfica Oficial</h5>
+                <small class="text-muted">Sesiones de fotos y retratos profesionales de la personalidad.</small>
+            </div>
         </div>
-        <div class="row row-cols-1 row-cols-lg-2 g-3" id="session-container-people"></div>
+        <div id="content-person-pictures">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-success me-2"></div>Cargando fotografías oficiales...</div>
+        </div>
+    </section>
+
+    <!-- 2. Obras Dirigidas & Producidas -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-person-anime" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-primary bg-opacity-25 text-primary">
+                <i class="bi bi-tv fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Obras Dirigidas & Producidas</h5>
+                <small class="text-muted">Catálogo de series y películas animadas bajo su dirección o producción.</small>
+            </div>
+        </div>
+        <div id="content-person-anime">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Cargando obras dirigidas...</div>
+        </div>
+    </section>
+
+    <!-- 3. Roles de Actuación & Doblaje de Voz -->
+    <section class="entity-section-block mb-4 p-4 rounded-4" id="section-person-voices" style="background: rgba(18, 24, 38, 0.6); border: 1px solid var(--border-subtle);">
+        <div class="entity-section-header d-flex align-items-center gap-3 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+            <div class="session-icon-circle bg-warning bg-opacity-25 text-warning">
+                <i class="bi bi-mic-fill fs-5"></i>
+            </div>
+            <div>
+                <h5 class="text-white fw-bold mb-0">Roles de Actuación & Doblaje de Voz</h5>
+                <small class="text-muted">Personajes icónicos interpretados en la industria de la animación.</small>
+            </div>
+        </div>
+        <div id="content-person-voices">
+            <div class="text-center py-4 text-muted small"><div class="spinner-border spinner-border-sm text-warning me-2"></div>Cargando roles interpretados...</div>
+        </div>
     </section>
 </div>
 {% endif %}
 
+
 <script>
 // ==============================================================================
-// TENRAI REST API v1.0.19 (94 GET ENDPOINTS DIRECTORY & RUNNER)
+// TENRAI VISUAL MULTIMEDIA SECTIONS LOADER
 // ==============================================================================
 const CURRENT_ITEM_ID = "{{ item_id }}";
 const CURRENT_MEDIA_TYPE = "{{ item_type }}";
-
-const TENRAI_ENDPOINTS = [
-    // 1. Anime Endpoints (26)
-    { id: 1, category: 'anime', method: 'GET', path: '/anime', name: 'Catálogo General Anime', desc: 'Búsqueda global y listado paginado de animes.' },
-    { id: 2, category: 'anime', method: 'GET', path: '/anime/{id}', name: 'Ficha Principal Anime', desc: 'Metadatos estándar de la obra.' },
-    { id: 3, category: 'anime', method: 'GET', path: '/anime/{id}/full', name: 'Detalle Completo Anime', desc: 'Ficha exhaustiva con relaciones, trailers y productores.' },
-    { id: 4, category: 'anime', method: 'GET', path: '/anime/{id}/characters', name: 'Personajes & Seiyuus', desc: 'Personajes vinculados con sus actores de voz oficiales.' },
-    { id: 5, category: 'anime', method: 'GET', path: '/anime/{id}/staff', name: 'Equipo de Producción (Staff)', desc: 'Directores, diseñadores, guionistas y animadores.' },
-    { id: 6, category: 'anime', method: 'GET', path: '/anime/{id}/episodes', name: 'Lista de Episodios', desc: 'Guía de episodios emitidos con títulos y fechas.' },
-    { id: 7, category: 'anime', method: 'GET', path: '/anime/{id}/episodes/1', name: 'Detalle de Episodio (Ep. 1)', desc: 'Sinopsis y metadatos del primer episodio.' },
-    { id: 8, category: 'anime', method: 'GET', path: '/anime/{id}/news', name: 'Noticias Relacionadas', desc: 'Artículos de prensa y comunicados de prensa.' },
-    { id: 9, category: 'anime', method: 'GET', path: '/anime/{id}/forum', name: 'Hilos del Foro', desc: 'Temas de debate de la comunidad internacional.' },
-    { id: 10, category: 'anime', method: 'GET', path: '/anime/{id}/videos', name: 'Videos & Trailers Oficiales', desc: 'Teasers promocionales y avances en alta definición.' },
-    { id: 11, category: 'anime', method: 'GET', path: '/anime/{id}/videos/episodes', name: 'Videos de Episodios', desc: 'Avances y clips individuales de episodios.' },
-    { id: 12, category: 'anime', method: 'GET', path: '/anime/{id}/pictures', name: 'Galería de Imágenes', desc: 'Pósters promocionales, key visuals y carátulas.' },
-    { id: 13, category: 'anime', method: 'GET', path: '/anime/{id}/statistics', name: 'Estadísticas de Audiencia', desc: 'Puntuaciones, estados de visualización y totales.' },
-    { id: 14, category: 'anime', method: 'GET', path: '/anime/{id}/moreinfo', name: 'Información Adicional', desc: 'Notas de producción y trasfondo histórico.' },
-    { id: 15, category: 'anime', method: 'GET', path: '/anime/{id}/recommendations', name: 'Recomendaciones Similares', desc: 'Obras afines recomendadas por lectores y crítica.' },
-    { id: 16, category: 'anime', method: 'GET', path: '/anime/{id}/userupdates', name: 'Actualizaciones de Usuarios', desc: 'Registros recientes de visualización en la comunidad.' },
-    { id: 17, category: 'anime', method: 'GET', path: '/anime/{id}/reviews', name: 'Reseñas Críticas Tenrai', desc: 'Reseñas detalladas elaboradas por miembros.' },
-    { id: 18, category: 'anime', method: 'GET', path: '/anime/{id}/relations', name: 'Relaciones de Franquicia', desc: 'Precuelas, secuelas, adaptaciones y spin-offs.' },
-    { id: 19, category: 'anime', method: 'GET', path: '/anime/{id}/themes', name: 'Temas Musicales (OST)', desc: 'Listado oficial de Openings y Endings.' },
-    { id: 20, category: 'anime', method: 'GET', path: '/anime/{id}/external', name: 'Enlaces Externos', desc: 'Sitio oficial, Wikipedia y bases referenciales.' },
-    { id: 21, category: 'anime', method: 'GET', path: '/anime/{id}/streaming', name: 'Servicios de Streaming', desc: 'Plataformas legales con licencia de emisión.' },
-    { id: 22, category: 'anime', method: 'GET', path: '/anime/{id}/character-staff-clashes', name: 'Cruce Personaje / Staff', desc: 'Coincidencias de créditos entre elenco y staff.' },
-    { id: 23, category: 'anime', method: 'GET', path: '/anime/{id}/episodes-count', name: 'Conteo Total de Episodios', desc: 'Total numérico de episodios registrados.' },
-    { id: 24, category: 'anime', method: 'GET', path: '/anime/{id}/franchise-list', name: 'Árbol de Franquicia', desc: 'Esquema completo de la franquicia multimedia.' },
-    { id: 25, category: 'anime', method: 'GET', path: '/anime/{id}/ranking-history', name: 'Histórico de Posición', desc: 'Evolución cronológica en el ranking de popularidad.' },
-    { id: 26, category: 'anime', method: 'GET', path: '/anime/{id}/rating-history', name: 'Histórico de Calificaciones', desc: 'Variación de la puntuación media a través del tiempo.' },
-
-    // 2. Manga Endpoints (16)
-    { id: 27, category: 'manga', method: 'GET', path: '/manga', name: 'Catálogo General Manga', desc: 'Búsqueda global y listado paginado de mangas.' },
-    { id: 28, category: 'manga', method: 'GET', path: '/manga/{id}', name: 'Ficha Principal Manga', desc: 'Metadatos estándar de la obra literaria/cómic.' },
-    { id: 29, category: 'manga', method: 'GET', path: '/manga/{id}/full', name: 'Detalle Completo Manga', desc: 'Ficha exhaustiva con serializaciones y autores.' },
-    { id: 30, category: 'manga', method: 'GET', path: '/manga/{id}/characters', name: 'Personajes del Manga', desc: 'Personajes principales y secundarios de la obra.' },
-    { id: 31, category: 'manga', method: 'GET', path: '/manga/{id}/news', name: 'Noticias del Manga', desc: 'Lanzamientos editoriales y anuncios oficiales.' },
-    { id: 32, category: 'manga', method: 'GET', path: '/manga/{id}/forum', name: 'Foros de Debate Manga', desc: 'Temas comunitarios en torno a los capítulos.' },
-    { id: 33, category: 'manga', method: 'GET', path: '/manga/{id}/pictures', name: 'Galería de Portadas', desc: 'Portadas de volúmenes e ilustraciones a color.' },
-    { id: 34, category: 'manga', method: 'GET', path: '/manga/{id}/statistics', name: 'Estadísticas de Lectura', desc: 'Métricas de lectura y distribución de notas.' },
-    { id: 35, category: 'manga', method: 'GET', path: '/manga/{id}/moreinfo', name: 'Información Extendida Manga', desc: 'Detalles editoriales y notas de autor.' },
-    { id: 36, category: 'manga', method: 'GET', path: '/manga/{id}/recommendations', name: 'Mangas Recomendados', desc: 'Mangas similares sugeridos por lectores.' },
-    { id: 37, category: 'manga', method: 'GET', path: '/manga/{id}/userupdates', name: 'Lecturas Recientes', desc: 'Progreso de lectura reportado por la comunidad.' },
-    { id: 38, category: 'manga', method: 'GET', path: '/manga/{id}/reviews', name: 'Reseñas de Manga', desc: 'Críticas literarias completas de la comunidad.' },
-    { id: 39, category: 'manga', method: 'GET', path: '/manga/{id}/relations', name: 'Relaciones de Manga', desc: 'Adaptaciones al anime, novelas derivadas y precuelas.' },
-    { id: 40, category: 'manga', method: 'GET', path: '/manga/{id}/external', name: 'Sitios Oficiales Manga', desc: 'Enlaces a editoriales y portales oficiales.' },
-    { id: 41, category: 'manga', method: 'GET', path: '/manga/{id}/ranking-history', name: 'Histórico de Ranking Manga', desc: 'Evolución en la tabla de clasificación.' },
-    { id: 42, category: 'manga', method: 'GET', path: '/manga/{id}/rating-history', name: 'Histórico de Notas Manga', desc: 'Historial de calificaciones a lo largo del tiempo.' },
-
-    // 3. Characters Endpoints (7 - Obsoletos eliminados)
-    { id: 43, category: 'characters', method: 'GET', path: '/characters', name: 'Buscador de Personajes', desc: 'Explorador y búsqueda de personajes.' },
-    { id: 44, category: 'characters', method: 'GET', path: '/characters/{id}', name: 'Ficha de Personaje', desc: 'Datos biográficos del personaje.' },
-    { id: 45, category: 'characters', method: 'GET', path: '/characters/{id}/full', name: 'Personaje Completo', desc: 'Ficha integral con animes, mangas y voces.' },
-    { id: 46, category: 'characters', method: 'GET', path: '/characters/{id}/anime', name: 'Animes del Personaje', desc: 'Lista de adaptaciones animadas donde aparece.' },
-    { id: 47, category: 'characters', method: 'GET', path: '/characters/{id}/manga', name: 'Mangas del Personaje', desc: 'Publicaciones donde interviene el personaje.' },
-    { id: 48, category: 'characters', method: 'GET', path: '/characters/{id}/voices', name: 'Actores de Voz (Seiyuus)', desc: 'Doblaje en japonés e idiomas internacionales.' },
-    { id: 49, category: 'characters', method: 'GET', path: '/characters/{id}/pictures', name: 'Retratos del Personaje', desc: 'Galería de ilustraciones y capturas oficiales.' },
-
-    // 4. People Endpoints (6 - Obsoletos eliminados)
-    { id: 50, category: 'people', method: 'GET', path: '/people', name: 'Directorio de Personas', desc: 'Directorio de mangakas, seiyuus y directores.' },
-    { id: 51, category: 'people', method: 'GET', path: '/people/{id}', name: 'Ficha de Creador / Actor', desc: 'Datos biográficos de la personalidad.' },
-    { id: 52, category: 'people', method: 'GET', path: '/people/{id}/full', name: 'Perfil Completo de Creador', desc: 'Trayectoria profesional integral.' },
-    { id: 53, category: 'people', method: 'GET', path: '/people/{id}/anime', name: 'Animes Producidos', desc: 'Obras de anime dirigidas o producidas.' },
-    { id: 54, category: 'people', method: 'GET', path: '/people/{id}/voices', name: 'Roles de Doblaje', desc: 'Personajes interpretados en la animación.' },
-    { id: 55, category: 'people', method: 'GET', path: '/people/{id}/pictures', name: 'Fotografías del Creador', desc: 'Galería fotográfica oficial.' },
-
-    // 5. Seasons Endpoints (3 - Obsoleto /seasons eliminado)
-    { id: 56, category: 'seasons', method: 'GET', path: '/seasons/now', name: 'Temporada Actual en Emisión', desc: 'Estrenos y continuaciones en emisión activa.' },
-    { id: 57, category: 'seasons', method: 'GET', path: '/seasons/upcoming', name: 'Próximos Estrenos', desc: 'Animes anunciados para las próximas temporadas.' },
-    { id: 58, category: 'seasons', method: 'GET', path: '/seasons/2026/winter', name: 'Temporada Invierno 2026', desc: 'Catálogo de animes de una temporada específica.' },
-
-    // 6. Top Lists (5)
-    { id: 65, category: 'top', method: 'GET', path: '/top/anime', name: 'Top Animes de la Historia', desc: 'Ranking de animes mejor valorados de todos los tiempos.' },
-    { id: 66, category: 'top', method: 'GET', path: '/top/manga', name: 'Top Mangas de la Historia', desc: 'Ranking de mangas mejor valorados.' },
-    { id: 67, category: 'top', method: 'GET', path: '/top/people', name: 'Top Creadores & Seiyuus', desc: 'Personalidades más seguidas de la industria.' },
-    { id: 68, category: 'top', method: 'GET', path: '/top/characters', name: 'Top Personajes Populares', desc: 'Personajes con mayor número de favoritos.' },
-    { id: 69, category: 'top', method: 'GET', path: '/top/reviews', name: 'Top Reseñas Comunitarias', desc: 'Reseñas con mayores votos útiles.' },
-
-    // 7. Schedules (1)
-    { id: 70, category: 'other', method: 'GET', path: '/schedules', name: 'Calendario Semanal de Emisión', desc: 'Programación de episodios día por día.' },
-
-    // 8. Reviews Comunitarias (2)
-    { id: 71, category: 'other', method: 'GET', path: '/reviews/anime', name: 'Reseñas Recientes Anime', desc: 'Feed global de opiniones sobre animes.' },
-    { id: 72, category: 'other', method: 'GET', path: '/reviews/manga', name: 'Reseñas Recientes Manga', desc: 'Feed global de opiniones sobre mangas.' },
-
-    // 9. Recomendaciones (2)
-    { id: 73, category: 'other', method: 'GET', path: '/recommendations/anime', name: 'Recomendaciones Globales Anime', desc: 'Pares de animes recomendados mutuamente.' },
-    { id: 74, category: 'other', method: 'GET', path: '/recommendations/manga', name: 'Recomendaciones Globales Manga', desc: 'Pares de mangas recomendados mutuamente.' },
-
-    // 10. News (3)
-    { id: 75, category: 'news_articles', method: 'GET', path: '/news', name: 'Feed Global de Noticias', desc: 'Noticias oficiales de lanzamientos de la industria.' },
-    { id: 76, category: 'news_articles', method: 'GET', path: '/news/1', name: 'Lectura de Noticia (ID 1)', desc: 'Contenido completo de la noticia seleccionada.' },
-    { id: 77, category: 'news_articles', method: 'GET', path: '/news/1/related-entries', name: 'Obras de la Noticia', desc: 'Animes y mangas citados en la noticia.' },
-
-    // 11. Articles (3)
-    { id: 78, category: 'news_articles', method: 'GET', path: '/articles', name: 'Columnas & Artículos Editoriales', desc: 'Reportajes y análisis literarios a fondo.' },
-    { id: 79, category: 'news_articles', method: 'GET', path: '/articles/1', name: 'Lectura de Artículo (ID 1)', desc: 'Texto editorial íntegro.' },
-    { id: 80, category: 'news_articles', method: 'GET', path: '/articles/1/related-entries', name: 'Obras del Artículo', desc: 'Títulos evaluados en el artículo editorial.' },
-
-    // 12. Producers (5)
-    { id: 81, category: 'producers', method: 'GET', path: '/producers', name: 'Directorio de Productoras / Estudios', desc: 'Estudios de animación y empresas productoras.' },
-    { id: 82, category: 'producers', method: 'GET', path: '/producers/1', name: 'Ficha del Estudio (ID 1)', desc: 'Historia y obras del estudio de animación.' },
-    { id: 83, category: 'producers', method: 'GET', path: '/producers/1/full', name: 'Estudio Completo', desc: 'Catálogo histórico de producciones.' },
-    { id: 84, category: 'producers', method: 'GET', path: '/producers/1/external', name: 'Enlaces del Estudio', desc: 'Sitio web y redes de la compañía productora.' },
-    { id: 85, category: 'producers', method: 'GET', path: '/producers/1/article-mentions', name: 'Menciones de Productora', desc: 'Artículos donde se cita al estudio.' },
-
-    // 13. Magazines (1)
-    { id: 86, category: 'other', method: 'GET', path: '/magazines', name: 'Directorio de Revistas', desc: 'Publicaciones editoriales (Shonen Jump, etc.).' },
-
-    // 14. Genres (2)
-    { id: 87, category: 'other', method: 'GET', path: '/genres/anime', name: 'Taxonomía Géneros Anime', desc: 'Lista completa de géneros y demografías de anime.' },
-    { id: 88, category: 'other', method: 'GET', path: '/genres/manga', name: 'Taxonomía Géneros Manga', desc: 'Lista completa de géneros y demografías de manga.' },
-
-    // 15. Stacks (2)
-    { id: 89, category: 'other', method: 'GET', path: '/stacks', name: 'Interest Stacks Comunitarios', desc: 'Colecciones curadas por la comunidad de usuarios.' },
-    { id: 90, category: 'other', method: 'GET', path: '/stacks/1', name: 'Contenido de Stack (ID 1)', desc: 'Obras agrupadas dentro de una colección.' },
-
-    // 16. Random (4)
-    { id: 91, category: 'other', method: 'GET', path: '/random/anime', name: 'Anime Aleatorio Sorpresa', desc: 'Descubrimiento aleatorio de un anime del catálogo.' },
-    { id: 92, category: 'other', method: 'GET', path: '/random/manga', name: 'Manga Aleatorio Sorpresa', desc: 'Descubrimiento aleatorio de un manga del catálogo.' },
-    { id: 93, category: 'other', method: 'GET', path: '/random/characters', name: 'Personaje Aleatorio', desc: 'Descubrimiento al azar de un personaje de anime/manga.' },
-    { id: 94, category: 'other', method: 'GET', path: '/random/people', name: 'Persona / Creador Aleatorio', desc: 'Descubrimiento al azar de un autor o seiyuu.' }
-];
-
-const tenraiDataStore = {};
-const fetchedCategories = new Set();
-
-const CATEGORY_CONTAINER_MAP = {
-    'anime': 'session-container-anime',
-    'manga': 'session-container-manga',
-    'characters': 'session-container-characters',
-    'people': 'session-container-people',
-    'seasons': 'session-container-seasons',
-    'top': 'session-container-top',
-    'news_articles': 'session-container-news',
-    'producers': 'session-container-producers',
-    'other': 'session-container-other'
-};
-
-function resolveEndpointPath(pathTemplate) {
-    let resolved = pathTemplate;
-    if (resolved.includes('{id}')) {
-        resolved = resolved.replace('{id}', CURRENT_ITEM_ID);
-    }
-    return resolved;
-}
 
 function escapeHtml(str) {
     if (!str) return '';
@@ -480,416 +616,1083 @@ function escapeHtml(str) {
         .replace(/'/g, '&#039;');
 }
 
-function renderAllApartados() {
-    // Populate each independent session block with its respective endpoints
-    const categories = Object.keys(CATEGORY_CONTAINER_MAP);
-    
-    categories.forEach(catKey => {
-        const containerId = CATEGORY_CONTAINER_MAP[catKey];
-        const containerEl = document.getElementById(containerId);
-        if (!containerEl) return;
+async function safeTenraiFetch(endpointPath) {
+    try {
+        const response = await fetch('/api/tenrai' + endpointPath);
+        if (!response.ok) return null;
+        const json = await response.json();
+        return json.data !== undefined ? json.data : json;
+    } catch (e) {
+        console.warn('Tenrai fetch error:', endpointPath, e);
+        return null;
+    }
+}
 
-        const endpoints = TENRAI_ENDPOINTS.filter(ep => ep.category === catKey);
-        if (endpoints.length === 0) {
-            containerEl.innerHTML = '<div class="col-12 p-4 text-center text-muted small">No hay endpoints disponibles en esta sesión.</div>';
+// ------------------------------------------------------------------------------
+// ANIME MULTIMEDIA RENDERERS
+// ------------------------------------------------------------------------------
+async function loadAnimeSections() {
+    const id = CURRENT_ITEM_ID;
+
+    // 1. Videos & Trailers
+    safeTenraiFetch(`/anime/${id}/videos`).then(videos => {
+        const container = document.getElementById('anime-videos-list');
+        if (!container) return;
+        if (!videos) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay videos promocionales registrados.</div>';
+            return;
+        }
+
+        const promoList = Array.isArray(videos.promo) ? videos.promo : (Array.isArray(videos) ? videos : []);
+        const epVideos = Array.isArray(videos.episodes) ? videos.episodes : [];
+
+        if (promoList.length === 0 && epVideos.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay videos disponibles actualmente.</div>';
             return;
         }
 
         let html = '';
-        endpoints.forEach(ep => {
-            const resolved = resolveEndpointPath(ep.path);
-            html += `
-                <div class="col">
-                    <div class="tenrai-apartado-card h-100 d-flex flex-column" id="apartado-card-${ep.id}">
-                        <div class="tenrai-apartado-header d-flex align-items-center justify-content-between flex-wrap gap-2 p-3">
-                            <div class="d-flex align-items-center gap-2 overflow-hidden">
-                                <span class="tenrai-method-badge">${ep.method}</span>
-                                <div class="overflow-hidden">
-                                    <strong class="text-white d-block text-truncate">${escapeHtml(ep.name)}</strong>
-                                    <span class="text-muted font-monospace small">${escapeHtml(resolved)}</span>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <span class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25">#${ep.id}</span>
-                                <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25" id="status-badge-${ep.id}">Pendiente</span>
-                                <span class="badge bg-dark border border-secondary text-muted" id="latency-badge-${ep.id}">-- ms</span>
-                                <button class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" onclick="toggleApartadoJson(${ep.id})" title="Ver JSON">
-                                    <i class="bi bi-code-slash"></i> JSON
-                                </button>
-                                <button class="btn btn-sm btn-outline-secondary" onclick="copyApartadoJson(${ep.id}, this)" title="Copiar JSON">
-                                    <i class="bi bi-clipboard"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="px-3 py-2 border-bottom border-secondary border-opacity-10 text-secondary small">
-                            ${escapeHtml(ep.desc)}
-                        </div>
-                        
-                        <!-- Visual Result -->
-                        <div class="p-3 flex-grow-1" id="visual-container-${ep.id}">
-                            <div class="text-center py-3 text-muted small">
-                                <div class="spinner-border spinner-border-sm text-danger me-2" role="status"></div>
-                                Esperando consulta...
-                            </div>
-                        </div>
-
-                        <!-- Collapsible Raw JSON -->
-                        <div class="p-3 bg-black border-top border-secondary border-opacity-25 d-none mt-auto" id="json-container-${ep.id}">
-                            <div class="d-flex align-items-center justify-content-between mb-2">
-                                <span class="text-secondary font-monospace small"><i class="bi bi-terminal me-1"></i>Estructura JSON (Tenrai API v1)</span>
-                                <button class="btn btn-xs btn-outline-secondary btn-sm" onclick="copyApartadoJson(${ep.id}, this)">
-                                    <i class="bi bi-clipboard me-1"></i>Copiar
-                                </button>
-                            </div>
-                            <pre class="m-0 text-success font-monospace small" style="max-height: 280px; overflow-y: auto;" id="json-code-${ep.id}">Cargando JSON...</pre>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-
-        containerEl.innerHTML = html;
-    });
-}
-
-function toggleApartadoJson(id) {
-    const jsonContainer = document.getElementById(`json-container-${id}`);
-    if (jsonContainer) {
-        jsonContainer.classList.toggle('d-none');
-    }
-}
-
-function copyApartadoJson(id, btn) {
-    const data = tenraiDataStore[id];
-    const textToCopy = data ? JSON.stringify(data, null, 2) : (document.getElementById(`json-code-${id}`)?.textContent || '');
-    if (!textToCopy) return;
-
-    navigator.clipboard.writeText(textToCopy).then(() => {
-        const orig = btn.innerHTML;
-        btn.innerHTML = '<i class="bi bi-check-lg text-success"></i>';
-        setTimeout(() => btn.innerHTML = orig, 1800);
-        if (window.showToast) window.showToast('JSON de la consulta copiado al portapapeles', 'success', 2000);
-    });
-}
-
-async function fetchEndpointData(ep) {
-    const resolved = resolveEndpointPath(ep.path);
-    const statusBadge = document.getElementById(`status-badge-${ep.id}`);
-    const latencyBadge = document.getElementById(`latency-badge-${ep.id}`);
-    const visualContainer = document.getElementById(`visual-container-${ep.id}`);
-    const jsonCode = document.getElementById(`json-code-${ep.id}`);
-
-    if (statusBadge) {
-        statusBadge.className = 'badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25';
-        statusBadge.textContent = 'Consultando...';
-    }
-
-    const startTime = performance.now();
-    try {
-        const proxyUrl = `/api/tenrai${resolved.startsWith('/') ? resolved : '/' + resolved}`;
-        const response = await fetch(proxyUrl);
-        const endTime = performance.now();
-        const latency = Math.round(endTime - startTime);
-
-        if (latencyBadge) latencyBadge.textContent = `${latency} ms`;
-
-        if (response.ok) {
-            const data = await response.json();
-            tenraiDataStore[ep.id] = data;
-
-            if (statusBadge) {
-                statusBadge.className = 'badge bg-success bg-opacity-25 text-success border border-success border-opacity-25';
-                statusBadge.textContent = '200 OK';
-            }
-            if (jsonCode) jsonCode.textContent = JSON.stringify(data, null, 2);
-            renderApartadoVisual(ep, data, visualContainer);
-        } else {
-            if (statusBadge) {
-                statusBadge.className = 'badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25';
-                statusBadge.textContent = `${response.status} Error`;
-            }
-            if (jsonCode) jsonCode.textContent = `Error ${response.status}: Recurso no disponible para esta consulta en Tenrai API.`;
-            if (visualContainer) {
-                visualContainer.innerHTML = `
-                    <div class="p-3 rounded-3 text-center" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25);">
-                        <i class="bi bi-info-circle text-secondary fs-4 mb-2 d-block"></i>
-                        <h6 class="text-white fw-bold mb-1">Sin Registros Asociados (${response.status})</h6>
-                        <p class="text-secondary small mb-0 font-monospace">${escapeHtml(resolved)}</p>
-                    </div>
-                `;
-            }
-        }
-    } catch (err) {
-        if (statusBadge) {
-            statusBadge.className = 'badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25';
-            statusBadge.textContent = 'Error Red';
-        }
-        if (jsonCode) jsonCode.textContent = `Error de red: ${err.message}`;
-        if (visualContainer) {
-            visualContainer.innerHTML = `
-                <div class="p-3 rounded-3 text-center text-secondary small">
-                    Error al conectar con la pasarela: ${escapeHtml(err.message)}
-                </div>
-            `;
-        }
-    }
-}
-
-function renderApartadoVisual(ep, data, container) {
-    if (!container) return;
-
-    if (!data) {
-        container.innerHTML = '<div class="text-center py-3 text-muted small">Sin datos devueltos.</div>';
-        return;
-    }
-
-    const payload = data.data || data;
-
-    // 1. Array of Characters
-    if (ep.path.includes('/characters') && Array.isArray(payload)) {
-        if (payload.length === 0) {
-            container.innerHTML = '<div class="p-3 text-center text-muted small">No se registraron personajes para esta obra.</div>';
-            return;
-        }
-        let itemsHtml = '<div class="row row-cols-1 row-cols-md-2 g-2">';
-        payload.slice(0, 8).forEach(c => {
-            const charObj = c.character || c;
-            const img = charObj.images?.jpg?.image_url || 'https://via.placeholder.com/80x100?text=No+Img';
-            const name = charObj.name || 'Personaje';
-            const role = c.role || 'Rol';
-            const seiyuu = (c.voice_actors && c.voice_actors[0]) ? c.voice_actors[0].person?.name : null;
-
-            itemsHtml += `
-                <div class="col">
-                    <div class="tenrai-adapted-item-card d-flex align-items-center gap-3">
-                        <img src="${escapeHtml(img)}" alt="${escapeHtml(name)}" class="rounded-3" style="width: 44px; height: 58px; object-fit: cover; flex-shrink: 0;">
-                        <div class="overflow-hidden">
-                            <strong class="text-white small d-block text-truncate">${escapeHtml(name)}</strong>
-                            <span class="badge bg-danger bg-opacity-25 text-danger" style="font-size: 0.68rem;">${escapeHtml(role)}</span>
-                            ${seiyuu ? `<small class="text-muted d-block text-truncate" style="font-size: 0.72rem;"><i class="bi bi-mic me-1"></i>${escapeHtml(seiyuu)}</small>` : ''}
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-        itemsHtml += '</div>';
-        container.innerHTML = itemsHtml;
-        return;
-    }
-
-    // 2. Episodes List
-    if (ep.path.includes('/episodes') && Array.isArray(payload)) {
-        if (payload.length === 0) {
-            container.innerHTML = '<div class="p-3 text-center text-muted small">No hay lista de episodios disponible.</div>';
-            return;
-        }
-        let epsHtml = '<div class="d-flex flex-column gap-2">';
-        payload.slice(0, 10).forEach(epItem => {
-            const num = epItem.mal_id || epItem.episode || '#';
-            const title = epItem.title || `Episodio ${num}`;
-            const aired = epItem.aired ? new Date(epItem.aired).toLocaleDateString() : '';
-            const score = epItem.score ? `<span class="badge bg-warning bg-opacity-25 text-warning"><i class="bi bi-star-fill me-1"></i>${epItem.score}</span>` : '';
-
-            epsHtml += `
-                <div class="tenrai-adapted-item-card d-flex align-items-center justify-content-between gap-3">
-                    <div class="d-flex align-items-center gap-3 overflow-hidden">
-                        <span class="badge bg-dark border border-secondary text-info fw-bold" style="min-width: 40px;">#${num}</span>
-                        <div class="text-truncate">
-                            <strong class="text-white small d-block text-truncate">${escapeHtml(title)}</strong>
-                            ${aired ? `<small class="text-muted" style="font-size: 0.72rem;">Emisión: ${escapeHtml(aired)}</small>` : ''}
-                        </div>
-                    </div>
-                    ${score}
-                </div>
-            `;
-        });
-        epsHtml += '</div>';
-        container.innerHTML = epsHtml;
-        return;
-    }
-
-    // 3. Pictures Gallery
-    if (ep.path.includes('/pictures') && Array.isArray(payload)) {
-        if (payload.length === 0) {
-            container.innerHTML = '<div class="p-3 text-center text-muted small">No hay imágenes en la galería.</div>';
-            return;
-        }
-        let picsHtml = '<div class="row row-cols-3 row-cols-md-6 g-2">';
-        payload.slice(0, 6).forEach(p => {
-            const imgUrl = p.jpg?.large_image_url || p.jpg?.image_url;
-            if (imgUrl) {
-                picsHtml += `
-                    <div class="col">
-                        <a href="${escapeHtml(imgUrl)}" target="_blank" rel="noopener noreferrer" class="d-block rounded-3 overflow-hidden border border-secondary border-opacity-25 shadow-sm" style="height: 90px;">
-                            <img src="${escapeHtml(imgUrl)}" alt="Póster" class="w-100 h-100" style="object-fit: cover;">
-                        </a>
-                    </div>
-                `;
-            }
-        });
-        picsHtml += '</div>';
-        container.innerHTML = picsHtml;
-        return;
-    }
-
-    // 4. Staff List
-    if (ep.path.includes('/staff') && Array.isArray(payload)) {
-        let staffHtml = '<div class="row row-cols-1 row-cols-md-2 g-2">';
-        payload.slice(0, 8).forEach(s => {
-            const p = s.person || {};
-            const img = p.images?.jpg?.image_url || 'https://via.placeholder.com/60?text=Staff';
-            const name = p.name || 'Miembro';
-            const positions = (s.positions || []).join(', ') || 'Staff';
-
-            staffHtml += `
-                <div class="col">
-                    <div class="tenrai-adapted-item-card d-flex align-items-center gap-3">
-                        <img src="${escapeHtml(img)}" alt="${escapeHtml(name)}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; flex-shrink: 0;">
-                        <div class="overflow-hidden">
-                            <strong class="text-white small d-block text-truncate">${escapeHtml(name)}</strong>
-                            <small class="text-secondary text-truncate d-block" style="font-size: 0.72rem;">${escapeHtml(positions)}</small>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-        staffHtml += '</div>';
-        container.innerHTML = staffHtml;
-        return;
-    }
-
-    // 5. Videos / Trailers
-    if (ep.path.includes('/videos')) {
-        const promoList = payload.promo || [];
         if (promoList.length > 0) {
-            let vidHtml = '<div class="row row-cols-1 row-cols-md-2 g-2">';
-            promoList.slice(0, 2).forEach(v => {
-                const title = v.title || 'Trailer Oficial';
-                const youtubeUrl = v.trailer?.url || v.trailer?.embed_url;
-                const thumb = v.trailer?.images?.maximum_image_url || v.trailer?.images?.medium_image_url || 'https://via.placeholder.com/320x180';
+            const featured = promoList[0];
+            const ytId = featured.trailer && featured.trailer.youtube_id ? featured.trailer.youtube_id : '';
+            const embedUrl = featured.trailer && featured.trailer.embed_url ? featured.trailer.embed_url : (ytId ? `https://www.youtube-nocookie.com/embed/${ytId}` : '');
+            const title = featured.title || 'Trailer Oficial';
 
-                vidHtml += `
-                    <div class="col">
-                        <div class="tenrai-adapted-item-card overflow-hidden">
-                            <div class="position-relative mb-2 rounded-2 overflow-hidden" style="height: 110px;">
-                                <img src="${escapeHtml(thumb)}" alt="${escapeHtml(title)}" class="w-100 h-100" style="object-fit: cover;">
-                                ${youtubeUrl ? `<a href="${escapeHtml(youtubeUrl)}" target="_blank" rel="noopener noreferrer" class="position-absolute top-50 start-50 translate-middle btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><i class="bi bi-play-fill fs-5"></i></a>` : ''}
+            if (embedUrl) {
+                html += `
+                <div class="col-12 mb-3">
+                    <div class="card bg-black border-secondary border-opacity-25 rounded-4 overflow-hidden shadow-sm">
+                        <div class="ratio ratio-16x9">
+                            <iframe src="${escapeHtml(embedUrl)}" title="${escapeHtml(title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                        <div class="p-3 bg-dark bg-opacity-75">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h6 class="fw-bold text-white mb-0 text-truncate">${escapeHtml(title)}</h6>
+                                <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25"><i class="bi bi-youtube me-1"></i> Trailer Principal</span>
                             </div>
-                            <strong class="text-white small d-block text-truncate">${escapeHtml(title)}</strong>
                         </div>
                     </div>
-                `;
-            });
-            vidHtml += '</div>';
-            container.innerHTML = vidHtml;
-            return;
-        }
-    }
-
-    // 6. Statistics
-    if (ep.path.includes('/statistics') && typeof payload === 'object') {
-        let statsHtml = '<div class="row g-2">';
-        const statKeys = ['watching', 'reading', 'completed', 'on_hold', 'dropped', 'plan_to_watch', 'plan_to_read', 'total'];
-        statKeys.forEach(k => {
-            if (payload[k] !== undefined) {
-                statsHtml += `
-                    <div class="col-6 col-sm-3">
-                        <div class="p-2 rounded-3 text-center" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-subtle);">
-                            <span class="text-muted text-uppercase d-block" style="font-size: 0.65rem;">${escapeHtml(k.replace('_', ' '))}</span>
-                            <strong class="text-white fs-6">${Number(payload[k]).toLocaleString()}</strong>
-                        </div>
-                    </div>
-                `;
+                </div>`;
             }
-        });
-        statsHtml += '</div>';
-        container.innerHTML = statsHtml;
-        return;
-    }
+        }
 
-    // 7. General Entity Array (Top lists, Seasons, Recommendations, News, Stacks, etc.)
-    if (Array.isArray(payload)) {
-        if (payload.length === 0) {
-            container.innerHTML = '<div class="p-3 text-center text-muted small">No se encontraron registros en este endpoint.</div>';
+        promoList.slice(1, 7).forEach(promo => {
+            const title = promo.title || 'Avance Promocional';
+            const img = (promo.trailer && promo.trailer.images && (promo.trailer.images.maximum_image_url || promo.trailer.images.large_image_url || promo.trailer.images.medium_image_url)) || '';
+            const ytUrl = promo.trailer && promo.trailer.url ? promo.trailer.url : '';
+            html += `
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 bg-dark bg-opacity-50 border-secondary border-opacity-25 rounded-3 overflow-hidden">
+                    <div class="position-relative ratio ratio-16x9 bg-black">
+                        ${img ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(title)}" class="w-100 h-100 object-fit-cover" loading="lazy">` : ''}
+                        ${ytUrl ? `<a href="${escapeHtml(ytUrl)}" target="_blank" rel="noopener noreferrer" class="position-absolute top-50 start-50 translate-middle btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center shadow" style="width:46px;height:46px;"><i class="bi bi-play-fill fs-4"></i></a>` : ''}
+                    </div>
+                    <div class="p-2 small text-white text-truncate fw-semibold">${escapeHtml(title)}</div>
+                </div>
+            </div>`;
+        });
+
+        epVideos.slice(0, 6).forEach(ep => {
+            const title = ep.title || `Episodio ${ep.episode || ''}`;
+            const img = (ep.images && ep.images.jpg && ep.images.jpg.image_url) || '';
+            const epUrl = ep.url || '';
+            html += `
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 bg-dark bg-opacity-50 border-secondary border-opacity-25 rounded-3 overflow-hidden">
+                    <div class="position-relative ratio ratio-16x9 bg-black">
+                        ${img ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(title)}" class="w-100 h-100 object-fit-cover" loading="lazy">` : ''}
+                        ${epUrl ? `<a href="${escapeHtml(epUrl)}" target="_blank" rel="noopener noreferrer" class="position-absolute top-50 start-50 translate-middle btn btn-warning btn-sm rounded-circle d-flex align-items-center justify-content-center shadow" style="width:40px;height:40px;"><i class="bi bi-play-fill fs-5"></i></a>` : ''}
+                    </div>
+                    <div class="p-2 small text-white text-truncate">${escapeHtml(title)}</div>
+                </div>
+            </div>`;
+        });
+
+        container.innerHTML = html;
+    });
+
+    // 2. Pictures Gallery
+    safeTenraiFetch(`/anime/${id}/pictures`).then(pictures => {
+        const container = document.getElementById('anime-pictures-gallery');
+        if (!container) return;
+        const picList = Array.isArray(pictures) ? pictures : [];
+        if (picList.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay imágenes en la galería.</div>';
             return;
         }
-        let listHtml = '<div class="row row-cols-1 row-cols-md-2 g-2">';
-        payload.slice(0, 8).forEach(it => {
-            const itemEntity = it.entry || it;
-            const title = itemEntity.title || itemEntity.name || itemEntity.username || 'Elemento';
-            const img = itemEntity.images?.jpg?.image_url || itemEntity.images?.jpg?.large_image_url || 'https://via.placeholder.com/50x65';
-            const score = itemEntity.score ? `<span class="badge bg-warning bg-opacity-25 text-warning"><i class="bi bi-star-fill me-1"></i>${itemEntity.score}</span>` : '';
-            const type = itemEntity.type || it.role || '';
 
-            listHtml += `
-                <div class="col">
-                    <div class="tenrai-adapted-item-card d-flex align-items-center gap-3">
-                        <img src="${escapeHtml(img)}" alt="${escapeHtml(title)}" class="rounded-3" style="width: 40px; height: 52px; object-fit: cover; flex-shrink: 0;">
-                        <div class="overflow-hidden flex-grow-1">
-                            <strong class="text-white small d-block text-truncate">${escapeHtml(title)}</strong>
-                            <div class="d-flex align-items-center gap-2 mt-1">
-                                ${type ? `<span class="badge bg-dark border border-secondary text-secondary" style="font-size: 0.65rem;">${escapeHtml(type)}</span>` : ''}
-                                ${score}
+        let html = '';
+        picList.slice(0, 12).forEach(pic => {
+            const imgUrl = (pic.jpg && (pic.jpg.large_image_url || pic.jpg.image_url)) || (pic.webp && pic.webp.image_url) || '';
+            if (!imgUrl) return;
+            html += `
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <a href="${escapeHtml(imgUrl)}" target="_blank" rel="noopener noreferrer" class="d-block card bg-dark border-secondary border-opacity-25 rounded-3 overflow-hidden text-decoration-none shadow-sm h-100 transition-hover">
+                    <div class="ratio ratio-2x3 bg-black">
+                        <img src="${escapeHtml(imgUrl)}" alt="Key Visual" class="w-100 h-100 object-fit-cover" loading="lazy">
+                    </div>
+                </a>
+            </div>`;
+        });
+        container.innerHTML = html;
+    });
+
+    // 3. Characters & Seiyuus
+    safeTenraiFetch(`/anime/${id}/characters`).then(characters => {
+        const container = document.getElementById('anime-characters-grid');
+        if (!container) return;
+        const charList = Array.isArray(characters) ? characters : [];
+        if (charList.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay personajes registrados.</div>';
+            return;
+        }
+
+        let html = '';
+        charList.slice(0, 16).forEach(c => {
+            const charObj = c.character || {};
+            const charImg = (charObj.images && charObj.images.jpg && charObj.images.jpg.image_url) || '';
+            const charName = charObj.name || 'Personaje';
+            const role = c.role || 'Secundario';
+            const charMalId = charObj.mal_id || '';
+
+            const vaList = Array.isArray(c.voice_actors) ? c.voice_actors : [];
+            const japVa = vaList.find(va => va.language === 'Japanese') || vaList[0] || null;
+            const vaObj = japVa ? (japVa.person || {}) : null;
+            const vaImg = vaObj && vaObj.images && vaObj.images.jpg ? vaObj.images.jpg.image_url : '';
+            const vaName = vaObj ? vaObj.name : '';
+            const vaLang = japVa ? japVa.language : '';
+
+            html += `
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-2">
+                    <div class="d-flex align-items-center justify-content-between gap-2">
+                        <div class="d-flex align-items-center gap-2 overflow-hidden">
+                            ${charImg ? `<img src="${escapeHtml(charImg)}" alt="${escapeHtml(charName)}" class="rounded-circle object-fit-cover flex-shrink-0" style="width:48px;height:48px;" loading="lazy">` : `<div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-muted" style="width:48px;height:48px;"><i class="bi bi-person"></i></div>`}
+                            <div class="overflow-hidden">
+                                ${charMalId ? `<a href="/detail/characters/${charMalId}/" class="text-white text-decoration-none fw-semibold small text-truncate d-block">${escapeHtml(charName)}</a>` : `<div class="text-white fw-semibold small text-truncate">${escapeHtml(charName)}</div>`}
+                                <span class="badge bg-secondary bg-opacity-50 text-white-50" style="font-size:0.7rem;">${escapeHtml(role)}</span>
                             </div>
+                        </div>
+                        ${vaObj ? `
+                        <div class="d-flex align-items-center gap-2 overflow-hidden text-end">
+                            <div class="overflow-hidden">
+                                ${vaObj.mal_id ? `<a href="/detail/people/${vaObj.mal_id}/" class="text-info text-decoration-none small text-truncate d-block">${escapeHtml(vaName)}</a>` : `<div class="text-info small text-truncate">${escapeHtml(vaName)}</div>`}
+                                <span class="text-muted" style="font-size:0.68rem;">${escapeHtml(vaLang)}</span>
+                            </div>
+                            ${vaImg ? `<img src="${escapeHtml(vaImg)}" alt="${escapeHtml(vaName)}" class="rounded-circle object-fit-cover flex-shrink-0" style="width:44px;height:44px;" loading="lazy">` : `<div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-muted" style="width:44px;height:44px;"><i class="bi bi-mic"></i></div>`}
+                        </div>` : ''}
+                    </div>
+                </div>
+            </div>`;
+        });
+        container.innerHTML = html;
+    });
+
+    // 4. Episodes Guide
+    Promise.all([
+        safeTenraiFetch(`/anime/${id}/episodes`),
+        safeTenraiFetch(`/anime/${id}/episodes-count`)
+    ]).then(([episodes, countData]) => {
+        const container = document.getElementById('anime-episodes-list');
+        const badge = document.getElementById('anime-episodes-badge');
+        if (!container) return;
+
+        const epList = Array.isArray(episodes) ? episodes : [];
+        const totalCount = (countData && (countData.episodes_count || countData.total)) || epList.length;
+        if (badge && totalCount) {
+            badge.textContent = `${totalCount} Episodios`;
+        }
+
+        if (epList.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay guía de episodios disponible.</div>';
+            return;
+        }
+
+        let html = '';
+        epList.slice(0, 24).forEach(ep => {
+            const epNum = ep.mal_id || ep.episode || '-';
+            const epTitle = ep.title || `Episodio ${epNum}`;
+            const epJapanese = ep.title_japanese || '';
+            const epRomanji = ep.title_romanji || '';
+            const aired = ep.aired ? new Date(ep.aired).toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+            const forumUrl = ep.forum_url || '';
+
+            html += `
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 bg-dark bg-opacity-50 border-secondary border-opacity-25 rounded-3 p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 fw-bold">Ep. ${escapeHtml(String(epNum))}</span>
+                        ${aired ? `<span class="text-muted small"><i class="bi bi-calendar3 me-1"></i>${escapeHtml(aired)}</span>` : ''}
+                    </div>
+                    <h6 class="text-white fw-bold mb-1 text-truncate" title="${escapeHtml(epTitle)}">${escapeHtml(epTitle)}</h6>
+                    ${epJapanese ? `<div class="text-white-50 small text-truncate" style="font-size:0.75rem;">${escapeHtml(epJapanese)}</div>` : ''}
+                    ${epRomanji ? `<div class="text-muted small text-truncate" style="font-size:0.75rem;">${escapeHtml(epRomanji)}</div>` : ''}
+                    ${forumUrl ? `<div class="mt-2 text-end"><a href="${escapeHtml(forumUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary btn-sm py-0 px-2" style="font-size:0.72rem;"><i class="bi bi-chat-text me-1"></i> Debate del Episodio</a></div>` : ''}
+                </div>
+            </div>`;
+        });
+        container.innerHTML = html;
+    });
+
+    // 5. Staff & Production
+    safeTenraiFetch(`/anime/${id}/staff`).then(staff => {
+        const container = document.getElementById('anime-staff-grid');
+        if (!container) return;
+        const staffList = Array.isArray(staff) ? staff : [];
+        if (staffList.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay personal de producción registrado.</div>';
+            return;
+        }
+
+        let html = '';
+        staffList.slice(0, 12).forEach(st => {
+            const p = st.person || {};
+            const pImg = (p.images && p.images.jpg && p.images.jpg.image_url) || '';
+            const pName = p.name || 'Staff';
+            const roles = Array.isArray(st.positions) ? st.positions.join(', ') : (st.position || 'Producción');
+            const pId = p.mal_id || '';
+
+            html += `
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-2">
+                    <div class="d-flex align-items-center gap-2">
+                        ${pImg ? `<img src="${escapeHtml(pImg)}" alt="${escapeHtml(pName)}" class="rounded-circle object-fit-cover flex-shrink-0" style="width:46px;height:46px;" loading="lazy">` : `<div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-muted" style="width:46px;height:46px;"><i class="bi bi-person-gear"></i></div>`}
+                        <div class="overflow-hidden">
+                            ${pId ? `<a href="/detail/people/${pId}/" class="text-white text-decoration-none fw-semibold small text-truncate d-block">${escapeHtml(pName)}</a>` : `<div class="text-white fw-semibold small text-truncate">${escapeHtml(pName)}</div>`}
+                            <div class="text-muted small text-truncate" style="font-size:0.72rem;">${escapeHtml(roles)}</div>
                         </div>
                     </div>
                 </div>
-            `;
+            </div>`;
         });
-        listHtml += '</div>';
-        container.innerHTML = listHtml;
-        return;
-    }
+        container.innerHTML = html;
+    });
 
-    // 8. General Object Fallback
-    if (typeof payload === 'object' && payload !== null) {
-        let objHtml = '<div class="d-flex flex-column gap-2">';
-        const keys = Object.keys(payload).slice(0, 10);
-        keys.forEach(k => {
-            const val = payload[k];
-            if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
-                objHtml += `
-                    <div class="tenrai-adapted-item-card d-flex align-items-center justify-content-between">
-                        <span class="text-muted small font-monospace">${escapeHtml(k)}:</span>
-                        <strong class="text-white small text-truncate" style="max-width: 60%;">${escapeHtml(String(val))}</strong>
+    // 6. Themes & OST
+    safeTenraiFetch(`/anime/${id}/themes`).then(themes => {
+        const container = document.getElementById('anime-themes-list');
+        if (!container) return;
+        const openings = (themes && Array.isArray(themes.openings)) ? themes.openings : [];
+        const endings = (themes && Array.isArray(themes.endings)) ? themes.endings : [];
+
+        if (openings.length === 0 && endings.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay temas musicales registrados.</div>';
+            return;
+        }
+
+        let html = '';
+        if (openings.length > 0) {
+            html += `
+            <div class="col-12 col-lg-6">
+                <div class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-3">
+                    <h6 class="fw-bold text-warning mb-3"><i class="bi bi-disc me-2"></i>Temas de Apertura (Openings)</h6>
+                    <div class="d-flex flex-column gap-2">
+                        ${openings.map((op, idx) => `
+                            <div class="p-2 rounded bg-black bg-opacity-40 border border-secondary border-opacity-25 small text-white">
+                                <span class="badge bg-warning bg-opacity-25 text-warning me-2">OP ${idx + 1}</span>
+                                <span>${escapeHtml(op)}</span>
+                            </div>
+                        `).join('')}
                     </div>
-                `;
-            }
+                </div>
+            </div>`;
+        }
+
+        if (endings.length > 0) {
+            html += `
+            <div class="col-12 col-lg-6">
+                <div class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-3">
+                    <h6 class="fw-bold text-info mb-3"><i class="bi bi-music-note-beamed me-2"></i>Temas de Cierre (Endings)</h6>
+                    <div class="d-flex flex-column gap-2">
+                        ${endings.map((ed, idx) => `
+                            <div class="p-2 rounded bg-black bg-opacity-40 border border-secondary border-opacity-25 small text-white">
+                                <span class="badge bg-info bg-opacity-25 text-info me-2">ED ${idx + 1}</span>
+                                <span>${escapeHtml(ed)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        container.innerHTML = html;
+    });
+
+    // 7. Statistics
+    safeTenraiFetch(`/anime/${id}/statistics`).then(stats => {
+        const container = document.getElementById('anime-statistics-content');
+        if (!container) return;
+        if (!stats) {
+            container.innerHTML = '<div class="text-muted small py-3">No hay estadísticas de audiencia disponibles.</div>';
+            return;
+        }
+
+        const watching = stats.watching || 0;
+        const completed = stats.completed || 0;
+        const onHold = stats.on_hold || 0;
+        const dropped = stats.dropped || 0;
+        const planToWatch = stats.plan_to_watch || 0;
+        const total = stats.total || (watching + completed + onHold + dropped + planToWatch);
+
+        const html = `
+        <div class="row g-3">
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-25 text-center">
+                    <div class="text-success fw-bold fs-5">${escapeHtml(Number(watching).toLocaleString())}</div>
+                    <div class="text-muted small">Viendo</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-25 text-center">
+                    <div class="text-primary fw-bold fs-5">${escapeHtml(Number(completed).toLocaleString())}</div>
+                    <div class="text-muted small">Completado</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-25 text-center">
+                    <div class="text-warning fw-bold fs-5">${escapeHtml(Number(onHold).toLocaleString())}</div>
+                    <div class="text-muted small">En Espera</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-25 text-center">
+                    <div class="text-danger fw-bold fs-5">${escapeHtml(Number(dropped).toLocaleString())}</div>
+                    <div class="text-muted small">Abandonado</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-25 text-center">
+                    <div class="text-info fw-bold fs-5">${escapeHtml(Number(planToWatch).toLocaleString())}</div>
+                    <div class="text-muted small">Por Ver</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-25 text-center">
+                    <div class="text-white fw-bold fs-5">${escapeHtml(Number(total).toLocaleString())}</div>
+                    <div class="text-muted small">Total Comunidad</div>
+                </div>
+            </div>
+        </div>`;
+        container.innerHTML = html;
+    });
+
+    // 8. Relations & Franchise
+    safeTenraiFetch(`/anime/${id}/relations`).then(relations => {
+        const container = document.getElementById('anime-relations-list');
+        if (!container) return;
+        const relList = Array.isArray(relations) ? relations : [];
+        if (relList.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay adaptaciones o relaciones registradas.</div>';
+            return;
+        }
+
+        let html = '';
+        relList.forEach(rel => {
+            const relType = rel.relation || 'Relacionado';
+            const entries = Array.isArray(rel.entry) ? rel.entry : [];
+            entries.forEach(entry => {
+                const entryType = (entry.type || 'anime').toLowerCase();
+                const entryId = entry.mal_id || '';
+                const entryName = entry.name || 'Título';
+                const detailUrl = `/detail/${entryType}/${entryId}/`;
+
+                html += `
+                <div class="col-12 col-md-6 col-lg-4">
+                    <a href="${escapeHtml(detailUrl)}" class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-3 text-decoration-none text-white transition-hover">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25">${escapeHtml(relType)}</span>
+                            <span class="badge bg-secondary bg-opacity-50 text-white-50 text-uppercase" style="font-size:0.7rem;">${escapeHtml(entryType)}</span>
+                        </div>
+                        <h6 class="fw-bold mb-1 text-truncate">${escapeHtml(entryName)}</h6>
+                        <span class="text-muted small"><i class="bi bi-box-arrow-up-right me-1"></i>Ver ficha relacionada</span>
+                    </a>
+                </div>`;
+            });
         });
-        objHtml += '</div>';
-        container.innerHTML = objHtml;
-        return;
-    }
+        container.innerHTML = html;
+    });
 
-    container.innerHTML = `<div class="p-3 text-white small">${escapeHtml(String(payload))}</div>`;
+    // 9. Recommendations & Reviews
+    Promise.all([
+        safeTenraiFetch(`/anime/${id}/recommendations`),
+        safeTenraiFetch(`/anime/${id}/reviews`)
+    ]).then(([recs, reviews]) => {
+        const container = document.getElementById('anime-recommendations-list');
+        if (!container) return;
+
+        const recList = Array.isArray(recs) ? recs : [];
+        const revList = Array.isArray(reviews) ? reviews : [];
+
+        if (recList.length === 0 && revList.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay recomendaciones registradas.</div>';
+            return;
+        }
+
+        let html = '';
+        recList.slice(0, 6).forEach(rec => {
+            const entry = rec.entry || {};
+            const recImg = (entry.images && entry.images.jpg && (entry.images.jpg.large_image_url || entry.images.jpg.image_url)) || '';
+            const recTitle = entry.title || 'Recomendación';
+            const recId = entry.mal_id || '';
+            const votes = rec.votes || 0;
+
+            html += `
+            <div class="col-6 col-md-4 col-lg-2">
+                <a href="/detail/anime/${recId}/" class="d-block card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 overflow-hidden text-decoration-none text-white transition-hover shadow-sm">
+                    <div class="ratio ratio-2x3 bg-black">
+                        ${recImg ? `<img src="${escapeHtml(recImg)}" alt="${escapeHtml(recTitle)}" class="w-100 h-100 object-fit-cover" loading="lazy">` : ''}
+                    </div>
+                    <div class="p-2">
+                        <div class="fw-semibold small text-truncate" title="${escapeHtml(recTitle)}">${escapeHtml(recTitle)}</div>
+                        <span class="badge bg-secondary bg-opacity-50 text-white-50 mt-1" style="font-size:0.68rem;"><i class="bi bi-hand-thumbs-up me-1"></i>${escapeHtml(String(votes))} votos</span>
+                    </div>
+                </a>
+            </div>`;
+        });
+
+        revList.slice(0, 3).forEach(rev => {
+            const userObj = rev.user || {};
+            const username = userObj.username || 'Usuario';
+            const userImg = (userObj.images && userObj.images.jpg && userObj.images.jpg.image_url) || '';
+            const score = rev.score || '-';
+            const reviewText = rev.review ? (rev.review.substring(0, 260) + '...') : '';
+
+            html += `
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="d-flex align-items-center gap-2">
+                            ${userImg ? `<img src="${escapeHtml(userImg)}" alt="${escapeHtml(username)}" class="rounded-circle object-fit-cover" style="width:34px;height:34px;" loading="lazy">` : `<div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-muted" style="width:34px;height:34px;"><i class="bi bi-person"></i></div>`}
+                            <span class="fw-semibold text-white small">${escapeHtml(username)}</span>
+                        </div>
+                        <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 fw-bold"><i class="bi bi-star-fill me-1"></i>${escapeHtml(String(score))}</span>
+                    </div>
+                    <p class="text-white-50 small mb-0 lh-sm">${escapeHtml(reviewText)}</p>
+                </div>
+            </div>`;
+        });
+
+        container.innerHTML = html;
+    });
+
+    // 10. Streaming, External Links & News
+    Promise.all([
+        safeTenraiFetch(`/anime/${id}/streaming`),
+        safeTenraiFetch(`/anime/${id}/external`),
+        safeTenraiFetch(`/anime/${id}/news`)
+    ]).then(([streaming, external, news]) => {
+        const container = document.getElementById('anime-news-content');
+        if (!container) return;
+
+        const streamList = Array.isArray(streaming) ? streaming : [];
+        const extList = Array.isArray(external) ? external : [];
+        const newsList = Array.isArray(news) ? news : [];
+
+        let html = '<div class="row g-4">';
+
+        if (streamList.length > 0) {
+            html += `
+            <div class="col-12 col-lg-6">
+                <h6 class="fw-bold text-white mb-2"><i class="bi bi-broadcast me-2 text-danger"></i>Plataformas de Emisión Oficial</h6>
+                <div class="d-flex flex-wrap gap-2">
+                    ${streamList.map(st => `
+                        <a href="${escapeHtml(st.url || '#')}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-danger d-inline-flex align-items-center gap-1 rounded-pill">
+                            <i class="bi bi-play-circle"></i> ${escapeHtml(st.name || 'Streaming')}
+                        </a>
+                    `).join('')}
+                </div>
+            </div>`;
+        }
+
+        if (extList.length > 0) {
+            html += `
+            <div class="col-12 col-lg-6">
+                <h6 class="fw-bold text-white mb-2"><i class="bi bi-link-45deg me-2 text-info"></i>Enlaces Oficiales</h6>
+                <div class="d-flex flex-wrap gap-2">
+                    ${extList.slice(0, 8).map(ext => `
+                        <a href="${escapeHtml(ext.url || '#')}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-info d-inline-flex align-items-center gap-1 rounded-pill">
+                            <i class="bi bi-box-arrow-up-right"></i> ${escapeHtml(ext.name || 'Sitio')}
+                        </a>
+                    `).join('')}
+                </div>
+            </div>`;
+        }
+
+        if (newsList.length > 0) {
+            html += `
+            <div class="col-12">
+                <h6 class="fw-bold text-white mb-3"><i class="bi bi-newspaper me-2 text-warning"></i>Últimas Noticias de Prensa</h6>
+                <div class="row g-3">
+                    ${newsList.slice(0, 4).map(item => {
+                        const nTitle = item.title || 'Noticia';
+                        const nUrl = item.url || '#';
+                        const nDate = item.date ? new Date(item.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+                        const nImg = (item.images && item.images.jpg && item.images.jpg.image_url) || '';
+
+                        return `
+                        <div class="col-12 col-md-6">
+                            <a href="${escapeHtml(nUrl)}" target="_blank" rel="noopener noreferrer" class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-3 text-decoration-none text-white transition-hover">
+                                <div class="d-flex gap-3 align-items-center">
+                                    ${nImg ? `<img src="${escapeHtml(nImg)}" alt="${escapeHtml(nTitle)}" class="rounded-2 object-fit-cover flex-shrink-0" style="width:70px;height:70px;" loading="lazy">` : ''}
+                                    <div class="overflow-hidden">
+                                        <h6 class="fw-bold mb-1 small text-truncate" title="${escapeHtml(nTitle)}">${escapeHtml(nTitle)}</h6>
+                                        <span class="text-muted" style="font-size:0.75rem;"><i class="bi bi-clock me-1"></i>${escapeHtml(nDate)}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>`;
+                    }).join('')}
+                </div>
+            </div>`;
+        }
+
+        html += '</div>';
+
+        if (streamList.length === 0 && extList.length === 0 && newsList.length === 0) {
+            container.innerHTML = '<div class="text-muted small py-3">No hay enlaces ni noticias disponibles.</div>';
+        } else {
+            container.innerHTML = html;
+        }
+    });
 }
 
-async function autoFetchCategory(categoryKey) {
-    if (fetchedCategories.has(categoryKey)) return;
-    fetchedCategories.add(categoryKey);
+// ------------------------------------------------------------------------------
+// MANGA MULTIMEDIA RENDERERS
+// ------------------------------------------------------------------------------
+async function loadMangaSections() {
+    const id = CURRENT_ITEM_ID;
 
-    const endpoints = TENRAI_ENDPOINTS.filter(ep => ep.category === categoryKey);
-    for (const ep of endpoints) {
-        await fetchEndpointData(ep);
-        // Small delay between calls to preserve smooth UI rendering and avoid 429
-        await new Promise(r => setTimeout(r, 60));
-    }
+    // 1. Pictures Gallery
+    safeTenraiFetch(`/manga/${id}/pictures`).then(pictures => {
+        const container = document.getElementById('manga-pictures-gallery');
+        if (!container) return;
+        const picList = Array.isArray(pictures) ? pictures : [];
+        if (picList.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay imágenes en la galería.</div>';
+            return;
+        }
+
+        let html = '';
+        picList.slice(0, 12).forEach(pic => {
+            const imgUrl = (pic.jpg && (pic.jpg.large_image_url || pic.jpg.image_url)) || (pic.webp && pic.webp.image_url) || '';
+            if (!imgUrl) return;
+            html += `
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <a href="${escapeHtml(imgUrl)}" target="_blank" rel="noopener noreferrer" class="d-block card bg-dark border-secondary border-opacity-25 rounded-3 overflow-hidden text-decoration-none shadow-sm h-100 transition-hover">
+                    <div class="ratio ratio-2x3 bg-black">
+                        <img src="${escapeHtml(imgUrl)}" alt="Key Visual" class="w-100 h-100 object-fit-cover" loading="lazy">
+                    </div>
+                </a>
+            </div>`;
+        });
+        container.innerHTML = html;
+    });
+
+    // 2. Characters
+    safeTenraiFetch(`/manga/${id}/characters`).then(characters => {
+        const container = document.getElementById('manga-characters-grid');
+        if (!container) return;
+        const charList = Array.isArray(characters) ? characters : [];
+        if (charList.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay personajes registrados.</div>';
+            return;
+        }
+
+        let html = '';
+        charList.slice(0, 16).forEach(c => {
+            const charObj = c.character || {};
+            const charImg = (charObj.images && charObj.images.jpg && charObj.images.jpg.image_url) || '';
+            const charName = charObj.name || 'Personaje';
+            const role = c.role || 'Secundario';
+            const charMalId = charObj.mal_id || '';
+
+            html += `
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-2">
+                    <div class="d-flex align-items-center gap-2">
+                        ${charImg ? `<img src="${escapeHtml(charImg)}" alt="${escapeHtml(charName)}" class="rounded-circle object-fit-cover flex-shrink-0" style="width:48px;height:48px;" loading="lazy">` : `<div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-muted" style="width:48px;height:48px;"><i class="bi bi-person"></i></div>`}
+                        <div class="overflow-hidden">
+                            ${charMalId ? `<a href="/detail/characters/${charMalId}/" class="text-white text-decoration-none fw-semibold small text-truncate d-block">${escapeHtml(charName)}</a>` : `<div class="text-white fw-semibold small text-truncate">${escapeHtml(charName)}</div>`}
+                            <span class="badge bg-secondary bg-opacity-50 text-white-50" style="font-size:0.7rem;">${escapeHtml(role)}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        });
+        container.innerHTML = html;
+    });
+
+    // 3. Relations
+    safeTenraiFetch(`/manga/${id}/relations`).then(relations => {
+        const container = document.getElementById('manga-relations-list');
+        if (!container) return;
+        const relList = Array.isArray(relations) ? relations : [];
+        if (relList.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay relaciones registradas.</div>';
+            return;
+        }
+
+        let html = '';
+        relList.forEach(rel => {
+            const relType = rel.relation || 'Relacionado';
+            const entries = Array.isArray(rel.entry) ? rel.entry : [];
+            entries.forEach(entry => {
+                const entryType = (entry.type || 'manga').toLowerCase();
+                const entryId = entry.mal_id || '';
+                const entryName = entry.name || 'Título';
+                const detailUrl = `/detail/${entryType}/${entryId}/`;
+
+                html += `
+                <div class="col-12 col-md-6 col-lg-4">
+                    <a href="${escapeHtml(detailUrl)}" class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-3 text-decoration-none text-white transition-hover">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25">${escapeHtml(relType)}</span>
+                            <span class="badge bg-secondary bg-opacity-50 text-white-50 text-uppercase" style="font-size:0.7rem;">${escapeHtml(entryType)}</span>
+                        </div>
+                        <h6 class="fw-bold mb-1 text-truncate">${escapeHtml(entryName)}</h6>
+                        <span class="text-muted small"><i class="bi bi-box-arrow-up-right me-1"></i>Ver ficha relacionada</span>
+                    </a>
+                </div>`;
+            });
+        });
+        container.innerHTML = html;
+    });
+
+    // 4. Statistics
+    safeTenraiFetch(`/manga/${id}/statistics`).then(stats => {
+        const container = document.getElementById('manga-statistics-content');
+        if (!container) return;
+        if (!stats) {
+            container.innerHTML = '<div class="text-muted small py-3">No hay estadísticas disponibles.</div>';
+            return;
+        }
+
+        const reading = stats.reading || 0;
+        const completed = stats.completed || 0;
+        const onHold = stats.on_hold || 0;
+        const dropped = stats.dropped || 0;
+        const planToRead = stats.plan_to_read || 0;
+        const total = stats.total || (reading + completed + onHold + dropped + planToRead);
+
+        const html = `
+        <div class="row g-3">
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-25 text-center">
+                    <div class="text-success fw-bold fs-5">${escapeHtml(Number(reading).toLocaleString())}</div>
+                    <div class="text-muted small">Leyendo</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-25 text-center">
+                    <div class="text-primary fw-bold fs-5">${escapeHtml(Number(completed).toLocaleString())}</div>
+                    <div class="text-muted small">Completado</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-25 text-center">
+                    <div class="text-warning fw-bold fs-5">${escapeHtml(Number(onHold).toLocaleString())}</div>
+                    <div class="text-muted small">En Pausa</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-25 text-center">
+                    <div class="text-danger fw-bold fs-5">${escapeHtml(Number(dropped).toLocaleString())}</div>
+                    <div class="text-muted small">Abandonado</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-25 text-center">
+                    <div class="text-info fw-bold fs-5">${escapeHtml(Number(planToRead).toLocaleString())}</div>
+                    <div class="text-muted small">Por Leer</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="p-3 rounded-3 bg-dark bg-opacity-60 border border-secondary border-opacity-25 text-center">
+                    <div class="text-white fw-bold fs-5">${escapeHtml(Number(total).toLocaleString())}</div>
+                    <div class="text-muted small">Total Lectores</div>
+                </div>
+            </div>
+        </div>`;
+        container.innerHTML = html;
+    });
+
+    // 5. Recommendations & Reviews
+    Promise.all([
+        safeTenraiFetch(`/manga/${id}/recommendations`),
+        safeTenraiFetch(`/manga/${id}/reviews`)
+    ]).then(([recs, reviews]) => {
+        const container = document.getElementById('manga-recommendations-list');
+        if (!container) return;
+
+        const recList = Array.isArray(recs) ? recs : [];
+        const revList = Array.isArray(reviews) ? reviews : [];
+
+        if (recList.length === 0 && revList.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay recomendaciones disponibles.</div>';
+            return;
+        }
+
+        let html = '';
+        recList.slice(0, 6).forEach(rec => {
+            const entry = rec.entry || {};
+            const recImg = (entry.images && entry.images.jpg && (entry.images.jpg.large_image_url || entry.images.jpg.image_url)) || '';
+            const recTitle = entry.title || 'Recomendación';
+            const recId = entry.mal_id || '';
+            const votes = rec.votes || 0;
+
+            html += `
+            <div class="col-6 col-md-4 col-lg-2">
+                <a href="/detail/manga/${recId}/" class="d-block card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 overflow-hidden text-decoration-none text-white transition-hover shadow-sm">
+                    <div class="ratio ratio-2x3 bg-black">
+                        ${recImg ? `<img src="${escapeHtml(recImg)}" alt="${escapeHtml(recTitle)}" class="w-100 h-100 object-fit-cover" loading="lazy">` : ''}
+                    </div>
+                    <div class="p-2">
+                        <div class="fw-semibold small text-truncate" title="${escapeHtml(recTitle)}">${escapeHtml(recTitle)}</div>
+                        <span class="badge bg-secondary bg-opacity-50 text-white-50 mt-1" style="font-size:0.68rem;"><i class="bi bi-hand-thumbs-up me-1"></i>${escapeHtml(String(votes))} votos</span>
+                    </div>
+                </a>
+            </div>`;
+        });
+
+        revList.slice(0, 3).forEach(rev => {
+            const userObj = rev.user || {};
+            const username = userObj.username || 'Usuario';
+            const userImg = (userObj.images && userObj.images.jpg && userObj.images.jpg.image_url) || '';
+            const score = rev.score || '-';
+            const reviewText = rev.review ? (rev.review.substring(0, 260) + '...') : '';
+
+            html += `
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-3">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="d-flex align-items-center gap-2">
+                            ${userImg ? `<img src="${escapeHtml(userImg)}" alt="${escapeHtml(username)}" class="rounded-circle object-fit-cover" style="width:34px;height:34px;" loading="lazy">` : `<div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-muted" style="width:34px;height:34px;"><i class="bi bi-person"></i></div>`}
+                            <span class="fw-semibold text-white small">${escapeHtml(username)}</span>
+                        </div>
+                        <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 fw-bold"><i class="bi bi-star-fill me-1"></i>${escapeHtml(String(score))}</span>
+                    </div>
+                    <p class="text-white-50 small mb-0 lh-sm">${escapeHtml(reviewText)}</p>
+                </div>
+            </div>`;
+        });
+
+        container.innerHTML = html;
+    });
+
+    // 6. External Links & News
+    Promise.all([
+        safeTenraiFetch(`/manga/${id}/external`),
+        safeTenraiFetch(`/manga/${id}/news`)
+    ]).then(([external, news]) => {
+        const container = document.getElementById('manga-news-content');
+        if (!container) return;
+
+        const extList = Array.isArray(external) ? external : [];
+        const newsList = Array.isArray(news) ? news : [];
+
+        let html = '<div class="row g-4">';
+        if (extList.length > 0) {
+            html += `
+            <div class="col-12 col-lg-6">
+                <h6 class="fw-bold text-white mb-2"><i class="bi bi-link-45deg me-2 text-info"></i>Enlaces Oficiales</h6>
+                <div class="d-flex flex-wrap gap-2">
+                    ${extList.slice(0, 8).map(ext => `
+                        <a href="${escapeHtml(ext.url || '#')}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-info d-inline-flex align-items-center gap-1 rounded-pill">
+                            <i class="bi bi-box-arrow-up-right"></i> ${escapeHtml(ext.name || 'Sitio')}
+                        </a>
+                    `).join('')}
+                </div>
+            </div>`;
+        }
+
+        if (newsList.length > 0) {
+            html += `
+            <div class="col-12">
+                <h6 class="fw-bold text-white mb-3"><i class="bi bi-newspaper me-2 text-warning"></i>Últimas Noticias de Prensa</h6>
+                <div class="row g-3">
+                    ${newsList.slice(0, 4).map(item => {
+                        const nTitle = item.title || 'Noticia';
+                        const nUrl = item.url || '#';
+                        const nDate = item.date ? new Date(item.date).toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+                        const nImg = (item.images && item.images.jpg && item.images.jpg.image_url) || '';
+
+                        return `
+                        <div class="col-12 col-md-6">
+                            <a href="${escapeHtml(nUrl)}" target="_blank" rel="noopener noreferrer" class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-3 text-decoration-none text-white transition-hover">
+                                <div class="d-flex gap-3 align-items-center">
+                                    ${nImg ? `<img src="${escapeHtml(nImg)}" alt="${escapeHtml(nTitle)}" class="rounded-2 object-fit-cover flex-shrink-0" style="width:70px;height:70px;" loading="lazy">` : ''}
+                                    <div class="overflow-hidden">
+                                        <h6 class="fw-bold mb-1 small text-truncate" title="${escapeHtml(nTitle)}">${escapeHtml(nTitle)}</h6>
+                                        <span class="text-muted" style="font-size:0.75rem;"><i class="bi bi-clock me-1"></i>${escapeHtml(nDate)}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>`;
+                    }).join('')}
+                </div>
+            </div>`;
+        }
+
+        html += '</div>';
+
+        if (extList.length === 0 && newsList.length === 0) {
+            container.innerHTML = '<div class="text-muted small py-3">No hay enlaces ni noticias disponibles.</div>';
+        } else {
+            container.innerHTML = html;
+        }
+    });
 }
 
+// ------------------------------------------------------------------------------
+// CHARACTER MULTIMEDIA RENDERERS
+// ------------------------------------------------------------------------------
+async function loadCharacterSections() {
+    const id = CURRENT_ITEM_ID;
+
+    // 1. Pictures Gallery
+    safeTenraiFetch(`/characters/${id}/pictures`).then(pictures => {
+        const container = document.getElementById('char-pictures-gallery');
+        if (!container) return;
+        const picList = Array.isArray(pictures) ? pictures : [];
+        if (picList.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay imágenes en la galería.</div>';
+            return;
+        }
+
+        let html = '';
+        picList.slice(0, 12).forEach(pic => {
+            const imgUrl = (pic.jpg && (pic.jpg.large_image_url || pic.jpg.image_url)) || '';
+            if (!imgUrl) return;
+            html += `
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <a href="${escapeHtml(imgUrl)}" target="_blank" rel="noopener noreferrer" class="d-block card bg-dark border-secondary border-opacity-25 rounded-3 overflow-hidden text-decoration-none shadow-sm h-100 transition-hover">
+                    <div class="ratio ratio-2x3 bg-black">
+                        <img src="${escapeHtml(imgUrl)}" alt="Character" class="w-100 h-100 object-fit-cover" loading="lazy">
+                    </div>
+                </a>
+            </div>`;
+        });
+        container.innerHTML = html;
+    });
+
+    // 2. Voices (Seiyuus)
+    safeTenraiFetch(`/characters/${id}/voices`).then(voices => {
+        const container = document.getElementById('char-voices-grid');
+        if (!container) return;
+        const vList = Array.isArray(voices) ? voices : [];
+        if (vList.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay actores de voz registrados.</div>';
+            return;
+        }
+
+        let html = '';
+        vList.forEach(v => {
+            const p = v.person || {};
+            const pImg = (p.images && p.images.jpg && p.images.jpg.image_url) || '';
+            const pName = p.name || 'Actor de Voz';
+            const lang = v.language || 'Japonés';
+            const pId = p.mal_id || '';
+
+            html += `
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-2">
+                    <div class="d-flex align-items-center gap-2">
+                        ${pImg ? `<img src="${escapeHtml(pImg)}" alt="${escapeHtml(pName)}" class="rounded-circle object-fit-cover flex-shrink-0" style="width:48px;height:48px;" loading="lazy">` : `<div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-muted" style="width:48px;height:48px;"><i class="bi bi-mic"></i></div>`}
+                        <div class="overflow-hidden">
+                            ${pId ? `<a href="/detail/people/${pId}/" class="text-white text-decoration-none fw-semibold small text-truncate d-block">${escapeHtml(pName)}</a>` : `<div class="text-white fw-semibold small text-truncate">${escapeHtml(pName)}</div>`}
+                            <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-25" style="font-size:0.7rem;">${escapeHtml(lang)}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        });
+        container.innerHTML = html;
+    });
+
+    // 3. Anime & Manga Appearances
+    Promise.all([
+        safeTenraiFetch(`/characters/${id}/anime`),
+        safeTenraiFetch(`/characters/${id}/manga`)
+    ]).then(([animeList, mangaList]) => {
+        const container = document.getElementById('char-appearances-grid');
+        if (!container) return;
+
+        const aList = Array.isArray(animeList) ? animeList : [];
+        const mList = Array.isArray(mangaList) ? mangaList : [];
+
+        if (aList.length === 0 && mList.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay apariciones registradas.</div>';
+            return;
+        }
+
+        let html = '';
+        aList.slice(0, 8).forEach(item => {
+            const ani = item.anime || {};
+            const img = (ani.images && ani.images.jpg && ani.images.jpg.image_url) || '';
+            const title = ani.title || 'Anime';
+            const role = item.role || 'Rol';
+            const malId = ani.mal_id || '';
+
+            html += `
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="/detail/anime/${malId}/" class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-2 text-decoration-none text-white transition-hover">
+                    <div class="d-flex align-items-center gap-2">
+                        ${img ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(title)}" class="rounded-2 object-fit-cover flex-shrink-0" style="width:44px;height:62px;" loading="lazy">` : ''}
+                        <div class="overflow-hidden">
+                            <span class="badge bg-danger bg-opacity-25 text-danger mb-1" style="font-size:0.65rem;">Anime</span>
+                            <div class="fw-semibold small text-truncate" title="${escapeHtml(title)}">${escapeHtml(title)}</div>
+                            <span class="text-muted" style="font-size:0.7rem;">${escapeHtml(role)}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>`;
+        });
+
+        mList.slice(0, 8).forEach(item => {
+            const mng = item.manga || {};
+            const img = (mng.images && mng.images.jpg && mng.images.jpg.image_url) || '';
+            const title = mng.title || 'Manga';
+            const role = item.role || 'Rol';
+            const malId = mng.mal_id || '';
+
+            html += `
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="/detail/manga/${malId}/" class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-2 text-decoration-none text-white transition-hover">
+                    <div class="d-flex align-items-center gap-2">
+                        ${img ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(title)}" class="rounded-2 object-fit-cover flex-shrink-0" style="width:44px;height:62px;" loading="lazy">` : ''}
+                        <div class="overflow-hidden">
+                            <span class="badge bg-success bg-opacity-25 text-success mb-1" style="font-size:0.65rem;">Manga</span>
+                            <div class="fw-semibold small text-truncate" title="${escapeHtml(title)}">${escapeHtml(title)}</div>
+                            <span class="text-muted" style="font-size:0.7rem;">${escapeHtml(role)}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>`;
+        });
+
+        container.innerHTML = html;
+    });
+}
+
+// ------------------------------------------------------------------------------
+// PERSON (CREATOR / SEIYUU) MULTIMEDIA RENDERERS
+// ------------------------------------------------------------------------------
+async function loadPersonSections() {
+    const id = CURRENT_ITEM_ID;
+
+    // 1. Pictures Gallery
+    safeTenraiFetch(`/people/${id}/pictures`).then(pictures => {
+        const container = document.getElementById('person-pictures-gallery');
+        if (!container) return;
+        const picList = Array.isArray(pictures) ? pictures : [];
+        if (picList.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay fotografías en la galería.</div>';
+            return;
+        }
+
+        let html = '';
+        picList.slice(0, 12).forEach(pic => {
+            const imgUrl = (pic.jpg && (pic.jpg.large_image_url || pic.jpg.image_url)) || '';
+            if (!imgUrl) return;
+            html += `
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                <a href="${escapeHtml(imgUrl)}" target="_blank" rel="noopener noreferrer" class="d-block card bg-dark border-secondary border-opacity-25 rounded-3 overflow-hidden text-decoration-none shadow-sm h-100 transition-hover">
+                    <div class="ratio ratio-2x3 bg-black">
+                        <img src="${escapeHtml(imgUrl)}" alt="Person" class="w-100 h-100 object-fit-cover" loading="lazy">
+                    </div>
+                </a>
+            </div>`;
+        });
+        container.innerHTML = html;
+    });
+
+    // 2. Anime Productions (Staff roles)
+    safeTenraiFetch(`/people/${id}/anime`).then(animeStaff => {
+        const container = document.getElementById('person-anime-grid');
+        if (!container) return;
+        const list = Array.isArray(animeStaff) ? animeStaff : [];
+        if (list.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay animes producidos registrados.</div>';
+            return;
+        }
+
+        let html = '';
+        list.slice(0, 12).forEach(item => {
+            const ani = item.anime || {};
+            const img = (ani.images && ani.images.jpg && ani.images.jpg.image_url) || '';
+            const title = ani.title || 'Anime';
+            const position = item.position || 'Staff';
+            const malId = ani.mal_id || '';
+
+            html += `
+            <div class="col-12 col-md-6 col-lg-4">
+                <a href="/detail/anime/${malId}/" class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-2 text-decoration-none text-white transition-hover">
+                    <div class="d-flex align-items-center gap-2">
+                        ${img ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(title)}" class="rounded-2 object-fit-cover flex-shrink-0" style="width:44px;height:62px;" loading="lazy">` : ''}
+                        <div class="overflow-hidden">
+                            <div class="fw-semibold small text-truncate" title="${escapeHtml(title)}">${escapeHtml(title)}</div>
+                            <span class="badge bg-warning bg-opacity-25 text-warning" style="font-size:0.7rem;">${escapeHtml(position)}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>`;
+        });
+        container.innerHTML = html;
+    });
+
+    // 3. Voice Acting Roles
+    safeTenraiFetch(`/people/${id}/voices`).then(voices => {
+        const container = document.getElementById('person-voices-grid');
+        if (!container) return;
+        const list = Array.isArray(voices) ? voices : [];
+        if (list.length === 0) {
+            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay roles de voz registrados.</div>';
+            return;
+        }
+
+        let html = '';
+        list.slice(0, 16).forEach(item => {
+            const charObj = item.character || {};
+            const aniObj = item.anime || {};
+            const charImg = (charObj.images && charObj.images.jpg && charObj.images.jpg.image_url) || '';
+            const charName = charObj.name || 'Personaje';
+            const role = item.role || 'Rol';
+            const aniTitle = aniObj.title || '';
+            const charId = charObj.mal_id || '';
+
+            html += `
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100 bg-dark bg-opacity-60 border-secondary border-opacity-25 rounded-3 p-2">
+                    <div class="d-flex align-items-center gap-2">
+                        ${charImg ? `<img src="${escapeHtml(charImg)}" alt="${escapeHtml(charName)}" class="rounded-circle object-fit-cover flex-shrink-0" style="width:48px;height:48px;" loading="lazy">` : `<div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-muted" style="width:48px;height:48px;"><i class="bi bi-person"></i></div>`}
+                        <div class="overflow-hidden">
+                            ${charId ? `<a href="/detail/characters/${charId}/" class="text-white text-decoration-none fw-semibold small text-truncate d-block">${escapeHtml(charName)}</a>` : `<div class="text-white fw-semibold small text-truncate">${escapeHtml(charName)}</div>`}
+                            <div class="text-muted small text-truncate" style="font-size:0.72rem;">${escapeHtml(aniTitle)}</div>
+                            <span class="badge bg-info bg-opacity-25 text-info" style="font-size:0.68rem;">${escapeHtml(role)}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        });
+        container.innerHTML = html;
+    });
+}
+
+// ------------------------------------------------------------------------------
+// INITIALIZATION
+// ------------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', function() {
-    renderAllApartados();
-
-    // Dedicated entity session load (matching current media type)
-    let primaryCat = 'anime';
-    if (CURRENT_MEDIA_TYPE === 'manga' || CURRENT_MEDIA_TYPE === 'lightnovel') {
-        primaryCat = 'manga';
+    if (CURRENT_MEDIA_TYPE === 'anime') {
+        loadAnimeSections();
+    } else if (CURRENT_MEDIA_TYPE === 'manga' || CURRENT_MEDIA_TYPE === 'lightnovel') {
+        loadMangaSections();
     } else if (CURRENT_MEDIA_TYPE === 'characters' || CURRENT_MEDIA_TYPE === 'character') {
-        primaryCat = 'characters';
+        loadCharacterSections();
     } else if (CURRENT_MEDIA_TYPE === 'people' || CURRENT_MEDIA_TYPE === 'person') {
-        primaryCat = 'people';
+        loadPersonSections();
     }
-    autoFetchCategory(primaryCat);
 });
+
 
 // ==============================================================================
 // Existing Detail Functions (Synopsis, Sharing, Rating, Discussions)

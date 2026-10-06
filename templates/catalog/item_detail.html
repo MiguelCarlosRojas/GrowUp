@@ -636,10 +636,10 @@ async function loadAnimeSections() {
 
     // 1. Videos & Trailers
     safeTenraiFetch(`/anime/${id}/videos`).then(videos => {
-        const container = document.getElementById('anime-videos-list');
+        const container = document.getElementById('content-anime-videos');
         if (!container) return;
         if (!videos) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay videos promocionales registrados.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay videos promocionales registrados.</div>';
             return;
         }
 
@@ -647,11 +647,11 @@ async function loadAnimeSections() {
         const epVideos = Array.isArray(videos.episodes) ? videos.episodes : [];
 
         if (promoList.length === 0 && epVideos.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay videos disponibles actualmente.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay videos disponibles actualmente.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         if (promoList.length > 0) {
             const featured = promoList[0];
             const ytId = featured.trailer && featured.trailer.youtube_id ? featured.trailer.youtube_id : '';
@@ -660,7 +660,7 @@ async function loadAnimeSections() {
 
             if (embedUrl) {
                 html += `
-                <div class="col-12 mb-3">
+                <div class="col-12 mb-2">
                     <div class="card bg-black border-secondary border-opacity-25 rounded-4 overflow-hidden shadow-sm">
                         <div class="ratio ratio-16x9">
                             <iframe src="${escapeHtml(embedUrl)}" title="${escapeHtml(title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
@@ -708,20 +708,21 @@ async function loadAnimeSections() {
             </div>`;
         });
 
+        html += '</div>';
         container.innerHTML = html;
     });
 
     // 2. Pictures Gallery
     safeTenraiFetch(`/anime/${id}/pictures`).then(pictures => {
-        const container = document.getElementById('anime-pictures-gallery');
+        const container = document.getElementById('content-anime-pictures');
         if (!container) return;
         const picList = Array.isArray(pictures) ? pictures : [];
         if (picList.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay imágenes en la galería.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay imágenes adicionales en la galería.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         picList.slice(0, 12).forEach(pic => {
             const imgUrl = (pic.jpg && (pic.jpg.large_image_url || pic.jpg.image_url)) || (pic.webp && pic.webp.image_url) || '';
             if (!imgUrl) return;
@@ -734,20 +735,21 @@ async function loadAnimeSections() {
                 </a>
             </div>`;
         });
+        html += '</div>';
         container.innerHTML = html;
     });
 
     // 3. Characters & Seiyuus
     safeTenraiFetch(`/anime/${id}/characters`).then(characters => {
-        const container = document.getElementById('anime-characters-grid');
+        const container = document.getElementById('content-anime-characters');
         if (!container) return;
         const charList = Array.isArray(characters) ? characters : [];
         if (charList.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay personajes registrados.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay personajes registrados.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         charList.slice(0, 16).forEach(c => {
             const charObj = c.character || {};
             const charImg = (charObj.images && charObj.images.jpg && charObj.images.jpg.image_url) || '';
@@ -785,30 +787,22 @@ async function loadAnimeSections() {
                 </div>
             </div>`;
         });
+        html += '</div>';
         container.innerHTML = html;
     });
 
-    // 4. Episodes Guide
-    Promise.all([
-        safeTenraiFetch(`/anime/${id}/episodes`),
-        safeTenraiFetch(`/anime/${id}/episodes-count`)
-    ]).then(([episodes, countData]) => {
-        const container = document.getElementById('anime-episodes-list');
-        const badge = document.getElementById('anime-episodes-badge');
+    // 4. Guia de Episodios Oficiales (Only /episodes, avoiding non-existent 404 endpoints)
+    safeTenraiFetch(`/anime/${id}/episodes`).then(episodes => {
+        const container = document.getElementById('content-anime-episodes');
         if (!container) return;
 
         const epList = Array.isArray(episodes) ? episodes : [];
-        const totalCount = (countData && (countData.episodes_count || countData.total)) || epList.length;
-        if (badge && totalCount) {
-            badge.textContent = `${totalCount} Episodios`;
-        }
-
         if (epList.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay guía de episodios disponible.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay guía de episodios disponible para esta serie.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         epList.slice(0, 24).forEach(ep => {
             const epNum = ep.mal_id || ep.episode || '-';
             const epTitle = ep.title || `Episodio ${epNum}`;
@@ -831,20 +825,21 @@ async function loadAnimeSections() {
                 </div>
             </div>`;
         });
+        html += '</div>';
         container.innerHTML = html;
     });
 
-    // 5. Staff & Production
+    // 5. Staff & Produccion
     safeTenraiFetch(`/anime/${id}/staff`).then(staff => {
-        const container = document.getElementById('anime-staff-grid');
+        const container = document.getElementById('content-anime-staff');
         if (!container) return;
         const staffList = Array.isArray(staff) ? staff : [];
         if (staffList.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay personal de producción registrado.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay personal de producción registrado.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         staffList.slice(0, 12).forEach(st => {
             const p = st.person || {};
             const pImg = (p.images && p.images.jpg && p.images.jpg.image_url) || '';
@@ -865,22 +860,23 @@ async function loadAnimeSections() {
                 </div>
             </div>`;
         });
+        html += '</div>';
         container.innerHTML = html;
     });
 
     // 6. Themes & OST
     safeTenraiFetch(`/anime/${id}/themes`).then(themes => {
-        const container = document.getElementById('anime-themes-list');
+        const container = document.getElementById('content-anime-themes');
         if (!container) return;
         const openings = (themes && Array.isArray(themes.openings)) ? themes.openings : [];
         const endings = (themes && Array.isArray(themes.endings)) ? themes.endings : [];
 
         if (openings.length === 0 && endings.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay temas musicales registrados.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay temas musicales registrados.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         if (openings.length > 0) {
             html += `
             <div class="col-12 col-lg-6">
@@ -915,15 +911,16 @@ async function loadAnimeSections() {
             </div>`;
         }
 
+        html += '</div>';
         container.innerHTML = html;
     });
 
     // 7. Statistics
     safeTenraiFetch(`/anime/${id}/statistics`).then(stats => {
-        const container = document.getElementById('anime-statistics-content');
+        const container = document.getElementById('content-anime-statistics');
         if (!container) return;
         if (!stats) {
-            container.innerHTML = '<div class="text-muted small py-3">No hay estadísticas de audiencia disponibles.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay estadísticas de audiencia disponibles.</div>';
             return;
         }
 
@@ -978,15 +975,15 @@ async function loadAnimeSections() {
 
     // 8. Relations & Franchise
     safeTenraiFetch(`/anime/${id}/relations`).then(relations => {
-        const container = document.getElementById('anime-relations-list');
+        const container = document.getElementById('content-anime-relations');
         if (!container) return;
         const relList = Array.isArray(relations) ? relations : [];
         if (relList.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay adaptaciones o relaciones registradas.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay adaptaciones o relaciones registradas.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         relList.forEach(rel => {
             const relType = rel.relation || 'Relacionado';
             const entries = Array.isArray(rel.entry) ? rel.entry : [];
@@ -1009,6 +1006,7 @@ async function loadAnimeSections() {
                 </div>`;
             });
         });
+        html += '</div>';
         container.innerHTML = html;
     });
 
@@ -1017,18 +1015,18 @@ async function loadAnimeSections() {
         safeTenraiFetch(`/anime/${id}/recommendations`),
         safeTenraiFetch(`/anime/${id}/reviews`)
     ]).then(([recs, reviews]) => {
-        const container = document.getElementById('anime-recommendations-list');
+        const container = document.getElementById('content-anime-recommendations');
         if (!container) return;
 
         const recList = Array.isArray(recs) ? recs : [];
         const revList = Array.isArray(reviews) ? reviews : [];
 
         if (recList.length === 0 && revList.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay recomendaciones registradas.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay recomendaciones ni reseñas disponibles.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         recList.slice(0, 6).forEach(rec => {
             const entry = rec.entry || {};
             const recImg = (entry.images && entry.images.jpg && (entry.images.jpg.large_image_url || entry.images.jpg.image_url)) || '';
@@ -1072,6 +1070,7 @@ async function loadAnimeSections() {
             </div>`;
         });
 
+        html += '</div>';
         container.innerHTML = html;
     });
 
@@ -1081,7 +1080,7 @@ async function loadAnimeSections() {
         safeTenraiFetch(`/anime/${id}/external`),
         safeTenraiFetch(`/anime/${id}/news`)
     ]).then(([streaming, external, news]) => {
-        const container = document.getElementById('anime-news-content');
+        const container = document.getElementById('content-anime-news');
         if (!container) return;
 
         const streamList = Array.isArray(streaming) ? streaming : [];
@@ -1149,7 +1148,7 @@ async function loadAnimeSections() {
         html += '</div>';
 
         if (streamList.length === 0 && extList.length === 0 && newsList.length === 0) {
-            container.innerHTML = '<div class="text-muted small py-3">No hay enlaces ni noticias disponibles.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay enlaces ni noticias disponibles.</div>';
         } else {
             container.innerHTML = html;
         }
@@ -1164,15 +1163,15 @@ async function loadMangaSections() {
 
     // 1. Pictures Gallery
     safeTenraiFetch(`/manga/${id}/pictures`).then(pictures => {
-        const container = document.getElementById('manga-pictures-gallery');
+        const container = document.getElementById('content-manga-pictures');
         if (!container) return;
         const picList = Array.isArray(pictures) ? pictures : [];
         if (picList.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay imágenes en la galería.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay imágenes adicionales en la galería.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         picList.slice(0, 12).forEach(pic => {
             const imgUrl = (pic.jpg && (pic.jpg.large_image_url || pic.jpg.image_url)) || (pic.webp && pic.webp.image_url) || '';
             if (!imgUrl) return;
@@ -1185,20 +1184,21 @@ async function loadMangaSections() {
                 </a>
             </div>`;
         });
+        html += '</div>';
         container.innerHTML = html;
     });
 
     // 2. Characters
     safeTenraiFetch(`/manga/${id}/characters`).then(characters => {
-        const container = document.getElementById('manga-characters-grid');
+        const container = document.getElementById('content-manga-characters');
         if (!container) return;
         const charList = Array.isArray(characters) ? characters : [];
         if (charList.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay personajes registrados.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay personajes registrados.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         charList.slice(0, 16).forEach(c => {
             const charObj = c.character || {};
             const charImg = (charObj.images && charObj.images.jpg && charObj.images.jpg.image_url) || '';
@@ -1219,20 +1219,21 @@ async function loadMangaSections() {
                 </div>
             </div>`;
         });
+        html += '</div>';
         container.innerHTML = html;
     });
 
     // 3. Relations
     safeTenraiFetch(`/manga/${id}/relations`).then(relations => {
-        const container = document.getElementById('manga-relations-list');
+        const container = document.getElementById('content-manga-relations');
         if (!container) return;
         const relList = Array.isArray(relations) ? relations : [];
         if (relList.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay relaciones registradas.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay relaciones registradas.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         relList.forEach(rel => {
             const relType = rel.relation || 'Relacionado';
             const entries = Array.isArray(rel.entry) ? rel.entry : [];
@@ -1255,15 +1256,16 @@ async function loadMangaSections() {
                 </div>`;
             });
         });
+        html += '</div>';
         container.innerHTML = html;
     });
 
     // 4. Statistics
     safeTenraiFetch(`/manga/${id}/statistics`).then(stats => {
-        const container = document.getElementById('manga-statistics-content');
+        const container = document.getElementById('content-manga-statistics');
         if (!container) return;
         if (!stats) {
-            container.innerHTML = '<div class="text-muted small py-3">No hay estadísticas disponibles.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay estadísticas disponibles.</div>';
             return;
         }
 
@@ -1321,18 +1323,18 @@ async function loadMangaSections() {
         safeTenraiFetch(`/manga/${id}/recommendations`),
         safeTenraiFetch(`/manga/${id}/reviews`)
     ]).then(([recs, reviews]) => {
-        const container = document.getElementById('manga-recommendations-list');
+        const container = document.getElementById('content-manga-recommendations');
         if (!container) return;
 
         const recList = Array.isArray(recs) ? recs : [];
         const revList = Array.isArray(reviews) ? reviews : [];
 
         if (recList.length === 0 && revList.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay recomendaciones disponibles.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay recomendaciones ni reseñas disponibles.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         recList.slice(0, 6).forEach(rec => {
             const entry = rec.entry || {};
             const recImg = (entry.images && entry.images.jpg && (entry.images.jpg.large_image_url || entry.images.jpg.image_url)) || '';
@@ -1376,6 +1378,7 @@ async function loadMangaSections() {
             </div>`;
         });
 
+        html += '</div>';
         container.innerHTML = html;
     });
 
@@ -1384,7 +1387,7 @@ async function loadMangaSections() {
         safeTenraiFetch(`/manga/${id}/external`),
         safeTenraiFetch(`/manga/${id}/news`)
     ]).then(([external, news]) => {
-        const container = document.getElementById('manga-news-content');
+        const container = document.getElementById('content-manga-news');
         if (!container) return;
 
         const extList = Array.isArray(external) ? external : [];
@@ -1436,7 +1439,7 @@ async function loadMangaSections() {
         html += '</div>';
 
         if (extList.length === 0 && newsList.length === 0) {
-            container.innerHTML = '<div class="text-muted small py-3">No hay enlaces ni noticias disponibles.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay enlaces ni noticias disponibles.</div>';
         } else {
             container.innerHTML = html;
         }
@@ -1451,15 +1454,15 @@ async function loadCharacterSections() {
 
     // 1. Pictures Gallery
     safeTenraiFetch(`/characters/${id}/pictures`).then(pictures => {
-        const container = document.getElementById('char-pictures-gallery');
+        const container = document.getElementById('content-char-pictures');
         if (!container) return;
         const picList = Array.isArray(pictures) ? pictures : [];
         if (picList.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay imágenes en la galería.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay imágenes en la galería.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         picList.slice(0, 12).forEach(pic => {
             const imgUrl = (pic.jpg && (pic.jpg.large_image_url || pic.jpg.image_url)) || '';
             if (!imgUrl) return;
@@ -1472,20 +1475,21 @@ async function loadCharacterSections() {
                 </a>
             </div>`;
         });
+        html += '</div>';
         container.innerHTML = html;
     });
 
     // 2. Voices (Seiyuus)
     safeTenraiFetch(`/characters/${id}/voices`).then(voices => {
-        const container = document.getElementById('char-voices-grid');
+        const container = document.getElementById('content-char-voices');
         if (!container) return;
         const vList = Array.isArray(voices) ? voices : [];
         if (vList.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay actores de voz registrados.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay actores de voz registrados.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         vList.forEach(v => {
             const p = v.person || {};
             const pImg = (p.images && p.images.jpg && p.images.jpg.image_url) || '';
@@ -1506,6 +1510,7 @@ async function loadCharacterSections() {
                 </div>
             </div>`;
         });
+        html += '</div>';
         container.innerHTML = html;
     });
 
@@ -1514,18 +1519,18 @@ async function loadCharacterSections() {
         safeTenraiFetch(`/characters/${id}/anime`),
         safeTenraiFetch(`/characters/${id}/manga`)
     ]).then(([animeList, mangaList]) => {
-        const container = document.getElementById('char-appearances-grid');
+        const container = document.getElementById('content-char-appearances');
         if (!container) return;
 
         const aList = Array.isArray(animeList) ? animeList : [];
         const mList = Array.isArray(mangaList) ? mangaList : [];
 
         if (aList.length === 0 && mList.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay apariciones registradas.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay apariciones registradas.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         aList.slice(0, 8).forEach(item => {
             const ani = item.anime || {};
             const img = (ani.images && ani.images.jpg && ani.images.jpg.image_url) || '';
@@ -1570,6 +1575,7 @@ async function loadCharacterSections() {
             </div>`;
         });
 
+        html += '</div>';
         container.innerHTML = html;
     });
 }
@@ -1582,15 +1588,15 @@ async function loadPersonSections() {
 
     // 1. Pictures Gallery
     safeTenraiFetch(`/people/${id}/pictures`).then(pictures => {
-        const container = document.getElementById('person-pictures-gallery');
+        const container = document.getElementById('content-person-pictures');
         if (!container) return;
         const picList = Array.isArray(pictures) ? pictures : [];
         if (picList.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay fotografías en la galería.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay fotografías en la galería.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         picList.slice(0, 12).forEach(pic => {
             const imgUrl = (pic.jpg && (pic.jpg.large_image_url || pic.jpg.image_url)) || '';
             if (!imgUrl) return;
@@ -1603,20 +1609,21 @@ async function loadPersonSections() {
                 </a>
             </div>`;
         });
+        html += '</div>';
         container.innerHTML = html;
     });
 
     // 2. Anime Productions (Staff roles)
     safeTenraiFetch(`/people/${id}/anime`).then(animeStaff => {
-        const container = document.getElementById('person-anime-grid');
+        const container = document.getElementById('content-person-anime');
         if (!container) return;
         const list = Array.isArray(animeStaff) ? animeStaff : [];
         if (list.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay animes producidos registrados.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay animes producidos registrados.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         list.slice(0, 12).forEach(item => {
             const ani = item.anime || {};
             const img = (ani.images && ani.images.jpg && ani.images.jpg.image_url) || '';
@@ -1637,20 +1644,21 @@ async function loadPersonSections() {
                 </a>
             </div>`;
         });
+        html += '</div>';
         container.innerHTML = html;
     });
 
     // 3. Voice Acting Roles
     safeTenraiFetch(`/people/${id}/voices`).then(voices => {
-        const container = document.getElementById('person-voices-grid');
+        const container = document.getElementById('content-person-voices');
         if (!container) return;
         const list = Array.isArray(voices) ? voices : [];
         if (list.length === 0) {
-            container.innerHTML = '<div class="col-12 text-muted small py-3">No hay roles de voz registrados.</div>';
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay roles de voz registrados.</div>';
             return;
         }
 
-        let html = '';
+        let html = '<div class="row g-3">';
         list.slice(0, 16).forEach(item => {
             const charObj = item.character || {};
             const aniObj = item.anime || {};
@@ -1674,6 +1682,7 @@ async function loadPersonSections() {
                 </div>
             </div>`;
         });
+        html += '</div>';
         container.innerHTML = html;
     });
 }

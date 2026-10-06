@@ -19,30 +19,78 @@
             <div class="explore-sidebar-header">
                 <h5 class="explore-sidebar-title">
                     <i class="bi bi-funnel-fill text-danger icon-glow-danger"></i>
-                    <span>Filtros & Categorías</span>
+                    <span>Filtros & Navegación</span>
                 </h5>
-                <a href="{% url 'catalog:explore' %}?type={{ selected_type }}" class="text-muted small text-decoration-none" title="Limpiar todos los filtros">
-                    <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
-                </a>
             </div>
 
-            <!-- Lateral Navigation for Types -->
+            <!-- Lateral Navigation for Types & Subtypes (Formato Integrado) -->
             <div class="explore-type-nav">
                 <span class="explore-filter-label mb-2"><i class="bi bi-collection-play"></i> Tipo de Contenido</span>
+                
+                <!-- Anime Principal -->
                 <a href="{% url 'catalog:explore' %}?type=anime{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link {% if selected_type == 'anime' %}active{% endif %}">
                     <span class="nav-item-content">
                         <i class="bi bi-tv nav-item-icon"></i>
-                        <span>Animes</span>
+                        <span>Animes (General)</span>
                     </span>
                     <i class="bi bi-chevron-right small opacity-50"></i>
                 </a>
+
+                <!-- Series TV -->
+                <a href="{% url 'catalog:explore' %}?type=tv{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link ps-4 {% if selected_type == 'tv' %}active{% endif %}">
+                    <span class="nav-item-content">
+                        <i class="bi bi-play-circle nav-item-icon"></i>
+                        <span>Series TV</span>
+                    </span>
+                    <i class="bi bi-chevron-right small opacity-50"></i>
+                </a>
+
+                <!-- Películas -->
+                <a href="{% url 'catalog:explore' %}?type=movie{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link ps-4 {% if selected_type == 'movie' %}active{% endif %}">
+                    <span class="nav-item-content">
+                        <i class="bi bi-film nav-item-icon"></i>
+                        <span>Películas Anime</span>
+                    </span>
+                    <i class="bi bi-chevron-right small opacity-50"></i>
+                </a>
+
+                <!-- OVAs & Especiales -->
+                <a href="{% url 'catalog:explore' %}?type=ova{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link ps-4 {% if selected_type == 'ova' %}active{% endif %}">
+                    <span class="nav-item-content">
+                        <i class="bi bi-disc nav-item-icon"></i>
+                        <span>OVAs & Especiales</span>
+                    </span>
+                    <i class="bi bi-chevron-right small opacity-50"></i>
+                </a>
+
+                <!-- Manga Principal -->
                 <a href="{% url 'catalog:explore' %}?type=manga{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link {% if selected_type == 'manga' %}active{% endif %}">
                     <span class="nav-item-content">
                         <i class="bi bi-book nav-item-icon"></i>
-                        <span>Mangas</span>
+                        <span>Mangas (Japón)</span>
                     </span>
                     <i class="bi bi-chevron-right small opacity-50"></i>
                 </a>
+
+                <!-- Manhwa (Corea) -->
+                <a href="{% url 'catalog:explore' %}?type=manhwa{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link ps-4 {% if selected_type == 'manhwa' %}active{% endif %}">
+                    <span class="nav-item-content">
+                        <i class="bi bi-phone nav-item-icon"></i>
+                        <span>Manhwas (Webtoons)</span>
+                    </span>
+                    <i class="bi bi-chevron-right small opacity-50"></i>
+                </a>
+
+                <!-- Manhua (China) -->
+                <a href="{% url 'catalog:explore' %}?type=manhua{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link ps-4 {% if selected_type == 'manhua' %}active{% endif %}">
+                    <span class="nav-item-content">
+                        <i class="bi bi-globe-asia-australia nav-item-icon"></i>
+                        <span>Manhuas (China)</span>
+                    </span>
+                    <i class="bi bi-chevron-right small opacity-50"></i>
+                </a>
+
+                <!-- Novelas Ligeras -->
                 <a href="{% url 'catalog:explore' %}?type=lightnovel{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link {% if selected_type == 'lightnovel' %}active{% endif %}">
                     <span class="nav-item-content">
                         <i class="bi bi-journal-bookmark nav-item-icon"></i>
@@ -50,13 +98,26 @@
                     </span>
                     <i class="bi bi-chevron-right small opacity-50"></i>
                 </a>
-                <a href="{% url 'catalog:explore' %}?type=original_novel{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link {% if selected_type == 'original_novel' %}active{% endif %}">
+
+                <!-- One-shots -->
+                <a href="{% url 'catalog:explore' %}?type=oneshot{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link ps-4 {% if selected_type == 'oneshot' %}active{% endif %}">
                     <span class="nav-item-content">
-                        <i class="bi bi-feather nav-item-icon"></i>
-                        <span>Obras Comunidad</span>
+                        <i class="bi bi-file-earmark-text nav-item-icon"></i>
+                        <span>One-Shots</span>
                     </span>
                     <i class="bi bi-chevron-right small opacity-50"></i>
                 </a>
+
+                <!-- Obras de la Comunidad -->
+                <a href="{% url 'catalog:explore' %}?type=original_novel{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link {% if selected_type == 'original_novel' %}active{% endif %}">
+                    <span class="nav-item-content">
+                        <i class="bi bi-feather nav-item-icon"></i>
+                        <span>Obras de la Comunidad</span>
+                    </span>
+                    <i class="bi bi-chevron-right small opacity-50"></i>
+                </a>
+
+                <!-- Personajes -->
                 <a href="{% url 'catalog:explore' %}?type=characters{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link {% if selected_type == 'characters' or selected_type == 'character' %}active{% endif %}">
                     <span class="nav-item-content">
                         <i class="bi bi-person-badge nav-item-icon"></i>
@@ -64,52 +125,29 @@
                     </span>
                     <i class="bi bi-chevron-right small opacity-50"></i>
                 </a>
+
+                <!-- Creadores -->
                 <a href="{% url 'catalog:explore' %}?type=people{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link {% if selected_type == 'people' or selected_type == 'person' %}active{% endif %}">
                     <span class="nav-item-content">
                         <i class="bi bi-mic nav-item-icon"></i>
-                        <span>Creadores</span>
+                        <span>Creadores & Mangakas</span>
                     </span>
                     <i class="bi bi-chevron-right small opacity-50"></i>
                 </a>
             </div>
 
-            <!-- Lateral Filters Form -->
+            <!-- Lateral Filters Form (Contextuales según el Tipo) -->
             <form action="{% url 'catalog:explore' %}" method="GET">
                 <input type="hidden" name="type" value="{{ selected_type }}">
 
-                <!-- Search Input -->
+                <!-- Search Input (Aplica a todos los tipos) -->
                 <div class="explore-filter-group">
                     <label class="explore-filter-label"><i class="bi bi-search"></i> Búsqueda</label>
-                    <input type="text" name="q" value="{{ selected_q }}" class="form-control filter-input-pro" placeholder="Título o palabra clave...">
+                    <input type="text" name="q" value="{{ selected_q }}" class="form-control filter-input-pro" placeholder="{% if selected_type == 'characters' %}Nombre del personaje...{% elif selected_type == 'people' %}Nombre del creador...{% else %}Título o palabra clave...{% endif %}">
                 </div>
 
-                <!-- Format Selection -->
-                <div class="explore-filter-group">
-                    <label class="explore-filter-label"><i class="bi bi-disc"></i> Formato</label>
-                    <select name="format" class="form-select filter-select-pro">
-                        <option value="">Todos los Formatos</option>
-                        {% if selected_type == 'anime' %}
-                            <option value="tv" {% if selected_format == 'tv' %}selected{% endif %}>Serie TV</option>
-                            <option value="movie" {% if selected_format == 'movie' %}selected{% endif %}>Película</option>
-                            <option value="ova" {% if selected_format == 'ova' %}selected{% endif %}>OVA</option>
-                            <option value="special" {% if selected_format == 'special' %}selected{% endif %}>Especial</option>
-                            <option value="ona" {% if selected_format == 'ona' %}selected{% endif %}>ONA</option>
-                            <option value="music" {% if selected_format == 'music' %}selected{% endif %}>Música</option>
-                        {% elif selected_type == 'manga' or selected_type == 'lightnovel' %}
-                            <option value="manga" {% if selected_format == 'manga' %}selected{% endif %}>Manga</option>
-                            <option value="novel" {% if selected_format == 'novel' %}selected{% endif %}>Novela</option>
-                            <option value="lightnovel" {% if selected_format == 'lightnovel' %}selected{% endif %}>Novela Ligera</option>
-                            <option value="oneshot" {% if selected_format == 'oneshot' %}selected{% endif %}>One-shot</option>
-                            <option value="doujin" {% if selected_format == 'doujin' %}selected{% endif %}>Doujinshi</option>
-                            <option value="manhwa" {% if selected_format == 'manhwa' %}selected{% endif %}>Manhwa</option>
-                            <option value="manhua" {% if selected_format == 'manhua' %}selected{% endif %}>Manhua</option>
-                        {% else %}
-                            <option value="" selected>Estándar</option>
-                        {% endif %}
-                    </select>
-                </div>
-
-                <!-- Genre Selection -->
+                {% if selected_type != 'characters' and selected_type != 'people' %}
+                <!-- Genre Selection (Para anime, manga, novelas, comunidad) -->
                 <div class="explore-filter-group">
                     <label class="explore-filter-label"><i class="bi bi-tags"></i> Género</label>
                     <select name="genre" class="form-select filter-select-pro">
@@ -126,18 +164,19 @@
                     </select>
                 </div>
 
-                <!-- Status Filter -->
+                <!-- Status Filter (Para obras narrativas) -->
                 <div class="explore-filter-group">
                     <label class="explore-filter-label"><i class="bi bi-activity"></i> Estado</label>
                     <select name="status" class="form-select filter-select-pro">
                         <option value="">Cualquier Estado</option>
-                        <option value="airing" {% if selected_status == 'airing' %}selected{% endif %}>En Emisión</option>
+                        <option value="airing" {% if selected_status == 'airing' %}selected{% endif %}>En Emisión / Publicación</option>
                         <option value="complete" {% if selected_status == 'complete' %}selected{% endif %}>Finalizado</option>
                         <option value="upcoming" {% if selected_status == 'upcoming' %}selected{% endif %}>Próximamente</option>
                     </select>
                 </div>
 
-                <!-- Min Score Filter -->
+                <!-- Min Score Filter (Para obras evaluadas) -->
+                {% if selected_type != 'original_novel' %}
                 <div class="explore-filter-group">
                     <label class="explore-filter-label"><i class="bi bi-star-half text-warning icon-glow-warning"></i> Nota Mínima</label>
                     <select name="min_score" class="form-select filter-select-pro">
@@ -149,8 +188,10 @@
                         <option value="5" {% if selected_min_score == '5' %}selected{% endif %}>5+ (Regular)</option>
                     </select>
                 </div>
+                {% endif %}
 
-                <!-- Rating Filter (Age Classification) -->
+                <!-- Rating Filter (Age Classification) - Solo para Anime -->
+                {% if effective_category == 'anime' %}
                 <div class="explore-filter-group">
                     <label class="explore-filter-label"><i class="bi bi-shield-lock"></i> Clasificación</label>
                     <select name="rating" class="form-select filter-select-pro">
@@ -162,15 +203,22 @@
                         <option value="r" {% if selected_rating == 'r' %}selected{% endif %}>R (+18)</option>
                     </select>
                 </div>
+                {% endif %}
+                {% endif %}
 
-                <!-- Sort & Order By -->
+                <!-- Sort & Order By (Adaptado al tipo) -->
                 <div class="row g-2 mb-3">
                     <div class="col-7">
                         <label class="explore-filter-label"><i class="bi bi-sort-down"></i> Ordenar</label>
                         <select name="order_by" class="form-select filter-select-pro">
-                            <option value="score" {% if selected_order_by == 'score' %}selected{% endif %}>Puntuación</option>
-                            <option value="popularity" {% if selected_order_by == 'popularity' %}selected{% endif %}>Popularidad</option>
-                            <option value="title" {% if selected_order_by == 'title' %}selected{% endif %}>Título (A-Z)</option>
+                            {% if selected_type == 'characters' or selected_type == 'people' %}
+                                <option value="favorites" {% if selected_order_by == 'favorites' or selected_order_by == 'score' %}selected{% endif %}>Favoritos</option>
+                                <option value="title" {% if selected_order_by == 'title' %}selected{% endif %}>Nombre (A-Z)</option>
+                            {% else %}
+                                <option value="score" {% if selected_order_by == 'score' %}selected{% endif %}>Puntuación</option>
+                                <option value="popularity" {% if selected_order_by == 'popularity' %}selected{% endif %}>Popularidad</option>
+                                <option value="title" {% if selected_order_by == 'title' %}selected{% endif %}>Título (A-Z)</option>
+                            {% endif %}
                         </select>
                     </div>
                     <div class="col-5">
@@ -209,8 +257,14 @@
             </div>
             <span class="badge px-3 py-1" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.3); color: #ffffff;">
                 {% if selected_type == 'anime' %}Animes
+                {% elif selected_type == 'tv' %}Series TV
+                {% elif selected_type == 'movie' %}Películas Anime
+                {% elif selected_type == 'ova' %}OVAs & Especiales
                 {% elif selected_type == 'manga' %}Mangas
+                {% elif selected_type == 'manhwa' %}Manhwas
+                {% elif selected_type == 'manhua' %}Manhuas
                 {% elif selected_type == 'lightnovel' %}Novelas Ligeras
+                {% elif selected_type == 'oneshot' %}One-Shots
                 {% elif selected_type == 'characters' or selected_type == 'character' %}Personajes
                 {% elif selected_type == 'people' or selected_type == 'person' %}Creadores & Mangakas
                 {% else %}Obras de la Comunidad
@@ -231,7 +285,7 @@
                     {% elif selected_type == 'people' or selected_type == 'person' %}
                         <a href="{% url 'catalog:item_detail' item_type='people' item_id=item.mal_id %}" class="text-decoration-none">
                     {% else %}
-                        <a href="{% url 'catalog:item_detail' item_type=selected_type item_id=item.mal_id %}" class="text-decoration-none">
+                        <a href="{% url 'catalog:item_detail' item_type=effective_category item_id=item.mal_id %}" class="text-decoration-none">
                     {% endif %}
                         <div class="media-poster-box">
                             <img src="{{ item.images.jpg.large_image_url }}" alt="{{ item.title }}" loading="lazy" class="media-poster-img">
@@ -267,7 +321,7 @@
                                 <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
                             </a>
                         {% else %}
-                            <a href="{% url 'catalog:item_detail' item_type=selected_type item_id=item.mal_id %}" class="text-decoration-none">
+                            <a href="{% url 'catalog:item_detail' item_type=effective_category item_id=item.mal_id %}" class="text-decoration-none">
                                 <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
                             </a>
                         {% endif %}
@@ -325,7 +379,7 @@
             <h4 class="text-white fw-bold mb-2">No se encontraron resultados</h4>
             <p class="text-muted mb-4">Intenta ajustar los términos de búsqueda o cambiar de género y filtros.</p>
             <a href="{% url 'catalog:explore' %}?type={{ selected_type }}" class="btn btn-accent px-4 py-2">
-                Restablecer Filtros
+                Limpiar Filtros
             </a>
         </div>
         {% endif %}

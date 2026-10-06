@@ -185,15 +185,17 @@ def item_detail_view(request, item_type, item_id):
     )
 
     is_bookmarked = False
+    user_review = None
     if request.user.is_authenticated:
         is_bookmarked = Bookmark.objects.filter(user=request.user, item_type=item_type, item_id=str(item_id)).exists()
+        user_review = ItemReview.objects.filter(user=request.user, item_type=item_type, item_id=str(item_id)).first()
 
     # Platforms (Official and Community / Streaming & Reading)
     platforms = tenrai_service.get_platforms_fast(item_type, item.get('title') or item.get('name') or '', item_id)
     share_url = request.build_absolute_uri()
     share_title = item.get('title') or item.get('name') or 'GrowUp'
 
-    review_form = ReviewForm()
+    review_form = ReviewForm(instance=user_review) if user_review else ReviewForm()
     discussion_form = DiscussionForm()
 
     context = {
@@ -208,6 +210,7 @@ def item_detail_view(request, item_type, item_id):
         'total_reviews': stats.get('count', 0),
         'discussions': discussions,
         'is_bookmarked': is_bookmarked,
+        'user_review': user_review,
         'review_form': review_form,
         'discussion_form': discussion_form,
     }

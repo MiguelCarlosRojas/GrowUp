@@ -605,6 +605,8 @@
 // ==============================================================================
 const CURRENT_ITEM_ID = "{{ item_id }}";
 const CURRENT_MEDIA_TYPE = "{{ item_type }}";
+const MAIN_POSTER_URL = "{{ item.images.jpg.large_image_url|default:'' }}";
+const MAIN_POSTER_IMAGE_URL = "{{ item.images.jpg.image_url|default:'' }}";
 
 function escapeHtml(str) {
     if (!str) return '';
@@ -616,6 +618,12 @@ function escapeHtml(str) {
         .replace(/'/g, '&#039;');
 }
 
+function isSameImage(url1, url2) {
+    if (!url1 || !url2) return false;
+    const clean = u => u.split('?')[0].trim();
+    return clean(url1) === clean(url2);
+}
+
 async function safeTenraiFetch(endpointPath) {
     try {
         const response = await fetch('/api/tenrai' + endpointPath);
@@ -625,6 +633,66 @@ async function safeTenraiFetch(endpointPath) {
     } catch (e) {
         console.warn('Tenrai fetch error:', endpointPath, e);
         return null;
+    }
+}
+
+// ------------------------------------------------------------------------------
+// MODAL CONTROLLERS: LIGHTBOX, VIDEO THEATER, THEME AUDIO
+// ------------------------------------------------------------------------------
+function openImageLightbox(imgUrl, title) {
+    if (!imgUrl) return;
+    const modalImg = document.getElementById('lightboxModalImage');
+    const extBtn = document.getElementById('lightboxModalExternalBtn');
+    const modalTitle = document.getElementById('imageLightboxTitle');
+    if (modalImg) modalImg.src = imgUrl;
+    if (extBtn) extBtn.href = imgUrl;
+    if (modalTitle && title) modalTitle.innerHTML = `<i class="bi bi-image text-danger me-2"></i>${escapeHtml(title)}`;
+    const modalEl = document.getElementById('imageLightboxModal');
+    if (modalEl && window.bootstrap) {
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+    }
+}
+
+function openVideoPlayerModal(ytId, title, extUrl) {
+    const iframe = document.getElementById('videoModalIframe');
+    const titleEl = document.getElementById('videoPlayerTitle');
+    const ytBtn = document.getElementById('videoModalYoutubeLink');
+    const embedUrl = ytId ? `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}&rel=0` : '';
+    const directUrl = extUrl || (ytId ? `https://www.youtube.com/watch?v=${ytId}` : '#');
+    
+    if (iframe) iframe.src = embedUrl;
+    if (titleEl) titleEl.innerHTML = `<i class="bi bi-play-circle-fill text-danger me-2"></i>${escapeHtml(title || 'Video Oficial')}`;
+    if (ytBtn) ytBtn.href = directUrl;
+    
+    const modalEl = document.getElementById('videoPlayerModal');
+    if (modalEl && window.bootstrap) {
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+    }
+}
+
+function stopModalVideo() {
+    const iframe = document.getElementById('videoModalIframe');
+    if (iframe) iframe.src = '';
+}
+
+function openThemeAudioModal(title, type) {
+    const titleEl = document.getElementById('themeModalTrackTitle');
+    const badgeEl = document.getElementById('themeModalTypeBadge');
+    const ytBtn = document.getElementById('themeModalYoutubeBtn');
+    const spBtn = document.getElementById('themeModalSpotifyBtn');
+    const query = encodeURIComponent(title + ' anime ost');
+    
+    if (titleEl) titleEl.textContent = title;
+    if (badgeEl) badgeEl.textContent = type;
+    if (ytBtn) ytBtn.href = `https://www.youtube.com/results?search_query=${query}`;
+    if (spBtn) spBtn.href = `https://open.spotify.com/search/${query}`;
+    
+    const modalEl = document.getElementById('themeAudioModal');
+    if (modalEl && window.bootstrap) {
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
     }
 }
 
@@ -655,20 +723,31 @@ async function loadAnimeSections() {
         if (promoList.length > 0) {
             const featured = promoList[0];
             const ytId = featured.trailer && featured.trailer.youtube_id ? featured.trailer.youtube_id : '';
-            const embedUrl = featured.trailer && featured.trailer.embed_url ? featured.trailer.embed_url : (ytId ? `https://www.youtube-nocookie.com/embed/${ytId}` : '');
+            const embedUrl = ytId ? `https://www.youtube-nocookie.com/embed/${ytId}?enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}&rel=0` : (featured.trailer && featured.trailer.embed_url ? featured.trailer.embed_url : '');
             const title = featured.title || 'Trailer Oficial';
+            const ytDirectUrl = featured.trailer && featured.trailer.url ? featured.trailer.url : (ytId ? `https://www.youtube.com/watch?v=${ytId}` : '');
 
             if (embedUrl) {
                 html += `
                 <div class="col-12 mb-2">
                     <div class="card bg-black border-secondary border-opacity-25 rounded-4 overflow-hidden shadow-sm">
                         <div class="ratio ratio-16x9">
-                            <iframe src="${escapeHtml(embedUrl)}" title="${escapeHtml(title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                            <iframe src="${escapeHtml(embedUrl)}" title="${escapeHtml(title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
                         </div>
-                        <div class="p-3 bg-dark bg-opacity-75">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <h6 class="fw-bold text-white mb-0 text-truncate">${escapeHtml(title)}</h6>
-                                <span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25"><i class="bi bi-youtube me-1"></i> Trailer Principal</span>
+                        <div class="p-3 bg-dark bg-opacity-75 d-flex flex-wrap align-items-center justify-content-between gap-2">
+                            <div>
+                                <h6 class="fw-bold text-white mb-0">${escapeHtml(title)}</h6>
+                                <small class="text-muted">Reproducción directa optimizada para Tenrai</small>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                ${ytId ? `
+                                <button type="button" class="btn btn-sm btn-outline-glow" onclick="openVideoPlayerModal('${escapeHtml(ytId)}', '${escapeHtml(title)}', '${escapeHtml(ytDirectUrl)}')">
+                                    <i class="bi bi-aspect-ratio me-1"></i> Modo Cine
+                                </button>` : ''}
+                                ${ytDirectUrl ? `
+                                <a href="${escapeHtml(ytDirectUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-danger fw-bold">
+                                    <i class="bi bi-youtube me-1"></i> Ver en YouTube
+                                </a>` : ''}
                             </div>
                         </div>
                     </div>
@@ -679,15 +758,19 @@ async function loadAnimeSections() {
         promoList.slice(1, 7).forEach(promo => {
             const title = promo.title || 'Avance Promocional';
             const img = (promo.trailer && promo.trailer.images && (promo.trailer.images.maximum_image_url || promo.trailer.images.large_image_url || promo.trailer.images.medium_image_url)) || '';
-            const ytUrl = promo.trailer && promo.trailer.url ? promo.trailer.url : '';
+            const ytId = promo.trailer && promo.trailer.youtube_id ? promo.trailer.youtube_id : '';
+            const ytUrl = promo.trailer && promo.trailer.url ? promo.trailer.url : (ytId ? `https://www.youtube.com/watch?v=${ytId}` : '');
             html += `
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card h-100 bg-dark bg-opacity-50 border-secondary border-opacity-25 rounded-3 overflow-hidden">
-                    <div class="position-relative ratio ratio-16x9 bg-black">
+                    <div class="position-relative ratio ratio-16x9 bg-black" role="button" onclick="openVideoPlayerModal('${escapeHtml(ytId)}', '${escapeHtml(title)}', '${escapeHtml(ytUrl)}')">
                         ${img ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(title)}" class="w-100 h-100 object-fit-cover" loading="lazy">` : ''}
-                        ${ytUrl ? `<a href="${escapeHtml(ytUrl)}" target="_blank" rel="noopener noreferrer" class="position-absolute top-50 start-50 translate-middle btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center shadow" style="width:46px;height:46px;"><i class="bi bi-play-fill fs-4"></i></a>` : ''}
+                        <div class="position-absolute top-50 start-50 translate-middle btn btn-danger btn-sm rounded-circle d-flex align-items-center justify-content-center shadow" style="width:46px;height:46px;"><i class="bi bi-play-fill fs-4"></i></div>
                     </div>
-                    <div class="p-2 small text-white text-truncate fw-semibold">${escapeHtml(title)}</div>
+                    <div class="p-2 d-flex align-items-center justify-content-between gap-2">
+                        <span class="small text-white text-truncate fw-semibold" title="${escapeHtml(title)}">${escapeHtml(title)}</span>
+                        ${ytUrl ? `<a href="${escapeHtml(ytUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-link text-danger p-0 small" title="Ver en YouTube"><i class="bi bi-box-arrow-up-right"></i></a>` : ''}
+                    </div>
                 </div>
             </div>`;
         });
@@ -703,7 +786,10 @@ async function loadAnimeSections() {
                         ${img ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(title)}" class="w-100 h-100 object-fit-cover" loading="lazy">` : ''}
                         ${epUrl ? `<a href="${escapeHtml(epUrl)}" target="_blank" rel="noopener noreferrer" class="position-absolute top-50 start-50 translate-middle btn btn-warning btn-sm rounded-circle d-flex align-items-center justify-content-center shadow" style="width:40px;height:40px;"><i class="bi bi-play-fill fs-5"></i></a>` : ''}
                     </div>
-                    <div class="p-2 small text-white text-truncate">${escapeHtml(title)}</div>
+                    <div class="p-2 d-flex align-items-center justify-content-between gap-2">
+                        <span class="small text-white text-truncate" title="${escapeHtml(title)}">${escapeHtml(title)}</span>
+                        ${epUrl ? `<a href="${escapeHtml(epUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-link text-warning p-0 small" title="Ver clip"><i class="bi bi-box-arrow-up-right"></i></a>` : ''}
+                    </div>
                 </div>
             </div>`;
         });
@@ -712,28 +798,38 @@ async function loadAnimeSections() {
         container.innerHTML = html;
     });
 
-    // 2. Pictures Gallery
+    // 2. Pictures Gallery (Deduplicated against main cover poster)
     safeTenraiFetch(`/anime/${id}/pictures`).then(pictures => {
         const container = document.getElementById('content-anime-pictures');
         if (!container) return;
         const picList = Array.isArray(pictures) ? pictures : [];
-        if (picList.length === 0) {
+        
+        const filteredPics = picList.filter(pic => {
+            const picLarge = (pic.jpg && pic.jpg.large_image_url) || (pic.webp && pic.webp.large_image_url) || '';
+            const picNorm = (pic.jpg && pic.jpg.image_url) || (pic.webp && pic.webp.image_url) || '';
+            return !isSameImage(picLarge, MAIN_POSTER_URL) &&
+                   !isSameImage(picNorm, MAIN_POSTER_URL) &&
+                   !isSameImage(picLarge, MAIN_POSTER_IMAGE_URL) &&
+                   !isSameImage(picNorm, MAIN_POSTER_IMAGE_URL);
+        });
+
+        if (filteredPics.length === 0) {
             container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay imágenes adicionales en la galería.</div>';
             return;
         }
 
         let html = '<div class="row g-3">';
-        picList.slice(0, 18).forEach(pic => {
+        filteredPics.slice(0, 18).forEach(pic => {
             const imgUrl = (pic.jpg && (pic.jpg.large_image_url || pic.jpg.image_url)) || (pic.webp && (pic.webp.large_image_url || pic.webp.image_url)) || '';
             if (!imgUrl) return;
             html += `
             <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                <a href="${escapeHtml(imgUrl)}" target="_blank" rel="noopener noreferrer" class="gallery-thumb-card shadow-sm" title="Ver imagen en alta resolución">
+                <div class="gallery-thumb-card shadow-sm" role="button" onclick="openImageLightbox('${escapeHtml(imgUrl)}', 'Visual promocional')">
                     <img src="${escapeHtml(imgUrl)}" alt="Key Visual" class="gallery-thumb-img" loading="lazy">
                     <div class="gallery-thumb-overlay">
-                        <span class="badge bg-black bg-opacity-75 text-white small" style="font-size:0.65rem;"><i class="bi bi-arrows-fullscreen me-1"></i>HD</span>
+                        <span class="badge bg-black bg-opacity-75 text-white small" style="font-size:0.65rem;"><i class="bi bi-arrows-fullscreen me-1"></i>Ver</span>
                     </div>
-                </a>
+                </div>
             </div>`;
         });
         html += '</div>';
@@ -792,7 +888,7 @@ async function loadAnimeSections() {
         container.innerHTML = html;
     });
 
-    // 4. Guia de Episodios Oficiales (Only /episodes, avoiding non-existent 404 endpoints)
+    // 4. Guia de Episodios Oficiales
     safeTenraiFetch(`/anime/${id}/episodes`).then(episodes => {
         const container = document.getElementById('content-anime-episodes');
         if (!container) return;
@@ -865,7 +961,7 @@ async function loadAnimeSections() {
         container.innerHTML = html;
     });
 
-    // 6. Themes & OST
+    // 6. Themes & OST (With Interactive Playback Button)
     safeTenraiFetch(`/anime/${id}/themes`).then(themes => {
         const container = document.getElementById('content-anime-themes');
         if (!container) return;
@@ -885,9 +981,14 @@ async function loadAnimeSections() {
                     <h6 class="fw-bold text-warning mb-3"><i class="bi bi-disc me-2"></i>Temas de Apertura (Openings)</h6>
                     <div class="d-flex flex-column gap-2">
                         ${openings.map((op, idx) => `
-                            <div class="p-2 rounded bg-black bg-opacity-40 border border-secondary border-opacity-25 small text-white">
-                                <span class="badge bg-warning bg-opacity-25 text-warning me-2">OP ${idx + 1}</span>
-                                <span>${escapeHtml(op)}</span>
+                            <div class="d-flex align-items-center justify-content-between p-2 rounded bg-black bg-opacity-40 border border-secondary border-opacity-25 small text-white">
+                                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                                    <span class="badge bg-warning bg-opacity-25 text-warning flex-shrink-0">OP ${idx + 1}</span>
+                                    <span class="text-truncate" title="${escapeHtml(op)}">${escapeHtml(op)}</span>
+                                </div>
+                                <button type="button" class="theme-play-btn flex-shrink-0 ms-2" onclick="openThemeAudioModal('${escapeHtml(op)}', 'Opening ${idx + 1}')" title="Reproducir y escuchar tema">
+                                    <i class="bi bi-play-fill"></i>
+                                </button>
                             </div>
                         `).join('')}
                     </div>
@@ -902,9 +1003,14 @@ async function loadAnimeSections() {
                     <h6 class="fw-bold text-info mb-3"><i class="bi bi-music-note-beamed me-2"></i>Temas de Cierre (Endings)</h6>
                     <div class="d-flex flex-column gap-2">
                         ${endings.map((ed, idx) => `
-                            <div class="p-2 rounded bg-black bg-opacity-40 border border-secondary border-opacity-25 small text-white">
-                                <span class="badge bg-info bg-opacity-25 text-info me-2">ED ${idx + 1}</span>
-                                <span>${escapeHtml(ed)}</span>
+                            <div class="d-flex align-items-center justify-content-between p-2 rounded bg-black bg-opacity-40 border border-secondary border-opacity-25 small text-white">
+                                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                                    <span class="badge bg-info bg-opacity-25 text-info flex-shrink-0">ED ${idx + 1}</span>
+                                    <span class="text-truncate" title="${escapeHtml(ed)}">${escapeHtml(ed)}</span>
+                                </div>
+                                <button type="button" class="theme-play-btn flex-shrink-0 ms-2" onclick="openThemeAudioModal('${escapeHtml(ed)}', 'Ending ${idx + 1}')" title="Reproducir y escuchar tema">
+                                    <i class="bi bi-play-fill"></i>
+                                </button>
                             </div>
                         `).join('')}
                     </div>
@@ -1075,7 +1181,7 @@ async function loadAnimeSections() {
         container.innerHTML = html;
     });
 
-    // 10. Streaming, External Links & News
+    // 10. Streaming, External Links & News (Redesigned Badges)
     Promise.all([
         safeTenraiFetch(`/anime/${id}/streaming`),
         safeTenraiFetch(`/anime/${id}/external`),
@@ -1096,8 +1202,10 @@ async function loadAnimeSections() {
                 <h6 class="fw-bold text-white mb-2"><i class="bi bi-broadcast me-2 text-danger"></i>Plataformas de Emisión Oficial</h6>
                 <div class="d-flex flex-wrap gap-2">
                     ${streamList.map(st => `
-                        <a href="${escapeHtml(st.url || '#')}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-danger d-inline-flex align-items-center gap-1 rounded-pill">
-                            <i class="bi bi-play-circle"></i> ${escapeHtml(st.name || 'Streaming')}
+                        <a href="${escapeHtml(st.url || '#')}" target="_blank" rel="noopener noreferrer" class="platform-stream-badge-btn">
+                            <i class="bi bi-play-circle-fill"></i>
+                            <span>${escapeHtml(st.name || 'Streaming Oficial')}</span>
+                            <i class="bi bi-box-arrow-up-right ms-auto opacity-75 small"></i>
                         </a>
                     `).join('')}
                 </div>
@@ -1110,8 +1218,10 @@ async function loadAnimeSections() {
                 <h6 class="fw-bold text-white mb-2"><i class="bi bi-link-45deg me-2 text-info"></i>Enlaces Oficiales</h6>
                 <div class="d-flex flex-wrap gap-2">
                     ${extList.slice(0, 8).map(ext => `
-                        <a href="${escapeHtml(ext.url || '#')}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-info d-inline-flex align-items-center gap-1 rounded-pill">
-                            <i class="bi bi-box-arrow-up-right"></i> ${escapeHtml(ext.name || 'Sitio')}
+                        <a href="${escapeHtml(ext.url || '#')}" target="_blank" rel="noopener noreferrer" class="platform-ext-badge-btn">
+                            <i class="bi bi-globe2"></i>
+                            <span>${escapeHtml(ext.name || 'Sitio Oficial')}</span>
+                            <i class="bi bi-box-arrow-up-right ms-auto opacity-75 small"></i>
                         </a>
                     `).join('')}
                 </div>
@@ -1162,28 +1272,38 @@ async function loadAnimeSections() {
 async function loadMangaSections() {
     const id = CURRENT_ITEM_ID;
 
-    // 1. Pictures Gallery
+    // 1. Pictures Gallery (Deduplicated against main cover poster)
     safeTenraiFetch(`/manga/${id}/pictures`).then(pictures => {
         const container = document.getElementById('content-manga-pictures');
         if (!container) return;
         const picList = Array.isArray(pictures) ? pictures : [];
-        if (picList.length === 0) {
-            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay imágenes adicionales en la galería.</div>';
+        
+        const filteredPics = picList.filter(pic => {
+            const picLarge = (pic.jpg && pic.jpg.large_image_url) || (pic.webp && pic.webp.large_image_url) || '';
+            const picNorm = (pic.jpg && pic.jpg.image_url) || (pic.webp && pic.webp.image_url) || '';
+            return !isSameImage(picLarge, MAIN_POSTER_URL) &&
+                   !isSameImage(picNorm, MAIN_POSTER_URL) &&
+                   !isSameImage(picLarge, MAIN_POSTER_IMAGE_URL) &&
+                   !isSameImage(picNorm, MAIN_POSTER_IMAGE_URL);
+        });
+
+        if (filteredPics.length === 0) {
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay portadas adicionales en la galería.</div>';
             return;
         }
 
         let html = '<div class="row g-3">';
-        picList.slice(0, 18).forEach(pic => {
+        filteredPics.slice(0, 18).forEach(pic => {
             const imgUrl = (pic.jpg && (pic.jpg.large_image_url || pic.jpg.image_url)) || (pic.webp && (pic.webp.large_image_url || pic.webp.image_url)) || '';
             if (!imgUrl) return;
             html += `
             <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                <a href="${escapeHtml(imgUrl)}" target="_blank" rel="noopener noreferrer" class="gallery-thumb-card shadow-sm" title="Ver imagen en alta resolución">
-                    <img src="${escapeHtml(imgUrl)}" alt="Key Visual" class="gallery-thumb-img" loading="lazy">
+                <div class="gallery-thumb-card shadow-sm" role="button" onclick="openImageLightbox('${escapeHtml(imgUrl)}', 'Portada de Tomo')">
+                    <img src="${escapeHtml(imgUrl)}" alt="Tomo" class="gallery-thumb-img" loading="lazy">
                     <div class="gallery-thumb-overlay">
-                        <span class="badge bg-black bg-opacity-75 text-white small" style="font-size:0.65rem;"><i class="bi bi-arrows-fullscreen me-1"></i>HD</span>
+                        <span class="badge bg-black bg-opacity-75 text-white small" style="font-size:0.65rem;"><i class="bi bi-arrows-fullscreen me-1"></i>Ver</span>
                     </div>
-                </a>
+                </div>
             </div>`;
         });
         html += '</div>';
@@ -1402,8 +1522,10 @@ async function loadMangaSections() {
                 <h6 class="fw-bold text-white mb-2"><i class="bi bi-link-45deg me-2 text-info"></i>Enlaces Oficiales</h6>
                 <div class="d-flex flex-wrap gap-2">
                     ${extList.slice(0, 8).map(ext => `
-                        <a href="${escapeHtml(ext.url || '#')}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-info d-inline-flex align-items-center gap-1 rounded-pill">
-                            <i class="bi bi-box-arrow-up-right"></i> ${escapeHtml(ext.name || 'Sitio')}
+                        <a href="${escapeHtml(ext.url || '#')}" target="_blank" rel="noopener noreferrer" class="platform-ext-badge-btn">
+                            <i class="bi bi-globe2"></i>
+                            <span>${escapeHtml(ext.name || 'Sitio Oficial')}</span>
+                            <i class="bi bi-box-arrow-up-right ms-auto opacity-75 small"></i>
                         </a>
                     `).join('')}
                 </div>
@@ -1459,23 +1581,33 @@ async function loadCharacterSections() {
         const container = document.getElementById('content-char-pictures');
         if (!container) return;
         const picList = Array.isArray(pictures) ? pictures : [];
-        if (picList.length === 0) {
-            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay imágenes en la galería.</div>';
+        
+        const filteredPics = picList.filter(pic => {
+            const picLarge = (pic.jpg && pic.jpg.large_image_url) || '';
+            const picNorm = (pic.jpg && pic.jpg.image_url) || '';
+            return !isSameImage(picLarge, MAIN_POSTER_URL) &&
+                   !isSameImage(picNorm, MAIN_POSTER_URL) &&
+                   !isSameImage(picLarge, MAIN_POSTER_IMAGE_URL) &&
+                   !isSameImage(picNorm, MAIN_POSTER_IMAGE_URL);
+        });
+
+        if (filteredPics.length === 0) {
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay imágenes adicionales en la galería.</div>';
             return;
         }
 
         let html = '<div class="row g-3">';
-        picList.slice(0, 18).forEach(pic => {
+        filteredPics.slice(0, 18).forEach(pic => {
             const imgUrl = (pic.jpg && (pic.jpg.large_image_url || pic.jpg.image_url)) || '';
             if (!imgUrl) return;
             html += `
             <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                <a href="${escapeHtml(imgUrl)}" target="_blank" rel="noopener noreferrer" class="gallery-thumb-card shadow-sm" title="Ver imagen en alta resolución">
+                <div class="gallery-thumb-card shadow-sm" role="button" onclick="openImageLightbox('${escapeHtml(imgUrl)}', 'Retrato del Personaje')">
                     <img src="${escapeHtml(imgUrl)}" alt="Character" class="gallery-thumb-img" loading="lazy">
                     <div class="gallery-thumb-overlay">
-                        <span class="badge bg-black bg-opacity-75 text-white small" style="font-size:0.65rem;"><i class="bi bi-arrows-fullscreen me-1"></i>HD</span>
+                        <span class="badge bg-black bg-opacity-75 text-white small" style="font-size:0.65rem;"><i class="bi bi-arrows-fullscreen me-1"></i>Ver</span>
                     </div>
-                </a>
+                </div>
             </div>`;
         });
         html += '</div>';
@@ -1594,23 +1726,33 @@ async function loadPersonSections() {
         const container = document.getElementById('content-person-pictures');
         if (!container) return;
         const picList = Array.isArray(pictures) ? pictures : [];
-        if (picList.length === 0) {
-            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay fotografías en la galería.</div>';
+        
+        const filteredPics = picList.filter(pic => {
+            const picLarge = (pic.jpg && pic.jpg.large_image_url) || '';
+            const picNorm = (pic.jpg && pic.jpg.image_url) || '';
+            return !isSameImage(picLarge, MAIN_POSTER_URL) &&
+                   !isSameImage(picNorm, MAIN_POSTER_URL) &&
+                   !isSameImage(picLarge, MAIN_POSTER_IMAGE_URL) &&
+                   !isSameImage(picNorm, MAIN_POSTER_IMAGE_URL);
+        });
+
+        if (filteredPics.length === 0) {
+            container.innerHTML = '<div class="text-muted small py-3"><i class="bi bi-info-circle me-1"></i>No hay fotografías adicionales en la galería.</div>';
             return;
         }
 
         let html = '<div class="row g-3">';
-        picList.slice(0, 18).forEach(pic => {
+        filteredPics.slice(0, 18).forEach(pic => {
             const imgUrl = (pic.jpg && (pic.jpg.large_image_url || pic.jpg.image_url)) || '';
             if (!imgUrl) return;
             html += `
             <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                <a href="${escapeHtml(imgUrl)}" target="_blank" rel="noopener noreferrer" class="gallery-thumb-card shadow-sm" title="Ver fotografía en alta resolución">
+                <div class="gallery-thumb-card shadow-sm" role="button" onclick="openImageLightbox('${escapeHtml(imgUrl)}', 'Fotografía de Prensa')">
                     <img src="${escapeHtml(imgUrl)}" alt="Person" class="gallery-thumb-img" loading="lazy">
                     <div class="gallery-thumb-overlay">
-                        <span class="badge bg-black bg-opacity-75 text-white small" style="font-size:0.65rem;"><i class="bi bi-arrows-fullscreen me-1"></i>HD</span>
+                        <span class="badge bg-black bg-opacity-75 text-white small" style="font-size:0.65rem;"><i class="bi bi-arrows-fullscreen me-1"></i>Ver</span>
                     </div>
-                </a>
+                </div>
             </div>`;
         });
         html += '</div>';
@@ -1704,8 +1846,11 @@ document.addEventListener('DOMContentLoaded', function() {
     } else if (CURRENT_MEDIA_TYPE === 'people' || CURRENT_MEDIA_TYPE === 'person') {
         loadPersonSections();
     }
-});
 
+    {% if user.is_authenticated and user_review %}
+    setStarRating({{ user_review.rating|default:5 }});
+    {% endif %}
+});
 
 // ==============================================================================
 // Existing Detail Functions (Synopsis, Sharing, Rating, Discussions)
@@ -1738,7 +1883,7 @@ function copyPageLink() {
         var copyIcon = document.getElementById('copyIcon');
         if (copyIcon && copyBtn) {
             copyIcon.className = 'bi bi-check-lg text-success';
-            copyBtn.setAttribute('title', '¡Enlace copiado!');
+            copyBtn.setAttribute('title', 'Enlace copiado');
             if (window.showToast) {
                 window.showToast('Enlace copiado al portapapeles con éxito', 'success', 3000);
             }
@@ -1846,55 +1991,25 @@ function selectDiscussionType(type) {
                 </div>
             </div>
 
-            <!-- Add Review Form -->
-            {% if user.is_authenticated %}
-                <div class="p-3 rounded-4 mb-4" style="background: rgba(8, 12, 20, 0.85); border: 1px solid rgba(255, 255, 255, 0.08);">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <span class="badge-status-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; width: 28px; height: 28px; border-radius: 8px;">
-                            <i class="bi bi-star-fill" style="font-size: 0.85rem;"></i>
-                        </span>
-                        <h6 class="text-white fw-bold mb-0">Escribir o Editar mi Calificación</h6>
-                    </div>
-                    <form action="{% url 'catalog:add_review' item_type=item_type item_id=item_id %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="item_title" value="{{ item.title }}">
-                        <input type="hidden" name="item_image" value="{{ item.images.jpg.large_image_url }}">
-                        
-                        <div class="mb-3">
-                            <label class="form-label text-muted small fw-semibold d-block">Selecciona tu Calificación</label>
-                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 p-2 rounded-3" style="background: rgba(18, 24, 38, 0.8); border: 1px solid rgba(255, 255, 255, 0.08);">
-                                <div class="star-picker-container" id="starPickerGroup">
-                                    <button type="button" class="star-picker-btn active" id="starPickerBtn1" onclick="setStarRating(1)" aria-label="1 Estrella"><i class="bi bi-star-fill text-warning"></i></button>
-                                    <button type="button" class="star-picker-btn active" id="starPickerBtn2" onclick="setStarRating(2)" aria-label="2 Estrellas"><i class="bi bi-star-fill text-warning"></i></button>
-                                    <button type="button" class="star-picker-btn active" id="starPickerBtn3" onclick="setStarRating(3)" aria-label="3 Estrellas"><i class="bi bi-star-fill text-warning"></i></button>
-                                    <button type="button" class="star-picker-btn active" id="starPickerBtn4" onclick="setStarRating(4)" aria-label="4 Estrellas"><i class="bi bi-star-fill text-warning"></i></button>
-                                    <button type="button" class="star-picker-btn active" id="starPickerBtn5" onclick="setStarRating(5)" aria-label="5 Estrellas"><i class="bi bi-star-fill text-warning"></i></button>
-                                </div>
-                                <span class="star-picker-text-label" id="starRatingLabel">5 de 5 - Obra Maestra</span>
-                            </div>
-                            <div class="d-none">
-                                {{ review_form.rating }}
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-muted small fw-semibold">Título de tu Opinión</label>
-                            <input type="text" name="headline" class="form-control filter-input-pro" placeholder="Ej: Una historia épica con animación excepcional" required value="{{ review_form.headline.value|default:'' }}">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-muted small fw-semibold">Tu Reseña Detallada</label>
-                            <textarea name="opinion" rows="3" class="form-control filter-input-pro" placeholder="Describe los puntos fuertes del argumento, personajes, ambientación..." required>{{ review_form.opinion.value|default:'' }}</textarea>
-                        </div>
-                        <button type="submit" class="btn btn-accent btn-sm w-100 py-2 fw-bold">
-                            <i class="bi bi-send-fill me-1"></i> Publicar Clasificación
+            <!-- Review Action Trigger Button / Auth Requirement -->
+            <div class="mb-4">
+                {% if user.is_authenticated %}
+                    {% if user_review %}
+                        <button type="button" class="btn btn-accent w-100 py-2 fw-bold d-flex align-items-center justify-content-center gap-2 shadow" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                            <i class="bi bi-pencil-square"></i> Editar mi Calificación
                         </button>
-                    </form>
-                </div>
-            {% else %}
-                <div class="p-3 rounded-4 text-center small mb-4" style="background: rgba(18, 24, 38, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); color: #cbd5e1;">
-                    <i class="bi bi-lock-fill text-warning fs-5 d-block mb-1"></i>
-                    <a href="{% url 'accounts:login' %}" class="text-danger fw-bold text-decoration-none">Inicia sesión</a> para dejar tu clasificación y opinión sobre esta obra.
-                </div>
-            {% endif %}
+                    {% else %}
+                        <button type="button" class="btn btn-accent w-100 py-2 fw-bold d-flex align-items-center justify-content-center gap-2 shadow" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                            <i class="bi bi-star-fill"></i> Escribir mi Calificación
+                        </button>
+                    {% endif %}
+                {% else %}
+                    <div class="p-3 rounded-4 text-center small" style="background: rgba(18, 24, 38, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); color: #cbd5e1;">
+                        <i class="bi bi-lock-fill text-warning fs-5 d-block mb-1"></i>
+                        <a href="{% url 'accounts:login' %}" class="text-danger fw-bold text-decoration-none">Inicia sesión</a> para dejar tu calificación y opinión sobre esta obra.
+                    </div>
+                {% endif %}
+            </div>
 
             <!-- List of Reviews -->
             <div class="d-flex flex-column gap-3">
@@ -1942,47 +2057,19 @@ function selectDiscussionType(type) {
                 </span>
             </div>
 
-            <!-- Add Comment Form -->
-            {% if user.is_authenticated %}
-                <div class="p-3 rounded-4 mb-4" style="background: rgba(8, 12, 20, 0.85); border: 1px solid rgba(255, 255, 255, 0.08);">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <span class="badge-status-icon" style="background: rgba(6, 182, 212, 0.15); color: #06b6d4; width: 28px; height: 28px; border-radius: 8px;">
-                            <i class="bi bi-chat-text-fill" style="font-size: 0.85rem;"></i>
-                        </span>
-                        <h6 class="text-white fw-bold mb-0">Publicar un Tema en la Comunidad</h6>
+            <!-- Discussion Action Trigger Button / Auth Requirement -->
+            <div class="mb-4">
+                {% if user.is_authenticated %}
+                    <button type="button" class="btn btn-outline-glow w-100 py-2 fw-bold d-flex align-items-center justify-content-center gap-2 shadow" data-bs-toggle="modal" data-bs-target="#discussionModal">
+                        <i class="bi bi-chat-dots-fill"></i> Publicar un Tema en la Comunidad
+                    </button>
+                {% else %}
+                    <div class="p-3 rounded-4 text-center small" style="background: rgba(18, 24, 38, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); color: #cbd5e1;">
+                        <i class="bi bi-lock-fill text-info fs-5 d-block mb-1"></i>
+                        <a href="{% url 'accounts:login' %}" class="text-info fw-bold text-decoration-none">Inicia sesión</a> para hacer preguntas o responder comentarios de la comunidad.
                     </div>
-                    
-                    <form action="{% url 'catalog:add_discussion' item_type=item_type item_id=item_id %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="item_title" value="{{ item.title }}">
-                        
-                        <!-- Discussion Type Pill Selector -->
-                        <div class="forum-type-selector mt-2">
-                            <div class="forum-type-btn" id="typeBtnComment" onclick="selectDiscussionType('comment')">
-                                <i class="bi bi-chat-dots me-1"></i> Comentario / Debate
-                            </div>
-                            <div class="forum-type-btn active" id="typeBtnQuestion" onclick="selectDiscussionType('question')">
-                                <i class="bi bi-question-circle me-1"></i> Pregunta / Duda
-                            </div>
-                        </div>
-                        <div class="d-none">
-                            {{ discussion_form.discussion_type }}
-                        </div>
-
-                        <div class="mb-3">
-                            <textarea name="content" rows="3" class="form-control filter-input-pro" placeholder="Escribe tu consulta o abre un hilo de debate respetuoso con la comunidad..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-outline-glow btn-sm w-100 py-2 fw-bold">
-                            <i class="bi bi-send me-1"></i> Enviar Mensaje a la Comunidad
-                        </button>
-                    </form>
-                </div>
-            {% else %}
-                <div class="p-3 rounded-4 text-center small mb-4" style="background: rgba(18, 24, 38, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); color: #cbd5e1;">
-                    <i class="bi bi-lock-fill text-info fs-5 d-block mb-1"></i>
-                    <a href="{% url 'accounts:login' %}" class="text-info fw-bold text-decoration-none">Inicia sesión</a> para hacer preguntas o responder comentarios de la comunidad.
-                </div>
-            {% endif %}
+                {% endif %}
+            </div>
 
             <!-- List of Discussions / Replies -->
             <div class="d-flex flex-column gap-3">
@@ -2055,4 +2142,201 @@ function selectDiscussionType(type) {
         </div>
     </div>
 </div>
+
+<!-- ==========================================================================
+     POPUP MODALS: LIGHTBOX, VIDEO THEATER, THEME AUDIO, REVIEW & DISCUSSION
+     ========================================================================== -->
+
+<!-- 1. Image Lightbox Modal -->
+<div class="modal fade" id="imageLightboxModal" tabindex="-1" aria-labelledby="imageLightboxTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content lightbox-modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h6 class="modal-title text-white fw-bold" id="imageLightboxTitle"><i class="bi bi-image text-danger me-2"></i>Galería Visual en Alta Resolución</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center p-3">
+                <div class="lightbox-img-container mb-3">
+                    <img src="" id="lightboxModalImage" alt="Visual" class="img-fluid rounded-3 shadow-lg lightbox-preview-img">
+                </div>
+                <div class="d-flex justify-content-center align-items-center gap-3">
+                    <a href="" id="lightboxModalExternalBtn" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-glow">
+                        <i class="bi bi-box-arrow-up-right me-1"></i> Abrir en tamaño completo
+                    </a>
+                    <button type="button" class="btn btn-sm btn-subtle-pill" data-bs-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. Video Player Theater Modal -->
+<div class="modal fade" id="videoPlayerModal" tabindex="-1" aria-labelledby="videoPlayerTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content bg-black border border-secondary border-opacity-50 rounded-4 overflow-hidden shadow-2xl">
+            <div class="modal-header border-0 bg-dark bg-opacity-75 py-2 px-3">
+                <h6 class="modal-title text-white fw-bold text-truncate" id="videoPlayerTitle"><i class="bi bi-play-circle-fill text-danger me-2"></i>Reproductor de Video</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar" onclick="stopModalVideo()"></button>
+            </div>
+            <div class="modal-body p-0 bg-black">
+                <div class="ratio ratio-16x9">
+                    <iframe id="videoModalIframe" src="" title="Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                </div>
+            </div>
+            <div class="modal-footer border-0 bg-dark bg-opacity-75 py-2 px-3 d-flex justify-content-between align-items-center">
+                <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Si el reproductor tiene restricciones de derechos de autor, puedes abrir el video directamente en YouTube.</small>
+                <div class="d-flex gap-2">
+                    <a href="" id="videoModalYoutubeLink" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-danger px-3 fw-bold">
+                        <i class="bi bi-youtube me-1"></i> Ver en YouTube
+                    </a>
+                    <button type="button" class="btn btn-sm btn-subtle-pill" data-bs-dismiss="modal" onclick="stopModalVideo()">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 3. Theme Audio Player Modal -->
+<div class="modal fade" id="themeAudioModal" tabindex="-1" aria-labelledby="themeAudioTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark border border-secondary border-opacity-50 rounded-4 overflow-hidden shadow-2xl">
+            <div class="modal-header border-0 bg-black bg-opacity-60 py-3">
+                <h6 class="modal-title text-white fw-bold" id="themeAudioTitle"><i class="bi bi-music-note-beamed text-danger me-2"></i>Tema Musical Oficial</h6>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body p-4 text-center">
+                <div class="theme-audio-disc-wrap mb-3 mx-auto" style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid rgba(255, 42, 84, 0.4); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(255, 42, 84, 0.25);">
+                    <i class="bi bi-disc text-danger fs-2"></i>
+                </div>
+                <span class="badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-30 mb-2 px-3 py-1" id="themeModalTypeBadge">Opening</span>
+                <h5 class="text-white fw-bold mb-2 text-wrap" id="themeModalTrackTitle">Tema</h5>
+                <p class="text-muted small mb-4">Banda sonora original licenciada de la obra</p>
+                
+                <div class="equalizer-wave justify-content-center mb-4">
+                    <span class="equalizer-bar" style="height: 18px;"></span>
+                    <span class="equalizer-bar" style="height: 32px;"></span>
+                    <span class="equalizer-bar" style="height: 24px;"></span>
+                    <span class="equalizer-bar" style="height: 38px;"></span>
+                    <span class="equalizer-bar" style="height: 28px;"></span>
+                    <span class="equalizer-bar" style="height: 20px;"></span>
+                    <span class="equalizer-bar" style="height: 35px;"></span>
+                </div>
+
+                <div class="d-flex flex-column gap-2">
+                    <a href="" id="themeModalYoutubeBtn" target="_blank" rel="noopener noreferrer" class="btn btn-danger w-100 py-2 fw-bold d-flex align-items-center justify-content-center gap-2">
+                        <i class="bi bi-youtube fs-5"></i> Escuchar en YouTube
+                    </a>
+                    <a href="" id="themeModalSpotifyBtn" target="_blank" rel="noopener noreferrer" class="btn btn-outline-success w-100 py-2 fw-bold d-flex align-items-center justify-content-center gap-2">
+                        <i class="bi bi-spotify fs-5"></i> Buscar en Spotify
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if user.is_authenticated %}
+<!-- 4. Review Popup Modal -->
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark border border-secondary border-opacity-50 rounded-4 overflow-hidden shadow-2xl">
+            <div class="modal-header border-0 bg-black bg-opacity-60 py-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge-status-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; width: 28px; height: 28px; border-radius: 8px;">
+                        <i class="bi bi-star-fill" style="font-size: 0.85rem;"></i>
+                    </span>
+                    <h6 class="modal-title text-white fw-bold" id="reviewModalTitle">
+                        {% if user_review %}Editar mi Calificación{% else %}Escribir mi Calificación{% endif %}
+                    </h6>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form action="{% url 'catalog:add_review' item_type=item_type item_id=item_id %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="item_title" value="{{ item.title }}">
+                <input type="hidden" name="item_image" value="{{ item.images.jpg.large_image_url }}">
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-semibold d-block">Selecciona tu Calificación</label>
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 p-2 rounded-3" style="background: rgba(18, 24, 38, 0.8); border: 1px solid rgba(255, 255, 255, 0.08);">
+                            <div class="star-picker-container" id="starPickerGroup">
+                                <button type="button" class="star-picker-btn active" id="starPickerBtn1" onclick="setStarRating(1)" aria-label="1 Estrella"><i class="bi bi-star-fill text-warning"></i></button>
+                                <button type="button" class="star-picker-btn active" id="starPickerBtn2" onclick="setStarRating(2)" aria-label="2 Estrellas"><i class="bi bi-star-fill text-warning"></i></button>
+                                <button type="button" class="star-picker-btn active" id="starPickerBtn3" onclick="setStarRating(3)" aria-label="3 Estrellas"><i class="bi bi-star-fill text-warning"></i></button>
+                                <button type="button" class="star-picker-btn active" id="starPickerBtn4" onclick="setStarRating(4)" aria-label="4 Estrellas"><i class="bi bi-star-fill text-warning"></i></button>
+                                <button type="button" class="star-picker-btn active" id="starPickerBtn5" onclick="setStarRating(5)" aria-label="5 Estrellas"><i class="bi bi-star-fill text-warning"></i></button>
+                            </div>
+                            <span class="star-picker-text-label" id="starRatingLabel">5 de 5 - Obra Maestra</span>
+                        </div>
+                        <div class="d-none">
+                            {{ review_form.rating }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-semibold">Título de tu Opinión</label>
+                        <input type="text" name="headline" class="form-control filter-input-pro" placeholder="Ej: Una historia épica con animación excepcional" required value="{{ review_form.headline.value|default:'' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-semibold">Tu Reseña Detallada</label>
+                        <textarea name="opinion" rows="4" class="form-control filter-input-pro" placeholder="Describe los puntos fuertes del argumento, personajes, ambientación..." required>{{ review_form.opinion.value|default:'' }}</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 bg-black bg-opacity-40 py-3">
+                    <button type="button" class="btn btn-subtle-pill btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-accent btn-sm px-4 fw-bold">
+                        <i class="bi bi-send-fill me-1"></i> Publicar Calificación
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- 5. Discussion Popup Modal -->
+<div class="modal fade" id="discussionModal" tabindex="-1" aria-labelledby="discussionModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark border border-secondary border-opacity-50 rounded-4 overflow-hidden shadow-2xl">
+            <div class="modal-header border-0 bg-black bg-opacity-60 py-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge-status-icon" style="background: rgba(6, 182, 212, 0.15); color: #06b6d4; width: 28px; height: 28px; border-radius: 8px;">
+                        <i class="bi bi-chat-text-fill" style="font-size: 0.85rem;"></i>
+                    </span>
+                    <h6 class="modal-title text-white fw-bold" id="discussionModalTitle">Publicar un Tema en la Comunidad</h6>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form action="{% url 'catalog:add_discussion' item_type=item_type item_id=item_id %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="item_title" value="{{ item.title }}">
+                <div class="modal-body p-4">
+                    <!-- Discussion Type Pill Selector -->
+                    <div class="forum-type-selector mb-3">
+                        <div class="forum-type-btn" id="typeBtnComment" onclick="selectDiscussionType('comment')">
+                            <i class="bi bi-chat-dots me-1"></i> Comentario / Debate
+                        </div>
+                        <div class="forum-type-btn active" id="typeBtnQuestion" onclick="selectDiscussionType('question')">
+                            <i class="bi bi-question-circle me-1"></i> Pregunta / Duda
+                        </div>
+                    </div>
+                    <div class="d-none">
+                        {{ discussion_form.discussion_type }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-semibold">Mensaje o Consulta</label>
+                        <textarea name="content" rows="4" class="form-control filter-input-pro" placeholder="Escribe tu consulta o abre un hilo de debate respetuoso con la comunidad..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 bg-black bg-opacity-40 py-3">
+                    <button type="button" class="btn btn-subtle-pill btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-outline-glow btn-sm px-4 fw-bold">
+                        <i class="bi bi-send me-1"></i> Enviar a la Comunidad
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

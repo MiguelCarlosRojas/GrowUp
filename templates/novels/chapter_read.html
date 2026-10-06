@@ -28,9 +28,9 @@
                 <div class="d-flex align-items-center gap-2 flex-wrap">
                     <!-- Theme Toggles -->
                     <div class="btn-group btn-group-sm" role="group">
-                        <button type="button" class="btn btn-outline-glow theme-btn active" onclick="setReadingTheme('dark', this)" title="Tema Oscuro">Dark</button>
-                        <button type="button" class="btn btn-outline-glow theme-btn" onclick="setReadingTheme('sepia', this)" title="Tema Sepia">Sepia</button>
-                        <button type="button" class="btn btn-outline-glow theme-btn" onclick="setReadingTheme('black', this)" title="Tema OLED">OLED</button>
+                        <button type="button" class="btn btn-outline-glow active" onclick="setReadingTheme('dark')" title="Tema Oscuro">Dark</button>
+                        <button type="button" class="btn btn-outline-glow" onclick="setReadingTheme('sepia')" title="Tema Sepia">Sepia</button>
+                        <button type="button" class="btn btn-outline-glow" onclick="setReadingTheme('black')" title="Tema OLED">OLED</button>
                     </div>
 
                     <!-- Font size controls -->
@@ -103,7 +103,7 @@
         document.getElementById('reader-text').style.fontSize = currentSize + 'rem';
     }
 
-    function setReadingTheme(theme, btn) {
+    function setReadingTheme(theme) {
         const box = document.getElementById('reader-container');
         box.classList.remove('reader-theme-dark', 'reader-theme-sepia', 'reader-theme-oled');
         if (theme === 'sepia') {
@@ -112,12 +112,6 @@
             box.classList.add('reader-theme-oled');
         } else {
             box.classList.add('reader-theme-dark');
-        }
-
-        const buttons = document.querySelectorAll('.theme-btn');
-        buttons.forEach(b => b.classList.remove('active'));
-        if (btn) {
-            btn.classList.add('active');
         }
     }
 </script>

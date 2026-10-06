@@ -6,285 +6,329 @@
 <div class="mb-4">
     <div class="d-flex align-items-center gap-2 mb-1">
         <span class="section-accent-bar"></span>
-        <h2 class="fw-bold text-white mb-0">Explorar Mangas, Animes y Novelas Ligeras</h2>
+        <h2 class="fw-bold text-white mb-0">Explorar Catálogo</h2>
     </div>
-    <p class="text-muted">Filtros dinámicos en vivo con datos de Tenrai API v1 y la comunidad de escritores de GrowUp.</p>
+    <p class="text-muted mb-0">Filtros dinámicos en vivo con datos de Tenrai API v1 y la comunidad de escritores de GrowUp.</p>
 </div>
 
-<!-- Advanced Filter Panel with Pill Selectors -->
-<div class="filter-bar-pro mb-4">
-    <!-- Quick Type Selectors -->
-    <div class="d-flex gap-2 mb-3 flex-wrap">
-        <a href="{% url 'catalog:explore' %}?type=anime{% if selected_q %}&q={{ selected_q }}{% endif %}" class="btn-subtle-pill {% if selected_type == 'anime' %}active{% endif %}">
-            <i class="bi bi-tv"></i> Animes
-        </a>
-        <a href="{% url 'catalog:explore' %}?type=manga{% if selected_q %}&q={{ selected_q }}{% endif %}" class="btn-subtle-pill {% if selected_type == 'manga' %}active{% endif %}">
-            <i class="bi bi-book"></i> Mangas
-        </a>
-        <a href="{% url 'catalog:explore' %}?type=lightnovel{% if selected_q %}&q={{ selected_q }}{% endif %}" class="btn-subtle-pill {% if selected_type == 'lightnovel' %}active{% endif %}">
-            <i class="bi bi-journal-bookmark"></i> Novelas Ligeras
-        </a>
-        <a href="{% url 'catalog:explore' %}?type=original_novel{% if selected_q %}&q={{ selected_q }}{% endif %}" class="btn-subtle-pill {% if selected_type == 'original_novel' %}active{% endif %}">
-            <i class="bi bi-feather"></i> Obras de la Comunidad
-        </a>
-        <a href="{% url 'catalog:explore' %}?type=characters{% if selected_q %}&q={{ selected_q }}{% endif %}" class="btn-subtle-pill {% if selected_type == 'characters' or selected_type == 'character' %}active{% endif %}">
-            <i class="bi bi-person-badge"></i> Personajes
-        </a>
-        <a href="{% url 'catalog:explore' %}?type=people{% if selected_q %}&q={{ selected_q }}{% endif %}" class="btn-subtle-pill {% if selected_type == 'people' or selected_type == 'person' %}active{% endif %}">
-            <i class="bi bi-mic"></i> Creadores & Mangakas
-        </a>
-    </div>
+<!-- Main Explore Layout with Left Sidebar Filter Navigation -->
+<div class="explore-layout">
+    <!-- Left Column: Sticky Sidebar Filter Navigation -->
+    <aside class="explore-sidebar-col">
+        <div class="explore-filter-sidebar">
+            <div class="explore-sidebar-header">
+                <h5 class="explore-sidebar-title">
+                    <i class="bi bi-funnel-fill text-danger icon-glow-danger"></i>
+                    <span>Filtros & Categorías</span>
+                </h5>
+                <a href="{% url 'catalog:explore' %}?type={{ selected_type }}" class="text-muted small text-decoration-none" title="Limpiar todos los filtros">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                </a>
+            </div>
 
-    <form action="{% url 'catalog:explore' %}" method="GET" class="row g-2 g-md-3">
-        <input type="hidden" name="type" value="{{ selected_type }}">
-        
-        <!-- Text Query -->
-        <div class="col-12 col-sm-6 col-lg-3">
-            <label class="form-label text-muted small fw-semibold">Buscar por Título o Nombre</label>
-            <input type="text" name="q" value="{{ selected_q }}" class="form-control filter-input-pro" placeholder="Ej: Naruto, Bleach, Berserk...">
-        </div>
-
-        <!-- Format / Subtype Filter -->
-        <div class="col-6 col-sm-3 col-lg-2">
-            <label class="form-label text-muted small fw-semibold">Formato</label>
-            <select name="format" class="form-select filter-select-pro">
-                <option value="">Todos los Formatos</option>
-                {% if selected_type == 'anime' %}
-                    <option value="tv" {% if selected_format == 'tv' %}selected{% endif %}>Serie TV</option>
-                    <option value="movie" {% if selected_format == 'movie' %}selected{% endif %}>Película</option>
-                    <option value="ova" {% if selected_format == 'ova' %}selected{% endif %}>OVA</option>
-                    <option value="special" {% if selected_format == 'special' %}selected{% endif %}>Especial</option>
-                    <option value="ona" {% if selected_format == 'ona' %}selected{% endif %}>ONA</option>
-                    <option value="music" {% if selected_format == 'music' %}selected{% endif %}>Música</option>
-                {% elif selected_type == 'manga' or selected_type == 'lightnovel' %}
-                    <option value="manga" {% if selected_format == 'manga' %}selected{% endif %}>Manga</option>
-                    <option value="novel" {% if selected_format == 'novel' %}selected{% endif %}>Novela</option>
-                    <option value="lightnovel" {% if selected_format == 'lightnovel' %}selected{% endif %}>Novela Ligera</option>
-                    <option value="oneshot" {% if selected_format == 'oneshot' %}selected{% endif %}>One-shot</option>
-                    <option value="doujin" {% if selected_format == 'doujin' %}selected{% endif %}>Doujinshi</option>
-                    <option value="manhwa" {% if selected_format == 'manhwa' %}selected{% endif %}>Manhwa</option>
-                    <option value="manhua" {% if selected_format == 'manhua' %}selected{% endif %}>Manhua</option>
-                {% else %}
-                    <option value="" selected>Estándar</option>
-                {% endif %}
-            </select>
-        </div>
-
-        <!-- Genre Selection -->
-        <div class="col-6 col-sm-3 col-lg-2">
-            <label class="form-label text-muted small fw-semibold">Género</label>
-            <select name="genre" class="form-select filter-select-pro">
-                <option value="">Todos los Géneros</option>
-                {% if selected_type == 'original_novel' %}
-                    {% for cat in novel_categories %}
-                        <option value="{{ cat.slug }}" {% if selected_genre == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
-                    {% endfor %}
-                {% else %}
-                    {% for g in genres %}
-                        <option value="{{ g.id }}" {% if selected_genre == g.id|stringformat:"s" %}selected{% endif %}>{{ g.name }}</option>
-                    {% endfor %}
-                {% endif %}
-            </select>
-        </div>
-
-        <!-- Status Filter -->
-        <div class="col-6 col-sm-3 col-lg-2">
-            <label class="form-label text-muted small fw-semibold">Estado</label>
-            <select name="status" class="form-select filter-select-pro">
-                <option value="">Cualquier Estado</option>
-                <option value="airing" {% if selected_status == 'airing' %}selected{% endif %}>En Emisión</option>
-                <option value="complete" {% if selected_status == 'complete' %}selected{% endif %}>Finalizado</option>
-                <option value="upcoming" {% if selected_status == 'upcoming' %}selected{% endif %}>Próximamente</option>
-            </select>
-        </div>
-
-        <!-- Min Score Filter -->
-        <div class="col-6 col-sm-3 col-lg-1">
-            <label class="form-label text-muted small fw-semibold">Nota Mín.</label>
-            <select name="min_score" class="form-select filter-select-pro">
-                <option value="">Todas</option>
-                <option value="9" {% if selected_min_score == '9' %}selected{% endif %}>9+</option>
-                <option value="8" {% if selected_min_score == '8' %}selected{% endif %}>8+</option>
-                <option value="7" {% if selected_min_score == '7' %}selected{% endif %}>7+</option>
-                <option value="6" {% if selected_min_score == '6' %}selected{% endif %}>6+</option>
-                <option value="5" {% if selected_min_score == '5' %}selected{% endif %}>5+</option>
-            </select>
-        </div>
-
-        <!-- Rating Filter (Age Classification) -->
-        <div class="col-6 col-sm-3 col-lg-2">
-            <label class="form-label text-muted small fw-semibold">Edad / Clasif.</label>
-            <select name="rating" class="form-select filter-select-pro">
-                <option value="">Cualquiera</option>
-                <option value="g" {% if selected_rating == 'g' %}selected{% endif %}>G (Todos)</option>
-                <option value="pg" {% if selected_rating == 'pg' %}selected{% endif %}>PG (Familiar)</option>
-                <option value="pg13" {% if selected_rating == 'pg13' %}selected{% endif %}>PG-13 (+13)</option>
-                <option value="r17" {% if selected_rating == 'r17' %}selected{% endif %}>R-17 (+17)</option>
-                <option value="r" {% if selected_rating == 'r' %}selected{% endif %}>R (+18)</option>
-            </select>
-        </div>
-
-        <!-- Sort / Order By -->
-        <div class="col-6 col-sm-4 col-lg-2">
-            <label class="form-label text-muted small fw-semibold">Ordenar Por</label>
-            <select name="order_by" class="form-select filter-select-pro">
-                <option value="score" {% if selected_order_by == 'score' %}selected{% endif %}>Puntuación / Favoritos</option>
-                <option value="popularity" {% if selected_order_by == 'popularity' %}selected{% endif %}>Popularidad</option>
-                <option value="title" {% if selected_order_by == 'title' %}selected{% endif %}>Título (A-Z)</option>
-            </select>
-        </div>
-
-        <!-- Sort Direction -->
-        <div class="col-6 col-sm-2 col-lg-1">
-            <label class="form-label text-muted small fw-semibold">Sentido</label>
-            <select name="sort" class="form-select filter-select-pro">
-                <option value="desc" {% if selected_sort == 'desc' %}selected{% endif %}>Desc</option>
-                <option value="asc" {% if selected_sort == 'asc' %}selected{% endif %}>Asc</option>
-            </select>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="col-12 d-flex flex-column flex-sm-row justify-content-end gap-2 pt-3 border-top border-secondary border-opacity-25">
-            <a href="{% url 'catalog:explore' %}?type={{ selected_type }}" class="btn btn-outline-glow w-100 w-sm-auto">
-                <i class="bi bi-x-circle me-1"></i> Limpiar Filtros
-            </a>
-            <button type="submit" class="btn btn-accent w-100 w-sm-auto px-4">
-                <i class="bi bi-funnel me-1"></i> Aplicar Filtros
-            </button>
-        </div>
-    </form>
-</div>
-
-<!-- Results Header -->
-<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-    <div>
-        <h5 class="text-white fw-bold mb-0">
-            Resultados ({% if pagination %}{{ pagination.total_items }}{% else %}{{ items|length }}{% endif %})
-            {% if pagination and pagination.total_pages > 1 %}
-                <span class="text-muted fw-normal fs-6 ms-2">Mostrando {{ pagination.start_index }} - {{ pagination.end_index }} (Pág. {{ pagination.current_page }} de {{ pagination.total_pages }})</span>
-            {% endif %}
-        </h5>
-    </div>
-    <span class="badge px-3 py-1" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.3); color: #ffffff;">
-        {% if selected_type == 'anime' %}Animes
-        {% elif selected_type == 'manga' %}Mangas
-        {% elif selected_type == 'lightnovel' %}Novelas Ligeras
-        {% elif selected_type == 'characters' or selected_type == 'character' %}Personajes
-        {% elif selected_type == 'people' or selected_type == 'person' %}Creadores & Mangakas
-        {% else %}Obras de la Comunidad
-        {% endif %}
-    </span>
-</div>
-
-<!-- Grid of Results (Full-Width Responsive Modern Grid) -->
-{% if items %}
-<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 g-md-4">
-    {% for item in items %}
-    <div class="col">
-        <div class="media-card">
-            {% if item.is_original %}
-                <a href="{% url 'novels:novel_detail' slug=item.mal_id %}" class="text-decoration-none">
-            {% elif selected_type == 'characters' or selected_type == 'character' %}
-                <a href="{% url 'catalog:item_detail' item_type='characters' item_id=item.mal_id %}" class="text-decoration-none">
-            {% elif selected_type == 'people' or selected_type == 'person' %}
-                <a href="{% url 'catalog:item_detail' item_type='people' item_id=item.mal_id %}" class="text-decoration-none">
-            {% else %}
-                <a href="{% url 'catalog:item_detail' item_type=selected_type item_id=item.mal_id %}" class="text-decoration-none">
-            {% endif %}
-                <div class="media-poster-box">
-                    <img src="{{ item.images.jpg.large_image_url }}" alt="{{ item.title }}" loading="lazy" class="media-poster-img">
-                    <div class="media-poster-overlay"></div>
-                    
-                    <!-- Badges -->
-                    <span class="badge-top-left">{{ item.type|default:'OBRA' }}</span>
-                    {% if item.score %}
-                    <span class="badge-top-right">
-                        <i class="bi bi-star-fill"></i> {{ item.score }}
+            <!-- Lateral Navigation for Types -->
+            <div class="explore-type-nav">
+                <span class="explore-filter-label mb-2"><i class="bi bi-collection-play"></i> Tipo de Contenido</span>
+                <a href="{% url 'catalog:explore' %}?type=anime{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link {% if selected_type == 'anime' %}active{% endif %}">
+                    <span class="nav-item-content">
+                        <i class="bi bi-tv nav-item-icon"></i>
+                        <span>Animes</span>
                     </span>
-                    {% endif %}
+                    <i class="bi bi-chevron-right small opacity-50"></i>
+                </a>
+                <a href="{% url 'catalog:explore' %}?type=manga{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link {% if selected_type == 'manga' %}active{% endif %}">
+                    <span class="nav-item-content">
+                        <i class="bi bi-book nav-item-icon"></i>
+                        <span>Mangas</span>
+                    </span>
+                    <i class="bi bi-chevron-right small opacity-50"></i>
+                </a>
+                <a href="{% url 'catalog:explore' %}?type=lightnovel{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link {% if selected_type == 'lightnovel' %}active{% endif %}">
+                    <span class="nav-item-content">
+                        <i class="bi bi-journal-bookmark nav-item-icon"></i>
+                        <span>Novelas Ligeras</span>
+                    </span>
+                    <i class="bi bi-chevron-right small opacity-50"></i>
+                </a>
+                <a href="{% url 'catalog:explore' %}?type=original_novel{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link {% if selected_type == 'original_novel' %}active{% endif %}">
+                    <span class="nav-item-content">
+                        <i class="bi bi-feather nav-item-icon"></i>
+                        <span>Obras Comunidad</span>
+                    </span>
+                    <i class="bi bi-chevron-right small opacity-50"></i>
+                </a>
+                <a href="{% url 'catalog:explore' %}?type=characters{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link {% if selected_type == 'characters' or selected_type == 'character' %}active{% endif %}">
+                    <span class="nav-item-content">
+                        <i class="bi bi-person-badge nav-item-icon"></i>
+                        <span>Personajes</span>
+                    </span>
+                    <i class="bi bi-chevron-right small opacity-50"></i>
+                </a>
+                <a href="{% url 'catalog:explore' %}?type=people{% if selected_q %}&q={{ selected_q }}{% endif %}" class="explore-type-nav-link {% if selected_type == 'people' or selected_type == 'person' %}active{% endif %}">
+                    <span class="nav-item-content">
+                        <i class="bi bi-mic nav-item-icon"></i>
+                        <span>Creadores</span>
+                    </span>
+                    <i class="bi bi-chevron-right small opacity-50"></i>
+                </a>
+            </div>
 
-                    <!-- Hover overlay -->
-                    <div class="media-hover-overlay">
-                        <span class="hover-icon-circle"><i class="bi bi-eye-fill"></i></span>
-                        <span class="hover-label">Ver Detalle</span>
+            <!-- Lateral Filters Form -->
+            <form action="{% url 'catalog:explore' %}" method="GET">
+                <input type="hidden" name="type" value="{{ selected_type }}">
+
+                <!-- Search Input -->
+                <div class="explore-filter-group">
+                    <label class="explore-filter-label"><i class="bi bi-search"></i> Búsqueda</label>
+                    <input type="text" name="q" value="{{ selected_q }}" class="form-control filter-input-pro" placeholder="Título o palabra clave...">
+                </div>
+
+                <!-- Format Selection -->
+                <div class="explore-filter-group">
+                    <label class="explore-filter-label"><i class="bi bi-disc"></i> Formato</label>
+                    <select name="format" class="form-select filter-select-pro">
+                        <option value="">Todos los Formatos</option>
+                        {% if selected_type == 'anime' %}
+                            <option value="tv" {% if selected_format == 'tv' %}selected{% endif %}>Serie TV</option>
+                            <option value="movie" {% if selected_format == 'movie' %}selected{% endif %}>Película</option>
+                            <option value="ova" {% if selected_format == 'ova' %}selected{% endif %}>OVA</option>
+                            <option value="special" {% if selected_format == 'special' %}selected{% endif %}>Especial</option>
+                            <option value="ona" {% if selected_format == 'ona' %}selected{% endif %}>ONA</option>
+                            <option value="music" {% if selected_format == 'music' %}selected{% endif %}>Música</option>
+                        {% elif selected_type == 'manga' or selected_type == 'lightnovel' %}
+                            <option value="manga" {% if selected_format == 'manga' %}selected{% endif %}>Manga</option>
+                            <option value="novel" {% if selected_format == 'novel' %}selected{% endif %}>Novela</option>
+                            <option value="lightnovel" {% if selected_format == 'lightnovel' %}selected{% endif %}>Novela Ligera</option>
+                            <option value="oneshot" {% if selected_format == 'oneshot' %}selected{% endif %}>One-shot</option>
+                            <option value="doujin" {% if selected_format == 'doujin' %}selected{% endif %}>Doujinshi</option>
+                            <option value="manhwa" {% if selected_format == 'manhwa' %}selected{% endif %}>Manhwa</option>
+                            <option value="manhua" {% if selected_format == 'manhua' %}selected{% endif %}>Manhua</option>
+                        {% else %}
+                            <option value="" selected>Estándar</option>
+                        {% endif %}
+                    </select>
+                </div>
+
+                <!-- Genre Selection -->
+                <div class="explore-filter-group">
+                    <label class="explore-filter-label"><i class="bi bi-tags"></i> Género</label>
+                    <select name="genre" class="form-select filter-select-pro">
+                        <option value="">Todos los Géneros</option>
+                        {% if selected_type == 'original_novel' %}
+                            {% for cat in novel_categories %}
+                                <option value="{{ cat.slug }}" {% if selected_genre == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+                            {% endfor %}
+                        {% else %}
+                            {% for g in genres %}
+                                <option value="{{ g.id }}" {% if selected_genre == g.id|stringformat:"s" %}selected{% endif %}>{{ g.name }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+
+                <!-- Status Filter -->
+                <div class="explore-filter-group">
+                    <label class="explore-filter-label"><i class="bi bi-activity"></i> Estado</label>
+                    <select name="status" class="form-select filter-select-pro">
+                        <option value="">Cualquier Estado</option>
+                        <option value="airing" {% if selected_status == 'airing' %}selected{% endif %}>En Emisión</option>
+                        <option value="complete" {% if selected_status == 'complete' %}selected{% endif %}>Finalizado</option>
+                        <option value="upcoming" {% if selected_status == 'upcoming' %}selected{% endif %}>Próximamente</option>
+                    </select>
+                </div>
+
+                <!-- Min Score Filter -->
+                <div class="explore-filter-group">
+                    <label class="explore-filter-label"><i class="bi bi-star-half text-warning icon-glow-warning"></i> Nota Mínima</label>
+                    <select name="min_score" class="form-select filter-select-pro">
+                        <option value="">Todas</option>
+                        <option value="9" {% if selected_min_score == '9' %}selected{% endif %}>9+ (Excelente)</option>
+                        <option value="8" {% if selected_min_score == '8' %}selected{% endif %}>8+ (Muy Bueno)</option>
+                        <option value="7" {% if selected_min_score == '7' %}selected{% endif %}>7+ (Bueno)</option>
+                        <option value="6" {% if selected_min_score == '6' %}selected{% endif %}>6+ (Aceptable)</option>
+                        <option value="5" {% if selected_min_score == '5' %}selected{% endif %}>5+ (Regular)</option>
+                    </select>
+                </div>
+
+                <!-- Rating Filter (Age Classification) -->
+                <div class="explore-filter-group">
+                    <label class="explore-filter-label"><i class="bi bi-shield-lock"></i> Clasificación</label>
+                    <select name="rating" class="form-select filter-select-pro">
+                        <option value="">Cualquiera</option>
+                        <option value="g" {% if selected_rating == 'g' %}selected{% endif %}>G (Todos)</option>
+                        <option value="pg" {% if selected_rating == 'pg' %}selected{% endif %}>PG (Familiar)</option>
+                        <option value="pg13" {% if selected_rating == 'pg13' %}selected{% endif %}>PG-13 (+13)</option>
+                        <option value="r17" {% if selected_rating == 'r17' %}selected{% endif %}>R-17 (+17)</option>
+                        <option value="r" {% if selected_rating == 'r' %}selected{% endif %}>R (+18)</option>
+                    </select>
+                </div>
+
+                <!-- Sort & Order By -->
+                <div class="row g-2 mb-3">
+                    <div class="col-7">
+                        <label class="explore-filter-label"><i class="bi bi-sort-down"></i> Ordenar</label>
+                        <select name="order_by" class="form-select filter-select-pro">
+                            <option value="score" {% if selected_order_by == 'score' %}selected{% endif %}>Puntuación</option>
+                            <option value="popularity" {% if selected_order_by == 'popularity' %}selected{% endif %}>Popularidad</option>
+                            <option value="title" {% if selected_order_by == 'title' %}selected{% endif %}>Título (A-Z)</option>
+                        </select>
+                    </div>
+                    <div class="col-5">
+                        <label class="explore-filter-label"><i class="bi bi-arrow-down-up"></i> Sentido</label>
+                        <select name="sort" class="form-select filter-select-pro">
+                            <option value="desc" {% if selected_sort == 'desc' %}selected{% endif %}>Desc</option>
+                            <option value="asc" {% if selected_sort == 'asc' %}selected{% endif %}>Asc</option>
+                        </select>
                     </div>
                 </div>
-            </a>
 
-            <div class="media-info-wrap">
-                {% if item.is_original %}
-                    <a href="{% url 'novels:novel_detail' slug=item.mal_id %}" class="text-decoration-none">
-                        <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
+                <!-- Submit and Clear Buttons -->
+                <div class="d-flex flex-column gap-2 pt-2 border-top border-secondary border-opacity-25">
+                    <button type="submit" class="btn btn-accent w-100">
+                        <i class="bi bi-funnel-fill me-1"></i> Aplicar Filtros
+                    </button>
+                    <a href="{% url 'catalog:explore' %}?type={{ selected_type }}" class="btn btn-outline-glow w-100">
+                        <i class="bi bi-x-circle me-1"></i> Limpiar Filtros
                     </a>
-                {% elif selected_type == 'characters' or selected_type == 'character' %}
-                    <a href="{% url 'catalog:item_detail' item_type='characters' item_id=item.mal_id %}" class="text-decoration-none">
-                        <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
+                </div>
+            </form>
+        </div>
+    </aside>
+
+    <!-- Right Column: Results Grid and Header -->
+    <main class="explore-content-col">
+        <!-- Results Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <div>
+                <h5 class="text-white fw-bold mb-0">
+                    Resultados ({% if pagination %}{{ pagination.total_items }}{% else %}{{ items|length }}{% endif %})
+                    {% if pagination and pagination.total_pages > 1 %}
+                        <span class="text-muted fw-normal fs-6 ms-2">Mostrando {{ pagination.start_index }} - {{ pagination.end_index }} (Pág. {{ pagination.current_page }} de {{ pagination.total_pages }})</span>
+                    {% endif %}
+                </h5>
+            </div>
+            <span class="badge px-3 py-1" style="background: rgba(255, 42, 84, 0.15); border: 1px solid rgba(255, 42, 84, 0.3); color: #ffffff;">
+                {% if selected_type == 'anime' %}Animes
+                {% elif selected_type == 'manga' %}Mangas
+                {% elif selected_type == 'lightnovel' %}Novelas Ligeras
+                {% elif selected_type == 'characters' or selected_type == 'character' %}Personajes
+                {% elif selected_type == 'people' or selected_type == 'person' %}Creadores & Mangakas
+                {% else %}Obras de la Comunidad
+                {% endif %}
+            </span>
+        </div>
+
+        <!-- Grid of Results -->
+        {% if items %}
+        <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 g-3 g-md-4">
+            {% for item in items %}
+            <div class="col">
+                <div class="media-card">
+                    {% if item.is_original %}
+                        <a href="{% url 'novels:novel_detail' slug=item.mal_id %}" class="text-decoration-none">
+                    {% elif selected_type == 'characters' or selected_type == 'character' %}
+                        <a href="{% url 'catalog:item_detail' item_type='characters' item_id=item.mal_id %}" class="text-decoration-none">
+                    {% elif selected_type == 'people' or selected_type == 'person' %}
+                        <a href="{% url 'catalog:item_detail' item_type='people' item_id=item.mal_id %}" class="text-decoration-none">
+                    {% else %}
+                        <a href="{% url 'catalog:item_detail' item_type=selected_type item_id=item.mal_id %}" class="text-decoration-none">
+                    {% endif %}
+                        <div class="media-poster-box">
+                            <img src="{{ item.images.jpg.large_image_url }}" alt="{{ item.title }}" loading="lazy" class="media-poster-img">
+                            <div class="media-poster-overlay"></div>
+                            
+                            <!-- Badges -->
+                            <span class="badge-top-left">{{ item.type|default:'OBRA' }}</span>
+                            {% if item.score %}
+                            <span class="badge-top-right">
+                                <i class="bi bi-star-fill text-warning icon-glow-warning"></i> {{ item.score }}
+                            </span>
+                            {% endif %}
+
+                            <!-- Hover overlay -->
+                            <div class="media-hover-overlay">
+                                <span class="hover-icon-circle"><i class="bi bi-eye-fill"></i></span>
+                                <span class="hover-label">Ver Detalle</span>
+                            </div>
+                        </div>
                     </a>
-                {% elif selected_type == 'people' or selected_type == 'person' %}
-                    <a href="{% url 'catalog:item_detail' item_type='people' item_id=item.mal_id %}" class="text-decoration-none">
-                        <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
-                    </a>
-                {% else %}
-                    <a href="{% url 'catalog:item_detail' item_type=selected_type item_id=item.mal_id %}" class="text-decoration-none">
-                        <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
+
+                    <div class="media-info-wrap">
+                        {% if item.is_original %}
+                            <a href="{% url 'novels:novel_detail' slug=item.mal_id %}" class="text-decoration-none">
+                                <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
+                            </a>
+                        {% elif selected_type == 'characters' or selected_type == 'character' %}
+                            <a href="{% url 'catalog:item_detail' item_type='characters' item_id=item.mal_id %}" class="text-decoration-none">
+                                <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
+                            </a>
+                        {% elif selected_type == 'people' or selected_type == 'person' %}
+                            <a href="{% url 'catalog:item_detail' item_type='people' item_id=item.mal_id %}" class="text-decoration-none">
+                                <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'catalog:item_detail' item_type=selected_type item_id=item.mal_id %}" class="text-decoration-none">
+                                <h6 class="media-title" title="{{ item.title }}">{{ item.title }}</h6>
+                            </a>
+                        {% endif %}
+
+                        <div class="media-meta-line">
+                            <span>{{ item.type|default:'Serie' }}</span>
+                            <span>{{ item.status|default:'' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Sliding 5-Page Pagination Controls -->
+        {% if pagination and pagination.total_pages > 1 %}
+        <nav aria-label="Navegación del catálogo" class="mt-4">
+            <div class="pagination-pro-container">
+                <!-- Previous Page: Visible only when has_previous_page is true -->
+                {% if pagination.has_previous_page %}
+                    <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_format %}&format={{ selected_format }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_min_score %}&min_score={{ selected_min_score }}{% endif %}{% if selected_rating %}&rating={{ selected_rating }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}&page={{ pagination.previous_page_number }}" class="page-btn-pro" title="Página Anterior">
+                        <i class="bi bi-chevron-left me-1"></i> Anterior
                     </a>
                 {% endif %}
 
-                <div class="media-meta-line">
-                    <span>{{ item.type|default:'Serie' }}</span>
-                    <span>{{ item.status|default:'' }}</span>
-                </div>
+                <!-- Page Numbers (Sliding 5-page window) -->
+                {% for p_num in pagination.page_range %}
+                    {% if p_num == pagination.current_page %}
+                        <span class="page-btn-pro active">{{ p_num }}</span>
+                    {% else %}
+                        <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_format %}&format={{ selected_format }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_min_score %}&min_score={{ selected_min_score }}{% endif %}{% if selected_rating %}&rating={{ selected_rating }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}&page={{ p_num }}" class="page-btn-pro">
+                            {{ p_num }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Ellipsis when there are pages beyond current window -->
+                {% if pagination.total_pages > pagination.page_range|last %}
+                    <span class="page-btn-pro disabled px-2">...</span>
+                {% endif %}
+
+                <!-- Next Page -->
+                {% if pagination.has_next_page %}
+                    <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_format %}&format={{ selected_format }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_min_score %}&min_score={{ selected_min_score }}{% endif %}{% if selected_rating %}&rating={{ selected_rating }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}&page={{ pagination.next_page_number }}" class="page-btn-pro" title="Página Siguiente">
+                        Siguiente <i class="bi bi-chevron-right ms-1"></i>
+                    </a>
+                {% endif %}
             </div>
+        </nav>
+        {% endif %}
+        {% else %}
+        <!-- Empty State -->
+        <div class="text-center py-5 my-5 p-4 rounded-4" style="background: rgba(18, 24, 38, 0.6); border: 1px dashed var(--border-subtle);">
+            <i class="bi bi-search fs-1 text-muted mb-3 d-block"></i>
+            <h4 class="text-white fw-bold mb-2">No se encontraron resultados</h4>
+            <p class="text-muted mb-4">Intenta ajustar los términos de búsqueda o cambiar de género y filtros.</p>
+            <a href="{% url 'catalog:explore' %}?type={{ selected_type }}" class="btn btn-accent px-4 py-2">
+                Restablecer Filtros
+            </a>
         </div>
-    </div>
-    {% endfor %}
+        {% endif %}
+    </main>
 </div>
-
-<!-- Sliding 5-Page Pagination Controls -->
-{% if pagination and pagination.total_pages > 1 %}
-<nav aria-label="Navegación del catálogo" class="mt-4">
-    <div class="pagination-pro-container">
-        <!-- Previous Page: Visible only when has_previous_page is true (hidden on page 1) -->
-        {% if pagination.has_previous_page %}
-            <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_format %}&format={{ selected_format }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_min_score %}&min_score={{ selected_min_score }}{% endif %}{% if selected_rating %}&rating={{ selected_rating }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}&page={{ pagination.previous_page_number }}" class="page-btn-pro" title="Página Anterior">
-                <i class="bi bi-chevron-left me-1"></i> Anterior
-            </a>
-        {% endif %}
-
-        <!-- Page Numbers (Sliding 5-page window) -->
-        {% for p_num in pagination.page_range %}
-            {% if p_num == pagination.current_page %}
-                <span class="page-btn-pro active">{{ p_num }}</span>
-            {% else %}
-                <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_format %}&format={{ selected_format }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_min_score %}&min_score={{ selected_min_score }}{% endif %}{% if selected_rating %}&rating={{ selected_rating }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}&page={{ p_num }}" class="page-btn-pro">
-                    {{ p_num }}
-                </a>
-            {% endif %}
-        {% endfor %}
-
-        <!-- Ellipsis when there are pages beyond current window -->
-        {% if pagination.total_pages > pagination.page_range|last %}
-            <span class="page-btn-pro disabled px-2">...</span>
-        {% endif %}
-
-        <!-- Next Page -->
-        {% if pagination.has_next_page %}
-            <a href="?type={{ selected_type }}{% if selected_q %}&q={{ selected_q }}{% endif %}{% if selected_format %}&format={{ selected_format }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}{% if selected_min_score %}&min_score={{ selected_min_score }}{% endif %}{% if selected_rating %}&rating={{ selected_rating }}{% endif %}{% if selected_order_by %}&order_by={{ selected_order_by }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}&page={{ pagination.next_page_number }}" class="page-btn-pro" title="Página Siguiente">
-                Siguiente <i class="bi bi-chevron-right ms-1"></i>
-            </a>
-        {% endif %}
-    </div>
-</nav>
-{% endif %}
-{% else %}
-<!-- Empty State -->
-<div class="text-center py-5 my-5 p-4 rounded-4" style="background: rgba(18, 24, 38, 0.6); border: 1px dashed var(--border-subtle);">
-    <i class="bi bi-search fs-1 text-muted mb-3 d-block"></i>
-    <h4 class="text-white fw-bold mb-2">No se encontraron resultados</h4>
-    <p class="text-muted mb-4">Intenta ajustar los términos de búsqueda o cambiar de género y filtros.</p>
-    <a href="{% url 'catalog:explore' %}?type={{ selected_type }}" class="btn btn-accent px-4 py-2">
-        Restablecer Filtros
-    </a>
-</div>
-{% endif %}
 {% endblock %}

@@ -1,15 +1,17 @@
 /**
  * GrowUp Real-Time WebSocket Client
- * Connects to the native ASGI WebSocket endpoint for live updates
- * without repetitive polling queries to the database.
+ * Connects to ASGI WebSocket endpoint for live updates.
+ * Gracefully and immediately falls back to REST API if WebSockets
+ * are unavailable or unsupported by the hosting environment.
  */
 (function() {
     'use strict';
 
     let socket = null;
     let reconnectAttempts = 0;
-    const maxReconnectAttempts = 5;
+    const maxReconnectAttempts = 2;
     let pingInterval = null;
+    let hasEverConnected = false;
 
     function getWebSocketUrl() {
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -17,10 +19,21 @@
     }
 
     function initWebSocket() {
+        // Immediate fallback fetching ensures metrics and notifications populate without waiting
+        fetchFallbackMetrics();
+        fetchFallbackNotifications();
+
         if (!('WebSocket' in window)) {
-            // Fallback to single-query REST API if WebSockets not supported
-            fetchFallbackMetrics();
             return;
+        }
+
+        // If WebSockets were verified unavailable on this host in the current session, do not attempt
+        try {
+            if (sessionStorage.getItem('growup_ws_available') === 'false') {
+                return;
+            }
+        } catch (e) {
+            // Storage access restricted, proceed
         }
 
         try {
@@ -28,7 +41,12 @@
             socket = new WebSocket(url);
 
             socket.onopen = function() {
+                hasEverConnected = true;
                 reconnectAttempts = 0;
+                try {
+                    sessionStorage.setItem('growup_ws_available', 'true');
+                } catch (e) {}
+
                 // Subscribe to live metric events
                 socket.send(JSON.stringify({ action: 'subscribe', topic: 'global' }));
                 
@@ -56,23 +74,36 @@
 
             socket.onclose = function() {
                 if (pingInterval) clearInterval(pingInterval);
+
+                if (!hasEverConnected) {
+                    // Handshake failed or server environment (e.g. WSGI) does not support WebSockets.
+                    // Mark as unavailable for session and DO NOT retry to prevent console error loops.
+                    try {
+                        sessionStorage.setItem('growup_ws_available', 'false');
+                    } catch (e) {}
+                    return;
+                }
+
+                // If previously connected and dropped due to a transient network blip, retry once or twice
                 if (reconnectAttempts < maxReconnectAttempts) {
-                    const timeout = Math.min(1000 * Math.pow(2, reconnectAttempts), 15000);
+                    const timeout = Math.min(1000 * Math.pow(2, reconnectAttempts), 10000);
                     reconnectAttempts++;
                     setTimeout(initWebSocket, timeout);
-                } else {
-                    fetchFallbackMetrics();
-                    fetchFallbackNotifications();
                 }
             };
 
             socket.onerror = function() {
-                if (socket) socket.close();
+                if (socket) {
+                    try {
+                        socket.close();
+                    } catch (e) {}
+                }
             };
 
         } catch (err) {
-            fetchFallbackMetrics();
-            fetchFallbackNotifications();
+            try {
+                sessionStorage.setItem('growup_ws_available', 'false');
+            } catch (e) {}
         }
     }
 
